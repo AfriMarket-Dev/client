@@ -6,6 +6,7 @@ export interface Supplier {
   country: string;
   avatar: string;
   coverImage: string;
+  gallery?: string[];
   rating: number;
   reviewCount: number;
   verified: boolean;
@@ -43,7 +44,7 @@ export interface Product {
     price: number;
   }[];
   minimumOrder: number;
-  availability: 'in-stock' | 'pre-order' | 'out-of-stock';
+  availability: "in-stock" | "pre-order" | "out-of-stock";
   specifications: Record<string, string>;
   tags: string[];
 }
