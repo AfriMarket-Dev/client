@@ -1,5 +1,19 @@
-import React, { useState } from 'react';
-import { ArrowLeft, ArrowRight, User, Building, Check, Eye, EyeOff, MapPin, Phone, Mail, FileText, Shield, Users } from 'lucide-react';
+import React, { useState } from "react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  User,
+  Building,
+  Check,
+  Eye,
+  EyeOff,
+  MapPin,
+  Phone,
+  Mail,
+  FileText,
+  Shield,
+  Users,
+} from "lucide-react";
 
 interface CustomerFormData {
   fullName: string;
@@ -14,7 +28,7 @@ interface SupplierStep1Data {
   companyName: string;
   industry: string;
   registrationId: string;
-  representativeType: 'individual' | 'company-rep';
+  representativeType: "individual" | "company-rep";
   location: string;
   district: string;
   sector: string;
@@ -36,11 +50,20 @@ interface SupplierStep2Data {
 
 interface SignUpProps {
   onBack: () => void;
-  onSignUpComplete: (type: 'customer' | 'supplier', data: any) => void;
+  onSignUpComplete: (type: "customer" | "supplier", data: any) => void;
+  isLoading?: boolean;
+  serverError?: string;
 }
 
-const SignUp: React.FC<SignUpProps> = ({ onBack, onSignUpComplete }) => {
-  const [accountType, setAccountType] = useState<'customer' | 'supplier' | null>(null);
+const SignUp: React.FC<SignUpProps> = ({
+  onBack,
+  onSignUpComplete,
+  isLoading,
+  serverError,
+}) => {
+  const [accountType, setAccountType] = useState<
+    "customer" | "supplier" | null
+  >(null);
   const [currentStep, setCurrentStep] = useState(1);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -48,46 +71,64 @@ const SignUp: React.FC<SignUpProps> = ({ onBack, onSignUpComplete }) => {
 
   // Form data states
   const [customerData, setCustomerData] = useState<CustomerFormData>({
-    fullName: '',
-    email: '',
-    address: '',
-    phoneNumber: '',
-    password: '',
-    confirmPassword: ''
+    fullName: "",
+    email: "",
+    address: "",
+    phoneNumber: "",
+    password: "",
+    confirmPassword: "",
   });
 
-  const [supplierStep1Data, setSupplierStep1Data] = useState<SupplierStep1Data>({
-    companyName: '',
-    industry: '',
-    registrationId: '',
-    representativeType: 'individual',
-    location: '',
-    district: '',
-    sector: '',
-    cell: '',
-    village: '',
-    sectorAddress: ''
-  });
+  const [supplierStep1Data, setSupplierStep1Data] = useState<SupplierStep1Data>(
+    {
+      companyName: "",
+      industry: "",
+      registrationId: "",
+      representativeType: "individual",
+      location: "",
+      district: "",
+      sector: "",
+      cell: "",
+      village: "",
+      sectorAddress: "",
+    },
+  );
 
-  const [supplierStep2Data, setSupplierStep2Data] = useState<SupplierStep2Data>({
-    fullName: '',
-    email: '',
-    position: '',
-    contactNumber: '',
-    nationalId: '',
-    phoneNumber: '',
-    password: '',
-    confirmPassword: ''
-  });
+  const [supplierStep2Data, setSupplierStep2Data] = useState<SupplierStep2Data>(
+    {
+      fullName: "",
+      email: "",
+      position: "",
+      contactNumber: "",
+      nationalId: "",
+      phoneNumber: "",
+      password: "",
+      confirmPassword: "",
+    },
+  );
 
   const industries = [
-    'Electronics', 'Fashion & Textiles', 'Home & Garden', 'Beauty & Health',
-    'Automotive', 'Industrial Equipment', 'Food & Beverages', 'Agriculture',
-    'Construction', 'Technology', 'Healthcare', 'Education', 'Other'
+    "Electronics",
+    "Fashion & Textiles",
+    "Home & Garden",
+    "Beauty & Health",
+    "Automotive",
+    "Industrial Equipment",
+    "Food & Beverages",
+    "Agriculture",
+    "Construction",
+    "Technology",
+    "Healthcare",
+    "Education",
+    "Other",
   ];
 
   const rwandaLocations = [
-    'Kigali City', 'Eastern Province', 'Northern Province', 'Southern Province', 'Western Province'
+    "Kigali City",
+    "Eastern Province",
+    "Northern Province",
+    "Southern Province",
+    "Western Province",
   ];
 
   // Validation functions
@@ -108,15 +149,21 @@ const SignUp: React.FC<SignUpProps> = ({ onBack, onSignUpComplete }) => {
   const validateCustomerForm = (): boolean => {
     const newErrors: Record<string, string> = {};
 
-    if (!customerData.fullName.trim()) newErrors.fullName = 'Full name is required';
-    if (!customerData.email.trim()) newErrors.email = 'Email is required';
-    else if (!validateEmail(customerData.email)) newErrors.email = 'Invalid email format';
-    if (!customerData.address.trim()) newErrors.address = 'Address is required';
-    if (!customerData.phoneNumber.trim()) newErrors.phoneNumber = 'Phone number is required';
-    else if (!validatePhone(customerData.phoneNumber)) newErrors.phoneNumber = 'Invalid phone number';
-    if (!customerData.password) newErrors.password = 'Password is required';
-    else if (!validatePassword(customerData.password)) newErrors.password = 'Password must be at least 8 characters';
-    if (customerData.password !== customerData.confirmPassword) newErrors.confirmPassword = 'Passwords do not match';
+    if (!customerData.fullName.trim())
+      newErrors.fullName = "Full name is required";
+    if (!customerData.email.trim()) newErrors.email = "Email is required";
+    else if (!validateEmail(customerData.email))
+      newErrors.email = "Invalid email format";
+    if (!customerData.address.trim()) newErrors.address = "Address is required";
+    if (!customerData.phoneNumber.trim())
+      newErrors.phoneNumber = "Phone number is required";
+    else if (!validatePhone(customerData.phoneNumber))
+      newErrors.phoneNumber = "Invalid phone number";
+    if (!customerData.password) newErrors.password = "Password is required";
+    else if (!validatePassword(customerData.password))
+      newErrors.password = "Password must be at least 8 characters";
+    if (customerData.password !== customerData.confirmPassword)
+      newErrors.confirmPassword = "Passwords do not match";
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -125,15 +172,23 @@ const SignUp: React.FC<SignUpProps> = ({ onBack, onSignUpComplete }) => {
   const validateSupplierStep1 = (): boolean => {
     const newErrors: Record<string, string> = {};
 
-    if (!supplierStep1Data.companyName.trim()) newErrors.companyName = 'Company name is required';
-    if (!supplierStep1Data.industry) newErrors.industry = 'Industry is required';
-    if (!supplierStep1Data.registrationId.trim()) newErrors.registrationId = 'Registration ID/TIN is required';
-    if (!supplierStep1Data.location) newErrors.location = 'Location is required';
-    if (!supplierStep1Data.district.trim()) newErrors.district = 'District is required';
-    if (!supplierStep1Data.sector.trim()) newErrors.sector = 'Sector is required';
-    if (!supplierStep1Data.cell.trim()) newErrors.cell = 'Cell is required';
-    if (!supplierStep1Data.village.trim()) newErrors.village = 'Village is required';
-    if (!supplierStep1Data.sectorAddress.trim()) newErrors.sectorAddress = 'Sector address is required';
+    if (!supplierStep1Data.companyName.trim())
+      newErrors.companyName = "Company name is required";
+    if (!supplierStep1Data.industry)
+      newErrors.industry = "Industry is required";
+    if (!supplierStep1Data.registrationId.trim())
+      newErrors.registrationId = "Registration ID/TIN is required";
+    if (!supplierStep1Data.location)
+      newErrors.location = "Location is required";
+    if (!supplierStep1Data.district.trim())
+      newErrors.district = "District is required";
+    if (!supplierStep1Data.sector.trim())
+      newErrors.sector = "Sector is required";
+    if (!supplierStep1Data.cell.trim()) newErrors.cell = "Cell is required";
+    if (!supplierStep1Data.village.trim())
+      newErrors.village = "Village is required";
+    if (!supplierStep1Data.sectorAddress.trim())
+      newErrors.sectorAddress = "Sector address is required";
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -142,25 +197,36 @@ const SignUp: React.FC<SignUpProps> = ({ onBack, onSignUpComplete }) => {
   const validateSupplierStep2 = (): boolean => {
     const newErrors: Record<string, string> = {};
 
-    if (!supplierStep2Data.fullName.trim()) newErrors.fullName = 'Full name is required';
-    if (!supplierStep2Data.email.trim()) newErrors.email = 'Email is required';
-    else if (!validateEmail(supplierStep2Data.email)) newErrors.email = 'Invalid email format';
-    if (!supplierStep2Data.position.trim()) newErrors.position = 'Position is required';
-    if (!supplierStep2Data.contactNumber.trim()) newErrors.contactNumber = 'Contact number is required';
-    else if (!validatePhone(supplierStep2Data.contactNumber)) newErrors.contactNumber = 'Invalid contact number';
-    if (!supplierStep2Data.nationalId.trim()) newErrors.nationalId = 'National ID/Passport is required';
-    if (!supplierStep2Data.phoneNumber.trim()) newErrors.phoneNumber = 'Phone number is required';
-    else if (!validatePhone(supplierStep2Data.phoneNumber)) newErrors.phoneNumber = 'Invalid phone number';
-    if (!supplierStep2Data.password) newErrors.password = 'Password is required';
-    else if (!validatePassword(supplierStep2Data.password)) newErrors.password = 'Password must be at least 8 characters';
-    if (supplierStep2Data.password !== supplierStep2Data.confirmPassword) newErrors.confirmPassword = 'Passwords do not match';
+    if (!supplierStep2Data.fullName.trim())
+      newErrors.fullName = "Full name is required";
+    if (!supplierStep2Data.email.trim()) newErrors.email = "Email is required";
+    else if (!validateEmail(supplierStep2Data.email))
+      newErrors.email = "Invalid email format";
+    if (!supplierStep2Data.position.trim())
+      newErrors.position = "Position is required";
+    if (!supplierStep2Data.contactNumber.trim())
+      newErrors.contactNumber = "Contact number is required";
+    else if (!validatePhone(supplierStep2Data.contactNumber))
+      newErrors.contactNumber = "Invalid contact number";
+    if (!supplierStep2Data.nationalId.trim())
+      newErrors.nationalId = "National ID/Passport is required";
+    if (!supplierStep2Data.phoneNumber.trim())
+      newErrors.phoneNumber = "Phone number is required";
+    else if (!validatePhone(supplierStep2Data.phoneNumber))
+      newErrors.phoneNumber = "Invalid phone number";
+    if (!supplierStep2Data.password)
+      newErrors.password = "Password is required";
+    else if (!validatePassword(supplierStep2Data.password))
+      newErrors.password = "Password must be at least 8 characters";
+    if (supplierStep2Data.password !== supplierStep2Data.confirmPassword)
+      newErrors.confirmPassword = "Passwords do not match";
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const handleNext = () => {
-    if (accountType === 'supplier' && currentStep === 1) {
+    if (accountType === "supplier" && currentStep === 1) {
       if (validateSupplierStep1()) {
         setCurrentStep(2);
         setErrors({});
@@ -170,27 +236,30 @@ const SignUp: React.FC<SignUpProps> = ({ onBack, onSignUpComplete }) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (accountType === 'customer') {
+
+    if (accountType === "customer") {
       if (validateCustomerForm()) {
-        onSignUpComplete('customer', customerData);
+        onSignUpComplete("customer", customerData);
       }
-    } else if (accountType === 'supplier' && currentStep === 2) {
+    } else if (accountType === "supplier" && currentStep === 2) {
       if (validateSupplierStep2()) {
-        onSignUpComplete('supplier', { ...supplierStep1Data, ...supplierStep2Data });
+        onSignUpComplete("supplier", {
+          ...supplierStep1Data,
+          ...supplierStep2Data,
+        });
       }
     }
   };
 
-  const InputField = ({ 
-    label, 
-    type = 'text', 
-    value, 
-    onChange, 
-    error, 
+  const InputField = ({
+    label,
+    type = "text",
+    value,
+    onChange,
+    error,
     required = true,
     placeholder,
-    icon: Icon
+    icon: Icon,
   }: {
     label: string;
     type?: string;
@@ -216,8 +285,8 @@ const SignUp: React.FC<SignUpProps> = ({ onBack, onSignUpComplete }) => {
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder}
-          className={`w-full ${Icon ? 'pl-10' : 'pl-4'} pr-4 py-3 border rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-colors ${
-            error ? 'border-red-500 bg-red-50' : 'border-gray-200'
+          className={`w-full ${Icon ? "pl-10" : "pl-4"} pr-4 py-3 border rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-colors ${
+            error ? "border-red-500 bg-red-50" : "border-gray-200"
           }`}
         />
       </div>
@@ -225,15 +294,15 @@ const SignUp: React.FC<SignUpProps> = ({ onBack, onSignUpComplete }) => {
     </div>
   );
 
-  const SelectField = ({ 
-    label, 
-    value, 
-    onChange, 
-    options, 
-    error, 
+  const SelectField = ({
+    label,
+    value,
+    onChange,
+    options,
+    error,
     required = true,
     placeholder,
-    icon: Icon
+    icon: Icon,
   }: {
     label: string;
     value: string;
@@ -257,14 +326,19 @@ const SignUp: React.FC<SignUpProps> = ({ onBack, onSignUpComplete }) => {
         <select
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          className={`w-full ${Icon ? 'pl-10' : 'pl-4'} pr-4 py-3 border rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-colors ${
-            error ? 'border-red-500 bg-red-50' : 'border-gray-200'
+          className={`w-full ${Icon ? "pl-10" : "pl-4"} pr-4 py-3 border rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-colors ${
+            error ? "border-red-500 bg-red-50" : "border-gray-200"
           }`}
         >
-          <option value="">{placeholder || `Select ${label.toLowerCase()}`}</option>
+          <option value="">
+            {placeholder || `Select ${label.toLowerCase()}`}
+          </option>
           {options.map((option, index) => (
-            <option key={index} value={typeof option === 'string' ? option : option.value}>
-              {typeof option === 'string' ? option : option.label}
+            <option
+              key={index}
+              value={typeof option === "string" ? option : option.value}
+            >
+              {typeof option === "string" ? option : option.label}
             </option>
           ))}
         </select>
@@ -273,13 +347,13 @@ const SignUp: React.FC<SignUpProps> = ({ onBack, onSignUpComplete }) => {
     </div>
   );
 
-  const PasswordField = ({ 
-    label, 
-    value, 
-    onChange, 
-    error, 
-    show, 
-    onToggleShow 
+  const PasswordField = ({
+    label,
+    value,
+    onChange,
+    error,
+    show,
+    onToggleShow,
   }: {
     label: string;
     value: string;
@@ -297,11 +371,11 @@ const SignUp: React.FC<SignUpProps> = ({ onBack, onSignUpComplete }) => {
           <Shield className="h-5 w-5 text-gray-400" />
         </div>
         <input
-          type={show ? 'text' : 'password'}
+          type={show ? "text" : "password"}
           value={value}
           onChange={(e) => onChange(e.target.value)}
           className={`w-full pl-10 pr-12 py-3 border rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-colors ${
-            error ? 'border-red-500 bg-red-50' : 'border-gray-200'
+            error ? "border-red-500 bg-red-50" : "border-gray-200"
           }`}
           placeholder="Enter password"
         />
@@ -334,27 +408,34 @@ const SignUp: React.FC<SignUpProps> = ({ onBack, onSignUpComplete }) => {
               <ArrowLeft className="w-5 h-5 mr-2" />
               Back to Home
             </button>
-            
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">Join AfrikaMarket</h1>
-            <p className="text-xl text-gray-600">Choose your account type to get started</p>
+
+            <h1 className="text-4xl font-bold text-gray-900 mb-4">
+              Join AfrikaMarket
+            </h1>
+            <p className="text-xl text-gray-600">
+              Choose your account type to get started
+            </p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-8">
             {/* Customer Account */}
             <div
-              onClick={() => setAccountType('customer')}
+              onClick={() => setAccountType("customer")}
               className="group relative bg-white rounded-3xl p-8 border-2 border-gray-200 hover:border-orange-500 transition-all duration-300 cursor-pointer hover:shadow-2xl transform hover:-translate-y-2"
             >
               <div className="text-center">
                 <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-2xl text-white mb-6 group-hover:scale-110 transition-transform duration-300">
                   <User className="w-10 h-10" />
                 </div>
-                
-                <h3 className="text-2xl font-bold text-gray-900 mb-4">Customer Account</h3>
+
+                <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                  Customer Account
+                </h3>
                 <p className="text-gray-600 mb-6 leading-relaxed">
-                  Perfect for retailers and businesses looking to source quality products from verified African suppliers.
+                  Perfect for retailers and businesses looking to source quality
+                  products from verified African suppliers.
                 </p>
-                
+
                 <div className="space-y-3 text-left">
                   <div className="flex items-center text-gray-600">
                     <Check className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" />
@@ -373,7 +454,7 @@ const SignUp: React.FC<SignUpProps> = ({ onBack, onSignUpComplete }) => {
                     <span>Secure payment options</span>
                   </div>
                 </div>
-                
+
                 <button className="w-full mt-8 bg-gradient-to-r from-blue-500 to-cyan-500 text-white py-4 rounded-xl font-semibold hover:from-blue-600 hover:to-cyan-600 transition-colors">
                   Sign Up as Customer
                 </button>
@@ -382,19 +463,22 @@ const SignUp: React.FC<SignUpProps> = ({ onBack, onSignUpComplete }) => {
 
             {/* Supplier Account */}
             <div
-              onClick={() => setAccountType('supplier')}
+              onClick={() => setAccountType("supplier")}
               className="group relative bg-white rounded-3xl p-8 border-2 border-gray-200 hover:border-orange-500 transition-all duration-300 cursor-pointer hover:shadow-2xl transform hover:-translate-y-2"
             >
               <div className="text-center">
                 <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-orange-500 to-amber-500 rounded-2xl text-white mb-6 group-hover:scale-110 transition-transform duration-300">
                   <Building className="w-10 h-10" />
                 </div>
-                
-                <h3 className="text-2xl font-bold text-gray-900 mb-4">Supplier Account</h3>
+
+                <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                  Supplier Account
+                </h3>
                 <p className="text-gray-600 mb-6 leading-relaxed">
-                  Ideal for wholesalers, importers, and manufacturers ready to expand their reach across Africa.
+                  Ideal for wholesalers, importers, and manufacturers ready to
+                  expand their reach across Africa.
                 </p>
-                
+
                 <div className="space-y-3 text-left">
                   <div className="flex items-center text-gray-600">
                     <Check className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" />
@@ -413,7 +497,7 @@ const SignUp: React.FC<SignUpProps> = ({ onBack, onSignUpComplete }) => {
                     <span>Analytics and insights</span>
                   </div>
                 </div>
-                
+
                 <button className="w-full mt-8 bg-gradient-to-r from-orange-500 to-amber-500 text-white py-4 rounded-xl font-semibold hover:from-orange-600 hover:to-amber-600 transition-colors">
                   Sign Up as Supplier
                 </button>
@@ -434,7 +518,7 @@ const SignUp: React.FC<SignUpProps> = ({ onBack, onSignUpComplete }) => {
           <div className="text-center mb-8">
             <button
               onClick={() => {
-                if (accountType === 'supplier' && currentStep === 2) {
+                if (accountType === "supplier" && currentStep === 2) {
                   setCurrentStep(1);
                   setErrors({});
                 } else {
@@ -446,9 +530,11 @@ const SignUp: React.FC<SignUpProps> = ({ onBack, onSignUpComplete }) => {
               className="inline-flex items-center text-gray-600 hover:text-orange-600 transition-colors mb-6"
             >
               <ArrowLeft className="w-5 h-5 mr-2" />
-              {accountType === 'supplier' && currentStep === 2 ? 'Back to Step 1' : 'Back to Account Type'}
+              {accountType === "supplier" && currentStep === 2
+                ? "Back to Step 1"
+                : "Back to Account Type"}
             </button>
-            
+
             {/* Logo */}
             <div className="mb-4">
               <h1 className="text-3xl font-bold bg-gradient-to-r from-orange-600 to-amber-600 bg-clip-text text-transparent">
@@ -456,39 +542,61 @@ const SignUp: React.FC<SignUpProps> = ({ onBack, onSignUpComplete }) => {
               </h1>
               <p className="text-sm text-gray-500 -mt-1">Wholesale Hub</p>
             </div>
-            
+
             <div className="flex items-center justify-center mb-4">
-              <div className={`inline-flex items-center justify-center w-12 h-12 rounded-2xl text-white mr-3 ${
-                accountType === 'customer' ? 'bg-gradient-to-br from-blue-500 to-cyan-500' : 'bg-gradient-to-br from-orange-500 to-amber-500'
-              }`}>
-                {accountType === 'customer' ? <User className="w-6 h-6" /> : <Building className="w-6 h-6" />}
+              <div
+                className={`inline-flex items-center justify-center w-12 h-12 rounded-2xl text-white mr-3 ${
+                  accountType === "customer"
+                    ? "bg-gradient-to-br from-blue-500 to-cyan-500"
+                    : "bg-gradient-to-br from-orange-500 to-amber-500"
+                }`}
+              >
+                {accountType === "customer" ? (
+                  <User className="w-6 h-6" />
+                ) : (
+                  <Building className="w-6 h-6" />
+                )}
               </div>
               <div>
                 <h1 className="text-3xl font-bold text-gray-900">
-                  {accountType === 'customer' ? 'Customer' : 'Supplier'} Sign Up
+                  {accountType === "customer" ? "Customer" : "Supplier"} Sign Up
                 </h1>
-                {accountType === 'supplier' && (
+                {accountType === "supplier" && (
                   <p className="text-gray-600">Step {currentStep} of 2</p>
                 )}
               </div>
             </div>
 
             {/* Progress Indicator for Supplier */}
-            {accountType === 'supplier' && (
+            {accountType === "supplier" && (
               <div className="flex items-center justify-center space-x-4 mb-8">
-                <div className={`flex items-center ${currentStep >= 1 ? 'text-orange-600' : 'text-gray-400'}`}>
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold ${
-                    currentStep >= 1 ? 'bg-orange-500 text-white' : 'bg-gray-200 text-gray-600'
-                  }`}>
-                    {currentStep > 1 ? <Check className="w-4 h-4" /> : '1'}
+                <div
+                  className={`flex items-center ${currentStep >= 1 ? "text-orange-600" : "text-gray-400"}`}
+                >
+                  <div
+                    className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold ${
+                      currentStep >= 1
+                        ? "bg-orange-500 text-white"
+                        : "bg-gray-200 text-gray-600"
+                    }`}
+                  >
+                    {currentStep > 1 ? <Check className="w-4 h-4" /> : "1"}
                   </div>
                   <span className="ml-2 font-medium">Company Info</span>
                 </div>
-                <div className={`w-16 h-1 rounded-full ${currentStep >= 2 ? 'bg-orange-500' : 'bg-gray-200'}`}></div>
-                <div className={`flex items-center ${currentStep >= 2 ? 'text-orange-600' : 'text-gray-400'}`}>
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold ${
-                    currentStep >= 2 ? 'bg-orange-500 text-white' : 'bg-gray-200 text-gray-600'
-                  }`}>
+                <div
+                  className={`w-16 h-1 rounded-full ${currentStep >= 2 ? "bg-orange-500" : "bg-gray-200"}`}
+                ></div>
+                <div
+                  className={`flex items-center ${currentStep >= 2 ? "text-orange-600" : "text-gray-400"}`}
+                >
+                  <div
+                    className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold ${
+                      currentStep >= 2
+                        ? "bg-orange-500 text-white"
+                        : "bg-gray-200 text-gray-600"
+                    }`}
+                  >
                     2
                   </div>
                   <span className="ml-2 font-medium">Representative</span>
@@ -499,14 +607,21 @@ const SignUp: React.FC<SignUpProps> = ({ onBack, onSignUpComplete }) => {
 
           {/* Form */}
           <div className="bg-white rounded-3xl shadow-xl p-8">
+            {serverError && (
+              <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 rounded-xl text-sm">
+                {serverError}
+              </div>
+            )}
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Customer Form */}
-              {accountType === 'customer' && (
+              {accountType === "customer" && (
                 <>
                   <InputField
                     label="Full Name"
                     value={customerData.fullName}
-                    onChange={(value) => setCustomerData({...customerData, fullName: value})}
+                    onChange={(value) =>
+                      setCustomerData({ ...customerData, fullName: value })
+                    }
                     error={errors.fullName}
                     placeholder="Enter your full name"
                     icon={User}
@@ -516,7 +631,9 @@ const SignUp: React.FC<SignUpProps> = ({ onBack, onSignUpComplete }) => {
                     label="Email Address"
                     type="email"
                     value={customerData.email}
-                    onChange={(value) => setCustomerData({...customerData, email: value})}
+                    onChange={(value) =>
+                      setCustomerData({ ...customerData, email: value })
+                    }
                     error={errors.email}
                     placeholder="Enter your email address"
                     icon={Mail}
@@ -525,7 +642,9 @@ const SignUp: React.FC<SignUpProps> = ({ onBack, onSignUpComplete }) => {
                   <InputField
                     label="Address"
                     value={customerData.address}
-                    onChange={(value) => setCustomerData({...customerData, address: value})}
+                    onChange={(value) =>
+                      setCustomerData({ ...customerData, address: value })
+                    }
                     error={errors.address}
                     placeholder="Enter your address"
                     icon={MapPin}
@@ -535,7 +654,9 @@ const SignUp: React.FC<SignUpProps> = ({ onBack, onSignUpComplete }) => {
                     label="Phone Number"
                     type="tel"
                     value={customerData.phoneNumber}
-                    onChange={(value) => setCustomerData({...customerData, phoneNumber: value})}
+                    onChange={(value) =>
+                      setCustomerData({ ...customerData, phoneNumber: value })
+                    }
                     error={errors.phoneNumber}
                     placeholder="Enter your phone number"
                     icon={Phone}
@@ -544,7 +665,9 @@ const SignUp: React.FC<SignUpProps> = ({ onBack, onSignUpComplete }) => {
                   <PasswordField
                     label="Password"
                     value={customerData.password}
-                    onChange={(value) => setCustomerData({...customerData, password: value})}
+                    onChange={(value) =>
+                      setCustomerData({ ...customerData, password: value })
+                    }
                     error={errors.password}
                     show={showPassword}
                     onToggleShow={() => setShowPassword(!showPassword)}
@@ -553,26 +676,40 @@ const SignUp: React.FC<SignUpProps> = ({ onBack, onSignUpComplete }) => {
                   <PasswordField
                     label="Confirm Password"
                     value={customerData.confirmPassword}
-                    onChange={(value) => setCustomerData({...customerData, confirmPassword: value})}
+                    onChange={(value) =>
+                      setCustomerData({
+                        ...customerData,
+                        confirmPassword: value,
+                      })
+                    }
                     error={errors.confirmPassword}
                     show={showConfirmPassword}
-                    onToggleShow={() => setShowConfirmPassword(!showConfirmPassword)}
+                    onToggleShow={() =>
+                      setShowConfirmPassword(!showConfirmPassword)
+                    }
                   />
                 </>
               )}
 
               {/* Supplier Step 1 */}
-              {accountType === 'supplier' && currentStep === 1 && (
+              {accountType === "supplier" && currentStep === 1 && (
                 <>
                   <div className="mb-6">
-                    <h3 className="text-xl font-semibold text-gray-900 mb-2">Company Information</h3>
+                    <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                      Company Information
+                    </h3>
                     <p className="text-gray-600">Tell us about your business</p>
                   </div>
 
                   <InputField
                     label="Company Name"
                     value={supplierStep1Data.companyName}
-                    onChange={(value) => setSupplierStep1Data({...supplierStep1Data, companyName: value})}
+                    onChange={(value) =>
+                      setSupplierStep1Data({
+                        ...supplierStep1Data,
+                        companyName: value,
+                      })
+                    }
                     error={errors.companyName}
                     placeholder="Enter your company name"
                     icon={Building}
@@ -581,7 +718,12 @@ const SignUp: React.FC<SignUpProps> = ({ onBack, onSignUpComplete }) => {
                   <SelectField
                     label="Industry"
                     value={supplierStep1Data.industry}
-                    onChange={(value) => setSupplierStep1Data({...supplierStep1Data, industry: value})}
+                    onChange={(value) =>
+                      setSupplierStep1Data({
+                        ...supplierStep1Data,
+                        industry: value,
+                      })
+                    }
                     options={industries}
                     error={errors.industry}
                     icon={Users}
@@ -590,7 +732,12 @@ const SignUp: React.FC<SignUpProps> = ({ onBack, onSignUpComplete }) => {
                   <InputField
                     label="Registration ID or TIN Number"
                     value={supplierStep1Data.registrationId}
-                    onChange={(value) => setSupplierStep1Data({...supplierStep1Data, registrationId: value})}
+                    onChange={(value) =>
+                      setSupplierStep1Data({
+                        ...supplierStep1Data,
+                        registrationId: value,
+                      })
+                    }
                     error={errors.registrationId}
                     placeholder="Enter registration ID or TIN"
                     icon={FileText}
@@ -599,10 +746,17 @@ const SignUp: React.FC<SignUpProps> = ({ onBack, onSignUpComplete }) => {
                   <SelectField
                     label="Representative Type"
                     value={supplierStep1Data.representativeType}
-                    onChange={(value) => setSupplierStep1Data({...supplierStep1Data, representativeType: value as 'individual' | 'company-rep'})}
+                    onChange={(value) =>
+                      setSupplierStep1Data({
+                        ...supplierStep1Data,
+                        representativeType: value as
+                          | "individual"
+                          | "company-rep",
+                      })
+                    }
                     options={[
-                      { value: 'individual', label: 'Individual' },
-                      { value: 'company-rep', label: 'Company Representative' }
+                      { value: "individual", label: "Individual" },
+                      { value: "company-rep", label: "Company Representative" },
                     ]}
                     error={errors.representativeType}
                     icon={User}
@@ -611,7 +765,12 @@ const SignUp: React.FC<SignUpProps> = ({ onBack, onSignUpComplete }) => {
                   <SelectField
                     label="Location (Province)"
                     value={supplierStep1Data.location}
-                    onChange={(value) => setSupplierStep1Data({...supplierStep1Data, location: value})}
+                    onChange={(value) =>
+                      setSupplierStep1Data({
+                        ...supplierStep1Data,
+                        location: value,
+                      })
+                    }
                     options={rwandaLocations}
                     error={errors.location}
                     icon={MapPin}
@@ -621,7 +780,12 @@ const SignUp: React.FC<SignUpProps> = ({ onBack, onSignUpComplete }) => {
                     <InputField
                       label="District"
                       value={supplierStep1Data.district}
-                      onChange={(value) => setSupplierStep1Data({...supplierStep1Data, district: value})}
+                      onChange={(value) =>
+                        setSupplierStep1Data({
+                          ...supplierStep1Data,
+                          district: value,
+                        })
+                      }
                       error={errors.district}
                       placeholder="Enter district"
                     />
@@ -629,7 +793,12 @@ const SignUp: React.FC<SignUpProps> = ({ onBack, onSignUpComplete }) => {
                     <InputField
                       label="Sector"
                       value={supplierStep1Data.sector}
-                      onChange={(value) => setSupplierStep1Data({...supplierStep1Data, sector: value})}
+                      onChange={(value) =>
+                        setSupplierStep1Data({
+                          ...supplierStep1Data,
+                          sector: value,
+                        })
+                      }
                       error={errors.sector}
                       placeholder="Enter sector"
                     />
@@ -639,7 +808,12 @@ const SignUp: React.FC<SignUpProps> = ({ onBack, onSignUpComplete }) => {
                     <InputField
                       label="Cell"
                       value={supplierStep1Data.cell}
-                      onChange={(value) => setSupplierStep1Data({...supplierStep1Data, cell: value})}
+                      onChange={(value) =>
+                        setSupplierStep1Data({
+                          ...supplierStep1Data,
+                          cell: value,
+                        })
+                      }
                       error={errors.cell}
                       placeholder="Enter cell"
                     />
@@ -647,7 +821,12 @@ const SignUp: React.FC<SignUpProps> = ({ onBack, onSignUpComplete }) => {
                     <InputField
                       label="Village"
                       value={supplierStep1Data.village}
-                      onChange={(value) => setSupplierStep1Data({...supplierStep1Data, village: value})}
+                      onChange={(value) =>
+                        setSupplierStep1Data({
+                          ...supplierStep1Data,
+                          village: value,
+                        })
+                      }
                       error={errors.village}
                       placeholder="Enter village"
                     />
@@ -656,7 +835,12 @@ const SignUp: React.FC<SignUpProps> = ({ onBack, onSignUpComplete }) => {
                   <InputField
                     label="Sector Address (Physical Location)"
                     value={supplierStep1Data.sectorAddress}
-                    onChange={(value) => setSupplierStep1Data({...supplierStep1Data, sectorAddress: value})}
+                    onChange={(value) =>
+                      setSupplierStep1Data({
+                        ...supplierStep1Data,
+                        sectorAddress: value,
+                      })
+                    }
                     error={errors.sectorAddress}
                     placeholder="Enter physical address of operations"
                     icon={MapPin}
@@ -665,17 +849,26 @@ const SignUp: React.FC<SignUpProps> = ({ onBack, onSignUpComplete }) => {
               )}
 
               {/* Supplier Step 2 */}
-              {accountType === 'supplier' && currentStep === 2 && (
+              {accountType === "supplier" && currentStep === 2 && (
                 <>
                   <div className="mb-6">
-                    <h3 className="text-xl font-semibold text-gray-900 mb-2">Representative Information</h3>
-                    <p className="text-gray-600">Personal details of the company representative</p>
+                    <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                      Representative Information
+                    </h3>
+                    <p className="text-gray-600">
+                      Personal details of the company representative
+                    </p>
                   </div>
 
                   <InputField
                     label="Full Name of Representative"
                     value={supplierStep2Data.fullName}
-                    onChange={(value) => setSupplierStep2Data({...supplierStep2Data, fullName: value})}
+                    onChange={(value) =>
+                      setSupplierStep2Data({
+                        ...supplierStep2Data,
+                        fullName: value,
+                      })
+                    }
                     error={errors.fullName}
                     placeholder="Enter representative's full name"
                     icon={User}
@@ -685,7 +878,12 @@ const SignUp: React.FC<SignUpProps> = ({ onBack, onSignUpComplete }) => {
                     label="Email Address"
                     type="email"
                     value={supplierStep2Data.email}
-                    onChange={(value) => setSupplierStep2Data({...supplierStep2Data, email: value})}
+                    onChange={(value) =>
+                      setSupplierStep2Data({
+                        ...supplierStep2Data,
+                        email: value,
+                      })
+                    }
                     error={errors.email}
                     placeholder="Enter email address"
                     icon={Mail}
@@ -694,7 +892,12 @@ const SignUp: React.FC<SignUpProps> = ({ onBack, onSignUpComplete }) => {
                   <InputField
                     label="Position in Company"
                     value={supplierStep2Data.position}
-                    onChange={(value) => setSupplierStep2Data({...supplierStep2Data, position: value})}
+                    onChange={(value) =>
+                      setSupplierStep2Data({
+                        ...supplierStep2Data,
+                        position: value,
+                      })
+                    }
                     error={errors.position}
                     placeholder="e.g., CEO, Sales Manager, Owner"
                     icon={Building}
@@ -704,7 +907,12 @@ const SignUp: React.FC<SignUpProps> = ({ onBack, onSignUpComplete }) => {
                     label="Contact Number"
                     type="tel"
                     value={supplierStep2Data.contactNumber}
-                    onChange={(value) => setSupplierStep2Data({...supplierStep2Data, contactNumber: value})}
+                    onChange={(value) =>
+                      setSupplierStep2Data({
+                        ...supplierStep2Data,
+                        contactNumber: value,
+                      })
+                    }
                     error={errors.contactNumber}
                     placeholder="Enter contact number"
                     icon={Phone}
@@ -713,7 +921,12 @@ const SignUp: React.FC<SignUpProps> = ({ onBack, onSignUpComplete }) => {
                   <InputField
                     label="National ID or Passport Number"
                     value={supplierStep2Data.nationalId}
-                    onChange={(value) => setSupplierStep2Data({...supplierStep2Data, nationalId: value})}
+                    onChange={(value) =>
+                      setSupplierStep2Data({
+                        ...supplierStep2Data,
+                        nationalId: value,
+                      })
+                    }
                     error={errors.nationalId}
                     placeholder="Enter National ID or Passport number"
                     icon={FileText}
@@ -723,7 +936,12 @@ const SignUp: React.FC<SignUpProps> = ({ onBack, onSignUpComplete }) => {
                     label="Phone Number"
                     type="tel"
                     value={supplierStep2Data.phoneNumber}
-                    onChange={(value) => setSupplierStep2Data({...supplierStep2Data, phoneNumber: value})}
+                    onChange={(value) =>
+                      setSupplierStep2Data({
+                        ...supplierStep2Data,
+                        phoneNumber: value,
+                      })
+                    }
                     error={errors.phoneNumber}
                     placeholder="Enter phone number"
                     icon={Phone}
@@ -732,7 +950,12 @@ const SignUp: React.FC<SignUpProps> = ({ onBack, onSignUpComplete }) => {
                   <PasswordField
                     label="Password"
                     value={supplierStep2Data.password}
-                    onChange={(value) => setSupplierStep2Data({...supplierStep2Data, password: value})}
+                    onChange={(value) =>
+                      setSupplierStep2Data({
+                        ...supplierStep2Data,
+                        password: value,
+                      })
+                    }
                     error={errors.password}
                     show={showPassword}
                     onToggleShow={() => setShowPassword(!showPassword)}
@@ -741,21 +964,29 @@ const SignUp: React.FC<SignUpProps> = ({ onBack, onSignUpComplete }) => {
                   <PasswordField
                     label="Confirm Password"
                     value={supplierStep2Data.confirmPassword}
-                    onChange={(value) => setSupplierStep2Data({...supplierStep2Data, confirmPassword: value})}
+                    onChange={(value) =>
+                      setSupplierStep2Data({
+                        ...supplierStep2Data,
+                        confirmPassword: value,
+                      })
+                    }
                     error={errors.confirmPassword}
                     show={showConfirmPassword}
-                    onToggleShow={() => setShowConfirmPassword(!showConfirmPassword)}
+                    onToggleShow={() =>
+                      setShowConfirmPassword(!showConfirmPassword)
+                    }
                   />
                 </>
               )}
 
               {/* Form Actions */}
               <div className="flex gap-4 pt-6">
-                {accountType === 'supplier' && currentStep === 1 ? (
+                {accountType === "supplier" && currentStep === 1 ? (
                   <button
                     type="button"
                     onClick={handleNext}
-                    className="w-full bg-gradient-to-r from-orange-500 to-amber-500 text-white py-4 rounded-xl font-semibold hover:from-orange-600 hover:to-amber-600 transition-colors flex items-center justify-center"
+                    disabled={isLoading}
+                    className="w-full bg-gradient-to-r from-orange-500 to-amber-500 text-white py-4 rounded-xl font-semibold hover:from-orange-600 hover:to-amber-600 transition-colors flex items-center justify-center disabled:opacity-60 disabled:cursor-not-allowed"
                   >
                     Continue to Step 2
                     <ArrowRight className="w-5 h-5 ml-2" />
@@ -763,9 +994,12 @@ const SignUp: React.FC<SignUpProps> = ({ onBack, onSignUpComplete }) => {
                 ) : (
                   <button
                     type="submit"
-                    className="w-full bg-gradient-to-r from-orange-500 to-amber-500 text-white py-4 rounded-xl font-semibold hover:from-orange-600 hover:to-amber-600 transition-colors"
+                    disabled={isLoading}
+                    className="w-full bg-gradient-to-r from-orange-500 to-amber-500 text-white py-4 rounded-xl font-semibold hover:from-orange-600 hover:to-amber-600 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
                   >
-                    Create {accountType === 'customer' ? 'Customer' : 'Supplier'} Account
+                    {isLoading
+                      ? "Creating account..."
+                      : `Create ${accountType === "customer" ? "Customer" : "Supplier"} Account`}
                   </button>
                 )}
               </div>
@@ -773,10 +1007,20 @@ const SignUp: React.FC<SignUpProps> = ({ onBack, onSignUpComplete }) => {
 
             {/* Terms and Privacy */}
             <div className="mt-6 text-center text-sm text-gray-600">
-              By creating an account, you agree to our{' '}
-              <a href="#" className="text-orange-600 hover:text-orange-700 font-medium">Terms of Service</a>
-              {' '}and{' '}
-              <a href="#" className="text-orange-600 hover:text-orange-700 font-medium">Privacy Policy</a>
+              By creating an account, you agree to our{" "}
+              <a
+                href="#"
+                className="text-orange-600 hover:text-orange-700 font-medium"
+              >
+                Terms of Service
+              </a>{" "}
+              and{" "}
+              <a
+                href="#"
+                className="text-orange-600 hover:text-orange-700 font-medium"
+              >
+                Privacy Policy
+              </a>
             </div>
           </div>
         </div>
@@ -791,7 +1035,7 @@ const SignUp: React.FC<SignUpProps> = ({ onBack, onSignUpComplete }) => {
           className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/20"></div>
-        
+
         {/* Overlay Content */}
         <div className="absolute bottom-8 left-8 right-8 text-white">
           <div className="mb-4">
@@ -804,7 +1048,7 @@ const SignUp: React.FC<SignUpProps> = ({ onBack, onSignUpComplete }) => {
             Start Your Success Story
           </h4>
           <p className="text-sm opacity-90 leading-relaxed">
-            Whether you're a customer looking for quality products or a supplier 
+            Whether you're a customer looking for quality products or a supplier
             ready to expand your reach, AfrikaMarket is your gateway to success.
           </p>
         </div>

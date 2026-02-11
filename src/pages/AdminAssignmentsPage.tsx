@@ -5,6 +5,7 @@ import {
   CheckCircle,
   AlertCircle,
   Link as LinkIcon,
+  Search,
 } from "lucide-react";
 
 interface Assignment {

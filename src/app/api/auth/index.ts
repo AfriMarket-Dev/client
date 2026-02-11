@@ -1,31 +1,17 @@
 import { apiSlice } from "@/app/api/apiEntry";
 
-export interface LoginRequest {
+export interface SignInRequest {
   email: string;
   password: string;
 }
 
-export interface RegisterRequest {
+export interface SignUpRequest {
   email: string;
   password: string;
   name: string;
-  role?: string;
 }
 
-export interface AuthResponse {
-  user: {
-    id: string;
-    email: string;
-    name: string;
-    role: string;
-  };
-  tokens: {
-    access: string;
-    refresh: string;
-  };
-}
-
-export interface User {
+export interface SessionUser {
   id: string;
   email: string;
   name: string;
@@ -34,56 +20,84 @@ export interface User {
   updatedAt?: string;
 }
 
+export interface AuthResponse {
+  user: SessionUser;
+  token: string;
+}
+
 export const authApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    // Login
-    login: builder.mutation<AuthResponse, LoginRequest>({
-      query: (credentials) => ({
-        url: "/auth/login",
-        method: "POST",
-        body: credentials,
-      }),
+    signIn: builder.mutation<AuthResponse, SignInRequest>({
+      queryFn: async (args, _api, _extraOptions, baseQuery) => {
+        const result = await baseQuery({
+          url: "/api/auth/sign-in/email",
+          method: "POST",
+          body: args,
+        });
+
+        if (result.error) {
+          return { error: result.error };
+        }
+
+        const token = (
+          result.meta as { response: Response }
+        )?.response?.headers.get("set-auth-token");
+        const data = result.data as any;
+
+        return {
+          data: {
+            user: data.user,
+            token: token || "",
+          },
+        };
+      },
+      invalidatesTags: ["Session"],
     }),
 
-    // Register
-    register: builder.mutation<AuthResponse, RegisterRequest>({
-      query: (data) => ({
-        url: "/auth/register",
-        method: "POST",
-        body: data,
-      }),
+    signUp: builder.mutation<AuthResponse, SignUpRequest>({
+      queryFn: async (args, _api, _extraOptions, baseQuery) => {
+        const result = await baseQuery({
+          url: "/api/auth/sign-up/email",
+          method: "POST",
+          body: args,
+        });
+
+        if (result.error) {
+          return { error: result.error };
+        }
+
+        const token = (
+          result.meta as { response: Response }
+        )?.response?.headers.get("set-auth-token");
+        const data = result.data as any;
+
+        return {
+          data: {
+            user: data.user,
+            token: token || "",
+          },
+        };
+      },
     }),
 
-    // Refresh token
-    refreshToken: builder.mutation<{ access: string }, { refresh: string }>({
-      query: (data) => ({
-        url: "/auth/refresh",
-        method: "POST",
-        body: data,
-      }),
+    getSession: builder.query<any, void>({
+      query: () => "/api/auth/get-session",
+      providesTags: ["Session"],
     }),
 
-    // Get current user
-    getCurrentUser: builder.query<User, void>({
-      query: () => "/auth/me",
-      providesTags: ["Users"],
-    }),
-
-    // Logout
-    logout: builder.mutation<{ success: boolean }, void>({
+    signOut: builder.mutation<void, void>({
       query: () => ({
-        url: "/auth/logout",
+        url: "/api/auth/sign-out",
         method: "POST",
       }),
-      invalidatesTags: ["Users"],
+      invalidatesTags: ["Session"],
     }),
   }),
 });
 
 export const {
-  useLoginMutation,
-  useRegisterMutation,
-  useRefreshTokenMutation,
-  useGetCurrentUserQuery,
-  useLogoutMutation,
+  useSignInMutation,
+  useSignUpMutation,
+  useGetSessionQuery,
+  useSignOutMutation,
 } = authApi;

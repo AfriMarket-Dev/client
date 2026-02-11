@@ -1,4 +1,4 @@
-import { Outlet, Link, useLocation } from "react-router-dom";
+import { Outlet, Link, useLocation, useNavigate } from "react-router-dom";
 import {
   Menu,
   Settings,
@@ -8,18 +8,22 @@ import {
   Users,
   ShoppingCart,
   Bell,
+  LogOut,
 } from "lucide-react";
 import { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "@/app/store";
+import { useSignOutMutation } from "@/app/api/auth";
+import { logout } from "@/app/features/authSlice";
 
 export default function AdminLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [showNotifications, setShowNotifications] = useState(false);
   const location = useLocation();
-
-  const adminInfo = {
-    name: "Admin",
-    email: "admin@afrimarket.com",
-  };
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { user } = useSelector((state: RootState) => state.auth);
+  const [signOut] = useSignOutMutation();
 
   const notifications = [
     { id: 1, message: "New supplier registration", time: "5 min ago" },
@@ -28,6 +32,14 @@ export default function AdminLayout() {
   ];
 
   const isActive = (path: string) => location.pathname === path;
+
+  const handleLogout = async () => {
+    try {
+      await signOut().unwrap();
+    } catch {}
+    dispatch(logout());
+    navigate("/");
+  };
 
   const menuItems = [
     {
@@ -118,20 +130,26 @@ export default function AdminLayout() {
         <div className="p-4 border-t border-gray-200">
           <div className="flex items-center gap-3 p-2">
             <div className="w-10 h-10 bg-gradient-to-r from-orange-500 to-amber-500 rounded-full flex items-center justify-center flex-shrink-0">
-              <span className="text-sm font-bold text-white">A</span>
+              <span className="text-sm font-bold text-white">
+                {user?.name?.charAt(0) || "A"}
+              </span>
             </div>
             {sidebarOpen && (
               <div className="min-w-0">
                 <p className="text-sm font-medium text-gray-900 truncate">
-                  Admin
+                  {user?.name || "Admin"}
                 </p>
                 <p className="text-xs text-gray-500 truncate">
-                  admin@afrimarket.com
+                  {user?.email || "admin@afrimarket.com"}
                 </p>
               </div>
             )}
           </div>
-          <button className="w-full flex items-center gap-2 px-3 py-2 mt-2 text-sm font-medium text-red-600 hover:bg-red-50 rounded transition-colors">
+          <button
+            onClick={handleLogout}
+            className="w-full flex items-center gap-2 px-3 py-2 mt-2 text-sm font-medium text-red-600 hover:bg-red-50 rounded transition-colors"
+          >
+            <LogOut size={20} />
             {sidebarOpen && <span>Logout</span>}
           </button>
         </div>
@@ -198,21 +216,24 @@ export default function AdminLayout() {
             <div className="flex items-center gap-3 pl-6 border-l border-gray-200">
               <div className="w-10 h-10 bg-gradient-to-r from-orange-500 to-amber-500 rounded-full flex items-center justify-center flex-shrink-0">
                 <span className="text-sm font-bold text-white">
-                  {adminInfo.name.charAt(0)}
+                  {user?.name?.charAt(0) || "A"}
                 </span>
               </div>
               <div className="min-w-0">
                 <p className="text-sm font-medium text-gray-900">
-                  {adminInfo.name}
+                  {user?.name || "Admin"}
                 </p>
                 <p className="text-xs text-gray-500 truncate">
-                  {adminInfo.email}
+                  {user?.email || "admin@afrimarket.com"}
                 </p>
               </div>
             </div>
 
             {/* Settings Button */}
-            <button className="p-2 hover:bg-gray-100 rounded-lg transition-all">
+            <button
+              onClick={() => navigate("/admin/settings")}
+              className="p-2 hover:bg-gray-100 rounded-lg transition-all"
+            >
               <Settings size={20} className="text-gray-600" />
             </button>
           </div>

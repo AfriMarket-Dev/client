@@ -28,6 +28,8 @@ import AdminProfileSettingsPage from "@/pages/AdminProfileSettingsPage";
 import MainLayout from "@/layouts/MainLayout";
 import AuthLayout from "@/layouts/AuthLayout";
 import AdminLayout from "@/layouts/AdminLayout";
+import ProtectedRoute from "@/components/ProtectedRoute";
+import AdminRoute from "@/components/AdminRoute";
 
 export const router = createBrowserRouter([
   {
@@ -59,16 +61,22 @@ export const router = createBrowserRouter([
         element: <CategoriesPage />,
       },
       {
-        path: "wishlist",
-        element: <WishlistPage />,
-      },
-      {
         path: "about",
         element: <AboutPage />,
       },
       {
         path: "help",
         element: <HelpCenterPage />,
+      },
+      // protected public routes
+      {
+        element: <ProtectedRoute />,
+        children: [
+          {
+            path: "wishlist",
+            element: <WishlistPage />,
+          },
+        ],
       },
     ],
   },
@@ -86,69 +94,81 @@ export const router = createBrowserRouter([
       },
     ],
   },
+  // protected supplier dashboard
   {
-    path: "/dashboard",
-    element: <SupplierDashboardPage />,
-  },
-  {
-    path: "/admin",
-    element: <AdminLayout />,
+    element: <ProtectedRoute />,
     children: [
       {
-        index: true,
-        element: <AdminDashboard />,
+        path: "/dashboard",
+        element: <SupplierDashboardPage />,
       },
+    ],
+  },
+  // admin routes
+  {
+    element: <AdminRoute />,
+    children: [
       {
-        path: "suppliers",
-        element: <AdminSuppliersPage />,
-      },
-      {
-        path: "suppliers/new",
-        element: <AdminAddSupplierPage />,
-      },
-      {
-        path: "suppliers/:supplierId/edit",
-        element: <AdminEditSupplierPage />,
-      },
-      {
-        path: "suppliers/:supplierId/product/:productId/edit",
-        element: <AdminEditProductPage />,
-      },
-      {
-        path: "suppliers/:supplierId/product/:productId",
-        element: <AdminProductDetailsPage />,
-      },
-      {
-        path: "suppliers/:supplierId",
-        element: <AdminSupplierDetailsPage />,
-      },
-      {
-        path: "categories",
-        element: <AdminCategoriesPage />,
-      },
-      {
-        path: "services",
-        element: <AdminServicesPage />,
-      },
-      {
-        path: "services/:serviceId",
-        element: <ServiceDetailsPage />,
-      },
-      {
-        path: "products",
-        element: <AdminProductsPage />,
-      },
-      {
-        path: "assignments",
-        element: <AdminAssignmentsPage />,
-      },
-      {
-        path: "customers",
-        element: <AdminCustomersPage />,
-      },
-      {
-        path: "settings",
-        element: <AdminProfileSettingsPage />,
+        path: "/admin",
+        element: <AdminLayout />,
+        children: [
+          {
+            index: true,
+            element: <AdminDashboard />,
+          },
+          {
+            path: "suppliers",
+            element: <AdminSuppliersPage />,
+          },
+          {
+            path: "suppliers/new",
+            element: <AdminAddSupplierPage />,
+          },
+          {
+            path: "suppliers/:supplierId/edit",
+            element: <AdminEditSupplierPage />,
+          },
+          {
+            path: "suppliers/:supplierId/product/:productId/edit",
+            element: <AdminEditProductPage />,
+          },
+          {
+            path: "suppliers/:supplierId/product/:productId",
+            element: <AdminProductDetailsPage />,
+          },
+          {
+            path: "suppliers/:supplierId",
+            element: <AdminSupplierDetailsPage />,
+          },
+          {
+            path: "categories",
+            element: <AdminCategoriesPage />,
+          },
+          {
+            path: "services",
+            element: <AdminServicesPage />,
+          },
+          {
+            path: "services/:serviceId",
+            element: <ServiceDetailsPage />,
+          },
+          {
+            path: "products",
+            element: <AdminProductsPage />,
+          },
+          {
+            path: "assignments",
+            element: <AdminAssignmentsPage />,
+          },
+          {
+            path: "customers",
+            element: <AdminCustomersPage />,
+          },
+          {
+            path: "settings",
+            element: <AdminProfileSettingsPage />,
+          },
+        ],
       },
     ],
   },

@@ -1,22 +1,22 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import type {
   BaseQueryFn,
   FetchArgs,
   FetchBaseQueryError,
 } from "@reduxjs/toolkit/query/react";
-import { apiUrl } from "@/utils";
 import { RootState } from "@/app/store";
 import { logout } from "@/app/features/authSlice";
 
+const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:3000";
+
 const baseQuery = fetchBaseQuery({
-  baseUrl: apiUrl,
+  baseUrl: API_BASE,
   prepareHeaders: (headers, { getState }) => {
     const state = (getState as () => RootState)();
-    const accessToken = state.auth.tokens?.access;
+    const token = state.auth.token;
 
-    if (accessToken) {
-      headers.set("Authorization", `Bearer ${accessToken}`);
+    if (token) {
+      headers.set("Authorization", `Bearer ${token}`);
     }
 
     return headers;
@@ -31,19 +31,9 @@ const baseQueryWithReauth: BaseQueryFn<
   const result = await baseQuery(args, api, extraOptions);
 
   if (result.error && result.error.status === 401) {
-    // @ts-nocheck
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const errorData = result.error.data as any;
-    if (
-      errorData?.detail === "Invalid token" ||
-      errorData?.detail === "No token provided" ||
-      errorData?.message === "Invalid token" ||
-      errorData?.message === "No token provided"
-    ) {
-      api.dispatch(logout());
-      window.location.href = "/login";
-    }
+    api.dispatch(logout());
   }
+
   return result;
 };
 
@@ -59,6 +49,7 @@ export const apiSlice = createApi({
     "Customers",
     "Orders",
     "Dashboard",
+    "Session",
   ],
   endpoints: () => ({}),
 });

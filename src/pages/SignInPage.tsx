@@ -1,33 +1,65 @@
-import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
-import SignIn from '@/components/SignIn';
+import { useNavigate, useLocation } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import SignIn from "@/components/SignIn";
+import { useSignInMutation } from "@/app/api/auth";
+import { setUser, setToken } from "@/app/features/authSlice";
 
 const SignInPage = () => {
   const navigate = useNavigate();
-  const [currentUser, setCurrentUser] = useState<any>(null);
+  const location = useLocation();
+  const dispatch = useDispatch();
+  const [signIn, { isLoading, error }] = useSignInMutation();
 
-  const handleSignInComplete = (type: 'customer' | 'supplier', email: string) => {
-    console.log('Sign in completed:', type, email);
-    // Here you would typically authenticate the user
-    if (type === 'supplier') {
-      // Mock supplier data - in real app, this would come from your backend
-      setCurrentUser({ 
-        type: 'supplier', 
-        email,
-        name: 'AfroTech Imports',
-        representativeName: 'John Doe'
-      });
-      navigate('/dashboard');
-    } else {
-      navigate('/');
-    }
+  const from = (location.state as { from?: { pathname: string } })?.from
+    ?.pathname;
+
+  const handleSignInComplete = async (
+    _type: "customer" | "supplier",
+    email: string,
+    password: string,
+  ) => {
+    try {
+      const result = await signIn({ email, password }).unwrap();
+      dispatch(setToken(result.token));
+      dispatch(
+        setUser({
+          id: result.user.id,
+          email: result.user.email,
+          name: result.user.name,
+          role: result.user.role,
+        }),
+      );
+
+      const isAdmin =
+        result.user.role === "admin" || result.user.role === "agent";
+      const isSupplier = result.user.role === "supplier";
+
+      if (from) {
+        navigate(from, { replace: true });
+      } else if (isAdmin) {
+        navigate("/admin", { replace: true });
+      } else if (isSupplier) {
+        navigate("/dashboard", { replace: true });
+      } else {
+        navigate("/", { replace: true });
+      }
+    } catch {}
   };
+
+  const serverError =
+    error && "data" in error
+      ? (error.data as { message?: string })?.message || "Sign in failed"
+      : error
+        ? "Network error. Please try again."
+        : undefined;
 
   return (
     <SignIn
-      onBack={() => navigate('/')}
+      onBack={() => navigate("/")}
       onSignInComplete={handleSignInComplete}
-      onSwitchToSignUp={() => navigate('/auth/signup')}
+      onSwitchToSignUp={() => navigate("/auth/signup")}
+      isLoading={isLoading}
+      serverError={serverError}
     />
   );
 };
