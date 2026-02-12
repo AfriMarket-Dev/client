@@ -132,7 +132,7 @@ export default function AdminSuppliersPage() {
         </div>
         <button
           onClick={() => navigate("/admin/suppliers/new")}
-          className="flex items-center gap-2 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white px-4 py-2 rounded-lg transition-all"
+          className="flex items-center gap-2 bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary text-white px-4 py-2 rounded-lg transition-all"
         >
           <Plus size={20} />
           Add Supplier
@@ -148,13 +148,13 @@ export default function AdminSuppliersPage() {
             placeholder="Search by name or email..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
           />
         </div>
         <select
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value as any)}
-          className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+          className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
         >
           <option value="all">All Status</option>
           <option value="active">Active</option>
@@ -196,7 +196,7 @@ export default function AdminSuppliersPage() {
               <tr key={supplier.id} className="hover:bg-gray-50 transition-all">
                 <td className="px-6 py-4">
                   <div className="flex items-center gap-2">
-                    <div className="w-10 h-10 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full flex items-center justify-center text-white font-bold">
+                    <div className="w-10 h-10 bg-gradient-to-br from-primary to-primary/80 rounded-full flex items-center justify-center text-white font-bold">
                       {supplier.name.charAt(0)}
                     </div>
                     <div>
@@ -256,7 +256,7 @@ export default function AdminSuppliersPage() {
                   <div className="flex items-center justify-center gap-2">
                     <button
                       onClick={() => handleViewDetails(supplier.id)}
-                      className="p-2 hover:bg-orange-100 rounded-lg transition-all text-orange-600 tooltip"
+                      className="p-2 hover:bg-primary/10 rounded-lg transition-all text-primary tooltip"
                       title="View Details"
                     >
                       <Eye size={16} />

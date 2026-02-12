@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Search, Filter, Grid, List, Star, MapPin, MessageCircle, Phone, Mail, Heart, Eye, Package, Truck, Shield, ArrowRight, CheckCircle, Building, Users } from 'lucide-react';
 import { suppliers, products, categories } from '../data/mockData';
-import { Supplier } from '../types';
+import { type Supplier } from '../types';
 import { useWishlist } from '../hooks/useWishlist';
 
 interface SupplierListingProps {

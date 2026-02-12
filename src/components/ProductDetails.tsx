@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Star, MapPin, CheckCircle, Phone, Mail, MessageCircle, Heart, Package, Truck, Shield, Clock, Award, Users, TrendingUp, Send, User, Building, Calendar, Verified, Eye, Plus, Minus } from 'lucide-react';
+import { ArrowLeft, Star, MapPin, CheckCircle, Phone, Mail, MessageCircle, Heart, Package, Truck, Shield, Clock, Award, Users, TrendingUp, Send, Verified, Eye, Plus, Minus } from 'lucide-react';
 import { products, suppliers } from '../data/mockData';
-import { Product, Supplier } from '../types';
+import { type Product, type Supplier } from '../types';
 import { useWishlist } from '../hooks/useWishlist';
 
 interface ProductDetailsProps {
@@ -34,7 +34,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ productId, onBack, onSu
           <h2 className="text-2xl font-bold text-gray-900 mb-4">Product Not Found</h2>
           <button
             onClick={onBack}
-            className="bg-gradient-to-r from-orange-500 to-amber-500 text-white px-6 py-3 rounded-xl font-semibold hover:from-orange-600 hover:to-amber-600 transition-colors"
+            className="bg-gradient-to-r from-primary to-primary/90 text-white px-6 py-3 rounded-xl font-semibold hover:from-primary/90 hover:to-primary transition-colors"
           >
             Go Back
           </button>
@@ -77,7 +77,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ productId, onBack, onSu
                 required
                 value={inquiryForm.name}
                 onChange={(e) => setInquiryForm({...inquiryForm, name: e.target.value})}
-                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
                 placeholder="Enter your full name"
               />
             </div>
@@ -88,7 +88,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ productId, onBack, onSu
                 required
                 value={inquiryForm.email}
                 onChange={(e) => setInquiryForm({...inquiryForm, email: e.target.value})}
-                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
                 placeholder="Enter your email"
               />
             </div>
@@ -101,7 +101,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ productId, onBack, onSu
                 type="text"
                 value={inquiryForm.company}
                 onChange={(e) => setInquiryForm({...inquiryForm, company: e.target.value})}
-                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
                 placeholder="Your company name"
               />
             </div>
@@ -111,7 +111,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ productId, onBack, onSu
                 type="tel"
                 value={inquiryForm.phone}
                 onChange={(e) => setInquiryForm({...inquiryForm, phone: e.target.value})}
-                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
                 placeholder="Your phone number"
               />
             </div>
@@ -123,7 +123,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ productId, onBack, onSu
               type="number"
               value={inquiryForm.requestedQuantity}
               onChange={(e) => setInquiryForm({...inquiryForm, requestedQuantity: e.target.value})}
-              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
               placeholder="Number of units needed"
               min={product.minimumOrder}
             />
@@ -136,7 +136,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ productId, onBack, onSu
               rows={5}
               value={inquiryForm.message}
               onChange={(e) => setInquiryForm({...inquiryForm, message: e.target.value})}
-              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent resize-none"
+              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent resize-none"
               placeholder="Describe your requirements, questions, or any specific details..."
             />
           </div>
@@ -151,7 +151,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ productId, onBack, onSu
             </button>
             <button
               type="submit"
-              className="flex-1 bg-gradient-to-r from-orange-500 to-amber-500 text-white py-3 rounded-xl font-semibold hover:from-orange-600 hover:to-amber-600 transition-colors flex items-center justify-center"
+              className="flex-1 bg-gradient-to-r from-primary to-primary/90 text-white py-3 rounded-xl font-semibold hover:from-primary/90 hover:to-primary transition-colors flex items-center justify-center"
             >
               <Send className="w-4 h-4 mr-2" />
               Send Inquiry
@@ -169,7 +169,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ productId, onBack, onSu
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <button
             onClick={onBack}
-            className="flex items-center text-gray-600 hover:text-orange-600 transition-colors mb-4"
+            className="flex items-center text-gray-600 hover:text-primary transition-colors mb-4"
           >
             <ArrowLeft className="w-5 h-5 mr-2" />
             Back to Products
@@ -226,7 +226,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ productId, onBack, onSu
                   key={index}
                   onClick={() => setSelectedImageIndex(index)}
                   className={`aspect-square rounded-lg overflow-hidden bg-gray-100 border-2 transition-colors ${
-                    selectedImageIndex === index ? 'border-orange-500' : 'border-transparent hover:border-gray-300'
+                    selectedImageIndex === index ? 'border-primary' : 'border-transparent hover:border-gray-300'
                   }`}
                 >
                   <img src={image} alt="" className="w-full h-full object-cover" />
@@ -240,7 +240,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ productId, onBack, onSu
             {/* Basic Info */}
             <div>
               <div className="flex items-center gap-2 mb-3">
-                <span className="px-3 py-1 bg-orange-100 text-orange-700 text-sm font-medium rounded-full">
+                <span className="px-3 py-1 bg-primary/10 text-primary text-sm font-medium rounded-full">
                   {product.category}
                 </span>
                 <span className="px-3 py-1 bg-gray-100 text-gray-700 text-sm font-medium rounded-full">
@@ -265,19 +265,19 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ productId, onBack, onSu
             </div>
 
             {/* Pricing */}
-            <div className="bg-gradient-to-br from-orange-50 to-amber-50 rounded-2xl p-6 border border-orange-100">
+            <div className="bg-gradient-to-br from-primary/5 to-primary/10 rounded-2xl p-6 border border-primary/20">
               <h3 className="text-xl font-bold text-gray-900 mb-4">Bulk Pricing</h3>
               <div className="space-y-3">
                 {product.bulkPricing.map((tier, index) => (
                   <div key={index} className="flex justify-between items-center p-3 bg-white rounded-xl">
                     <span className="font-medium text-gray-700">{tier.quantity}+ units</span>
-                    <span className="text-xl font-bold text-orange-600">
+                    <span className="text-xl font-bold text-primary">
                       ${tier.price} {product.priceRange.currency}
                     </span>
                   </div>
                 ))}
               </div>
-              <div className="mt-4 pt-4 border-t border-orange-200">
+              <div className="mt-4 pt-4 border-t border-primary/20">
                 <div className="flex justify-between items-center">
                   <span className="font-medium text-gray-700">Minimum Order:</span>
                   <span className="text-lg font-bold text-gray-900">{product.minimumOrder} units</span>
@@ -300,7 +300,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ productId, onBack, onSu
                   value={quantity}
                   onChange={(e) => setQuantity(Math.max(product.minimumOrder, parseInt(e.target.value) || product.minimumOrder))}
                   min={product.minimumOrder}
-                  className="w-24 px-3 py-2 border border-gray-200 rounded-lg text-center focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                  className="w-24 px-3 py-2 border border-gray-200 rounded-lg text-center focus:ring-2 focus:ring-primary focus:border-transparent"
                 />
                 <button
                   onClick={() => setQuantity(quantity + 1)}
@@ -316,7 +316,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ productId, onBack, onSu
             <div className="space-y-4">
               <button
                 onClick={() => setShowInquiryForm(true)}
-                className="w-full bg-gradient-to-r from-orange-500 to-amber-500 text-white py-4 rounded-xl font-bold text-lg hover:from-orange-600 hover:to-amber-600 transition-colors flex items-center justify-center"
+                className="w-full bg-gradient-to-r from-primary to-primary/90 text-white py-4 rounded-xl font-bold text-lg hover:from-primary/90 hover:to-primary transition-colors flex items-center justify-center"
               >
                 <Send className="w-5 h-5 mr-2" />
                 Send Product Inquiry
@@ -324,7 +324,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ productId, onBack, onSu
               
               <button
                 onClick={() => onSupplierClick(supplier.id)}
-                className="w-full border-2 border-orange-500 text-orange-600 py-4 rounded-xl font-bold text-lg hover:bg-orange-500 hover:text-white transition-colors"
+                className="w-full border-2 border-primary text-primary py-4 rounded-xl font-bold text-lg hover:bg-primary hover:text-white transition-colors"
               >
                 View Supplier Profile
               </button>

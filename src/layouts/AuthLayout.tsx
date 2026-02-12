@@ -1,6 +1,6 @@
 import { Outlet, Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { RootState } from "@/app/store";
+import { type RootState } from "@/app/store";
 
 const AuthLayout = () => {
   const { isAuthenticated, user } = useSelector(

@@ -109,7 +109,7 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ supplierData }) => {
                   onClick={() => setActiveTab(tab.id as any)}
                   className={`w-full flex items-center px-3 py-3 text-sm font-medium rounded-lg transition-colors ${
                     activeTab === tab.id
-                      ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white'
+                      ? 'bg-gradient-to-r from-primary to-primary/90 text-white'
                       : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
                   }`}
                 >
@@ -131,7 +131,7 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ supplierData }) => {
                   <h3 className="text-xl font-semibold text-gray-900">Personal Profile</h3>
                   <button
                     type="submit"
-                    className="bg-gradient-to-r from-orange-500 to-amber-500 text-white px-6 py-2 rounded-lg font-medium hover:from-orange-600 hover:to-amber-600 transition-colors flex items-center"
+                    className="bg-gradient-to-r from-primary to-primary/90 text-white px-6 py-2 rounded-lg font-medium hover:from-primary/90 hover:to-primary transition-colors flex items-center"
                   >
                     <Save className="w-4 h-4 mr-2" />
                     Save Changes
@@ -148,7 +148,7 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ supplierData }) => {
                     />
                     <button
                       type="button"
-                      className="absolute bottom-0 right-0 bg-orange-500 text-white p-2 rounded-full hover:bg-orange-600 transition-colors"
+                      className="absolute bottom-0 right-0 bg-primary text-white p-2 rounded-full hover:bg-primary/90 transition-colors"
                     >
                       <Camera className="w-4 h-4" />
                     </button>
@@ -173,7 +173,7 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ supplierData }) => {
                       type="text"
                       value={profileData.fullName}
                       onChange={(e) => setProfileData({...profileData, fullName: e.target.value})}
-                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
                     />
                   </div>
                   <div>
@@ -182,7 +182,7 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ supplierData }) => {
                       type="text"
                       value={profileData.position}
                       onChange={(e) => setProfileData({...profileData, position: e.target.value})}
-                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
                     />
                   </div>
                 </div>
@@ -194,7 +194,7 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ supplierData }) => {
                       type="email"
                       value={profileData.email}
                       onChange={(e) => setProfileData({...profileData, email: e.target.value})}
-                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
                     />
                   </div>
                   <div>
@@ -203,7 +203,7 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ supplierData }) => {
                       type="tel"
                       value={profileData.phone}
                       onChange={(e) => setProfileData({...profileData, phone: e.target.value})}
-                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
                     />
                   </div>
                 </div>
@@ -217,7 +217,7 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ supplierData }) => {
                   <h3 className="text-xl font-semibold text-gray-900">Company Information</h3>
                   <button
                     type="submit"
-                    className="bg-gradient-to-r from-orange-500 to-amber-500 text-white px-6 py-2 rounded-lg font-medium hover:from-orange-600 hover:to-amber-600 transition-colors flex items-center"
+                    className="bg-gradient-to-r from-primary to-primary/90 text-white px-6 py-2 rounded-lg font-medium hover:from-primary/90 hover:to-primary transition-colors flex items-center"
                   >
                     <Save className="w-4 h-4 mr-2" />
                     Save Changes
@@ -249,7 +249,7 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ supplierData }) => {
                       type="text"
                       value={companyData.companyName}
                       onChange={(e) => setCompanyData({...companyData, companyName: e.target.value})}
-                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
                     />
                   </div>
                   <div>
@@ -257,7 +257,7 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ supplierData }) => {
                     <select
                       value={companyData.industry}
                       onChange={(e) => setCompanyData({...companyData, industry: e.target.value})}
-                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
                     >
                       {industries.map(industry => (
                         <option key={industry} value={industry}>{industry}</option>
@@ -272,7 +272,7 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ supplierData }) => {
                     rows={4}
                     value={companyData.description}
                     onChange={(e) => setCompanyData({...companyData, description: e.target.value})}
-                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent resize-none"
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent resize-none"
                   />
                 </div>
 
@@ -283,7 +283,7 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ supplierData }) => {
                       type="text"
                       value={companyData.registrationId}
                       onChange={(e) => setCompanyData({...companyData, registrationId: e.target.value})}
-                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
                     />
                   </div>
                   <div>
@@ -292,7 +292,7 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ supplierData }) => {
                       type="url"
                       value={companyData.website}
                       onChange={(e) => setCompanyData({...companyData, website: e.target.value})}
-                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
                     />
                   </div>
                 </div>
@@ -304,7 +304,7 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ supplierData }) => {
                       type="text"
                       value={companyData.location}
                       onChange={(e) => setCompanyData({...companyData, location: e.target.value})}
-                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
                     />
                   </div>
                   <div>
@@ -313,7 +313,7 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ supplierData }) => {
                       type="text"
                       value={companyData.address}
                       onChange={(e) => setCompanyData({...companyData, address: e.target.value})}
-                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
                     />
                   </div>
                 </div>
@@ -327,7 +327,7 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ supplierData }) => {
                   <h3 className="text-xl font-semibold text-gray-900">Security Settings</h3>
                   <button
                     type="submit"
-                    className="bg-gradient-to-r from-orange-500 to-amber-500 text-white px-6 py-2 rounded-lg font-medium hover:from-orange-600 hover:to-amber-600 transition-colors flex items-center"
+                    className="bg-gradient-to-r from-primary to-primary/90 text-white px-6 py-2 rounded-lg font-medium hover:from-primary/90 hover:to-primary transition-colors flex items-center"
                   >
                     <Save className="w-4 h-4 mr-2" />
                     Update Security
@@ -350,7 +350,7 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ supplierData }) => {
                       type={showCurrentPassword ? 'text' : 'password'}
                       value={securityData.currentPassword}
                       onChange={(e) => setSecurityData({...securityData, currentPassword: e.target.value})}
-                      className="w-full px-4 py-3 pr-12 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                      className="w-full px-4 py-3 pr-12 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
                       placeholder="Enter current password"
                     />
                     <button
@@ -371,7 +371,7 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ supplierData }) => {
                         type={showNewPassword ? 'text' : 'password'}
                         value={securityData.newPassword}
                         onChange={(e) => setSecurityData({...securityData, newPassword: e.target.value})}
-                        className="w-full px-4 py-3 pr-12 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                        className="w-full px-4 py-3 pr-12 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
                         placeholder="Enter new password"
                       />
                       <button
@@ -389,7 +389,7 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ supplierData }) => {
                       type="password"
                       value={securityData.confirmPassword}
                       onChange={(e) => setSecurityData({...securityData, confirmPassword: e.target.value})}
-                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
                       placeholder="Confirm new password"
                     />
                   </div>
@@ -407,7 +407,7 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ supplierData }) => {
                       onChange={(e) => setSecurityData({...securityData, twoFactorEnabled: e.target.checked})}
                       className="sr-only peer"
                     />
-                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-orange-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-orange-500"></div>
+                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/30 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
                   </label>
                 </div>
               </form>
@@ -420,7 +420,7 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ supplierData }) => {
                   <h3 className="text-xl font-semibold text-gray-900">Preferences</h3>
                   <button
                     type="submit"
-                    className="bg-gradient-to-r from-orange-500 to-amber-500 text-white px-6 py-2 rounded-lg font-medium hover:from-orange-600 hover:to-amber-600 transition-colors flex items-center"
+                    className="bg-gradient-to-r from-primary to-primary/90 text-white px-6 py-2 rounded-lg font-medium hover:from-primary/90 hover:to-primary transition-colors flex items-center"
                   >
                     <Save className="w-4 h-4 mr-2" />
                     Save Preferences
@@ -449,7 +449,7 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ supplierData }) => {
                             onChange={(e) => setPreferencesData({...preferencesData, [setting.key]: e.target.checked})}
                             className="sr-only peer"
                           />
-                          <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-orange-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-orange-500"></div>
+                          <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/30 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
                         </label>
                       </div>
                     ))}
@@ -465,7 +465,7 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ supplierData }) => {
                       <select
                         value={preferencesData.language}
                         onChange={(e) => setPreferencesData({...preferencesData, language: e.target.value})}
-                        className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                        className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
                       >
                         {languages.map(lang => (
                           <option key={lang.code} value={lang.code}>{lang.name}</option>
@@ -477,7 +477,7 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ supplierData }) => {
                       <select
                         value={preferencesData.timezone}
                         onChange={(e) => setPreferencesData({...preferencesData, timezone: e.target.value})}
-                        className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                        className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
                       >
                         {timezones.map(tz => (
                           <option key={tz} value={tz}>{tz}</option>
@@ -489,7 +489,7 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ supplierData }) => {
                       <select
                         value={preferencesData.currency}
                         onChange={(e) => setPreferencesData({...preferencesData, currency: e.target.value})}
-                        className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                        className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
                       >
                         <option value="USD">USD - US Dollar</option>
                         <option value="EUR">EUR - Euro</option>

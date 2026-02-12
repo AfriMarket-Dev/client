@@ -30,7 +30,7 @@ const AnalyticsDashboard: React.FC = () => {
       change: '+2.1%',
       trend: 'up',
       icon: TrendingUp,
-      color: 'orange',
+      color: 'primary',
       description: 'Views to inquiries ratio'
     },
     {
@@ -109,7 +109,7 @@ const AnalyticsDashboard: React.FC = () => {
   const categoryPerformance = [
     { category: 'Electronics', percentage: 45, value: 156, color: 'bg-blue-500', textColor: 'text-blue-600' },
     { category: 'Fashion & Textiles', percentage: 25, value: 87, color: 'bg-green-500', textColor: 'text-green-600' },
-    { category: 'Home & Garden', percentage: 20, value: 69, color: 'bg-orange-500', textColor: 'text-orange-600' },
+    { category: 'Home & Garden', percentage: 20, value: 69, color: 'bg-primary', textColor: 'text-primary' },
     { category: 'Beauty & Health', percentage: 10, value: 35, color: 'bg-purple-500', textColor: 'text-purple-600' }
   ];
 
@@ -133,7 +133,7 @@ const AnalyticsDashboard: React.FC = () => {
       message: 'Responded to David Ochieng\'s furniture inquiry with custom quote', 
       time: '6 hours ago',
       icon: Activity,
-      color: 'text-orange-600 bg-orange-100'
+      color: 'text-primary bg-primary/10'
     },
     { 
       type: 'view', 
@@ -168,7 +168,7 @@ const AnalyticsDashboard: React.FC = () => {
           <select
             value={timeRange}
             onChange={(e) => setTimeRange(e.target.value)}
-            className="px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent bg-white"
+            className="px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent bg-white"
           >
             <option value="7d">Last 7 days</option>
             <option value="30d">Last 30 days</option>
@@ -186,8 +186,8 @@ const AnalyticsDashboard: React.FC = () => {
         {stats.map((stat, index) => (
           <div key={index} className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
             <div className="flex items-center justify-between mb-4">
-              <div className={`p-3 rounded-xl bg-${stat.color}-100`}>
-                <stat.icon className={`w-6 h-6 text-${stat.color}-600`} />
+              <div className={`p-3 rounded-xl ${stat.color === 'primary' ? 'bg-primary/10' : `bg-${stat.color}-100`}`}>
+                <stat.icon className={`w-6 h-6 ${stat.color === 'primary' ? 'text-primary' : `text-${stat.color}-600`}`} />
               </div>
               <div className={`flex items-center text-sm font-semibold px-2 py-1 rounded-full ${
                 stat.trend === 'up' 
@@ -222,7 +222,7 @@ const AnalyticsDashboard: React.FC = () => {
                   onClick={() => setActiveChart(chart.id as any)}
                   className={`flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                     activeChart === chart.id
-                      ? 'bg-orange-500 text-white'
+                      ? 'bg-primary text-white'
                       : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                   }`}
                 >
@@ -236,7 +236,7 @@ const AnalyticsDashboard: React.FC = () => {
           {/* Chart Legend */}
           <div className="flex items-center justify-center space-x-6 mb-6">
             <div className="flex items-center">
-              <div className="w-4 h-4 bg-orange-500 rounded-full mr-2"></div>
+              <div className="w-4 h-4 bg-primary rounded-full mr-2"></div>
               <span className="text-sm text-gray-600">{getChartLabels().primary}</span>
             </div>
             <div className="flex items-center">
@@ -259,7 +259,7 @@ const AnalyticsDashboard: React.FC = () => {
                       {/* Primary Bar */}
                       <div className="relative group">
                         <div 
-                          className="w-8 bg-gradient-to-t from-orange-500 to-orange-400 rounded-t-lg transition-all duration-500 hover:from-orange-600 hover:to-orange-500"
+                          className="w-8 bg-gradient-to-t from-primary to-primary/80 rounded-t-lg transition-all duration-500 hover:from-primary hover:to-primary/90"
                           style={{ height: `${primaryHeight}px` }}
                         ></div>
                         <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
@@ -318,12 +318,12 @@ const AnalyticsDashboard: React.FC = () => {
                   <path
                     key={index}
                     d={pathData}
-                    fill={category.color.replace('bg-', '').replace('-500', '')}
+                    fill={category.color.replace('bg-', '').replace('-500', '').replace('primary', 'orange-600')}
                     className="hover:opacity-80 transition-opacity cursor-pointer"
                     style={{
                       fill: category.color === 'bg-blue-500' ? '#3b82f6' :
                             category.color === 'bg-green-500' ? '#10b981' :
-                            category.color === 'bg-orange-500' ? '#f97316' :
+                            category.color === 'bg-orange-500' ? '#ea580c' :
                             '#a855f7'
                     }}
                   />
@@ -392,7 +392,7 @@ const AnalyticsDashboard: React.FC = () => {
                     </div>
                     <div>
                       <span className="text-gray-500">Conv.:</span>
-                      <div className="font-semibold text-orange-600">{product.conversionRate}%</div>
+                      <div className="font-semibold text-primary">{product.conversionRate}%</div>
                     </div>
                   </div>
                 </div>
@@ -433,7 +433,7 @@ const AnalyticsDashboard: React.FC = () => {
           </div>
           
           <div className="mt-6 pt-4 border-t border-gray-100">
-            <button className="w-full text-center text-sm text-orange-600 hover:text-orange-700 font-medium">
+            <button className="w-full text-center text-sm text-primary hover:text-primary/80 font-medium">
               View All Activities
             </button>
           </div>
@@ -441,7 +441,7 @@ const AnalyticsDashboard: React.FC = () => {
       </div>
 
       {/* Performance Summary */}
-      <div className="bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 rounded-2xl p-8 text-white shadow-lg">
+      <div className="bg-gradient-to-r from-primary via-primary/90 to-primary/80 rounded-2xl p-8 text-white shadow-lg">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
           <div className="flex-1">
             <div className="flex items-center mb-4">
@@ -490,7 +490,7 @@ const AnalyticsDashboard: React.FC = () => {
           { label: 'Add New Product', icon: Package, color: 'from-blue-500 to-blue-600' },
           { label: 'View Messages', icon: MessageCircle, color: 'from-green-500 to-green-600' },
           { label: 'Check Inquiries', icon: Users, color: 'from-purple-500 to-purple-600' },
-          { label: 'Update Profile', icon: Activity, color: 'from-orange-500 to-orange-600' }
+          { label: 'Update Profile', icon: Activity, color: 'from-primary to-primary/90' }
         ].map((action, index) => (
           <button
             key={index}

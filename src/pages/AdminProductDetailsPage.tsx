@@ -49,7 +49,7 @@ export default function AdminProductDetailsPage() {
           </p>
           <button
             onClick={() => navigate(`/admin/suppliers/${supplierId}`)}
-            className="mt-6 px-6 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors"
+            className="mt-6 px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors"
           >
             Back to Supplier
           </button>
@@ -104,7 +104,7 @@ export default function AdminProductDetailsPage() {
               value={deleteConfirmation}
               onChange={(e) => setDeleteConfirmation(e.target.value)}
               placeholder={product.name}
-              className="mt-2 w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-orange-500 transition-colors"
+              className="mt-2 w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-primary transition-colors"
             />
             <p className="text-xs text-gray-500 mt-2">
               Enter: <span className="font-semibold">{product.name}</span>
@@ -187,7 +187,7 @@ export default function AdminProductDetailsPage() {
                       onClick={() => setSelectedImageIndex(idx)}
                       className={`w-20 h-20 rounded-lg border-2 overflow-hidden flex-shrink-0 transition-all ${
                         selectedImageIndex === idx
-                          ? "border-orange-500 ring-2 ring-orange-200"
+                          ? "border-primary ring-2 ring-primary/20"
                           : "border-gray-200 hover:border-gray-300"
                       }`}
                     >
@@ -209,7 +209,7 @@ export default function AdminProductDetailsPage() {
               </h2>
 
               <div className="flex items-center gap-4 mb-6">
-                <span className="px-4 py-2 bg-orange-100 text-orange-800 rounded-full font-semibold">
+                <span className="px-4 py-2 bg-primary/10 text-primary rounded-full font-semibold">
                   {product.category}
                 </span>
                 <span className="px-4 py-2 bg-gray-100 text-gray-800 rounded-full font-semibold">
@@ -234,39 +234,39 @@ export default function AdminProductDetailsPage() {
 
               {/* Pricing Section */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                <div className="bg-gradient-to-br from-orange-50 to-amber-50 rounded-lg p-4 border border-orange-100">
+                <div className="bg-gradient-to-br from-primary/5 to-primary/10 rounded-lg p-4 border border-primary/20">
                   <div className="flex items-center gap-2 mb-2">
-                    <DollarSign size={18} className="text-orange-600" />
+                    <DollarSign size={18} className="text-primary" />
                     <p className="text-sm font-medium text-gray-600">
                       Price Range
                     </p>
                   </div>
-                  <p className="text-2xl font-bold text-orange-600">
+                  <p className="text-2xl font-bold text-primary">
                     {product.priceRange.currency} {product.priceRange.min} -{" "}
                     {product.priceRange.max}
                   </p>
                 </div>
 
-                <div className="bg-gradient-to-br from-orange-50 to-amber-50 rounded-lg p-4 border border-orange-100">
+                <div className="bg-gradient-to-br from-primary/5 to-primary/10 rounded-lg p-4 border border-primary/20">
                   <div className="flex items-center gap-2 mb-2">
-                    <ShoppingCart size={18} className="text-orange-600" />
+                    <ShoppingCart size={18} className="text-primary" />
                     <p className="text-sm font-medium text-gray-600">
                       Minimum Order
                     </p>
                   </div>
-                  <p className="text-2xl font-bold text-orange-600">
+                  <p className="text-2xl font-bold text-primary">
                     {product.minimumOrder} units
                   </p>
                 </div>
 
-                <div className="bg-gradient-to-br from-orange-50 to-amber-50 rounded-lg p-4 border border-orange-100">
+                <div className="bg-gradient-to-br from-primary/5 to-primary/10 rounded-lg p-4 border border-primary/20">
                   <div className="flex items-center gap-2 mb-2">
-                    <Package size={18} className="text-orange-600" />
+                    <Package size={18} className="text-primary" />
                     <p className="text-sm font-medium text-gray-600">
                       Total Images
                     </p>
                   </div>
-                  <p className="text-2xl font-bold text-orange-600">
+                  <p className="text-2xl font-bold text-primary">
                     {product.images.length}
                   </p>
                 </div>
@@ -276,7 +276,7 @@ export default function AdminProductDetailsPage() {
             {/* Specifications */}
             <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
               <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-                <Layers size={24} className="text-orange-600" />
+                <Layers size={24} className="text-primary" />
                 Specifications
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -298,7 +298,7 @@ export default function AdminProductDetailsPage() {
             {product.bulkPricing.length > 0 && (
               <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
                 <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-                  <Tag size={24} className="text-orange-600" />
+                  <Tag size={24} className="text-primary" />
                   Bulk Pricing Tiers
                 </h3>
                 <div className="overflow-x-auto">
@@ -328,7 +328,7 @@ export default function AdminProductDetailsPage() {
                           <td className="px-4 py-3 text-gray-600">
                             {product.priceRange.currency} {tier.price}
                           </td>
-                          <td className="px-4 py-3 font-semibold text-orange-600">
+                          <td className="px-4 py-3 font-semibold text-primary">
                             {product.priceRange.currency}{" "}
                             {(tier.price * 100).toLocaleString()}
                           </td>
@@ -348,7 +348,7 @@ export default function AdminProductDetailsPage() {
                   {product.tags.map((tag, idx) => (
                     <span
                       key={idx}
-                      className="px-4 py-2 bg-gradient-to-r from-orange-100 to-amber-100 text-orange-800 rounded-full text-sm font-medium"
+                      className="px-4 py-2 bg-gradient-to-r from-primary/10 to-primary/5 text-primary rounded-full text-sm font-medium"
                     >
                       {tag}
                     </span>
@@ -363,7 +363,7 @@ export default function AdminProductDetailsPage() {
             {/* Supplier Card */}
             <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
               <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-                <Building2 size={20} className="text-orange-600" />
+                <Building2 size={20} className="text-primary" />
                 Supplier
               </h3>
               <div className="flex items-center gap-3 mb-4">
@@ -392,7 +392,7 @@ export default function AdminProductDetailsPage() {
               </div>
               <button
                 onClick={() => navigate(`/admin/suppliers/${supplierId}`)}
-                className="w-full px-4 py-2 border border-orange-300 text-orange-600 font-medium rounded-lg hover:bg-orange-50 transition-colors"
+                className="w-full px-4 py-2 border border-primary text-primary font-medium rounded-lg hover:bg-primary/5 transition-colors"
               >
                 View Supplier
               </button>
@@ -406,7 +406,7 @@ export default function AdminProductDetailsPage() {
               <div className="space-y-4">
                 <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                   <div className="flex items-center gap-2">
-                    <Eye size={18} className="text-orange-600" />
+                    <Eye size={18} className="text-primary" />
                     <span className="text-sm font-medium text-gray-600">
                       Views
                     </span>
@@ -415,7 +415,7 @@ export default function AdminProductDetailsPage() {
                 </div>
                 <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                   <div className="flex items-center gap-2">
-                    <ShoppingCart size={18} className="text-orange-600" />
+                    <ShoppingCart size={18} className="text-primary" />
                     <span className="text-sm font-medium text-gray-600">
                       Inquiries
                     </span>
@@ -424,7 +424,7 @@ export default function AdminProductDetailsPage() {
                 </div>
                 <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                   <div className="flex items-center gap-2">
-                    <Calendar size={18} className="text-orange-600" />
+                    <Calendar size={18} className="text-primary" />
                     <span className="text-sm font-medium text-gray-600">
                       Listed
                     </span>
@@ -442,7 +442,7 @@ export default function AdminProductDetailsPage() {
                     `/admin/suppliers/${supplierId}/product/${productId}/edit`,
                   )
                 }
-                className="w-full px-6 py-3 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-medium rounded-lg transition-all flex items-center justify-center gap-2 shadow-sm hover:shadow-md"
+                className="w-full px-6 py-3 bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary text-white font-medium rounded-lg transition-all flex items-center justify-center gap-2 shadow-sm hover:shadow-md"
               >
                 <Edit size={18} />
                 Edit Product
@@ -466,13 +466,13 @@ export default function AdminProductDetailsPage() {
               onClick={() => setActiveTab("orders")}
               className={`flex-1 px-6 py-4 font-semibold flex items-center justify-center gap-2 transition-all ${
                 activeTab === "orders"
-                  ? "text-orange-600 border-b-2 border-orange-600 bg-orange-50"
+                  ? "text-primary border-b-2 border-primary bg-primary/5"
                   : "text-gray-600 hover:text-gray-900"
               }`}
             >
               <FileText size={20} />
               Orders
-              <span className="ml-2 px-2 py-1 bg-orange-100 text-orange-800 rounded-full text-xs font-bold">
+              <span className="ml-2 px-2 py-1 bg-primary/10 text-primary rounded-full text-xs font-bold">
                 {orders.filter((o) => o.productId === productId).length}
               </span>
             </button>
@@ -486,7 +486,7 @@ export default function AdminProductDetailsPage() {
             >
               <MessageSquare size={20} />
               Inquiries
-              <span className="ml-2 px-2 py-1 bg-orange-100 text-orange-800 rounded-full text-xs font-bold">
+              <span className="ml-2 px-2 py-1 bg-primary/10 text-primary rounded-full text-xs font-bold">
                 {inquiries.filter((i) => i.productId === productId).length}
               </span>
             </button>
@@ -568,7 +568,7 @@ export default function AdminProductDetailsPage() {
                                 <span
                                   className={`text-xs font-semibold px-3 py-1 rounded-full ${
                                     order.shippingStatus === "delivered"
-                                      ? "bg-orange-100 text-orange-800"
+                                      ? "bg-primary/10 text-primary"
                                       : "bg-gray-100 text-gray-800"
                                   }`}
                                 >
@@ -618,7 +618,7 @@ export default function AdminProductDetailsPage() {
                       .map((inquiry) => (
                         <div
                           key={inquiry.id}
-                          className="border border-gray-200 rounded-lg p-4 hover:border-orange-300 hover:shadow-sm transition-all"
+                          className="border border-gray-200 rounded-lg p-4 hover:border-primary/50 hover:shadow-sm transition-all"
                         >
                           <div className="flex items-start justify-between mb-3">
                             <div>
@@ -633,7 +633,7 @@ export default function AdminProductDetailsPage() {
                               className={`text-xs font-semibold px-3 py-1 rounded-full flex items-center gap-1 ${
                                 inquiry.status === "replied"
                                   ? "bg-green-100 text-green-800"
-                                  : "bg-orange-100 text-orange-800"
+                                  : "bg-primary/10 text-primary"
                               }`}
                             >
                               {inquiry.status === "replied" ? (
@@ -669,7 +669,7 @@ export default function AdminProductDetailsPage() {
                                 )}
                               </span>
                             </div>
-                            <button className="px-4 py-2 bg-orange-100 text-orange-700 font-medium rounded-lg hover:bg-orange-200 transition-colors">
+                            <button className="px-4 py-2 bg-primary/10 text-primary font-medium rounded-lg hover:bg-primary/20 transition-colors">
                               Reply
                             </button>
                           </div>

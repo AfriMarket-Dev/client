@@ -12,7 +12,7 @@ const FeaturedSuppliers: React.FC<FeaturedSuppliersProps> = ({ onViewSupplier, o
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
 
   return (
-    <section className="py-16 bg-gradient-to-br from-orange-50 to-amber-50">
+    <section className="py-16 bg-gradient-to-br from-primary/5 to-primary/10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
@@ -83,7 +83,7 @@ const FeaturedSuppliers: React.FC<FeaturedSuppliersProps> = ({ onViewSupplier, o
               <div className="pt-12 px-6 pb-6">
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex-1">
-                    <h3 className="text-xl font-bold text-gray-900 mb-1 group-hover:text-orange-600 transition-colors">
+                    <h3 className="text-xl font-bold text-gray-900 mb-1 group-hover:text-primary transition-colors">
                       {supplier.name}
                     </h3>
                     <div className="flex items-center text-gray-600 mb-2">
@@ -109,7 +109,7 @@ const FeaturedSuppliers: React.FC<FeaturedSuppliersProps> = ({ onViewSupplier, o
                   {supplier.specialties.slice(0, 3).map((specialty, index) => (
                     <span
                       key={index}
-                      className="px-3 py-1 bg-orange-100 text-orange-700 text-xs font-medium rounded-full"
+                      className="px-3 py-1 bg-primary/10 text-primary text-xs font-medium rounded-full"
                     >
                       {specialty}
                     </span>
@@ -119,8 +119,8 @@ const FeaturedSuppliers: React.FC<FeaturedSuppliersProps> = ({ onViewSupplier, o
                 {/* Stats */}
                 <div className="grid grid-cols-3 gap-4 mb-6 py-4 border-t border-gray-100">
                   <div className="text-center">
-                    <div className="flex items-center justify-center w-8 h-8 bg-orange-100 rounded-lg mx-auto mb-1">
-                      <Package className="w-4 h-4 text-orange-600" />
+                    <div className="flex items-center justify-center w-8 h-8 bg-primary/10 rounded-lg mx-auto mb-1">
+                      <Package className="w-4 h-4 text-primary" />
                     </div>
                     <div className="text-lg font-bold text-gray-900">{supplier.totalProducts}</div>
                     <div className="text-xs text-gray-500">Products</div>
@@ -142,14 +142,14 @@ const FeaturedSuppliers: React.FC<FeaturedSuppliersProps> = ({ onViewSupplier, o
                       e.stopPropagation();
                       onViewSupplier?.(supplier.id);
                     }}
-                    className="flex-1 bg-gradient-to-r from-orange-500 to-amber-500 text-white py-3 rounded-xl font-semibold hover:from-orange-600 hover:to-amber-600 transition-all duration-300 flex items-center justify-center"
+                    className="flex-1 bg-gradient-to-r from-primary to-primary/90 text-white py-3 rounded-xl font-semibold hover:from-primary/90 hover:to-primary transition-all duration-300 flex items-center justify-center"
                   >
                     View Profile
                     <ArrowRight className="w-4 h-4 ml-2" />
                   </button>
                   <button 
                     onClick={(e) => e.stopPropagation()}
-                    className="p-3 border-2 border-orange-200 text-orange-600 rounded-xl hover:bg-orange-500 hover:text-white hover:border-orange-500 transition-all duration-300"
+                    className="p-3 border-2 border-primary/20 text-primary rounded-xl hover:bg-primary hover:text-white hover:border-primary transition-all duration-300"
                   >
                     <MessageCircle className="w-5 h-5" />
                   </button>
@@ -162,7 +162,7 @@ const FeaturedSuppliers: React.FC<FeaturedSuppliersProps> = ({ onViewSupplier, o
         <div className="text-center mt-12">
           <button 
             onClick={onViewAllSuppliers}
-            className="bg-gradient-to-r from-orange-500 to-amber-500 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:from-orange-600 hover:to-amber-600 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+            className="bg-gradient-to-r from-primary to-primary/90 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:from-primary/90 hover:to-primary transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
           >
             View All Suppliers
           </button>

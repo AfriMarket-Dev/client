@@ -62,7 +62,7 @@ const SignIn: React.FC<SignInProps> = ({
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50 flex">
+    <div className="min-h-screen bg-gradient-to-br from-primary/5 via-primary/10 to-transparent flex">
       {/* Left Side - Form */}
       <div className="flex-1 flex items-center justify-center p-8">
         <div className="max-w-md w-full">
@@ -70,7 +70,7 @@ const SignIn: React.FC<SignInProps> = ({
           <div className="text-center mb-8">
             <button
               onClick={onBack}
-              className="inline-flex items-center text-gray-600 hover:text-orange-600 transition-colors mb-6"
+              className="inline-flex items-center text-gray-600 hover:text-primary transition-colors mb-6"
             >
               <ArrowLeft className="w-5 h-5 mr-2" />
               Back to Home
@@ -78,7 +78,7 @@ const SignIn: React.FC<SignInProps> = ({
 
             {/* Logo */}
             <div className="mb-6">
-              <h1 className="text-3xl font-bold bg-gradient-to-r from-orange-600 to-amber-600 bg-clip-text text-transparent">
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
                 AfrikaMarket
               </h1>
               <p className="text-sm text-gray-500 -mt-1">Wholesale Hub</p>
@@ -96,7 +96,7 @@ const SignIn: React.FC<SignInProps> = ({
               onClick={() => setAccountType("customer")}
               className={`flex-1 flex items-center justify-center py-3 px-4 rounded-lg font-medium text-sm transition-colors ${
                 accountType === "customer"
-                  ? "bg-white text-orange-600 shadow-sm"
+                  ? "bg-white text-primary shadow-sm"
                   : "text-gray-600 hover:text-gray-800"
               }`}
             >
@@ -107,7 +107,7 @@ const SignIn: React.FC<SignInProps> = ({
               onClick={() => setAccountType("supplier")}
               className={`flex-1 flex items-center justify-center py-3 px-4 rounded-lg font-medium text-sm transition-colors ${
                 accountType === "supplier"
-                  ? "bg-white text-orange-600 shadow-sm"
+                  ? "bg-white text-primary shadow-sm"
                   : "text-gray-600 hover:text-gray-800"
               }`}
             >
@@ -136,7 +136,7 @@ const SignIn: React.FC<SignInProps> = ({
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className={`w-full pl-10 pr-4 py-3 border rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-colors ${
+                  className={`w-full pl-10 pr-4 py-3 border rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-colors ${
                     errors.email
                       ? "border-red-500 bg-red-50"
                       : "border-gray-200"
@@ -162,7 +162,7 @@ const SignIn: React.FC<SignInProps> = ({
                   type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className={`w-full pl-10 pr-12 py-3 border rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-colors ${
+                  className={`w-full pl-10 pr-12 py-3 border rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-colors ${
                     errors.password
                       ? "border-red-500 bg-red-50"
                       : "border-gray-200"
@@ -193,13 +193,13 @@ const SignIn: React.FC<SignInProps> = ({
                   type="checkbox"
                   checked={rememberMe}
                   onChange={(e) => setRememberMe(e.target.checked)}
-                  className="h-4 w-4 text-orange-600 focus:ring-orange-500 border-gray-300 rounded"
+                  className="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
                 />
                 <span className="ml-2 text-sm text-gray-600">Remember me</span>
               </label>
               <button
                 type="button"
-                className="text-sm text-orange-600 hover:text-orange-700 font-medium"
+                className="text-sm text-primary hover:text-primary/80 font-medium"
               >
                 Forgot password?
               </button>
@@ -209,7 +209,7 @@ const SignIn: React.FC<SignInProps> = ({
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-gradient-to-r from-orange-500 to-amber-500 text-white py-3 rounded-xl font-semibold hover:from-orange-600 hover:to-amber-600 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+              className="w-full bg-gradient-to-r from-primary to-primary/80 text-primary-foreground py-3 rounded-xl font-semibold hover:from-primary/90 hover:to-primary transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
             >
               {isLoading
                 ? "Signing in..."
@@ -223,7 +223,7 @@ const SignIn: React.FC<SignInProps> = ({
               Don't have an account?{" "}
               <button
                 onClick={onSwitchToSignUp}
-                className="text-orange-600 hover:text-orange-700 font-medium"
+                className="text-primary hover:text-primary/80 font-medium"
               >
                 Sign up here
               </button>
@@ -233,11 +233,11 @@ const SignIn: React.FC<SignInProps> = ({
           {/* Terms */}
           <div className="mt-6 text-center text-sm text-gray-500">
             By signing in, you agree to our{" "}
-            <a href="#" className="text-orange-600 hover:text-orange-700">
+            <a href="#" className="text-primary hover:text-primary/80">
               Terms of Service
             </a>{" "}
             and{" "}
-            <a href="#" className="text-orange-600 hover:text-orange-700">
+            <a href="#" className="text-primary hover:text-primary/80">
               Privacy Policy
             </a>
           </div>
@@ -246,7 +246,7 @@ const SignIn: React.FC<SignInProps> = ({
 
       {/* Right Side - Image */}
       <div className="hidden lg:flex flex-1 relative">
-        <div className="absolute inset-0 bg-gradient-to-br from-orange-500/20 to-amber-500/20"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-primary/10"></div>
         <img
           src="/ChatGPT Image Aug 2, 2025, 09_22_52 AM.png"
           alt="African supplier and customer business discussion"
@@ -257,7 +257,7 @@ const SignIn: React.FC<SignInProps> = ({
         {/* Overlay Content */}
         <div className="absolute bottom-8 left-8 right-8 text-white">
           <div className="mb-4">
-            <h3 className="text-2xl font-bold bg-gradient-to-r from-orange-300 to-amber-300 bg-clip-text text-transparent">
+            <h3 className="text-2xl font-bold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
               AfrikaMarket
             </h3>
             <p className="text-sm opacity-90">Wholesale Hub</p>

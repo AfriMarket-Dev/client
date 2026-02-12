@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Search, Filter, Grid, List, Star, MapPin, MessageCircle, Phone, Mail, Heart, Eye, Package, Truck, Shield, ArrowRight } from 'lucide-react';
 import { products, suppliers } from '../data/mockData';
-import { Product, Supplier } from '../types';
+import { type Product, type Supplier } from '../types';
 import { useWishlist } from '../hooks/useWishlist';
 
 interface ProductCatalogProps {
@@ -101,7 +101,7 @@ const ProductCatalog: React.FC<ProductCatalogProps> = ({ onBackToHome, onSupplie
                 onSupplierClick?.(selectedSupplier.id);
                 setShowContactModal(false);
               }}
-              className="w-full bg-gradient-to-r from-orange-500 to-amber-500 text-white py-3 rounded-xl font-semibold hover:from-orange-600 hover:to-amber-600 transition-colors"
+              className="w-full bg-gradient-to-r from-primary to-primary/90 text-white py-3 rounded-xl font-semibold hover:from-primary/90 hover:to-primary transition-colors"
             >
               View Full Profile
             </button>
@@ -144,7 +144,7 @@ const ProductCatalog: React.FC<ProductCatalogProps> = ({ onBackToHome, onSupplie
                 <button
                   onClick={() => setViewMode('grid')}
                   className={`p-2 rounded-md transition-colors ${
-                    viewMode === 'grid' ? 'bg-white text-orange-600 shadow-sm' : 'text-gray-600'
+                    viewMode === 'grid' ? 'bg-white text-primary shadow-sm' : 'text-gray-600'
                   }`}
                 >
                   <Grid className="w-4 h-4" />
@@ -152,7 +152,7 @@ const ProductCatalog: React.FC<ProductCatalogProps> = ({ onBackToHome, onSupplie
                 <button
                   onClick={() => setViewMode('list')}
                   className={`p-2 rounded-md transition-colors ${
-                    viewMode === 'list' ? 'bg-white text-orange-600 shadow-sm' : 'text-gray-600'
+                    viewMode === 'list' ? 'bg-white text-primary shadow-sm' : 'text-gray-600'
                   }`}
                 >
                   <List className="w-4 h-4" />
@@ -161,7 +161,7 @@ const ProductCatalog: React.FC<ProductCatalogProps> = ({ onBackToHome, onSupplie
               
               <button
                 onClick={() => setShowFilters(!showFilters)}
-                className="flex items-center px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors"
+                className="flex items-center px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors"
               >
                 <Filter className="w-4 h-4 mr-2" />
                 Filters
@@ -188,7 +188,7 @@ const ProductCatalog: React.FC<ProductCatalogProps> = ({ onBackToHome, onSupplie
                     placeholder="Search products..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                    className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
                   />
                 </div>
               </div>
@@ -205,7 +205,7 @@ const ProductCatalog: React.FC<ProductCatalogProps> = ({ onBackToHome, onSupplie
                         value={category}
                         checked={selectedCategory === category}
                         onChange={(e) => setSelectedCategory(e.target.value)}
-                        className="text-orange-500 focus:ring-orange-500"
+                        className="text-primary focus:ring-primary"
                       />
                       <span className="ml-2 text-sm text-gray-700 capitalize">{category}</span>
                     </label>
@@ -222,7 +222,7 @@ const ProductCatalog: React.FC<ProductCatalogProps> = ({ onBackToHome, onSupplie
                     placeholder="Min"
                     value={priceRange[0]}
                     onChange={(e) => setPriceRange([parseInt(e.target.value) || 0, priceRange[1]])}
-                    className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
                   />
                   <span className="text-gray-500">-</span>
                   <input
@@ -230,7 +230,7 @@ const ProductCatalog: React.FC<ProductCatalogProps> = ({ onBackToHome, onSupplie
                     placeholder="Max"
                     value={priceRange[1]}
                     onChange={(e) => setPriceRange([priceRange[0], parseInt(e.target.value) || 1000])}
-                    className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
                   />
                 </div>
               </div>
@@ -302,12 +302,12 @@ const ProductCatalog: React.FC<ProductCatalogProps> = ({ onBackToHome, onSupplie
 
                     <div className="p-4">
                       <div className="mb-2">
-                        <span className="text-xs font-medium text-orange-600 bg-orange-50 px-2 py-1 rounded-full">
+                        <span className="text-xs font-medium text-primary bg-primary/10 px-2 py-1 rounded-full">
                           {product.category}
                         </span>
                       </div>
                       
-                      <h3 className="font-semibold text-gray-900 mb-2 group-hover:text-orange-600 transition-colors">
+                      <h3 className="font-semibold text-gray-900 mb-2 group-hover:text-primary transition-colors">
                         {product.name}
                       </h3>
                       
@@ -317,7 +317,7 @@ const ProductCatalog: React.FC<ProductCatalogProps> = ({ onBackToHome, onSupplie
 
                       <div className="flex items-center justify-between mb-3">
                         <div>
-                          <div className="text-lg font-bold text-orange-600">
+                          <div className="text-lg font-bold text-primary">
                             ${product.priceRange.min} - ${product.priceRange.max}
                           </div>
                           <div className="text-xs text-gray-500">Min. order: {product.minimumOrder} units</div>
@@ -327,7 +327,7 @@ const ProductCatalog: React.FC<ProductCatalogProps> = ({ onBackToHome, onSupplie
                       {supplier && (
                         <div className="flex items-center justify-between pt-3 border-t border-gray-100">
                           <div 
-                            className="flex items-center space-x-2 cursor-pointer hover:text-orange-600 transition-colors"
+                            className="flex items-center space-x-2 cursor-pointer hover:text-primary transition-colors"
                             onClick={(e) => {
                               e.stopPropagation();
                               onSupplierClick?.(supplier.id);
@@ -349,7 +349,7 @@ const ProductCatalog: React.FC<ProductCatalogProps> = ({ onBackToHome, onSupplie
                               setSelectedSupplier(supplier);
                               setShowContactModal(true);
                             }}
-                            className="p-2 text-orange-600 hover:bg-orange-50 rounded-lg transition-colors"
+                            className="p-2 text-primary hover:bg-primary/10 rounded-lg transition-colors"
                           >
                             <MessageCircle className="w-4 h-4" />
                           </button>

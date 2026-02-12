@@ -109,7 +109,7 @@ const ProductManagement: React.FC = () => {
                   required
                   value={formData.name}
                   onChange={(e) => setFormData({...formData, name: e.target.value})}
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
                   placeholder="Enter product name"
                 />
               </div>
@@ -119,7 +119,7 @@ const ProductManagement: React.FC = () => {
                   required
                   value={formData.category}
                   onChange={(e) => setFormData({...formData, category: e.target.value})}
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
                 >
                   <option value="">Select category</option>
                   {categories.filter(cat => cat !== 'all').map(category => (
@@ -137,7 +137,7 @@ const ProductManagement: React.FC = () => {
                 rows={4}
                 value={formData.description}
                 onChange={(e) => setFormData({...formData, description: e.target.value})}
-                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent resize-none"
+                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent resize-none"
                 placeholder="Describe your product in detail..."
               />
             </div>
@@ -153,7 +153,7 @@ const ProductManagement: React.FC = () => {
                   step="0.01"
                   value={formData.minPrice}
                   onChange={(e) => setFormData({...formData, minPrice: parseFloat(e.target.value)})}
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
                   placeholder="0.00"
                 />
               </div>
@@ -166,7 +166,7 @@ const ProductManagement: React.FC = () => {
                   step="0.01"
                   value={formData.maxPrice}
                   onChange={(e) => setFormData({...formData, maxPrice: parseFloat(e.target.value)})}
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
                   placeholder="0.00"
                 />
               </div>
@@ -182,7 +182,7 @@ const ProductManagement: React.FC = () => {
                   min="0"
                   value={formData.stock}
                   onChange={(e) => setFormData({...formData, stock: parseInt(e.target.value)})}
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
                   placeholder="0"
                 />
               </div>
@@ -194,7 +194,7 @@ const ProductManagement: React.FC = () => {
                   min="1"
                   value={formData.moq}
                   onChange={(e) => setFormData({...formData, moq: parseInt(e.target.value)})}
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
                   placeholder="1"
                 />
               </div>
@@ -203,7 +203,7 @@ const ProductManagement: React.FC = () => {
                 <select
                   value={formData.status}
                   onChange={(e) => setFormData({...formData, status: e.target.value as any})}
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
                 >
                   <option value="active">Active</option>
                   <option value="inactive">Inactive</option>
@@ -226,7 +226,7 @@ const ProductManagement: React.FC = () => {
                         newImages[index] = e.target.value;
                         setFormData({...formData, images: newImages});
                       }}
-                      className="flex-1 px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                      className="flex-1 px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
                       placeholder="Enter image URL"
                     />
                     {formData.images.length > 1 && (
@@ -246,7 +246,7 @@ const ProductManagement: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setFormData({...formData, images: [...formData.images, '']})}
-                  className="flex items-center px-4 py-3 text-orange-600 hover:bg-orange-50 rounded-xl transition-colors"
+                  className="flex items-center px-4 py-3 text-primary hover:bg-primary/5 rounded-xl transition-colors"
                 >
                   <Plus className="w-5 h-5 mr-2" />
                   Add Another Image
@@ -265,7 +265,7 @@ const ProductManagement: React.FC = () => {
               </button>
               <button
                 type="submit"
-                className="flex-1 bg-gradient-to-r from-orange-500 to-amber-500 text-white py-3 rounded-xl font-semibold hover:from-orange-600 hover:to-amber-600 transition-colors"
+                className="flex-1 bg-gradient-to-r from-primary to-primary/90 text-white py-3 rounded-xl font-semibold hover:from-primary/90 hover:to-primary transition-colors"
               >
                 {product ? 'Update Product' : 'Add Product'}
               </button>
@@ -286,7 +286,7 @@ const ProductManagement: React.FC = () => {
         </div>
         <button
           onClick={() => setShowAddProduct(true)}
-          className="bg-gradient-to-r from-orange-500 to-amber-500 text-white px-6 py-3 rounded-xl font-semibold hover:from-orange-600 hover:to-amber-600 transition-colors flex items-center"
+          className="bg-gradient-to-r from-primary to-primary/90 text-white px-6 py-3 rounded-xl font-semibold hover:from-primary/90 hover:to-primary transition-colors flex items-center"
         >
           <Plus className="w-5 h-5 mr-2" />
           Add New Product
@@ -304,14 +304,14 @@ const ProductManagement: React.FC = () => {
                 placeholder="Search products..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
               />
             </div>
           </div>
           <select
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
-            className="px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+            className="px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
           >
             {categories.map(category => (
               <option key={category} value={category}>
@@ -323,7 +323,7 @@ const ProductManagement: React.FC = () => {
             <button
               onClick={() => setViewMode('grid')}
               className={`p-2 rounded-lg transition-colors ${
-                viewMode === 'grid' ? 'bg-white text-orange-600 shadow-sm' : 'text-gray-600'
+                viewMode === 'grid' ? 'bg-white text-primary shadow-sm' : 'text-gray-600'
               }`}
             >
               <Grid className="w-5 h-5" />
@@ -331,7 +331,7 @@ const ProductManagement: React.FC = () => {
             <button
               onClick={() => setViewMode('list')}
               className={`p-2 rounded-lg transition-colors ${
-                viewMode === 'list' ? 'bg-white text-orange-600 shadow-sm' : 'text-gray-600'
+                viewMode === 'list' ? 'bg-white text-primary shadow-sm' : 'text-gray-600'
               }`}
             >
               <List className="w-5 h-5" />
@@ -363,7 +363,7 @@ const ProductManagement: React.FC = () => {
 
             <div className="p-4">
               <div className="mb-2">
-                <span className="text-xs font-medium text-orange-600 bg-orange-50 px-2 py-1 rounded-full">
+                <span className="text-xs font-medium text-primary bg-primary/5 px-2 py-1 rounded-full">
                   {product.category}
                 </span>
               </div>
@@ -373,7 +373,7 @@ const ProductManagement: React.FC = () => {
               <div className="grid grid-cols-2 gap-4 mb-4 text-sm">
                 <div>
                   <span className="text-gray-500">Price Range:</span>
-                  <div className="font-semibold text-orange-600">${product.price.min} - ${product.price.max}</div>
+                  <div className="font-semibold text-primary">${product.price.min} - ${product.price.max}</div>
                 </div>
                 <div>
                   <span className="text-gray-500">Stock:</span>
@@ -401,7 +401,7 @@ const ProductManagement: React.FC = () => {
               <div className="flex gap-2">
                 <button
                   onClick={() => setEditingProduct(product)}
-                  className="flex-1 bg-orange-500 text-white py-2 rounded-lg font-medium hover:bg-orange-600 transition-colors flex items-center justify-center"
+                  className="flex-1 bg-primary text-white py-2 rounded-lg font-medium hover:bg-primary/90 transition-colors flex items-center justify-center"
                 >
                   <Edit className="w-4 h-4 mr-1" />
                   Edit
@@ -425,7 +425,7 @@ const ProductManagement: React.FC = () => {
           <p className="text-gray-600 mb-6">Try adjusting your search or filters</p>
           <button
             onClick={() => setShowAddProduct(true)}
-            className="bg-gradient-to-r from-orange-500 to-amber-500 text-white px-6 py-3 rounded-xl font-semibold hover:from-orange-600 hover:to-amber-600 transition-colors"
+            className="bg-gradient-to-r from-primary to-primary/90 text-white px-6 py-3 rounded-xl font-semibold hover:from-primary/90 hover:to-primary transition-colors"
           >
             Add Your First Product
           </button>

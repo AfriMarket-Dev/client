@@ -1,4 +1,4 @@
-import React, { ReactNode, ReactElement } from "react";
+import React, { type ReactNode, type ReactElement } from "react";
 import {
   AlertTriangle,
   RefreshCw,
@@ -120,12 +120,12 @@ ${typeof window !== "undefined" ? window.location.href : "Unknown"}`;
   render(): ReactElement | ReactNode {
     if (this.state.hasError) {
       return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-900 via-red-900 to-orange-900 flex items-center justify-center p-4">
+        <div className="min-h-screen bg-gradient-to-br from-slate-900 via-red-900 to-primary/20 flex items-center justify-center p-4">
           <div className="w-full max-w-3xl">
             {/* Main Error Card */}
             <div className="bg-white rounded-2xl shadow-2xl overflow-hidden">
               {/* Header */}
-              <div className="bg-gradient-to-r from-red-600 to-orange-600 px-8 py-8 text-white">
+              <div className="bg-gradient-to-r from-red-600 to-primary px-8 py-8 text-white">
                 <div className="flex items-start gap-4">
                   <div className="mt-1">
                     <AlertTriangle size={40} className="flex-shrink-0" />
@@ -144,7 +144,7 @@ ${typeof window !== "undefined" ? window.location.href : "Unknown"}`;
               {/* Content */}
               <div className="p-8 space-y-6">
                 {/* Error Message Card */}
-                <div className="bg-gradient-to-r from-red-50 to-orange-50 border-l-4 border-red-500 rounded-lg p-6">
+                <div className="bg-gradient-to-r from-red-50 to-primary/10 border-l-4 border-red-500 rounded-lg p-6">
                   <h2 className="text-sm font-bold text-red-900 uppercase tracking-wide mb-3">
                     Error Details
                   </h2>
@@ -245,7 +245,7 @@ ${typeof window !== "undefined" ? window.location.href : "Unknown"}`;
                 </button>
                 <button
                   onClick={this.handleReset}
-                  className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-700 hover:to-orange-700 text-white rounded-lg font-semibold transition-all"
+                  className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-red-600 to-primary hover:from-red-700 hover:to-primary/90 text-white rounded-lg font-semibold transition-all"
                 >
                   <RefreshCw size={18} />
                   Try Again

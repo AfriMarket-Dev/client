@@ -4,7 +4,7 @@ import type {
   FetchArgs,
   FetchBaseQueryError,
 } from "@reduxjs/toolkit/query/react";
-import { RootState } from "@/app/store";
+import { type RootState } from "@/app/store";
 import { logout } from "@/app/features/authSlice";
 
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:3000";

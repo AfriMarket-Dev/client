@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/Input";
 import {
   Search,
   Menu,
@@ -10,7 +13,7 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "@/app/store";
+import { type RootState } from "@/app/store";
 import { useSignOutMutation } from "@/app/api/auth";
 import { logout } from "@/app/features/authSlice";
 import { useWishlist } from "../hooks/useWishlist";
@@ -51,7 +54,7 @@ const Header: React.FC = () => {
   };
 
   return (
-    <header className="bg-white shadow-sm border-b border-orange-100 sticky top-0 z-40">
+    <header className="bg-background shadow-sm border-b border-border sticky top-0 z-40">
       {/* Top Bar */}
       <div className="bg-gradient-to-r from-orange-500 to-amber-500 text-white py-2">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -78,45 +81,46 @@ const Header: React.FC = () => {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex items-center">
-            <button
-              onClick={() => navigate("/")}
-              className="flex-shrink-0 cursor-pointer"
-            >
+            <Link to="/" className="flex-shrink-0 cursor-pointer">
               <h1 className="text-2xl font-bold bg-gradient-to-r from-orange-600 to-amber-600 bg-clip-text text-transparent">
                 AfrikaMarket
               </h1>
-              <p className="text-xs text-gray-500 -mt-1">Wholesale Hub</p>
-            </button>
+              <p className="text-xs text-muted-foreground -mt-1">Wholesale Hub</p>
+            </Link>
           </div>
 
           {/* Search Bar */}
           <div className="hidden md:flex flex-1 max-w-2xl mx-8">
-            <form onSubmit={handleSearch} className="w-full relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Search className="h-5 w-5 text-gray-400" />
+            <form onSubmit={handleSearch} className="w-full relative flex items-center gap-2">
+              <div className="relative w-full">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <Search className="h-5 w-5 text-muted-foreground" />
+                </div>
+                <Input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onKeyDown={handleSearchInput}
+                  placeholder="Search suppliers, products, or categories..."
+                  className="pl-10 pr-4 bg-muted/50 focus:bg-background transition-colors"
+                />
               </div>
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                onKeyDown={handleSearchInput}
-                placeholder="Search suppliers, products, or categories..."
-                className="block w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent bg-gray-50 focus:bg-white transition-colors"
-              />
-              <button
+              <Button
                 type="submit"
-                className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-gradient-to-r from-orange-500 to-amber-500 text-white px-4 py-1.5 rounded-lg text-sm font-medium hover:from-orange-600 hover:to-amber-600 transition-colors"
+                className="bg-gradient-to-r from-orange-500 to-amber-500 text-white hover:from-orange-600 hover:to-amber-600 transition-colors rounded-lg px-6"
               >
                 Search
-              </button>
+              </Button>
             </form>
           </div>
 
           {/* Right Navigation */}
           <div className="flex items-center space-x-4">
-            <button
+            <Button
+              variant="ghost"
+              size="icon"
               onClick={() => navigate("/wishlist")}
-              className="relative p-2 text-gray-600 hover:text-orange-600 transition-colors"
+              className="relative text-muted-foreground hover:text-orange-600 transition-colors"
             >
               <Heart className="w-5 h-5" />
               {wishlistCount > 0 && (
@@ -124,34 +128,37 @@ const Header: React.FC = () => {
                   {wishlistCount > 99 ? "99+" : wishlistCount}
                 </span>
               )}
-            </button>
+            </Button>
 
-            <div className="hidden md:flex items-center space-x-4 ml-4 pl-4 border-l border-gray-200">
-              <button
+            <div className="hidden md:flex items-center space-x-4 ml-4 pl-4 border-l border-border">
+              <Button
+                variant="ghost"
                 onClick={() => navigate("/about")}
-                className="text-sm font-medium text-gray-700 hover:text-orange-600 transition-colors"
+        
               >
                 About
-              </button>
-              <button
+              </Button>
+              <Button
+                variant="ghost"
                 onClick={() => navigate("/help")}
-                className="text-sm font-medium text-gray-700 hover:text-orange-600 transition-colors"
+        
               >
                 Help
-              </button>
+              </Button>
 
               {isAuthenticated && user ? (
                 <div className="relative">
-                  <button
+                  <Button
+                    variant="ghost"
                     onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                    className="flex items-center space-x-2 text-sm font-medium text-gray-700 hover:text-orange-600 transition-colors"
+                    className="flex items-center space-x-2 text-sm font-medium text-muted-foreground hover:text-orange-600 transition-colors"
                   >
                     <div className="w-8 h-8 bg-gradient-to-br from-orange-500 to-amber-500 rounded-full flex items-center justify-center text-white text-xs font-bold">
                       {user.name?.charAt(0).toUpperCase() || "U"}
                     </div>
                     <span className="max-w-[120px] truncate">{user.name}</span>
-                    <ChevronDown className="w-4 h-4" />
-                  </button>
+                    <ChevronDown className="w-4 h-4 ml-2" />
+                  </Button>
 
                   {isUserMenuOpen && (
                     <>
@@ -159,12 +166,12 @@ const Header: React.FC = () => {
                         className="fixed inset-0 z-40"
                         onClick={() => setIsUserMenuOpen(false)}
                       />
-                      <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-50">
-                        <div className="px-4 py-2 border-b border-gray-100">
-                          <p className="text-sm font-medium text-gray-900 truncate">
+                      <div className="absolute right-0 mt-2 w-48 bg-popover rounded-xl shadow-lg border border-border py-2 z-50">
+                        <div className="px-4 py-2 border-b border-border">
+                          <p className="text-sm font-medium text-foreground truncate">
                             {user.name}
                           </p>
-                          <p className="text-xs text-gray-500 truncate">
+                          <p className="text-xs text-muted-foreground truncate">
                             {user.email}
                           </p>
                         </div>
@@ -219,28 +226,30 @@ const Header: React.FC = () => {
               )}
             </div>
 
-            <button
+            <Button
+              variant="ghost"
+              size="icon"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="md:hidden p-2 text-gray-600 hover:text-orange-600 transition-colors"
+              className="md:hidden text-muted-foreground hover:text-orange-600 transition-colors"
             >
               <Menu className="w-5 h-5" />
-            </button>
+            </Button>
           </div>
         </div>
 
         {/* Mobile Search */}
-        <div className="md:hidden py-3 border-t border-gray-100">
+        <div className="md:hidden py-3 border-t border-border">
           <form onSubmit={handleSearch} className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <Search className="h-5 w-5 text-gray-400" />
+              <Search className="h-5 w-5 text-muted-foreground" />
             </div>
-            <input
+            <Input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyDown={handleSearchInput}
               placeholder="Search suppliers, products, or categories..."
-              className="block w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent bg-gray-50 focus:bg-white transition-colors"
+              className="pl-10 pr-4 py-3 rounded-xl border-input bg-muted/50 focus:bg-background transition-colors"
             />
           </form>
         </div>
@@ -248,7 +257,7 @@ const Header: React.FC = () => {
 
       {/* Mobile Menu */}
       {isMenuOpen && (
-        <div className="md:hidden bg-white border-t border-gray-100">
+        <div className="md:hidden bg-background border-t border-border">
           <div className="px-4 py-3 space-y-3">
             <button
               onClick={() => {

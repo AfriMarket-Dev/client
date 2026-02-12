@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Mail, CheckCircle } from 'lucide-react';
+import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/Input";
 
 const Newsletter: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -22,33 +24,33 @@ const Newsletter: React.FC = () => {
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Content */}
           <div className="space-y-6">
-            <div className="inline-flex items-center px-4 py-2 bg-orange-500/20 backdrop-blur-sm rounded-full text-sm font-medium text-orange-300 border border-orange-500/30">
+            <div className="inline-flex items-center px-4 py-2 bg-primary/20 backdrop-blur-sm rounded-full text-sm font-medium text-primary border border-primary/30">
               <Mail className="w-4 h-4 mr-2" />
               Stay Updated
             </div>
             
             <h2 className="text-3xl md:text-4xl font-bold leading-tight">
               Never Miss New
-              <span className="block bg-gradient-to-r from-orange-400 to-amber-400 bg-clip-text text-transparent">
+              <span className="block bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
                 Suppliers & Deals
               </span>
             </h2>
             
-            <p className="text-xl text-gray-300 leading-relaxed">
+            <p className="text-xl text-muted-foreground leading-relaxed">
               Get weekly updates on new suppliers, exclusive deals, market insights, 
               and industry trends delivered straight to your inbox.
             </p>
 
             <div className="space-y-4">
-              <div className="flex items-center text-gray-300">
+              <div className="flex items-center text-muted-foreground">
                 <CheckCircle className="w-5 h-5 text-green-400 mr-3 flex-shrink-0" />
                 <span>Weekly supplier spotlights and new arrivals</span>
               </div>
-              <div className="flex items-center text-gray-300">
+              <div className="flex items-center text-muted-foreground">
                 <CheckCircle className="w-5 h-5 text-green-400 mr-3 flex-shrink-0" />
                 <span>Exclusive wholesale deals and bulk pricing</span>
               </div>
-              <div className="flex items-center text-gray-300">
+              <div className="flex items-center text-muted-foreground">
                 <CheckCircle className="w-5 h-5 text-green-400 mr-3 flex-shrink-0" />
                 <span>Market trends and business growth tips</span>
               </div>
@@ -66,29 +68,29 @@ const Newsletter: React.FC = () => {
                   
                   <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
-                      <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-2">
+                      <label htmlFor="email" className="block text-sm font-medium text-muted-foreground mb-2">
                         Email Address
                       </label>
-                      <input
+                      <Input
                         type="email"
                         id="email"
                         placeholder="Enter your email address"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        className="w-full px-4 py-3 bg-white/10 border border-white/30 rounded-xl text-white placeholder-gray-400 focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-colors"
+                        className="w-full px-4 py-6 bg-white/10 border-white/30 text-white placeholder-gray-400 focus:bg-background/20 transition-colors"
                         required
                       />
                     </div>
                     
-                    <button
+                    <Button
                       type="submit"
-                      className="w-full bg-gradient-to-r from-orange-500 to-amber-500 text-white py-3 rounded-xl font-semibold hover:from-orange-600 hover:to-amber-600 transition-all duration-300 transform hover:scale-105"
+                      className="w-full bg-gradient-to-r from-primary to-primary/90 text-white hover:from-primary/90 hover:to-primary transition-all duration-300 transform hover:scale-105 py-6 h-auto"
                     >
                       Subscribe Now
-                    </button>
+                    </Button>
                   </form>
                   
-                  <p className="text-sm text-gray-400 text-center mt-4">
+                  <p className="text-sm text-muted-foreground text-center mt-4">
                     We respect your privacy. Unsubscribe at any time.
                   </p>
                 </>
@@ -98,7 +100,7 @@ const Newsletter: React.FC = () => {
                     <CheckCircle className="w-8 h-8 text-white" />
                   </div>
                   <h3 className="text-2xl font-bold mb-2">Thank You!</h3>
-                  <p className="text-gray-300">
+                  <p className="text-muted-foreground">
                     You've successfully subscribed to our newsletter. 
                     Check your inbox for a confirmation email.
                   </p>
@@ -107,7 +109,7 @@ const Newsletter: React.FC = () => {
             </div>
 
             {/* Decorative Elements */}
-            <div className="absolute -top-4 -right-4 w-24 h-24 bg-gradient-to-r from-orange-500/30 to-amber-500/30 rounded-full blur-xl"></div>
+            <div className="absolute -top-4 -right-4 w-24 h-24 bg-gradient-to-r from-primary/30 to-primary/20 rounded-full blur-xl"></div>
             <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-full blur-xl"></div>
           </div>
         </div>

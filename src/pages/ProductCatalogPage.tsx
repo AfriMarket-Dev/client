@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import ProductCatalog from '@/components/ProductCatalog';
-import { Product } from '@/types';
+import { type Product } from '@/types';
 
 const ProductCatalogPage = () => {
   const navigate = useNavigate();

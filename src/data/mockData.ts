@@ -1,4 +1,4 @@
-import { Supplier, Product, Category } from "../types";
+import { type Supplier, type Product, type Category } from "../types";
 import { Settings, Truck, Phone } from "lucide-react";
 
 export const categories: Category[] = [

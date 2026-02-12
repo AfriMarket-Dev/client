@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import SupplierDetails from '@/components/SupplierDetails';
-import { Product } from '@/types';
+import { type Product } from '@/types';
 
 const SupplierDetailsPage = () => {
   const navigate = useNavigate();

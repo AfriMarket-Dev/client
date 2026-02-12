@@ -24,7 +24,7 @@ import {
   Smile,
 } from "lucide-react";
 import { suppliers, products } from "../data/mockData";
-import { Product } from "../types";
+import { type Product } from "../types";
 import { useWishlist } from "../hooks/useWishlist";
 
 interface SupplierDetailsProps {

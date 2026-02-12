@@ -145,12 +145,12 @@ export default function AdminCustomersPage() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-gray-600 text-sm font-medium">Total Orders</p>
-              <p className="text-3xl font-bold text-orange-600 mt-2">
+              <p className="text-3xl font-bold text-primary mt-2">
                 {customers.reduce((sum, c) => sum + c.orders, 0)}
               </p>
             </div>
-            <div className="p-3 bg-orange-100 rounded-lg">
-              <MessageSquare className="w-6 h-6 text-orange-600" />
+            <div className="p-3 bg-primary/10 rounded-lg">
+              <MessageSquare className="w-6 h-6 text-primary" />
             </div>
           </div>
         </div>
@@ -184,7 +184,7 @@ export default function AdminCustomersPage() {
                 placeholder="Search by name or email..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
               />
             </div>
           </div>
@@ -192,14 +192,14 @@ export default function AdminCustomersPage() {
           <select
             value={filterStatus}
             onChange={(e) => setFilterStatus(e.target.value)}
-            className="px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+            className="px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
           >
             <option value="all">All Status</option>
             <option value="active">Active</option>
             <option value="inactive">Inactive</option>
           </select>
 
-          <button className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-lg hover:from-orange-600 hover:to-amber-600 transition-colors">
+          <button className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary to-primary/90 text-white rounded-lg hover:from-primary/90 hover:to-primary transition-colors">
             <Download size={18} />
             Export
           </button>
@@ -254,7 +254,7 @@ export default function AdminCustomersPage() {
                         </p>
                         <a
                           href={`mailto:${customer.email}`}
-                          className="text-xs text-orange-600 hover:text-orange-700"
+                          className="text-xs text-primary hover:text-primary/80"
                         >
                           {customer.email}
                         </a>
@@ -329,7 +329,7 @@ export default function AdminCustomersPage() {
           <button className="px-4 py-2 border border-gray-200 rounded-lg text-gray-600 hover:bg-gray-50 transition-colors">
             Previous
           </button>
-          <button className="px-4 py-2 bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-lg hover:from-orange-600 hover:to-amber-600 transition-colors">
+          <button className="px-4 py-2 bg-gradient-to-r from-primary to-primary/90 text-white rounded-lg hover:from-primary/90 hover:to-primary transition-colors">
             1
           </button>
           <button className="px-4 py-2 border border-gray-200 rounded-lg text-gray-600 hover:bg-gray-50 transition-colors">

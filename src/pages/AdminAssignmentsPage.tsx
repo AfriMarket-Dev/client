@@ -3,7 +3,6 @@ import {
   Plus,
   Trash2,
   CheckCircle,
-  AlertCircle,
   Link as LinkIcon,
   Search,
 } from "lucide-react";
@@ -100,7 +99,7 @@ export default function AdminAssignmentsPage() {
         </div>
         <button
           onClick={() => setShowModal(true)}
-          className="flex items-center gap-2 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white px-4 py-2 rounded-lg transition-all"
+          className="flex items-center gap-2 bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary text-white px-4 py-2 rounded-lg transition-all"
         >
           <Plus size={20} />
           New Assignment
@@ -116,7 +115,7 @@ export default function AdminAssignmentsPage() {
             placeholder="Search assignments..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
           />
         </div>
       </div>
@@ -218,7 +217,7 @@ export default function AdminAssignmentsPage() {
                 <select
                   value={selectedSupplier}
                   onChange={(e) => setSelectedSupplier(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
                   required
                 >
                   <option value="">Choose a supplier</option>
@@ -245,7 +244,7 @@ export default function AdminAssignmentsPage() {
                         type="checkbox"
                         checked={selectedServices.includes(service.id)}
                         onChange={() => toggleService(service.id)}
-                        className="w-4 h-4 text-orange-600 border-gray-300 rounded focus:ring-orange-500"
+                        className="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary"
                       />
                       <span className="text-sm text-gray-700">
                         {service.name}
@@ -266,7 +265,7 @@ export default function AdminAssignmentsPage() {
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 px-4 py-2 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white rounded-lg transition-all"
+                  className="flex-1 px-4 py-2 bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary text-white rounded-lg transition-all"
                   disabled={!selectedSupplier || selectedServices.length === 0}
                 >
                   Assign

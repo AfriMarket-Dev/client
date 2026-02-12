@@ -37,12 +37,12 @@ export default function ConfirmationModal({
           <div className="flex items-center justify-center mb-4">
             <div
               className={`p-3 rounded-full ${
-                isDanger ? "bg-red-100" : "bg-orange-100"
+                isDanger ? "bg-red-100" : "bg-primary/10"
               }`}
             >
               <Icon
                 size={28}
-                className={isDanger ? "text-red-600" : "text-orange-600"}
+                className={isDanger ? "text-red-600" : "text-primary"}
               />
             </div>
           </div>
@@ -68,7 +68,7 @@ export default function ConfirmationModal({
               className={`flex-1 px-4 py-2.5 text-white font-medium rounded-lg transition-all disabled:opacity-50 ${
                 isDanger
                   ? "bg-red-600 hover:bg-red-700"
-                  : "bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600"
+                  : "bg-gradient-to-r from-primary to-amber-500 hover:from-primary hover:to-amber-600"
               }`}
             >
               {isLoading ? "Processing..." : confirmText}

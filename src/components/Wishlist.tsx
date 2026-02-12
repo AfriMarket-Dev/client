@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Heart, ArrowLeft, Package, Users, Trash2, Eye, MessageCircle, MapPin, Star, Building, User, Grid, List } from 'lucide-react';
+import { Heart, ArrowLeft, Package, Users, Trash2, Eye, MapPin, Grid, List, Star } from 'lucide-react';
 import { useWishlist } from '../hooks/useWishlist';
-import { Product, Supplier } from '../types';
+import { type Product } from '../types';
 
 interface WishlistProps {
   onBack: () => void;
@@ -39,7 +39,7 @@ const Wishlist: React.FC<WishlistProps> = ({ onBack, onProductClick, onSupplierC
             <div className="flex items-center">
               <button
                 onClick={onBack}
-                className="flex items-center text-gray-600 hover:text-orange-600 transition-colors mr-4"
+                className="flex items-center text-gray-600 hover:text-primary transition-colors mr-4"
               >
                 <ArrowLeft className="w-5 h-5 mr-2" />
                 Back
@@ -58,7 +58,7 @@ const Wishlist: React.FC<WishlistProps> = ({ onBack, onProductClick, onSupplierC
                 <button
                   onClick={() => setViewMode('grid')}
                   className={`p-2 rounded-md transition-colors ${
-                    viewMode === 'grid' ? 'bg-white text-orange-600 shadow-sm' : 'text-gray-600'
+                    viewMode === 'grid' ? 'bg-white text-primary shadow-sm' : 'text-gray-600'
                   }`}
                 >
                   <Grid className="w-4 h-4" />
@@ -66,7 +66,7 @@ const Wishlist: React.FC<WishlistProps> = ({ onBack, onProductClick, onSupplierC
                 <button
                   onClick={() => setViewMode('list')}
                   className={`p-2 rounded-md transition-colors ${
-                    viewMode === 'list' ? 'bg-white text-orange-600 shadow-sm' : 'text-gray-600'
+                    viewMode === 'list' ? 'bg-white text-primary shadow-sm' : 'text-gray-600'
                   }`}
                 >
                   <List className="w-4 h-4" />
@@ -95,7 +95,7 @@ const Wishlist: React.FC<WishlistProps> = ({ onBack, onProductClick, onSupplierC
               onClick={() => setActiveTab('products')}
               className={`flex items-center py-4 px-2 border-b-2 font-medium text-sm transition-colors ${
                 activeTab === 'products'
-                  ? 'border-orange-500 text-orange-600'
+                  ? 'border-primary text-primary'
                   : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
               }`}
             >
@@ -106,7 +106,7 @@ const Wishlist: React.FC<WishlistProps> = ({ onBack, onProductClick, onSupplierC
               onClick={() => setActiveTab('suppliers')}
               className={`flex items-center py-4 px-2 border-b-2 font-medium text-sm transition-colors ${
                 activeTab === 'suppliers'
-                  ? 'border-orange-500 text-orange-600'
+                  ? 'border-primary text-primary'
                   : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
               }`}
             >
@@ -128,7 +128,7 @@ const Wishlist: React.FC<WishlistProps> = ({ onBack, onProductClick, onSupplierC
                 <p className="text-gray-600 mb-6">Start adding products you're interested in to your wishlist</p>
                 <button
                   onClick={onBack}
-                  className="bg-gradient-to-r from-orange-500 to-amber-500 text-white px-6 py-3 rounded-xl font-semibold hover:from-orange-600 hover:to-amber-600 transition-colors"
+                  className="bg-gradient-to-r from-primary to-primary/80 text-primary-foreground px-6 py-3 rounded-xl font-semibold hover:from-primary/90 hover:to-primary transition-colors"
                 >
                   Browse Products
                 </button>
@@ -168,12 +168,12 @@ const Wishlist: React.FC<WishlistProps> = ({ onBack, onProductClick, onSupplierC
 
                     <div className="p-4">
                       <div className="mb-2">
-                        <span className="text-xs font-medium text-orange-600 bg-orange-50 px-2 py-1 rounded-full">
+                        <span className="text-xs font-medium text-primary bg-primary/10 px-2 py-1 rounded-full">
                           {product.category}
                         </span>
                       </div>
                       
-                      <h3 className="font-semibold text-gray-900 mb-2 group-hover:text-orange-600 transition-colors">
+                      <h3 className="font-semibold text-gray-900 mb-2 group-hover:text-primary transition-colors">
                         {product.name}
                       </h3>
                       
@@ -183,7 +183,7 @@ const Wishlist: React.FC<WishlistProps> = ({ onBack, onProductClick, onSupplierC
 
                       <div className="flex items-center justify-between">
                         <div>
-                          <div className="text-lg font-bold text-orange-600">
+                          <div className="text-lg font-bold text-primary">
                             ${product.priceRange.min} - ${product.priceRange.max}
                           </div>
                           <div className="text-xs text-gray-500">Min. order: {product.minimumOrder} units</div>
@@ -206,7 +206,7 @@ const Wishlist: React.FC<WishlistProps> = ({ onBack, onProductClick, onSupplierC
                 <p className="text-gray-600 mb-6">Start adding suppliers you want to work with to your wishlist</p>
                 <button
                   onClick={onBack}
-                  className="bg-gradient-to-r from-orange-500 to-amber-500 text-white px-6 py-3 rounded-xl font-semibold hover:from-orange-600 hover:to-amber-600 transition-colors"
+                  className="bg-gradient-to-r from-primary to-primary/80 text-primary-foreground px-6 py-3 rounded-xl font-semibold hover:from-primary/90 hover:to-primary transition-colors"
                 >
                   Browse Suppliers
                 </button>
@@ -255,7 +255,7 @@ const Wishlist: React.FC<WishlistProps> = ({ onBack, onProductClick, onSupplierC
                     <div className="pt-8 px-4 pb-4">
                       <div className="flex items-start justify-between mb-3">
                         <div className="flex-1">
-                          <h3 className="text-lg font-bold text-gray-900 mb-1 group-hover:text-orange-600 transition-colors">
+                          <h3 className="text-lg font-bold text-gray-900 mb-1 group-hover:text-primary transition-colors">
                             {supplier.name}
                           </h3>
                           <div className="flex items-center text-gray-600 mb-2">
@@ -279,7 +279,7 @@ const Wishlist: React.FC<WishlistProps> = ({ onBack, onProductClick, onSupplierC
                         {supplier.specialties.slice(0, 2).map((specialty, index) => (
                           <span
                             key={index}
-                            className="px-2 py-1 bg-orange-100 text-orange-700 text-xs font-medium rounded-full"
+                            className="px-2 py-1 bg-primary/10 text-primary text-xs font-medium rounded-full"
                           >
                             {specialty}
                           </span>

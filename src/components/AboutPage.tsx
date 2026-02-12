@@ -1,4 +1,5 @@
 import React from 'react';
+import { Button } from "@/components/ui/Button";
 import { ArrowLeft, Globe, Target, Eye, Users, Award, TrendingUp, Heart, Shield, Handshake, Star, CheckCircle, MapPin, Calendar, Building } from 'lucide-react';
 
 interface AboutPageProps {
@@ -9,7 +10,7 @@ const AboutPage: React.FC<AboutPageProps> = ({ onBack }) => {
   const stats = [
     { icon: Users, value: '2,500+', label: 'Verified Suppliers', color: 'from-blue-500 to-cyan-500' },
     { icon: Globe, value: '54', label: 'African Countries', color: 'from-green-500 to-emerald-500' },
-    { icon: TrendingUp, value: '50K+', label: 'Products Available', color: 'from-orange-500 to-amber-500' },
+    { icon: TrendingUp, value: '50K+', label: 'Products Available', color: 'from-primary to-primary/80' },
     { icon: Award, value: '98%', label: 'Success Rate', color: 'from-purple-500 to-pink-500' }
   ];
 
@@ -100,26 +101,27 @@ const AboutPage: React.FC<AboutPageProps> = ({ onBack }) => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-muted/50">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 sticky top-0 z-30">
+      <div className="bg-background border-b border-border sticky top-0 z-30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <button
+          <Button
+            variant="ghost"
             onClick={onBack}
-            className="flex items-center text-gray-600 hover:text-orange-600 transition-colors mb-4"
+            className="flex items-center text-muted-foreground hover:text-primary mb-4 pl-0 hover:bg-transparent"
           >
             <ArrowLeft className="w-5 h-5 mr-2" />
             Back to Home
-          </button>
+          </Button>
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">About AfrikaMarket</h1>
-            <p className="text-gray-600 mt-1">Connecting Africa through trade and commerce</p>
+            <h1 className="text-3xl font-bold text-foreground">About AfrikaMarket</h1>
+            <p className="text-muted-foreground mt-1">Connecting Africa through trade and commerce</p>
           </div>
         </div>
       </div>
 
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50 py-20 overflow-hidden">
+      <section className="relative bg-gradient-to-br from-primary-50 via-warning/80 to-warning/10 py-20 overflow-hidden">
         {/* African Pattern Background */}
         <div className="absolute inset-0 opacity-5">
           <svg className="w-full h-full" viewBox="0 0 1200 800">
@@ -130,26 +132,26 @@ const AboutPage: React.FC<AboutPageProps> = ({ onBack }) => {
                 <path d="M30,30 L90,90 M90,30 L30,90" stroke="currentColor" strokeWidth="1" opacity="0.2"/>
               </pattern>
             </defs>
-            <rect width="100%" height="100%" fill="url(#about-pattern)" className="text-orange-600"/>
+            <rect width="100%" height="100%" fill="url(#about-pattern)" className="text-primary"/>
           </svg>
         </div>
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="inline-flex items-center px-6 py-3 bg-white/90 backdrop-blur-sm rounded-full text-sm font-medium text-orange-700 border-2 border-orange-200 shadow-lg mb-8">
+          <div className="inline-flex items-center px-6 py-3 bg-white/90 backdrop-blur-sm rounded-full text-sm font-medium text-primary border-2 border-primary/20 shadow-lg mb-8">
             <Globe className="w-5 h-5 mr-2" />
-            <span className="bg-gradient-to-r from-orange-600 to-amber-600 bg-clip-text text-transparent font-semibold">
+            <span className="bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent font-semibold">
               Empowering African Commerce
             </span>
           </div>
 
-          <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+          <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6 leading-tight">
             Building Africa's
-            <span className="block bg-gradient-to-r from-orange-600 via-amber-600 to-yellow-600 bg-clip-text text-transparent">
+            <span className="block bg-gradient-to-r from-primary via-primary/90 to-primary/80 bg-clip-text text-transparent">
               Digital Marketplace
             </span>
           </h1>
 
-          <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed mb-12">
+          <p className="text-xl text-muted-foreground max-w-4xl mx-auto leading-relaxed mb-12">
             AfrikaMarket is more than a platform – we're a movement dedicated to transforming 
             African commerce by connecting verified suppliers with retailers across the continent, 
             fostering economic growth and building lasting business relationships.
@@ -158,12 +160,12 @@ const AboutPage: React.FC<AboutPageProps> = ({ onBack }) => {
           {/* Stats */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
             {stats.map((stat, index) => (
-              <div key={index} className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-orange-100 shadow-lg">
+              <div key={index} className="bg-card/80 backdrop-blur-sm rounded-2xl p-6 border border-border shadow-lg">
                 <div className={`inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br ${stat.color} rounded-2xl text-white mb-4 mx-auto`}>
                   <stat.icon className="w-8 h-8" />
                 </div>
-                <div className="text-3xl font-bold text-gray-900 mb-1">{stat.value}</div>
-                <div className="text-sm text-gray-600 font-medium">{stat.label}</div>
+                <div className="text-3xl font-bold text-foreground mb-1">{stat.value}</div>
+                <div className="text-sm text-muted-foreground font-medium">{stat.label}</div>
               </div>
             ))}
           </div>
@@ -171,14 +173,14 @@ const AboutPage: React.FC<AboutPageProps> = ({ onBack }) => {
       </section>
 
       {/* Mission & Vision */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             {/* Mission */}
             <div className="relative">
-              <div className="bg-gradient-to-br from-orange-50 to-amber-50 rounded-3xl p-8 border border-orange-100">
+              <div className="bg-primary/5 rounded-3xl p-8 border border-primary/10">
                 <div className="flex items-center mb-6">
-                  <div className="flex items-center justify-center w-16 h-16 bg-gradient-to-br from-orange-500 to-amber-500 rounded-2xl text-white mr-4">
+                  <div className="flex items-center justify-center w-16 h-16 bg-gradient-to-br from-primary to-primary/80 rounded-2xl text-white mr-4">
                     <Target className="w-8 h-8" />
                   </div>
                   <h2 className="text-3xl font-bold text-gray-900">Our Mission</h2>
@@ -197,7 +199,7 @@ const AboutPage: React.FC<AboutPageProps> = ({ onBack }) => {
                   ].map((point, index) => (
                     <div key={index} className="flex items-center">
                       <CheckCircle className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" />
-                      <span className="text-gray-700">{point}</span>
+                      <span className="text-foreground">{point}</span>
                     </div>
                   ))}
                 </div>
@@ -227,7 +229,7 @@ const AboutPage: React.FC<AboutPageProps> = ({ onBack }) => {
                   ].map((point, index) => (
                     <div key={index} className="flex items-center">
                       <Star className="w-5 h-5 text-blue-500 mr-3 flex-shrink-0" />
-                      <span className="text-gray-700">{point}</span>
+                      <span className="text-foreground">{point}</span>
                     </div>
                   ))}
                 </div>
@@ -248,15 +250,14 @@ const AboutPage: React.FC<AboutPageProps> = ({ onBack }) => {
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {values.map((value, index) => (
-              <div key={index} className="bg-white rounded-2xl p-6 shadow-sm hover:shadow-lg transition-shadow">
-                <div className={`inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br ${value.color} rounded-2xl text-white mb-4`}>
-                  <value.icon className="w-8 h-8" />
-                </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-3">{value.title}</h3>
-                <p className="text-gray-600 leading-relaxed">{value.description}</p>
-              </div>
-            ))}
+      {/* Values */}
+      <section className="py-20 bg-muted/50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-foreground mb-6">Our Core Values</h2>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+              Guided by principles that empower African commerce.
+            </p>
           </div>
         </div>
       </section>
@@ -273,19 +274,18 @@ const AboutPage: React.FC<AboutPageProps> = ({ onBack }) => {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {team.map((member, index) => (
-              <div key={index} className="bg-gradient-to-br from-orange-50 to-amber-50 rounded-2xl p-6 border border-orange-100 text-center">
+              <div key={index} className="bg-primary/5 rounded-2xl p-6 border border-primary/10 text-center">
                 <img
                   src={member.image}
                   alt={member.name}
                   className="w-24 h-24 rounded-full mx-auto mb-4 object-cover border-4 border-white shadow-lg"
                 />
-                <h3 className="text-xl font-bold text-gray-900 mb-1">{member.name}</h3>
-                <p className="text-orange-600 font-medium mb-2">{member.position}</p>
-                <div className="flex items-center justify-center text-gray-600 text-sm mb-3">
-                  <MapPin className="w-4 h-4 mr-1" />
-                  {member.location}
-                </div>
-                <p className="text-gray-600 text-sm leading-relaxed">{member.bio}</p>
+      {/* Team */}
+      <section className="py-20 bg-background">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-foreground mb-6">Meet Our Leadership Team</h2>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
               </div>
             ))}
           </div>
@@ -304,24 +304,20 @@ const AboutPage: React.FC<AboutPageProps> = ({ onBack }) => {
 
           <div className="relative">
             {/* Timeline line */}
-            <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-gradient-to-b from-orange-500 to-amber-500 rounded-full"></div>
+            <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-gradient-to-b from-primary to-primary/80 rounded-full"></div>
 
             <div className="space-y-12">
               {milestones.map((milestone, index) => (
                 <div key={index} className={`flex items-center ${index % 2 === 0 ? 'flex-row' : 'flex-row-reverse'}`}>
-                  <div className={`w-1/2 ${index % 2 === 0 ? 'pr-8 text-right' : 'pl-8 text-left'}`}>
-                    <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-                      <div className="flex items-center mb-3">
-                        <Calendar className="w-5 h-5 text-orange-600 mr-2" />
-                        <span className="text-2xl font-bold text-orange-600">{milestone.year}</span>
-                      </div>
-                      <h3 className="text-xl font-bold text-gray-900 mb-2">{milestone.title}</h3>
-                      <p className="text-gray-600">{milestone.description}</p>
-                    </div>
-                  </div>
+      {/* Journey/Timeline */}
+      <section className="py-20 bg-muted/50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-foreground mb-6">Our Journey</h2>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
                   
                   {/* Timeline dot */}
-                  <div className="relative z-10 flex items-center justify-center w-12 h-12 bg-gradient-to-br from-orange-500 to-amber-500 rounded-full border-4 border-white shadow-lg">
+                  <div className="relative z-10 flex items-center justify-center w-12 h-12 bg-gradient-to-br from-primary to-primary/80 rounded-full border-4 border-white shadow-lg">
                     <div className="w-4 h-4 bg-white rounded-full"></div>
                   </div>
                   
@@ -334,7 +330,7 @@ const AboutPage: React.FC<AboutPageProps> = ({ onBack }) => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500">
+      <section className="py-20 bg-gradient-to-r from-primary via-primary/90 to-primary/80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-4xl font-bold text-white mb-6">Join the AfrikaMarket Community</h2>
           <p className="text-xl text-white/90 max-w-3xl mx-auto mb-8">
@@ -342,12 +338,19 @@ const AboutPage: React.FC<AboutPageProps> = ({ onBack }) => {
             AfrikaMarket is your gateway to African commerce success.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="bg-white text-orange-600 px-8 py-4 rounded-xl font-semibold text-lg hover:bg-gray-100 transition-colors shadow-lg">
+            <Button
+              size="lg"
+              className="bg-white text-primary hover:bg-gray-100 shadow-lg text-lg h-auto py-4 px-8"
+            >
               Become a Supplier
-            </button>
-            <button className="border-2 border-white text-white px-8 py-4 rounded-xl font-semibold text-lg hover:bg-white hover:text-orange-600 transition-all duration-300">
+            </Button>
+            <Button
+              variant="outline"
+              size="lg"
+              className="border-2 border-white text-white hover:bg-white hover:text-primary transition-all duration-300 text-lg h-auto py-4 px-8"
+            >
               Start Shopping
-            </button>
+            </Button>
           </div>
         </div>
       </section>

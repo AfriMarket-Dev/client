@@ -3,11 +3,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import {
   ChevronLeft,
   Building,
-  Mail,
-  Phone,
-  MapPin,
-  FileText,
-  Shield,
   User,
 } from "lucide-react";
 
@@ -155,7 +150,7 @@ export default function AdminEditSupplierPage() {
                 ? navigate("/admin/suppliers")
                 : setCurrentStep(1)
             }
-            className="flex items-center gap-2 text-orange-600 hover:text-orange-700 font-medium transition-colors"
+            className="flex items-center gap-2 text-primary hover:text-primary/80 font-medium transition-colors"
           >
             <ChevronLeft size={20} />
             {currentStep === 1 ? "Back to Suppliers" : "Back"}
@@ -177,12 +172,12 @@ export default function AdminEditSupplierPage() {
           <div className="flex gap-2">
             <div
               className={`flex-1 h-2 rounded-full transition-colors ${
-                currentStep >= 1 ? "bg-orange-500" : "bg-gray-200"
+                currentStep >= 1 ? "bg-primary" : "bg-gray-200"
               }`}
             ></div>
             <div
               className={`flex-1 h-2 rounded-full transition-colors ${
-                currentStep >= 2 ? "bg-orange-500" : "bg-gray-200"
+                currentStep >= 2 ? "bg-primary" : "bg-gray-200"
               }`}
             ></div>
           </div>
@@ -200,7 +195,7 @@ export default function AdminEditSupplierPage() {
             <div className="space-y-6">
               <div>
                 <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center gap-2">
-                  <Building className="text-orange-600" size={24} />
+                  <Building className="text-primary" size={24} />
                   Company Information
                 </h2>
               </div>
@@ -220,7 +215,7 @@ export default function AdminEditSupplierPage() {
                       })
                     }
                     placeholder="Enter company name"
-                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 ${
+                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary ${
                       errors.companyName ? "border-red-500" : "border-gray-300"
                     }`}
                     required
@@ -241,7 +236,7 @@ export default function AdminEditSupplierPage() {
                     onChange={(e) =>
                       setFormData({ ...formData, industry: e.target.value })
                     }
-                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 ${
+                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary ${
                       errors.industry ? "border-red-500" : "border-gray-300"
                     }`}
                     required
@@ -275,7 +270,7 @@ export default function AdminEditSupplierPage() {
                     })
                   }
                   placeholder="Enter registration ID or TIN"
-                  className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 ${
+                  className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary ${
                     errors.registrationId ? "border-red-500" : "border-gray-300"
                   }`}
                   required
@@ -297,7 +292,7 @@ export default function AdminEditSupplierPage() {
                     onChange={(e) =>
                       setFormData({ ...formData, location: e.target.value })
                     }
-                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 ${
+                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary ${
                       errors.location ? "border-red-500" : "border-gray-300"
                     }`}
                     required
@@ -327,7 +322,7 @@ export default function AdminEditSupplierPage() {
                       setFormData({ ...formData, district: e.target.value })
                     }
                     placeholder="Enter district"
-                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 ${
+                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary ${
                       errors.district ? "border-red-500" : "border-gray-300"
                     }`}
                     required
@@ -352,7 +347,7 @@ export default function AdminEditSupplierPage() {
                       setFormData({ ...formData, sector: e.target.value })
                     }
                     placeholder="Enter sector"
-                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 ${
+                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary ${
                       errors.sector ? "border-red-500" : "border-gray-300"
                     }`}
                     required
@@ -373,7 +368,7 @@ export default function AdminEditSupplierPage() {
                       setFormData({ ...formData, cell: e.target.value })
                     }
                     placeholder="Enter cell"
-                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 ${
+                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary ${
                       errors.cell ? "border-red-500" : "border-gray-300"
                     }`}
                     required
@@ -394,7 +389,7 @@ export default function AdminEditSupplierPage() {
                       setFormData({ ...formData, village: e.target.value })
                     }
                     placeholder="Enter village"
-                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 ${
+                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary ${
                       errors.village ? "border-red-500" : "border-gray-300"
                     }`}
                     required
@@ -421,7 +416,7 @@ export default function AdminEditSupplierPage() {
                   }
                   placeholder="Enter detailed address"
                   rows={3}
-                  className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 ${
+                  className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary ${
                     errors.sectorAddress ? "border-red-500" : "border-gray-300"
                   }`}
                   required
@@ -440,7 +435,7 @@ export default function AdminEditSupplierPage() {
             <div className="p-8 space-y-6">
               <div>
                 <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center gap-2">
-                  <User className="text-orange-600" size={24} />
+                  <User className="text-primary" size={24} />
                   Contact Person & Credentials
                 </h2>
               </div>
@@ -457,7 +452,7 @@ export default function AdminEditSupplierPage() {
                       setFormData({ ...formData, fullName: e.target.value })
                     }
                     placeholder="Enter full name"
-                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 ${
+                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary ${
                       errors.fullName ? "border-red-500" : "border-gray-300"
                     }`}
                     required
@@ -480,7 +475,7 @@ export default function AdminEditSupplierPage() {
                       setFormData({ ...formData, position: e.target.value })
                     }
                     placeholder="e.g., Manager, Director"
-                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 ${
+                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary ${
                       errors.position ? "border-red-500" : "border-gray-300"
                     }`}
                     required
@@ -505,7 +500,7 @@ export default function AdminEditSupplierPage() {
                       setFormData({ ...formData, email: e.target.value })
                     }
                     placeholder="Enter email"
-                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 ${
+                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary ${
                       errors.email ? "border-red-500" : "border-gray-300"
                     }`}
                     required
@@ -529,7 +524,7 @@ export default function AdminEditSupplierPage() {
                       })
                     }
                     placeholder="Enter contact number"
-                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 ${
+                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary ${
                       errors.contactNumber
                         ? "border-red-500"
                         : "border-gray-300"
@@ -559,7 +554,7 @@ export default function AdminEditSupplierPage() {
                       })
                     }
                     placeholder="Enter national ID or passport"
-                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 ${
+                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary ${
                       errors.nationalId ? "border-red-500" : "border-gray-300"
                     }`}
                     required
@@ -585,7 +580,7 @@ export default function AdminEditSupplierPage() {
                       })
                     }
                     placeholder="Enter phone number"
-                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 ${
+                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary ${
                       errors.phoneNumber ? "border-red-500" : "border-gray-300"
                     }`}
                     required
@@ -616,7 +611,7 @@ export default function AdminEditSupplierPage() {
                       setFormData({ ...formData, password: e.target.value })
                     }
                     placeholder="Enter new password (min 8 characters)"
-                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 ${
+                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary ${
                       errors.password ? "border-red-500" : "border-gray-300"
                     }`}
                   />
@@ -641,7 +636,7 @@ export default function AdminEditSupplierPage() {
                       })
                     }
                     placeholder="Confirm password"
-                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 ${
+                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary ${
                       errors.confirmPassword
                         ? "border-red-500"
                         : "border-gray-300"
@@ -675,7 +670,7 @@ export default function AdminEditSupplierPage() {
             <button
               type={currentStep === 1 ? "button" : "submit"}
               onClick={currentStep === 1 ? handleNext : undefined}
-              className="flex-1 px-6 py-3 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-medium rounded-lg transition-all"
+              className="flex-1 px-6 py-3 bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary text-white font-medium rounded-lg transition-all"
             >
               {currentStep === 1 ? "Next" : "Update Supplier"}
             </button>

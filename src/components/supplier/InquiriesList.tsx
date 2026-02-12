@@ -193,7 +193,7 @@ const InquiriesList: React.FC = () => {
             </div>
 
             {/* Product Info */}
-            <div className="bg-orange-50 rounded-xl p-6">
+            <div className="bg-primary/5 rounded-xl p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Product Inquiry</h3>
               <div className="flex items-start space-x-4">
                 <img
@@ -205,11 +205,11 @@ const InquiriesList: React.FC = () => {
                   <h4 className="font-semibold text-gray-900 mb-2">{selectedInquiry.productName}</h4>
                   <div className="grid md:grid-cols-2 gap-4">
                     <div className="flex items-center">
-                      <Package className="w-4 h-4 text-orange-600 mr-2" />
+                      <Package className="w-4 h-4 text-primary mr-2" />
                       <span className="text-gray-600">Quantity: {selectedInquiry.requestedQuantity} units</span>
                     </div>
                     <div className="flex items-center">
-                      <DollarSign className="w-4 h-4 text-orange-600 mr-2" />
+                      <DollarSign className="w-4 h-4 text-primary mr-2" />
                       <span className="text-gray-600">
                         Budget: ${selectedInquiry.budgetRange.min.toLocaleString()} - ${selectedInquiry.budgetRange.max.toLocaleString()}
                       </span>
@@ -234,7 +234,7 @@ const InquiriesList: React.FC = () => {
                 value={responseMessage}
                 onChange={(e) => setResponseMessage(e.target.value)}
                 rows={6}
-                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent resize-none"
+                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent resize-none"
                 placeholder="Type your response to the customer..."
                 required
               />
@@ -248,7 +248,7 @@ const InquiriesList: React.FC = () => {
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 bg-gradient-to-r from-orange-500 to-amber-500 text-white py-3 rounded-xl font-semibold hover:from-orange-600 hover:to-amber-600 transition-colors"
+                  className="flex-1 bg-gradient-to-r from-primary to-primary/90 text-white py-3 rounded-xl font-semibold hover:from-primary/90 hover:to-primary transition-colors"
                 >
                   Send Response
                 </button>
@@ -278,13 +278,13 @@ const InquiriesList: React.FC = () => {
               placeholder="Search inquiries..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+              className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
             />
           </div>
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+            className="px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
           >
             <option value="all">All Status</option>
             <option value="new">New</option>
@@ -295,7 +295,7 @@ const InquiriesList: React.FC = () => {
           <select
             value={urgencyFilter}
             onChange={(e) => setUrgencyFilter(e.target.value)}
-            className="px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+            className="px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
           >
             <option value="all">All Priority</option>
             <option value="high">High Priority</option>
@@ -349,15 +349,15 @@ const InquiriesList: React.FC = () => {
                 <h4 className="font-medium text-gray-900 mb-2">{inquiry.productName}</h4>
                 <div className="grid md:grid-cols-3 gap-4 text-sm">
                   <div className="flex items-center text-gray-600">
-                    <Package className="w-4 h-4 mr-2 text-orange-600" />
+                    <Package className="w-4 h-4 mr-2 text-primary" />
                     <span>Qty: {inquiry.requestedQuantity}</span>
                   </div>
                   <div className="flex items-center text-gray-600">
-                    <DollarSign className="w-4 h-4 mr-2 text-orange-600" />
+                    <DollarSign className="w-4 h-4 mr-2 text-primary" />
                     <span>Budget: ${inquiry.budgetRange.min.toLocaleString()} - ${inquiry.budgetRange.max.toLocaleString()}</span>
                   </div>
                   <div className="flex items-center text-gray-600">
-                    <Clock className="w-4 h-4 mr-2 text-orange-600" />
+                    <Clock className="w-4 h-4 mr-2 text-primary" />
                     <span>{inquiry.createdAt}</span>
                   </div>
                 </div>
@@ -375,14 +375,14 @@ const InquiriesList: React.FC = () => {
               <div className="flex space-x-2">
                 <button
                   onClick={() => setSelectedInquiry(inquiry)}
-                  className="flex items-center px-4 py-2 text-orange-600 hover:bg-orange-50 rounded-lg transition-colors"
+                  className="flex items-center px-4 py-2 text-primary hover:bg-primary/5 rounded-lg transition-colors"
                 >
                   <Eye className="w-4 h-4 mr-1" />
                   View Details
                 </button>
                 <button
                   onClick={() => setSelectedInquiry(inquiry)}
-                  className="flex items-center px-4 py-2 bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-lg hover:from-orange-600 hover:to-amber-600 transition-colors"
+                  className="flex items-center px-4 py-2 bg-gradient-to-r from-primary to-primary/90 text-white rounded-lg hover:from-primary/90 hover:to-primary transition-colors"
                 >
                   <Reply className="w-4 h-4 mr-1" />
                   Respond

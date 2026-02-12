@@ -1,4 +1,5 @@
 import React from 'react';
+import { Button } from "@/components/ui/Button";
 import { ArrowRight, Users, Package, Globe, TrendingUp, Star, Shield, Zap, CheckCircle, MapPin, Settings, Clock, Percent, Gift, Tag, Siren as Fire, Crown, Truck, Phone } from 'lucide-react';
 
 interface HeroProps {
@@ -9,8 +10,7 @@ interface HeroProps {
 
 const Hero: React.FC<HeroProps> = ({ onBrowseProducts, onBrowseSuppliers, onSignUpClick }) => {
   return (
-    <section className="relative bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50 overflow-hidden">
-      {/* African Pattern Background */}
+    <section>
       <div className="absolute inset-0 opacity-5">
         <svg
           className="absolute top-0 left-0 w-full h-full"
@@ -43,7 +43,7 @@ const Hero: React.FC<HeroProps> = ({ onBrowseProducts, onBrowseSuppliers, onSign
             width="100%"
             height="100%"
             fill="url(#african-pattern)"
-            className="text-orange-600"
+            className="text-primary"
           />
         </svg>
       </div>
@@ -51,12 +51,12 @@ const Hero: React.FC<HeroProps> = ({ onBrowseProducts, onBrowseSuppliers, onSign
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Top Promotional Banner - Amazon Style */}
         <div className="py-4 mt-3">
-          <div className="bg-gradient-to-r from-red-600 via-red-500 to-pink-500 rounded-xl p-4 text-white shadow-lg">
+          <div className="bg-linear-to-r from-primary/90 to-primary rounded-xl p-4 text-background">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-4">
-                <div className="flex items-center bg-white/20 rounded-full px-3 py-1">
-                  <Fire className="w-4 h-4 mr-2" />
-                  <span className="text-sm font-bold">FLASH SALE</span>
+                <div className="flex items-center bg-primary/20 rounded-full px-3 py-1">
+                  <Fire className="w-4 h-4 mr-2 text-primary-foreground" />
+                  <span className="text-sm font-bold text-primary-foreground">FLASH SALE</span>
                 </div>
                 <div>
                   <h3 className="text-lg font-bold">
@@ -80,9 +80,9 @@ const Hero: React.FC<HeroProps> = ({ onBrowseProducts, onBrowseSuppliers, onSign
                   <div className="text-2xl font-bold">35</div>
                   <div className="text-xs opacity-80">MINS</div>
                 </div>
-                <button className="bg-white text-red-600 px-6 py-2 rounded-lg font-bold hover:bg-gray-100 transition-colors">
+                <Button variant="secondary" size="sm" className="bg-background text-red-600 hover:bg-background/90 font-bold">
                   View all
-                </button>
+                </Button>
               </div>
             </div>
           </div>
@@ -91,21 +91,21 @@ const Hero: React.FC<HeroProps> = ({ onBrowseProducts, onBrowseSuppliers, onSign
         {/* Main Hero Content */}
         <div className="py-4">
           <div className="text-center mb-2">
-            {/* <div className="inline-flex items-center px-6 py-3 bg-white/90 backdrop-blur-sm rounded-full text-sm font-medium text-orange-700 border-2 border-orange-200 shadow-lg mb-6">
+            {/* <div className="inline-flex items-center px-6 py-3 bg-background/90 backdrop-blur-sm rounded-full text-sm font-medium text-primary border-2 border-primary/20 shadow-lg mb-6">
               <Globe className="w-5 h-5 mr-2" />
-              <span className="bg-gradient-to-r from-orange-600 to-amber-600 bg-clip-text text-transparent font-semibold">
+              <span className="bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent font-semibold">
                 Africa's Premier Wholesale Marketplace
               </span>
             </div> */}
 
-            <h1 className="text-5xl md:text-5xl font-bold text-gray-900 leading-tight mb-6">
+            <h1 className="text-5xl md:text-5xl font-bold text-foreground leading-tight mb-6">
               Connect with
-              <span className="block bg-gradient-to-r from-orange-600 via-amber-600 to-yellow-600 bg-clip-text text-transparent">
+              <span className="block bg-gradient-to-r from-primary/60 via-primary/80 to-primary/90 bg-clip-text text-transparent">
                 Trusted African Suppliers
               </span>
             </h1>
 
-            <p className="text-lg text-gray-600 leading-relaxed max-w-3xl mx-auto mb-8">
+            <p className="text-lg text-muted-foreground leading-relaxed max-w-3xl mx-auto mb-8">
               Discover quality products from verified wholesalers and importers
               across Africa. Build lasting business relationships and grow your
               retail business with confidence.
@@ -113,21 +113,24 @@ const Hero: React.FC<HeroProps> = ({ onBrowseProducts, onBrowseSuppliers, onSign
 
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-0">
-              <button
+              <Button
+                size="lg"
                 onClick={onBrowseProducts}
-                className="group bg-gradient-to-r from-orange-500 to-amber-500 text-white px-8 py-4 rounded-xl font-bold text-lg hover:from-orange-600 hover:to-amber-600 transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl"
+                className="group bg-gradient-to-r from-primary/60 via-primary/80 to-primary/90 text-background hover:from-primary/60 via-primary/80 to-primary/90 transition-all duration-300 shadow-xl hover:shadow-2xl text-lg px-8 py-6 h-auto"
               >
                 <span className="flex items-center justify-center">
                   Browse Products
                   <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
                 </span>
-              </button>
-              <button
+              </Button>
+              <Button
+                variant="outline"
+                size="lg"
                 onClick={onSignUpClick}
-                className="border-2 border-orange-500 text-orange-600 px-8 py-4 rounded-xl font-bold text-lg hover:bg-orange-500 hover:text-white transition-all duration-300 shadow-lg"
+                className="border-2 border-primary/60 via-primary/80 to-primary/90 text-primary/60 via-primary/80 to-primary/90 hover:bg-primary/60 via-primary/80 to-primary/90 hover:text-background transition-all duration-300 shadow-lg text-lg px-8 py-6 h-auto"
               >
                 Browse Services
-              </button>
+              </Button>
             </div>
 
             {/* Trust Indicators */}
@@ -153,21 +156,21 @@ const Hero: React.FC<HeroProps> = ({ onBrowseProducts, onBrowseSuppliers, onSign
      
           <div className="grid md:grid-cols-2 gap-6 mb-0">
            
-            {/* <div className="relative bg-gradient-to-r from-purple-600 to-indigo-600 rounded-2xl p-8 text-white overflow-hidden">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-16 translate-x-16"></div>
-              <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full translate-y-12 -translate-x-12"></div>
+            {/* <div className="relative bg-gradient-to-r from-purple-600 to-indigo-600 rounded-2xl p-8 text-background overflow-hidden">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-background/10 rounded-full -translate-y-16 translate-x-16"></div>
+              <div className="absolute bottom-0 left-0 w-24 h-24 bg-background/10 rounded-full translate-y-12 -translate-x-12"></div>
 
               <div className="relative z-10">
                 <div className="flex items-center mb-4">
                   <Crown className="w-6 h-6 mr-2" />
-                  <span className="bg-white/20 px-3 py-1 rounded-full text-sm font-bold">
+                  <span className="bg-background/20 px-3 py-1 rounded-full text-sm font-bold">
                     PREMIUM DEALS
                   </span>
                 </div>
                 <h3 className="text-2xl font-bold mb-2">
                   Electronics Mega Sale
                 </h3>
-                <p className="text-white/90 mb-4">
+                <p className="text-background/90 mb-4">
                   Latest smartphones, tablets & accessories
                 </p>
                 <div className="flex items-center space-x-4 mb-4">
@@ -177,26 +180,26 @@ const Hero: React.FC<HeroProps> = ({ onBrowseProducts, onBrowseSuppliers, onSign
                     <div className="opacity-75">Min. order: 50 units</div>
                   </div>
                 </div>
-                <button className="bg-white text-purple-600 px-6 py-3 rounded-xl font-bold hover:bg-gray-100 transition-colors">
+                <button className="bg-background text-purple-600 px-6 py-3 rounded-xl font-bold hover:bg-gray-100 transition-colors">
                   Shop Electronics
                 </button>
               </div>
             </div> */}
 
            
-            {/* <div className="relative bg-gradient-to-r from-green-600 to-emerald-600 rounded-2xl p-8 text-white overflow-hidden">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-16 translate-x-16"></div>
-              <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full translate-y-12 -translate-x-12"></div>
+            {/* <div className="relative bg-gradient-to-r from-green-600 to-emerald-600 rounded-2xl p-8 text-background overflow-hidden">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-background/10 rounded-full -translate-y-16 translate-x-16"></div>
+              <div className="absolute bottom-0 left-0 w-24 h-24 bg-background/10 rounded-full translate-y-12 -translate-x-12"></div>
 
               <div className="relative z-10">
                 <div className="flex items-center mb-4">
                   <Gift className="w-6 h-6 mr-2" />
-                  <span className="bg-white/20 px-3 py-1 rounded-full text-sm font-bold">
+                  <span className="bg-background/20 px-3 py-1 rounded-full text-sm font-bold">
                     NEW ARRIVALS
                   </span>
                 </div>
                 <h3 className="text-2xl font-bold mb-2">Fashion & Textiles</h3>
-                <p className="text-white/90 mb-4">
+                <p className="text-background/90 mb-4">
                   Premium African prints & modern fabrics
                 </p>
                 <div className="flex items-center space-x-4 mb-4">
@@ -206,7 +209,7 @@ const Hero: React.FC<HeroProps> = ({ onBrowseProducts, onBrowseSuppliers, onSign
                     <div className="opacity-75">Bulk pricing available</div>
                   </div>
                 </div>
-                <button className="bg-white text-green-600 px-6 py-3 rounded-xl font-bold hover:bg-gray-100 transition-colors">
+                <button className="bg-background text-green-600 px-6 py-3 rounded-xl font-bold hover:bg-gray-100 transition-colors">
                   Shop Fashion
                 </button>
               </div>
@@ -216,17 +219,17 @@ const Hero: React.FC<HeroProps> = ({ onBrowseProducts, onBrowseSuppliers, onSign
           {/* Main Promotional Grid */}
           <div className="grid md:grid-cols-4 gap-6">
             {/* Hot Deals Card */}
-            <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-orange-100 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+            <div className="bg-card/95 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-border hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center">
                   <div className="w-12 h-12 bg-gradient-to-br from-red-500 to-pink-500 rounded-xl flex items-center justify-center mr-3">
-                    <Fire className="w-6 h-6 text-white" />
+                    <Fire className="w-6 h-6 text-background" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold text-gray-900">
+                    <h3 className="text-lg font-bold text-card-foreground">
                       Hot Deals
                     </h3>
-                    <p className="text-sm text-gray-600">Limited time offers</p>
+                    <p className="text-sm text-muted-foreground">Limited time offers</p>
                   </div>
                 </div>
                 <div className="text-right">
@@ -287,31 +290,31 @@ const Hero: React.FC<HeroProps> = ({ onBrowseProducts, onBrowseSuppliers, onSign
                       alt="Deal"
                       className="w-full h-16 object-cover group-hover:scale-105 transition-transform duration-300"
                     />
-                    <div className="absolute top-1 right-1 bg-red-500 text-white text-xs px-1.5 py-0.5 rounded-full font-bold">
+                    <div className="absolute top-1 right-1 bg-red-500 text-background text-xs px-1.5 py-0.5 rounded-full font-bold">
                       {deal.discount} OFF
                     </div>
                   </div>
                 ))}
               </div>
 
-              <button className="w-full bg-gradient-to-r from-red-500 to-pink-500 text-white py-3 rounded-xl font-semibold hover:from-red-600 hover:to-pink-600 transition-colors flex items-center justify-center">
+              <Button className="w-full bg-gradient-to-r from-red-500 to-pink-500 text-background hover:from-red-600 hover:to-pink-600 transition-colors py-6 h-auto">
                 View All Deals
                 <ArrowRight className="w-4 h-4 ml-2" />
-              </button>
+              </Button>
             </div>
 
             {/* Top Products Card */}
-            <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-orange-100 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+            <div className="bg-card/95 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-border hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center">
                   <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-xl flex items-center justify-center mr-3">
-                    <Package className="w-6 h-6 text-white" />
+                    <Package className="w-6 h-6 text-background" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold text-gray-900">
+                    <h3 className="text-lg font-bold text-card-foreground">
                       Top Products
                     </h3>
-                    <p className="text-sm text-gray-600">Trending items</p>
+                    <p className="text-sm text-muted-foreground">Trending items</p>
                   </div>
                 </div>
                 <div className="text-right">
@@ -360,20 +363,20 @@ const Hero: React.FC<HeroProps> = ({ onBrowseProducts, onBrowseSuppliers, onSign
                       <div
                         className={`absolute -top-1 -right-1 text-xs px-1 py-0.5 rounded-full font-bold ${
                           product.badge === "BESTSELLER"
-                            ? "bg-yellow-500 text-white"
+                            ? "bg-yellow-500 text-background"
                             : product.badge === "NEW"
-                            ? "bg-green-500 text-white"
-                            : "bg-purple-500 text-white"
+                            ? "bg-green-500 text-background"
+                            : "bg-purple-500 text-background"
                         }`}
                       >
                         {product.badge}
                       </div>
                     </div>
                     <div className="flex-1 min-w-0">
-                      <div className="font-medium text-gray-900 text-sm truncate">
+                      <div className="font-medium text-foreground text-sm truncate">
                         {product.name}
                       </div>
-                      <div className="text-xs text-gray-500">
+                      <div className="text-xs text-muted-foreground">
                         {product.category}
                       </div>
                     </div>
@@ -384,31 +387,31 @@ const Hero: React.FC<HeroProps> = ({ onBrowseProducts, onBrowseSuppliers, onSign
                 ))}
               </div>
 
-              <button
+              <Button
                 onClick={onBrowseProducts}
-                className="w-full mt-4 bg-gradient-to-r from-blue-500 to-cyan-500 text-white py-3 rounded-xl font-semibold hover:from-blue-600 hover:to-cyan-600 transition-colors flex items-center justify-center"
+                className="w-full mt-4 bg-gradient-to-r from-blue-500 to-cyan-500 text-background hover:from-blue-600 hover:to-cyan-600 transition-colors py-6 h-auto"
               >
                 View All Products
                 <ArrowRight className="w-4 h-4 ml-2" />
-              </button>
+              </Button>
             </div>
 
             {/* Top Suppliers Card */}
-            <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-orange-100 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+            <div className="bg-card/95 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-border hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center">
-                  <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-amber-500 rounded-xl flex items-center justify-center mr-3">
-                    <Users className="w-6 h-6 text-white" />
+                  <div className="w-12 h-12 bg-gradient-to-br from-primary to-primary/80 rounded-xl flex items-center justify-center mr-3">
+                    <Users className="w-6 h-6 text-background" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold text-gray-900">
+                    <h3 className="text-lg font-bold text-card-foreground">
                       Top Suppliers
                     </h3>
-                    <p className="text-sm text-gray-600">Verified partners</p>
+                    <p className="text-sm text-muted-foreground">Verified partners</p>
                   </div>
                 </div>
                 <div className="text-right">
-                  <div className="text-2xl font-bold text-orange-600">
+                  <div className="text-2xl font-bold text-primary">
                     2.5K+
                   </div>
                   <div className="text-xs text-gray-500">Verified</div>
@@ -444,31 +447,31 @@ const Hero: React.FC<HeroProps> = ({ onBrowseProducts, onBrowseSuppliers, onSign
                 ].map((supplier, index) => (
                   <div
                     key={index}
-                    className="flex items-center space-x-3 p-2 hover:bg-orange-50 rounded-lg transition-colors cursor-pointer"
+                    className="flex items-center space-x-3 p-2 hover:bg-primary/5 rounded-lg transition-colors cursor-pointer"
                   >
                     <div className="relative">
                       <img
                         src={supplier.avatar}
                         alt={supplier.name}
-                        className="w-10 h-10 rounded-full object-cover border-2 border-white shadow-sm"
+                        className="w-10 h-10 rounded-full object-cover border-2 border-background shadow-sm"
                       />
                       <div
                         className={`absolute -top-1 -right-1 text-xs px-1 py-0.5 rounded-full font-bold ${
                           supplier.badge === "VERIFIED"
-                            ? "bg-green-500 text-white"
+                            ? "bg-green-500 text-background"
                             : supplier.badge === "TOP RATED"
-                            ? "bg-yellow-500 text-white"
-                            : "bg-orange-500 text-white"
+                            ? "bg-yellow-500 text-background"
+                            : "bg-primary text-background"
                         }`}
                       >
                         ★
                       </div>
                     </div>
                     <div className="flex-1 min-w-0">
-                      <div className="font-medium text-gray-900 text-sm truncate">
+                      <div className="font-medium text-foreground text-sm truncate">
                         {supplier.name}
                       </div>
-                      <div className="text-xs text-gray-500 flex items-center">
+                      <div className="text-xs text-muted-foreground flex items-center">
                         <MapPin className="w-3 h-3 mr-1" />
                         {supplier.location}
                       </div>
@@ -483,27 +486,27 @@ const Hero: React.FC<HeroProps> = ({ onBrowseProducts, onBrowseSuppliers, onSign
                 ))}
               </div>
 
-              <button
+              <Button
                 onClick={onBrowseSuppliers}
-                className="w-full mt-4 bg-gradient-to-r from-orange-500 to-amber-500 text-white py-3 rounded-xl font-semibold hover:from-orange-600 hover:to-amber-600 transition-colors flex items-center justify-center"
+                className="w-full mt-4 bg-gradient-to-r from-primary to-primary/90 text-background hover:from-primary/90 hover:to-primary transition-colors py-6 h-auto"
               >
                 View All Suppliers
                 <ArrowRight className="w-4 h-4 ml-2" />
-              </button>
+              </Button>
             </div>
 
             {/* Services Showcase */}
-            <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-orange-100 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+            <div className="bg-card/95 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-border hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center">
                   <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-xl flex items-center justify-center mr-3">
-                    <Settings className="w-6 h-6 text-white" />
+                    <Settings className="w-6 h-6 text-background" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold text-gray-900">
+                    <h3 className="text-lg font-bold text-card-foreground">
                       Top Services
                     </h3>
-                    <p className="text-sm text-gray-600">
+                    <p className="text-sm text-muted-foreground">
                       Professional solutions
                     </p>
                   </div>
@@ -545,10 +548,10 @@ const Hero: React.FC<HeroProps> = ({ onBrowseProducts, onBrowseSuppliers, onSign
                       <service.icon className="w-4 h-4 text-emerald-600" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <div className="font-medium text-gray-900 text-sm">
+                      <div className="font-medium text-foreground text-sm">
                         {service.name}
                       </div>
-                      <div className="text-xs text-gray-500">
+                      <div className="text-xs text-muted-foreground">
                         {service.description}
                       </div>
                     </div>
@@ -559,16 +562,16 @@ const Hero: React.FC<HeroProps> = ({ onBrowseProducts, onBrowseSuppliers, onSign
                 ))}
               </div>
 
-              <button className="w-full mt-4 bg-gradient-to-r from-emerald-500 to-teal-500 text-white py-3 rounded-xl font-semibold hover:from-emerald-600 hover:to-teal-600 transition-colors flex items-center justify-center">
+              <Button className="w-full mt-4 bg-gradient-to-r from-emerald-500 to-teal-500 text-background hover:from-emerald-600 hover:to-teal-600 transition-colors py-6 h-auto">
                 Explore Services
                 <ArrowRight className="w-4 h-4 ml-2" />
-              </button>
+              </Button>
             </div>
           </div>
 
           {/* Bottom Promotional Strip - eBay Style */}
           <div className="mt-2 grid md:grid-cols-3 gap-4">
-            <div className="bg-gradient-to-r from-yellow-400 to-orange-400 rounded-xl p-4 text-white">
+            <div className="bg-gradient-to-r from-primary/80 to-primary rounded-xl p-4 text-background">
               <div className="flex items-center justify-between">
                 <div>
                   <div className="flex items-center mb-1">
@@ -583,7 +586,7 @@ const Hero: React.FC<HeroProps> = ({ onBrowseProducts, onBrowseSuppliers, onSign
               </div>
             </div>
 
-            <div className="bg-gradient-to-r from-green-500 to-emerald-500 rounded-xl p-4 text-white">
+            <div className="bg-gradient-to-r from-green-500 to-emerald-500 rounded-xl p-4 text-background">
               <div className="flex items-center justify-between">
                 <div>
                   <div className="flex items-center mb-1">
@@ -596,7 +599,7 @@ const Hero: React.FC<HeroProps> = ({ onBrowseProducts, onBrowseSuppliers, onSign
               </div>
             </div>
 
-            <div className="bg-gradient-to-r from-purple-500 to-indigo-500 rounded-xl p-4 text-white">
+            <div className="bg-gradient-to-r from-purple-500 to-indigo-500 rounded-xl p-4 text-background">
               <div className="flex items-center justify-between">
                 <div>
                   <div className="flex items-center mb-1">
@@ -612,14 +615,14 @@ const Hero: React.FC<HeroProps> = ({ onBrowseProducts, onBrowseSuppliers, onSign
         </div>
 
         {/* Floating Promotion Badges */}
-        <div className="absolute top-2 left-1/2 transform -translate-x-1/2 bg-white rounded-full px-4 py-2 shadow-lg border-2 border-orange-200 ">
+        <div className="absolute top-2 left-1/2 transform -translate-x-1/2 bg-card rounded-full px-4 py-2 shadow-lg border-2 border-primary/20 ">
           <div className="flex items-center space-x-2">
             <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
-            <span className="text-sm font-bold text-gray-900">Live Deals</span>
+            <span className="text-sm font-bold text-foreground">Live Deals</span>
           </div>
         </div>
 
-        <div className="absolute -bottom-4 right-4 bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-full px-4 py-2 shadow-lg">
+        <div className="absolute -bottom-4 right-4 bg-gradient-to-r from-primary to-primary/90 text-background rounded-full px-4 py-2 shadow-lg">
           <div className="text-xs font-bold">50+ Active Deals</div>
         </div>
       </div>
@@ -640,9 +643,9 @@ const Hero: React.FC<HeroProps> = ({ onBrowseProducts, onBrowseSuppliers, onSign
               x2="100%"
               y2="0%"
             >
-              <stop offset="0%" stopColor="#f97316" />
-              <stop offset="50%" stopColor="#f59e0b" />
-              <stop offset="100%" stopColor="#eab308" />
+              <stop offset="0%" stopColor="var(--color-primary)" />
+              <stop offset="50%" stopColor="var(--color-primary)" stopOpacity="0.8" />
+              <stop offset="100%" stopColor="var(--color-primary)" stopOpacity="0.6" />
             </linearGradient>
           </defs>
         </svg>

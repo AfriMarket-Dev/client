@@ -34,7 +34,7 @@ export default function AdminServicesPage() {
             placeholder="Search services..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
           />
         </div>
       </div>
@@ -62,8 +62,8 @@ export default function AdminServicesPage() {
               <div className="p-6">
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex items-center gap-3">
-                    <div className="p-3 bg-orange-100 rounded-lg">
-                      <IconComponent size={24} className="text-orange-600" />
+                    <div className="p-3 bg-primary/10 rounded-lg">
+                      <IconComponent size={24} className="text-primary" />
                     </div>
                     <div>
                       <h3 className="text-lg font-bold text-gray-900">
@@ -76,8 +76,8 @@ export default function AdminServicesPage() {
                   </div>
                 </div>
 
-                <div className="bg-orange-50 rounded-lg p-3 mb-4">
-                  <p className="text-sm font-semibold text-orange-900">
+                <div className="bg-primary/5 rounded-lg p-3 mb-4">
+                  <p className="text-sm font-semibold text-primary">
                     {service.price}
                   </p>
                 </div>
@@ -141,7 +141,7 @@ export default function AdminServicesPage() {
                 <div className="flex items-center gap-2 mt-4 pt-4 border-t border-gray-100">
                   <button
                     onClick={() => navigate(`/admin/services/${service.id}`)}
-                    className="flex-1 p-2 hover:bg-orange-100 rounded-lg transition-all text-orange-600 font-medium text-sm"
+                    className="flex-1 p-2 hover:bg-primary/10 rounded-lg transition-all text-primary font-medium text-sm"
                   >
                     <Eye size={16} className="inline mr-1" />
                     View

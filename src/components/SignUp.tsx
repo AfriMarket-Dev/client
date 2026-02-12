@@ -285,7 +285,7 @@ const SignUp: React.FC<SignUpProps> = ({
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder}
-          className={`w-full ${Icon ? "pl-10" : "pl-4"} pr-4 py-3 border rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-colors ${
+          className={`w-full ${Icon ? "pl-10" : "pl-4"} pr-4 py-3 border rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-colors ${
             error ? "border-red-500 bg-red-50" : "border-gray-200"
           }`}
         />
@@ -326,7 +326,7 @@ const SignUp: React.FC<SignUpProps> = ({
         <select
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          className={`w-full ${Icon ? "pl-10" : "pl-4"} pr-4 py-3 border rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-colors ${
+          className={`w-full ${Icon ? "pl-10" : "pl-4"} pr-4 py-3 border rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-colors ${
             error ? "border-red-500 bg-red-50" : "border-gray-200"
           }`}
         >
@@ -374,7 +374,7 @@ const SignUp: React.FC<SignUpProps> = ({
           type={show ? "text" : "password"}
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          className={`w-full pl-10 pr-12 py-3 border rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-colors ${
+          className={`w-full pl-10 pr-12 py-3 border rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-colors ${
             error ? "border-red-500 bg-red-50" : "border-gray-200"
           }`}
           placeholder="Enter password"
@@ -398,12 +398,12 @@ const SignUp: React.FC<SignUpProps> = ({
   // Account Type Selection
   if (!accountType) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-br from-primary/5 via-primary/10 to-transparent flex items-center justify-center p-4">
         <div className="max-w-4xl w-full">
           <div className="text-center mb-12">
             <button
               onClick={onBack}
-              className="inline-flex items-center text-gray-600 hover:text-orange-600 transition-colors mb-6"
+              className="inline-flex items-center text-gray-600 hover:text-primary transition-colors mb-6"
             >
               <ArrowLeft className="w-5 h-5 mr-2" />
               Back to Home
@@ -421,7 +421,7 @@ const SignUp: React.FC<SignUpProps> = ({
             {/* Customer Account */}
             <div
               onClick={() => setAccountType("customer")}
-              className="group relative bg-white rounded-3xl p-8 border-2 border-gray-200 hover:border-orange-500 transition-all duration-300 cursor-pointer hover:shadow-2xl transform hover:-translate-y-2"
+              className="group relative bg-white rounded-3xl p-8 border-2 border-gray-200 hover:border-primary transition-all duration-300 cursor-pointer hover:shadow-2xl transform hover:-translate-y-2"
             >
               <div className="text-center">
                 <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-2xl text-white mb-6 group-hover:scale-110 transition-transform duration-300">
@@ -464,10 +464,10 @@ const SignUp: React.FC<SignUpProps> = ({
             {/* Supplier Account */}
             <div
               onClick={() => setAccountType("supplier")}
-              className="group relative bg-white rounded-3xl p-8 border-2 border-gray-200 hover:border-orange-500 transition-all duration-300 cursor-pointer hover:shadow-2xl transform hover:-translate-y-2"
+              className="group relative bg-white rounded-3xl p-8 border-2 border-gray-200 hover:border-primary transition-all duration-300 cursor-pointer hover:shadow-2xl transform hover:-translate-y-2"
             >
               <div className="text-center">
-                <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-orange-500 to-amber-500 rounded-2xl text-white mb-6 group-hover:scale-110 transition-transform duration-300">
+                <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-primary to-primary/80 rounded-2xl text-white mb-6 group-hover:scale-110 transition-transform duration-300">
                   <Building className="w-10 h-10" />
                 </div>
 
@@ -498,7 +498,7 @@ const SignUp: React.FC<SignUpProps> = ({
                   </div>
                 </div>
 
-                <button className="w-full mt-8 bg-gradient-to-r from-orange-500 to-amber-500 text-white py-4 rounded-xl font-semibold hover:from-orange-600 hover:to-amber-600 transition-colors">
+                <button className="w-full mt-8 bg-gradient-to-r from-primary to-primary/80 text-primary-foreground py-4 rounded-xl font-semibold hover:from-primary/90 hover:to-primary transition-colors">
                   Sign Up as Supplier
                 </button>
               </div>
@@ -510,7 +510,7 @@ const SignUp: React.FC<SignUpProps> = ({
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50 flex">
+    <div className="min-h-screen bg-gradient-to-br from-primary/5 via-primary/10 to-transparent flex">
       {/* Left Side - Form */}
       <div className="flex-1 py-8 px-4">
         <div className="max-w-2xl mx-auto">
@@ -527,7 +527,7 @@ const SignUp: React.FC<SignUpProps> = ({
                   setErrors({});
                 }
               }}
-              className="inline-flex items-center text-gray-600 hover:text-orange-600 transition-colors mb-6"
+              className="inline-flex items-center text-gray-600 hover:text-primary transition-colors mb-6"
             >
               <ArrowLeft className="w-5 h-5 mr-2" />
               {accountType === "supplier" && currentStep === 2
@@ -537,7 +537,7 @@ const SignUp: React.FC<SignUpProps> = ({
 
             {/* Logo */}
             <div className="mb-4">
-              <h1 className="text-3xl font-bold bg-gradient-to-r from-orange-600 to-amber-600 bg-clip-text text-transparent">
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
                 AfrikaMarket
               </h1>
               <p className="text-sm text-gray-500 -mt-1">Wholesale Hub</p>
@@ -548,7 +548,7 @@ const SignUp: React.FC<SignUpProps> = ({
                 className={`inline-flex items-center justify-center w-12 h-12 rounded-2xl text-white mr-3 ${
                   accountType === "customer"
                     ? "bg-gradient-to-br from-blue-500 to-cyan-500"
-                    : "bg-gradient-to-br from-orange-500 to-amber-500"
+                    : "bg-gradient-to-br from-primary to-primary/80"
                 }`}
               >
                 {accountType === "customer" ? (
@@ -571,12 +571,12 @@ const SignUp: React.FC<SignUpProps> = ({
             {accountType === "supplier" && (
               <div className="flex items-center justify-center space-x-4 mb-8">
                 <div
-                  className={`flex items-center ${currentStep >= 1 ? "text-orange-600" : "text-gray-400"}`}
+                  className={`flex items-center ${currentStep >= 1 ? "text-primary" : "text-gray-400"}`}
                 >
                   <div
                     className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold ${
                       currentStep >= 1
-                        ? "bg-orange-500 text-white"
+                        ? "bg-primary text-primary-foreground"
                         : "bg-gray-200 text-gray-600"
                     }`}
                   >
@@ -585,15 +585,15 @@ const SignUp: React.FC<SignUpProps> = ({
                   <span className="ml-2 font-medium">Company Info</span>
                 </div>
                 <div
-                  className={`w-16 h-1 rounded-full ${currentStep >= 2 ? "bg-orange-500" : "bg-gray-200"}`}
+                  className={`w-16 h-1 rounded-full ${currentStep >= 2 ? "bg-primary" : "bg-gray-200"}`}
                 ></div>
                 <div
-                  className={`flex items-center ${currentStep >= 2 ? "text-orange-600" : "text-gray-400"}`}
+                  className={`flex items-center ${currentStep >= 2 ? "text-primary" : "text-gray-400"}`}
                 >
                   <div
                     className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold ${
                       currentStep >= 2
-                        ? "bg-orange-500 text-white"
+                        ? "bg-primary text-primary-foreground"
                         : "bg-gray-200 text-gray-600"
                     }`}
                   >
@@ -986,7 +986,7 @@ const SignUp: React.FC<SignUpProps> = ({
                     type="button"
                     onClick={handleNext}
                     disabled={isLoading}
-                    className="w-full bg-gradient-to-r from-orange-500 to-amber-500 text-white py-4 rounded-xl font-semibold hover:from-orange-600 hover:to-amber-600 transition-colors flex items-center justify-center disabled:opacity-60 disabled:cursor-not-allowed"
+                    className="w-full bg-gradient-to-r from-primary to-primary/80 text-primary-foreground py-4 rounded-xl font-semibold hover:from-primary/90 hover:to-primary transition-colors flex items-center justify-center disabled:opacity-60 disabled:cursor-not-allowed"
                   >
                     Continue to Step 2
                     <ArrowRight className="w-5 h-5 ml-2" />
@@ -995,7 +995,7 @@ const SignUp: React.FC<SignUpProps> = ({
                   <button
                     type="submit"
                     disabled={isLoading}
-                    className="w-full bg-gradient-to-r from-orange-500 to-amber-500 text-white py-4 rounded-xl font-semibold hover:from-orange-600 hover:to-amber-600 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+                    className="w-full bg-gradient-to-r from-primary to-primary/80 text-primary-foreground py-4 rounded-xl font-semibold hover:from-primary/90 hover:to-primary transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
                   >
                     {isLoading
                       ? "Creating account..."
@@ -1010,14 +1010,14 @@ const SignUp: React.FC<SignUpProps> = ({
               By creating an account, you agree to our{" "}
               <a
                 href="#"
-                className="text-orange-600 hover:text-orange-700 font-medium"
+                className="text-primary hover:text-primary/80 font-medium"
               >
                 Terms of Service
               </a>{" "}
               and{" "}
               <a
                 href="#"
-                className="text-orange-600 hover:text-orange-700 font-medium"
+                className="text-primary hover:text-primary/80 font-medium"
               >
                 Privacy Policy
               </a>
@@ -1028,7 +1028,7 @@ const SignUp: React.FC<SignUpProps> = ({
 
       {/* Right Side - Image */}
       <div className="hidden lg:flex flex-1 relative">
-        <div className="absolute inset-0 bg-gradient-to-br from-orange-500/20 to-amber-500/20"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-primary/10"></div>
         <img
           src="/ChatGPT Image Aug 2, 2025, 09_22_52 AM.png"
           alt="African supplier and customer business discussion"
@@ -1039,7 +1039,7 @@ const SignUp: React.FC<SignUpProps> = ({
         {/* Overlay Content */}
         <div className="absolute bottom-8 left-8 right-8 text-white">
           <div className="mb-4">
-            <h3 className="text-2xl font-bold bg-gradient-to-r from-orange-300 to-amber-300 bg-clip-text text-transparent">
+            <h3 className="text-2xl font-bold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
               AfrikaMarket
             </h3>
             <p className="text-sm opacity-90">Wholesale Hub</p>

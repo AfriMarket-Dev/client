@@ -187,7 +187,7 @@ const MessageCenter: React.FC = () => {
               placeholder="Search conversations..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+              className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
             />
           </div>
         </div>
@@ -199,7 +199,7 @@ const MessageCenter: React.FC = () => {
               key={conversation.id}
               onClick={() => setSelectedConversation(conversation.id)}
               className={`p-4 border-b border-gray-100 cursor-pointer hover:bg-gray-50 transition-colors ${
-                selectedConversation === conversation.id ? 'bg-orange-50 border-r-4 border-r-orange-500' : ''
+                selectedConversation === conversation.id ? 'bg-primary/5 border-r-4 border-r-primary' : ''
               }`}
             >
               <div className="flex items-start space-x-3">
@@ -222,7 +222,7 @@ const MessageCenter: React.FC = () => {
                   <p className="text-sm text-gray-500 truncate">{conversation.lastMessage}</p>
                 </div>
                 {conversation.unreadCount > 0 && (
-                  <div className="bg-orange-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                  <div className="bg-primary text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
                     {conversation.unreadCount}
                   </div>
                 )}
@@ -278,7 +278,7 @@ const MessageCenter: React.FC = () => {
                     <div
                       className={`px-4 py-2 rounded-2xl ${
                         message.isOwn
-                          ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white'
+                          ? 'bg-gradient-to-r from-primary to-primary/90 text-white'
                           : 'bg-gray-100 text-gray-900'
                       }`}
                     >
@@ -319,13 +319,13 @@ const MessageCenter: React.FC = () => {
                     value={newMessage}
                     onChange={(e) => setNewMessage(e.target.value)}
                     placeholder="Type your message..."
-                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
                   />
                 </div>
                 <button
                   type="submit"
                   disabled={!newMessage.trim()}
-                  className="p-3 bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-xl hover:from-orange-600 hover:to-amber-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="p-3 bg-gradient-to-r from-primary to-primary/90 text-white rounded-xl hover:from-primary/90 hover:to-primary transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <Send className="w-5 h-5" />
                 </button>

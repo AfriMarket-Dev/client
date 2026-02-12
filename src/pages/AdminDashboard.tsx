@@ -3,7 +3,6 @@ import {
   Users,
   Package,
   Zap,
-  TrendingUp,
   AlertCircle,
 } from "lucide-react";
 
@@ -51,25 +50,25 @@ export default function AdminDashboard() {
     },
   ];
 
-  const getColorStyles = (color: string) => {
+    const getColorStyles = (color: string) => {
     const colors: Record<string, { bg: string; text: string }> = {
-      orange: { bg: "bg-orange-100", text: "text-orange-600" },
+      default: { bg: "bg-primary/10", text: "text-primary" },
       green: { bg: "bg-green-100", text: "text-green-600" },
       purple: { bg: "bg-purple-100", text: "text-purple-600" },
       blue: { bg: "bg-blue-100", text: "text-blue-600" },
     };
-    return colors[color] || colors.blue;
+    return colors[color] || colors.default;
   };
 
   const statsWithColors = stats.map((stat, index) => ({
     ...stat,
-    color: ["orange", "green", "purple", "blue"][index],
+    color: ["default", "green", "purple", "blue"][index],
   }));
 
   return (
     <div className="space-y-8">
       {/* Welcome Section */}
-      <div className="bg-gradient-to-r from-orange-500 to-amber-500 rounded-2xl p-6 text-white">
+      <div className="bg-gradient-to-r from-primary to-primary/90 rounded-2xl p-6 text-white">
         <h1 className="text-3xl font-bold mb-2">Welcome back, Admin!</h1>
         <p className="opacity-90">
           Here's what's happening on your platform today.
@@ -169,7 +168,7 @@ export default function AdminDashboard() {
             Quick Actions
           </h3>
           <div className="space-y-3">
-            <button className="w-full bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-medium py-2 px-4 rounded-lg transition-all">
+            <button className="w-full bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary text-white font-medium py-2 px-4 rounded-lg transition-all">
               Add Service
             </button>
             <button className="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-lg transition-all">
@@ -200,7 +199,7 @@ export default function AdminDashboard() {
             </div>
             <div className="w-full bg-gray-200 rounded-full h-2">
               <div
-                className="bg-gradient-to-r from-orange-500 to-amber-500 h-2 rounded-full"
+                className="bg-gradient-to-r from-primary to-primary/80 h-2 rounded-full"
                 style={{ width: "98%" }}
               ></div>
             </div>
@@ -214,7 +213,7 @@ export default function AdminDashboard() {
             </div>
             <div className="w-full bg-gray-200 rounded-full h-2">
               <div
-                className="bg-gradient-to-r from-orange-500 to-amber-500 h-2 rounded-full"
+                className="bg-gradient-to-r from-primary to-primary/80 h-2 rounded-full"
                 style={{ width: "95%" }}
               ></div>
             </div>
@@ -228,7 +227,7 @@ export default function AdminDashboard() {
             </div>
             <div className="w-full bg-gray-200 rounded-full h-2">
               <div
-                className="bg-gradient-to-r from-orange-500 to-amber-500 h-2 rounded-full"
+                className="bg-gradient-to-r from-primary to-primary/80 h-2 rounded-full"
                 style={{ width: "92%" }}
               ></div>
             </div>

@@ -32,7 +32,7 @@ const HelpCenter: React.FC<HelpCenterProps> = ({ onBack }) => {
       title: 'For Buyers',
       icon: Package,
       description: 'Guide for retailers and buyers',
-      color: 'from-orange-500 to-amber-500',
+      color: 'from-primary to-primary/90',
       articles: 15
     },
     {
@@ -174,7 +174,7 @@ const HelpCenter: React.FC<HelpCenterProps> = ({ onBack }) => {
       description: 'Speak directly with our team',
       availability: 'Mon-Fri, 8AM-6PM WAT',
       action: 'Call Now',
-      color: 'from-orange-500 to-amber-500'
+      color: 'from-primary to-primary/80'
     }
   ];
 
@@ -192,7 +192,7 @@ const HelpCenter: React.FC<HelpCenterProps> = ({ onBack }) => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <button
             onClick={onBack}
-            className="flex items-center text-gray-600 hover:text-orange-600 transition-colors mb-4"
+            className="flex items-center text-gray-600 hover:text-primary transition-colors mb-4"
           >
             <ArrowLeft className="w-5 h-5 mr-2" />
             Back to Home
@@ -205,9 +205,9 @@ const HelpCenter: React.FC<HelpCenterProps> = ({ onBack }) => {
       </div>
 
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50 py-16">
+      <section className="bg-gradient-to-br from-primary/10 via-white to-primary/5 py-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-orange-500 to-amber-500 rounded-2xl text-white mb-6">
+          <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-primary to-primary/90 rounded-2xl text-white mb-6">
             <HelpCircle className="w-10 h-10" />
           </div>
           
@@ -224,7 +224,7 @@ const HelpCenter: React.FC<HelpCenterProps> = ({ onBack }) => {
               placeholder="Search for help articles, FAQs, guides..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-6 py-4 text-lg border border-gray-200 rounded-2xl focus:ring-2 focus:ring-orange-500 focus:border-transparent shadow-lg"
+              className="w-full pl-12 pr-6 py-4 text-lg border border-gray-200 rounded-2xl focus:ring-2 focus:ring-primary focus:border-transparent shadow-lg"
             />
           </div>
         </div>
@@ -240,7 +240,7 @@ const HelpCenter: React.FC<HelpCenterProps> = ({ onBack }) => {
                 <button
                   onClick={() => setSelectedCategory(null)}
                   className={`w-full text-left px-3 py-2 rounded-lg transition-colors ${
-                    !selectedCategory ? 'bg-orange-100 text-orange-700' : 'text-gray-600 hover:bg-gray-100'
+                    !selectedCategory ? 'bg-primary/10 text-primary' : 'text-gray-600 hover:bg-gray-100'
                   }`}
                 >
                   All Categories
@@ -250,7 +250,7 @@ const HelpCenter: React.FC<HelpCenterProps> = ({ onBack }) => {
                     key={category.id}
                     onClick={() => setSelectedCategory(category.id)}
                     className={`w-full text-left px-3 py-2 rounded-lg transition-colors flex items-center ${
-                      selectedCategory === category.id ? 'bg-orange-100 text-orange-700' : 'text-gray-600 hover:bg-gray-100'
+                      selectedCategory === category.id ? 'bg-primary/10 text-primary' : 'text-gray-600 hover:bg-gray-100'
                     }`}
                   >
                     <category.icon className="w-4 h-4 mr-2" />
@@ -277,11 +277,11 @@ const HelpCenter: React.FC<HelpCenterProps> = ({ onBack }) => {
                       <div className={`inline-flex items-center justify-center w-12 h-12 bg-gradient-to-br ${category.color} rounded-xl text-white mb-4 group-hover:scale-110 transition-transform`}>
                         <category.icon className="w-6 h-6" />
                       </div>
-                      <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-orange-600 transition-colors">
+                      <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-primary transition-colors">
                         {category.title}
                       </h3>
                       <p className="text-gray-600 text-sm mb-3">{category.description}</p>
-                      <div className="flex items-center text-orange-600 text-sm font-medium">
+                      <div className="flex items-center text-primary text-sm font-medium">
                         <span>{category.articles} articles</span>
                         <ChevronRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
                       </div>
@@ -300,11 +300,11 @@ const HelpCenter: React.FC<HelpCenterProps> = ({ onBack }) => {
                     <div key={index} className="p-6 hover:bg-gray-50 transition-colors cursor-pointer group">
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
-                          <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-orange-600 transition-colors">
+                          <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-primary transition-colors">
                             {article.title}
                           </h3>
                           <div className="flex items-center space-x-4 text-sm text-gray-500">
-                            <span className="bg-orange-100 text-orange-700 px-2 py-1 rounded-full text-xs font-medium">
+                            <span className="bg-primary/10 text-primary px-2 py-1 rounded-full text-xs font-medium">
                               {article.category}
                             </span>
                             <div className="flex items-center">
@@ -314,7 +314,7 @@ const HelpCenter: React.FC<HelpCenterProps> = ({ onBack }) => {
                             <span>{article.views}</span>
                           </div>
                         </div>
-                        <ExternalLink className="w-5 h-5 text-gray-400 group-hover:text-orange-600 transition-colors" />
+                        <ExternalLink className="w-5 h-5 text-gray-400 group-hover:text-primary transition-colors" />
                       </div>
                     </div>
                   ))}
@@ -380,7 +380,7 @@ const HelpCenter: React.FC<HelpCenterProps> = ({ onBack }) => {
             </div>
 
             {/* Quick Tips */}
-            <div className="bg-gradient-to-r from-orange-500 to-amber-500 rounded-xl p-8 text-white">
+            <div className="bg-gradient-to-r from-primary to-primary/90 rounded-xl p-8 text-white">
               <div className="flex items-start space-x-4">
                 <div className="flex-shrink-0">
                   <div className="flex items-center justify-center w-12 h-12 bg-white/20 rounded-xl">

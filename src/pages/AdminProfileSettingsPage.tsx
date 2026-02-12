@@ -98,7 +98,7 @@ export default function AdminProfileSettingsPage() {
 
       {/* Profile Information Card */}
       <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
-        <div className="bg-gradient-to-r from-orange-500 to-amber-500 h-24"></div>
+        <div className="bg-gradient-to-r from-primary to-primary/90 h-24"></div>
 
         <div className="px-6 pb-6">
           <div className="flex flex-col md:flex-row gap-6 -mt-16 mb-6">
@@ -108,7 +108,7 @@ export default function AdminProfileSettingsPage() {
                 alt="Profile"
                 className="w-32 h-32 rounded-full border-4 border-white shadow-lg object-cover"
               />
-              <button className="absolute bottom-2 right-2 bg-orange-500 text-white p-2 rounded-full hover:bg-orange-600 transition-colors shadow-lg">
+              <button className="absolute bottom-2 right-2 bg-primary text-white p-2 rounded-full hover:bg-primary/90 transition-colors shadow-lg">
                 <User size={18} />
               </button>
             </div>
@@ -122,7 +122,7 @@ export default function AdminProfileSettingsPage() {
                 <span className="bg-blue-100 text-blue-800 text-xs font-semibold px-3 py-1 rounded-full">
                   Admin Access
                 </span>
-                <span className="bg-orange-100 text-orange-800 text-xs font-semibold px-3 py-1 rounded-full">
+                <span className="bg-primary/10 text-primary text-xs font-semibold px-3 py-1 rounded-full">
                   Active
                 </span>
               </div>
@@ -131,7 +131,7 @@ export default function AdminProfileSettingsPage() {
             {!isEditing && (
               <button
                 onClick={() => setIsEditing(true)}
-                className="h-fit px-6 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors font-medium"
+                className="h-fit px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors font-medium"
               >
                 Edit Profile
               </button>
@@ -145,7 +145,7 @@ export default function AdminProfileSettingsPage() {
         {/* Personal Information */}
         <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
           <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-            <User size={20} className="text-orange-600" />
+            <User size={20} className="text-primary" />
             Personal Information
           </h3>
 
@@ -160,7 +160,7 @@ export default function AdminProfileSettingsPage() {
                   name="fullName"
                   value={formData.fullName}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
                 />
               </div>
 
@@ -173,7 +173,7 @@ export default function AdminProfileSettingsPage() {
                   name="email"
                   value={formData.email}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
                 />
               </div>
 
@@ -186,7 +186,7 @@ export default function AdminProfileSettingsPage() {
                   name="phone"
                   value={formData.phone}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
                 />
               </div>
 
@@ -199,7 +199,7 @@ export default function AdminProfileSettingsPage() {
                   name="location"
                   value={formData.location}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
                 />
               </div>
 
@@ -212,7 +212,7 @@ export default function AdminProfileSettingsPage() {
                   value={formData.bio}
                   onChange={handleInputChange}
                   rows={3}
-                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent resize-none"
+                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent resize-none"
                 />
               </div>
 
@@ -268,7 +268,7 @@ export default function AdminProfileSettingsPage() {
         {/* Change Password */}
         <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
           <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-            <Lock size={20} className="text-orange-600" />
+            <Lock size={20} className="text-primary" />
             Change Password
           </h3>
 
@@ -284,7 +284,7 @@ export default function AdminProfileSettingsPage() {
                   value={passwordData.currentPassword}
                   onChange={handlePasswordChange}
                   placeholder="Enter current password"
-                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent pr-10"
+                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent pr-10"
                 />
                 <button
                   onClick={() => setShowPassword(!showPassword)}
@@ -306,7 +306,7 @@ export default function AdminProfileSettingsPage() {
                   value={passwordData.newPassword}
                   onChange={handlePasswordChange}
                   placeholder="Enter new password"
-                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent pr-10"
+                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent pr-10"
                 />
                 <button
                   onClick={() => setShowNewPassword(!showNewPassword)}
@@ -327,11 +327,11 @@ export default function AdminProfileSettingsPage() {
                 value={passwordData.confirmPassword}
                 onChange={handlePasswordChange}
                 placeholder="Confirm new password"
-                className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
               />
             </div>
 
-            <button className="w-full px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors font-medium">
+            <button className="w-full px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors font-medium">
               Update Password
             </button>
           </div>
@@ -341,7 +341,7 @@ export default function AdminProfileSettingsPage() {
       {/* Notification Settings */}
       <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
         <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-          <Bell size={20} className="text-orange-600" />
+          <Bell size={20} className="text-primary" />
           Notification Preferences
         </h3>
 
@@ -383,7 +383,7 @@ export default function AdminProfileSettingsPage() {
                 }
                 className={`relative w-12 h-6 rounded-full transition-colors ${
                   notifications[key as keyof typeof notifications]
-                    ? "bg-orange-500"
+                    ? "bg-primary"
                     : "bg-gray-300"
                 }`}
               >
@@ -403,7 +403,7 @@ export default function AdminProfileSettingsPage() {
       {/* Security Settings */}
       <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
         <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-          <Shield size={20} className="text-orange-600" />
+          <Shield size={20} className="text-primary" />
           Security Settings
         </h3>
 
@@ -420,7 +420,7 @@ export default function AdminProfileSettingsPage() {
             <button
               onClick={() => handleSecurityToggle("twoFactorAuth")}
               className={`relative w-12 h-6 rounded-full transition-colors ${
-                securitySettings.twoFactorAuth ? "bg-orange-500" : "bg-gray-300"
+                securitySettings.twoFactorAuth ? "bg-primary" : "bg-gray-300"
               }`}
             >
               <div
@@ -443,7 +443,7 @@ export default function AdminProfileSettingsPage() {
             <button
               onClick={() => handleSecurityToggle("loginAlerts")}
               className={`relative w-12 h-6 rounded-full transition-colors ${
-                securitySettings.loginAlerts ? "bg-orange-500" : "bg-gray-300"
+                securitySettings.loginAlerts ? "bg-primary" : "bg-gray-300"
               }`}
             >
               <div
@@ -471,7 +471,7 @@ export default function AdminProfileSettingsPage() {
                   sessionTimeout: parseInt(e.target.value),
                 }))
               }
-              className="px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+              className="px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
             >
               <option value={30}>30 minutes</option>
               <option value={60}>1 hour</option>

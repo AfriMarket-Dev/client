@@ -5,7 +5,6 @@ import {
   Star,
   Mail,
   Phone,
-  MapPin,
   Calendar,
   Users,
   Briefcase,
@@ -31,7 +30,7 @@ export default function ServiceDetailsPage() {
           </h1>
           <button
             onClick={() => navigate("/admin/services")}
-            className="px-6 py-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600"
+            className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90"
           >
             Back to Services
           </button>
@@ -48,7 +47,7 @@ export default function ServiceDetailsPage() {
       <div className="flex items-center gap-4">
         <button
           onClick={() => navigate("/admin/services")}
-          className="flex items-center gap-2 text-orange-600 hover:text-orange-700 font-medium"
+          className="flex items-center gap-2 text-primary hover:text-primary/80 font-medium"
         >
           <ChevronLeft size={20} />
           Back to Services
@@ -56,7 +55,7 @@ export default function ServiceDetailsPage() {
       </div>
 
       {/* Hero Section */}
-      <div className="relative h-64 rounded-2xl overflow-hidden bg-gradient-to-r from-orange-500 to-amber-500 shadow-md">
+      <div className="relative h-64 rounded-2xl overflow-hidden bg-gradient-to-r from-primary to-primary/80 shadow-md">
         <img
           src={service.image}
           alt={service.name}
@@ -69,8 +68,8 @@ export default function ServiceDetailsPage() {
       <div className="bg-white rounded-2xl shadow-md p-8">
         <div className="flex items-start justify-between gap-6 mb-8">
           <div className="flex items-start gap-4">
-            <div className="p-4 bg-orange-100 rounded-xl">
-              <IconComponent size={40} className="text-orange-600" />
+            <div className="p-4 bg-primary/10 rounded-xl">
+              <IconComponent size={40} className="text-primary" />
             </div>
             <div>
               <h1 className="text-4xl font-bold text-gray-900">
@@ -82,7 +81,7 @@ export default function ServiceDetailsPage() {
             </div>
           </div>
           <div className="text-right">
-            <div className="text-4xl font-bold text-orange-600 mb-2">
+            <div className="text-4xl font-bold text-primary mb-2">
               {service.price}
             </div>
             <div className="text-sm text-gray-600">Pricing</div>
@@ -133,7 +132,7 @@ export default function ServiceDetailsPage() {
           {/* Provider Details */}
           <div className="bg-white rounded-2xl shadow-md p-8">
             <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
-              <Briefcase size={24} className="text-orange-600" />
+              <Briefcase size={24} className="text-primary" />
               Service Provider
             </h2>
 
@@ -192,7 +191,7 @@ export default function ServiceDetailsPage() {
           {/* Recent Requests */}
           <div className="bg-white rounded-2xl shadow-md p-8">
             <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
-              <Clock size={24} className="text-orange-600" />
+              <Clock size={24} className="text-primary" />
               Recent Customer Requests
             </h2>
 
@@ -236,7 +235,7 @@ export default function ServiceDetailsPage() {
               ].map((request) => (
                 <div
                   key={request.id}
-                  className="border border-gray-200 rounded-lg p-4 hover:border-orange-300 transition-colors"
+                  className="border border-gray-200 rounded-lg p-4 hover:border-primary/50 transition-colors"
                 >
                   <div className="flex items-start justify-between mb-2">
                     <div>
@@ -281,9 +280,9 @@ export default function ServiceDetailsPage() {
             <div className="space-y-4">
               <a
                 href={`mailto:${service.provider.email}`}
-                className="flex items-center gap-4 p-4 border border-gray-200 rounded-lg hover:border-orange-300 hover:bg-orange-50 transition-colors"
+                className="flex items-center gap-4 p-4 border border-gray-200 rounded-lg hover:border-primary/50 hover:bg-primary/5 transition-colors"
               >
-                <Mail size={20} className="text-orange-600 flex-shrink-0" />
+                <Mail size={20} className="text-primary flex-shrink-0" />
                 <div className="min-w-0">
                   <p className="text-xs text-gray-600">Email</p>
                   <p className="text-sm font-medium text-gray-900 truncate">
@@ -294,9 +293,9 @@ export default function ServiceDetailsPage() {
 
               <a
                 href={`tel:${service.provider.phone}`}
-                className="flex items-center gap-4 p-4 border border-gray-200 rounded-lg hover:border-orange-300 hover:bg-orange-50 transition-colors"
+                className="flex items-center gap-4 p-4 border border-gray-200 rounded-lg hover:border-primary/50 hover:bg-primary/5 transition-colors"
               >
-                <Phone size={20} className="text-orange-600 flex-shrink-0" />
+                <Phone size={20} className="text-primary flex-shrink-0" />
                 <div className="min-w-0">
                   <p className="text-xs text-gray-600">Phone</p>
                   <p className="text-sm font-medium text-gray-900">
@@ -315,7 +314,7 @@ export default function ServiceDetailsPage() {
 
             <div className="space-y-4">
               <div className="text-center pb-4 border-b border-gray-200">
-                <p className="text-3xl font-bold text-orange-600">
+                <p className="text-3xl font-bold text-primary">
                   {service.provider.rating}
                 </p>
                 <p className="text-sm text-gray-600 mt-1">Average Rating</p>
@@ -339,12 +338,12 @@ export default function ServiceDetailsPage() {
           <div className="space-y-3">
             <button
               onClick={() => setShowContactModal(true)}
-              className="w-full px-6 py-3 bg-gradient-to-r from-orange-500 to-amber-500 text-white font-medium rounded-lg hover:from-orange-600 hover:to-amber-600 transition-colors flex items-center justify-center gap-2"
+              className="w-full px-6 py-3 bg-gradient-to-r from-primary to-primary/80 text-primary-foreground font-medium rounded-lg hover:from-primary/90 hover:to-primary transition-colors flex items-center justify-center gap-2"
             >
               <MessageSquare size={18} />
               Send Message
             </button>
-            <button className="w-full px-6 py-3 border-2 border-orange-500 text-orange-600 font-medium rounded-lg hover:bg-orange-50 transition-colors">
+            <button className="w-full px-6 py-3 border-2 border-primary text-primary font-medium rounded-lg hover:bg-primary/5 transition-colors">
               View More Services
             </button>
           </div>
@@ -367,7 +366,7 @@ export default function ServiceDetailsPage() {
                 <input
                   type="text"
                   placeholder="Service inquiry"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
                 />
               </div>
 
@@ -380,7 +379,7 @@ export default function ServiceDetailsPage() {
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   placeholder="Enter your message..."
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent resize-none"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent resize-none"
                 ></textarea>
               </div>
 
@@ -397,7 +396,7 @@ export default function ServiceDetailsPage() {
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 px-4 py-3 bg-gradient-to-r from-orange-500 to-amber-500 text-white font-medium rounded-lg hover:from-orange-600 hover:to-amber-600 transition-colors"
+                  className="flex-1 px-4 py-3 bg-gradient-to-r from-primary to-primary/80 text-primary-foreground font-medium rounded-lg hover:from-primary/90 hover:to-primary transition-colors"
                 >
                   Send
                 </button>

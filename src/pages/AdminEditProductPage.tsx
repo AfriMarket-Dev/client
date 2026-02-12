@@ -50,7 +50,7 @@ export default function AdminEditProductPage() {
           </h1>
           <button
             onClick={() => navigate(`/admin/suppliers/${supplierId}`)}
-            className="mt-6 px-6 py-2 bg-orange-500 text-white rounded-lg"
+            className="mt-6 px-6 py-2 bg-primary text-primary-foreground rounded-lg"
           >
             Back to Supplier
           </button>
@@ -91,8 +91,8 @@ export default function AdminEditProductPage() {
                   onClick={() => setStep(s)}
                   className={`px-6 py-3 rounded-lg font-medium transition-all ${
                     step === s
-                      ? "bg-orange-500 text-white shadow-lg"
-                      : "bg-white text-gray-600 border border-gray-200 hover:border-orange-300"
+                      ? "bg-primary text-primary-foreground shadow-lg"
+                      : "bg-white text-gray-600 border border-gray-200 hover:border-primary/50"
                   }`}
                 >
                   Step {s}
@@ -116,7 +116,7 @@ export default function AdminEditProductPage() {
                   name="name"
                   value={formData.name}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-orange-500 transition-colors"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-primary transition-colors"
                 />
               </div>
 
@@ -129,7 +129,7 @@ export default function AdminEditProductPage() {
                   value={formData.description}
                   onChange={handleInputChange}
                   rows={5}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-orange-500 transition-colors"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-primary transition-colors"
                 />
               </div>
 
@@ -142,7 +142,7 @@ export default function AdminEditProductPage() {
                     name="category"
                     value={formData.category}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-orange-500 transition-colors"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-primary transition-colors"
                   >
                     <option>Electronics</option>
                     <option>Fashion & Textiles</option>
@@ -159,7 +159,7 @@ export default function AdminEditProductPage() {
                     name="subcategory"
                     value={formData.subcategory}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-orange-500 transition-colors"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-primary transition-colors"
                   />
                 </div>
               </div>
@@ -177,7 +177,7 @@ export default function AdminEditProductPage() {
                 </button>
                 <button
                   onClick={() => setStep(2)}
-                  className="flex-1 px-6 py-3 bg-orange-500 text-white font-medium rounded-lg hover:bg-orange-600 transition-colors"
+                  className="flex-1 px-6 py-3 bg-primary text-primary-foreground font-medium rounded-lg hover:bg-primary/90 transition-colors"
                 >
                   Next
                 </button>
@@ -198,7 +198,7 @@ export default function AdminEditProductPage() {
                     name="minPrice"
                     value={formData.minPrice}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-orange-500 transition-colors"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-primary transition-colors"
                   />
                 </div>
                 <div>
@@ -210,7 +210,7 @@ export default function AdminEditProductPage() {
                     name="maxPrice"
                     value={formData.maxPrice}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-orange-500 transition-colors"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-primary transition-colors"
                   />
                 </div>
                 <div>
@@ -222,7 +222,7 @@ export default function AdminEditProductPage() {
                     name="minimumOrder"
                     value={formData.minimumOrder}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-orange-500 transition-colors"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-primary transition-colors"
                   />
                 </div>
               </div>
@@ -235,7 +235,7 @@ export default function AdminEditProductPage() {
                   name="availability"
                   value={formData.availability}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-orange-500 transition-colors"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-primary transition-colors"
                 >
                   <option value="in-stock">In Stock</option>
                   <option value="pre-order">Pre-Order</option>
@@ -270,7 +270,7 @@ export default function AdminEditProductPage() {
                 <button
                   onClick={handleSave}
                   disabled={loading}
-                  className="flex-1 px-6 py-3 bg-green-600 hover:bg-green-700 disabled:bg-gray-300 text-white font-medium rounded-lg transition-colors flex items-center justify-center gap-2"
+                  className="flex-1 px-6 py-3 bg-primary hover:bg-primary/90 disabled:bg-primary/50 text-white font-medium rounded-lg transition-colors flex items-center justify-center gap-2"
                 >
                   <Save size={18} />
                   {loading ? "Saving..." : "Save Changes"}

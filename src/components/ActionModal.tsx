@@ -1,5 +1,5 @@
 import { X } from "lucide-react";
-import { ReactNode } from "react";
+import { type ReactNode } from "react";
 
 interface ActionModalProps {
   isOpen: boolean;
@@ -59,10 +59,10 @@ export default function ActionModal({
       warning: "bg-yellow-50 border-yellow-200 text-yellow-800",
     },
     warning: {
-      icon: "bg-orange-100",
-      iconColor: "text-orange-600",
-      button: "bg-orange-600 hover:bg-orange-700 disabled:bg-gray-300",
-      warning: "bg-orange-50 border-orange-200 text-orange-800",
+      icon: "bg-primary/10",
+      iconColor: "text-primary",
+      button: "bg-primary hover:bg-primary/90 disabled:bg-gray-300",
+      warning: "bg-primary/5 border-primary/20 text-primary",
     },
     success: {
       icon: "bg-green-100",
@@ -128,7 +128,7 @@ export default function ActionModal({
                 value={inputValue || ""}
                 onChange={(e) => onInputChange(e.target.value)}
                 placeholder={inputPlaceholder}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
               />
               {confirmValue && (
                 <p className="text-xs text-gray-500 mt-2">

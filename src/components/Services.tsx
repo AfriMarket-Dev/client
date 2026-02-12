@@ -24,8 +24,8 @@ const Services: React.FC = () => {
       title: 'Supplier Services Info',
       description: 'Access detailed information about each supplier\'s shipping options, delivery times, and service capabilities.',
       features: ['Shipping options display', 'Delivery timeframes', 'Service area coverage', 'Minimum order details'],
-      color: 'from-orange-500 to-amber-500',
-      bgColor: 'from-orange-50 to-amber-50'
+      color: 'from-primary to-primary/90',
+      bgColor: 'from-primary/5 to-primary/10'
     },
     {
       icon: Users,
@@ -54,7 +54,7 @@ const Services: React.FC = () => {
   ];
 
   const stats = [
-    { icon: Users, value: '2,500+', label: 'Verified Suppliers', color: 'text-orange-600' },
+    { icon: Users, value: '2,500+', label: 'Verified Suppliers', color: 'text-primary' },
     { icon: Package, value: '50K+', label: 'Products Available', color: 'text-blue-600' },
     { icon: Globe, value: '54', label: 'African Countries', color: 'text-green-600' },
     { icon: TrendingUp, value: '98%', label: 'Connection Success', color: 'text-purple-600' }
@@ -72,14 +72,14 @@ const Services: React.FC = () => {
               <path d="M30,30 L50,50 M70,30 L90,50 M30,70 L50,90 M70,70 L90,90" stroke="currentColor" strokeWidth="2" opacity="0.1"/>
             </pattern>
           </defs>
-          <rect width="100%" height="100%" fill="url(#services-pattern)" className="text-orange-600"/>
+          <rect width="100%" height="100%" fill="url(#services-pattern)" className="text-primary"/>
         </svg>
       </div>
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16">
-          <div className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-orange-100 to-amber-100 rounded-full text-sm font-medium text-orange-700 border border-orange-200 mb-6">
+          <div className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-primary/10 to-primary/20 rounded-full text-sm font-medium text-primary border border-primary/20 mb-6">
             <Award className="w-4 h-4 mr-2" />
             Our Services
           </div>
@@ -87,16 +87,16 @@ const Services: React.FC = () => {
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
             Comprehensive Solutions for
             <span className="relative ml-3">
-              <span className="bg-gradient-to-r from-orange-600 via-amber-600 to-yellow-600 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-primary via-primary/90 to-primary/80 bg-clip-text text-transparent">
                 African Trade
               </span>
               <svg className="absolute -bottom-2 left-0 w-full h-3" viewBox="0 0 300 12">
                 <path d="M5,6 Q150,1 295,6" stroke="url(#services-gradient)" strokeWidth="3" fill="none" strokeLinecap="round"/>
                 <defs>
                   <linearGradient id="services-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="#f97316"/>
-                    <stop offset="50%" stopColor="#f59e0b"/>
-                    <stop offset="100%" stopColor="#eab308"/>
+                    <stop offset="0%" stopColor="var(--color-primary)"/>
+                    <stop offset="50%" stopColor="var(--color-primary)"/>
+                    <stop offset="100%" stopColor="var(--color-primary)"/>
                   </linearGradient>
                 </defs>
               </svg>
@@ -115,7 +115,7 @@ const Services: React.FC = () => {
             <div key={index} className="text-center group">
               <div className="relative mb-4">
                 <div className={`flex items-center justify-center w-16 h-16 bg-gradient-to-br ${
-                  index === 0 ? 'from-orange-500 to-amber-500' :
+                  index === 0 ? 'from-primary to-primary/90' :
                   index === 1 ? 'from-blue-500 to-cyan-500' :
                   index === 2 ? 'from-green-500 to-emerald-500' :
                   'from-purple-500 to-pink-500'
@@ -134,14 +134,14 @@ const Services: React.FC = () => {
           {services.map((service, index) => (
             <div
               key={index}
-              className={`relative bg-gradient-to-br ${service.bgColor} rounded-3xl p-8 border border-orange-100/50 hover:border-orange-300 transition-all duration-500 hover:shadow-2xl group overflow-hidden transform hover:-translate-y-2`}
+              className={`relative bg-gradient-to-br ${service.bgColor} rounded-3xl p-8 border border-primary/10 hover:border-primary/30 transition-all duration-500 hover:shadow-2xl group overflow-hidden transform hover:-translate-y-2`}
               style={{
                 animationDelay: `${index * 100}ms`
               }}
             >
               {/* African-inspired background pattern for each card */}
               <div className="absolute top-0 right-0 w-32 h-32 opacity-10">
-                <svg viewBox="0 0 128 128" className="w-full h-full text-orange-500">
+                <svg viewBox="0 0 128 128" className="w-full h-full text-primary">
                   <pattern id={`service-pattern-${index}`} x="0" y="0" width="32" height="32" patternUnits="userSpaceOnUse">
                     <polygon points="16,4 28,16 16,28 4,16" fill="currentColor" opacity="0.3"/>
                     <circle cx="16" cy="16" r="6" fill="none" stroke="currentColor" strokeWidth="1" opacity="0.2"/>
@@ -151,8 +151,8 @@ const Services: React.FC = () => {
               </div>
               
               {/* Floating geometric decoration */}
-              <div className="absolute top-4 right-4 w-6 h-6 bg-gradient-to-br from-orange-400 to-amber-400 rounded-full opacity-20 group-hover:scale-125 transition-transform duration-300"></div>
-              <div className="absolute bottom-4 left-4 w-4 h-4 bg-gradient-to-br from-amber-400 to-yellow-400 transform rotate-45 opacity-20 group-hover:rotate-90 transition-transform duration-300"></div>
+              <div className="absolute top-4 right-4 w-6 h-6 bg-gradient-to-br from-primary/60 to-primary/50 rounded-full opacity-20 group-hover:scale-125 transition-transform duration-300"></div>
+              <div className="absolute bottom-4 left-4 w-4 h-4 bg-gradient-to-br from-primary/40 to-primary/30 transform rotate-45 opacity-20 group-hover:rotate-90 transition-transform duration-300"></div>
               
               <div className="relative z-10">
                 {/* Icon */}
@@ -167,7 +167,7 @@ const Services: React.FC = () => {
                 </div>
 
                 {/* Content */}
-                <h3 className="text-2xl font-bold text-gray-900 mb-4 group-hover:text-orange-600 transition-colors">
+                <h3 className="text-2xl font-bold text-gray-900 mb-4 group-hover:text-primary transition-colors">
                   {service.title}
                 </h3>
                 
@@ -190,7 +190,7 @@ const Services: React.FC = () => {
         </div>
 
         {/* CTA Section */}
-        <div className="mt-16 bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 rounded-3xl p-8 md:p-12 text-center text-white relative overflow-hidden">
+        <div className="mt-16 bg-gradient-to-r from-primary via-primary/90 to-primary/80 rounded-3xl p-8 md:p-12 text-center text-white relative overflow-hidden">
           {/* Background Pattern */}
           <div className="absolute inset-0 opacity-10">
             <svg className="w-full h-full" viewBox="0 0 400 200">
@@ -213,10 +213,10 @@ const Services: React.FC = () => {
               Start building valuable business relationships today.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="bg-white text-orange-600 px-8 py-4 rounded-xl font-semibold text-lg hover:bg-gray-100 transition-colors shadow-lg">
+              <button className="bg-white text-primary px-8 py-4 rounded-xl font-semibold text-lg hover:bg-gray-100 transition-colors shadow-lg">
                 Get Started Now
               </button>
-              <button className="border-2 border-white text-white px-8 py-4 rounded-xl font-semibold text-lg hover:bg-white hover:text-orange-600 transition-all duration-300">
+              <button className="border-2 border-white text-white px-8 py-4 rounded-xl font-semibold text-lg hover:bg-white hover:text-primary transition-all duration-300">
                 Learn More
               </button>
             </div>
@@ -225,8 +225,8 @@ const Services: React.FC = () => {
       </div>
 
       {/* Decorative elements */}
-      <div className="absolute bottom-0 left-0 w-32 h-32 bg-gradient-to-br from-orange-200 to-amber-200 rounded-full opacity-20 transform -translate-x-16 translate-y-16"></div>
-      <div className="absolute top-1/4 right-0 w-24 h-24 bg-gradient-to-br from-amber-200 to-yellow-200 transform rotate-45 opacity-20 translate-x-12"></div>
+      <div className="absolute bottom-0 left-0 w-32 h-32 bg-gradient-to-br from-primary/30 to-primary/40 rounded-full opacity-20 transform -translate-x-16 translate-y-16"></div>
+      <div className="absolute top-1/4 right-0 w-24 h-24 bg-gradient-to-br from-primary/20 to-primary/30 transform rotate-45 opacity-20 translate-x-12"></div>
     </section>
   );
 };

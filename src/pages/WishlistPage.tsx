@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import Wishlist from '@/components/Wishlist';
-import { Product } from '@/types';
+import { type Product } from '@/types';
 
 const WishlistPage = () => {
   const navigate = useNavigate();

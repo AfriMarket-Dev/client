@@ -8,7 +8,7 @@ import SampleProducts from '@/components/SampleProducts';
 import HowItWorks from '@/components/HowItWorks';
 import Newsletter from '@/components/Newsletter';
 import Footer from '@/components/Footer';
-import { Product } from '@/types';
+import { type Product } from '@/types';
 
 const HomePage = () => {
   const navigate = useNavigate();

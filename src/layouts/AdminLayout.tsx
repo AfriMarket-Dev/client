@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "@/app/store";
+import { type RootState } from "@/app/store";
 import { useSignOutMutation } from "@/app/api/auth";
 import { logout } from "@/app/features/authSlice";
 

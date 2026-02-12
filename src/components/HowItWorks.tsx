@@ -23,9 +23,9 @@ const HowItWorks: React.FC = () => {
       icon: Handshake,
       title: 'Build Relationships',
       description: 'Establish long-term partnerships with reliable suppliers. Our platform facilitates secure connections and ongoing communication.',
-      color: 'from-orange-500 to-amber-500',
-      bgColor: 'from-orange-50 to-amber-50',
-      accentColor: 'orange'
+      color: 'from-primary to-primary/90',
+      bgColor: 'from-primary/5 to-primary/10',
+      accentColor: 'primary'
     },
     {
       icon: TrendingUp,
@@ -38,7 +38,7 @@ const HowItWorks: React.FC = () => {
   ];
 
   return (
-    <section className="py-20 bg-gradient-to-br from-gray-50 via-white to-orange-50/30 relative overflow-hidden">
+    <section className="py-20 bg-gradient-to-br from-gray-50 via-white to-primary/10 relative overflow-hidden">
       {/* Enhanced African Pattern Background */}
       <div className="absolute inset-0 opacity-5">
         <svg className="w-full h-full" viewBox="0 0 1200 800">
@@ -53,12 +53,12 @@ const HowItWorks: React.FC = () => {
               <circle cx="90" cy="90" r="3" fill="currentColor" opacity="0.6"/>
             </pattern>
           </defs>
-          <rect width="100%" height="100%" fill="url(#how-it-works-pattern)" className="text-orange-600"/>
+          <rect width="100%" height="100%" fill="url(#how-it-works-pattern)" className="text-primary"/>
         </svg>
       </div>
 
       {/* Floating Decorative Elements */}
-      <div className="absolute top-20 left-10 w-20 h-20 bg-gradient-to-br from-orange-400/20 to-amber-400/20 rounded-full blur-xl animate-pulse"></div>
+      <div className="absolute top-20 left-10 w-20 h-20 bg-gradient-to-br from-primary/20 to-primary/30 rounded-full blur-xl animate-pulse"></div>
       <div className="absolute top-40 right-20 w-32 h-32 bg-gradient-to-br from-blue-400/20 to-cyan-400/20 rounded-full blur-xl animate-pulse" style={{animationDelay: '1s'}}></div>
       <div className="absolute bottom-40 left-1/4 w-16 h-16 bg-gradient-to-br from-green-400/20 to-emerald-400/20 rounded-full blur-xl animate-pulse" style={{animationDelay: '2s'}}></div>
       <div className="absolute bottom-20 right-1/3 w-24 h-24 bg-gradient-to-br from-purple-400/20 to-pink-400/20 rounded-full blur-xl animate-pulse" style={{animationDelay: '3s'}}></div>
@@ -66,9 +66,9 @@ const HowItWorks: React.FC = () => {
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Enhanced Header */}
         <div className="text-center mb-20">
-          <div className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-orange-100 via-amber-100 to-yellow-100 rounded-full text-sm font-semibold text-orange-700 border-2 border-orange-200/50 mb-8 shadow-lg backdrop-blur-sm">
+          <div className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-primary/10 via-primary/5 to-white rounded-full text-sm font-semibold text-primary border-2 border-primary/20 mb-8 shadow-lg backdrop-blur-sm">
             <Globe className="w-5 h-5 mr-3" />
-            <span className="bg-gradient-to-r from-orange-600 to-amber-600 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-primary to-primary/90 bg-clip-text text-transparent">
               Simple Process, Powerful Results
             </span>
           </div>
@@ -76,16 +76,16 @@ const HowItWorks: React.FC = () => {
           <h2 className="text-5xl md:text-6xl font-bold text-gray-900 mb-8 leading-tight">
             How It
             <span className="relative ml-4">
-              <span className="bg-gradient-to-r from-orange-600 via-amber-600 to-yellow-600 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-primary via-primary/90 to-primary/80 bg-clip-text text-transparent">
                 Works
               </span>
               <svg className="absolute -bottom-3 left-0 w-full h-4" viewBox="0 0 200 16">
                 <path d="M5,8 Q100,2 195,8" stroke="url(#works-gradient)" strokeWidth="4" fill="none" strokeLinecap="round"/>
                 <defs>
                   <linearGradient id="works-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="#f97316"/>
-                    <stop offset="50%" stopColor="#f59e0b"/>
-                    <stop offset="100%" stopColor="#eab308"/>
+                    <stop offset="0%" stopColor="var(--color-primary)"/>
+                    <stop offset="50%" stopColor="var(--color-primary)"/>
+                    <stop offset="100%" stopColor="var(--color-primary)"/>
                   </linearGradient>
                 </defs>
               </svg>
@@ -101,7 +101,7 @@ const HowItWorks: React.FC = () => {
         {/* Enhanced Steps Grid */}
         <div className="relative">
           {/* Connection Lines - Desktop Only */}
-          <div className="hidden lg:block absolute top-1/2 left-0 right-0 h-1 bg-gradient-to-r from-blue-200 via-green-200 via-orange-200 to-purple-200 transform -translate-y-1/2 rounded-full opacity-60"></div>
+          <div className="hidden lg:block absolute top-1/2 left-0 right-0 h-1 bg-gradient-to-r from-blue-200 via-green-200 via-primary/20 to-purple-200 transform -translate-y-1/2 rounded-full opacity-60"></div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 relative z-10">
             {steps.map((step, index) => (
@@ -115,14 +115,14 @@ const HowItWorks: React.FC = () => {
                 {/* Step Card */}
                 <div className={`relative bg-gradient-to-br ${step.bgColor} rounded-3xl p-8 border-2 border-white/50 shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-3 hover:scale-105 backdrop-blur-sm`}>
                   {/* African-inspired corner decorations */}
-                  <div className="absolute top-0 left-0 w-8 h-8 border-l-4 border-t-4 border-orange-300/50 rounded-tl-3xl"></div>
-                  <div className="absolute top-0 right-0 w-8 h-8 border-r-4 border-t-4 border-orange-300/50 rounded-tr-3xl"></div>
-                  <div className="absolute bottom-0 left-0 w-8 h-8 border-l-4 border-b-4 border-orange-300/50 rounded-bl-3xl"></div>
-                  <div className="absolute bottom-0 right-0 w-8 h-8 border-r-4 border-b-4 border-orange-300/50 rounded-br-3xl"></div>
+                  <div className="absolute top-0 left-0 w-8 h-8 border-l-4 border-t-4 border-primary/30 rounded-tl-3xl"></div>
+                  <div className="absolute top-0 right-0 w-8 h-8 border-r-4 border-t-4 border-primary/30 rounded-tr-3xl"></div>
+                  <div className="absolute bottom-0 left-0 w-8 h-8 border-l-4 border-b-4 border-primary/30 rounded-bl-3xl"></div>
+                  <div className="absolute bottom-0 right-0 w-8 h-8 border-r-4 border-b-4 border-primary/30 rounded-br-3xl"></div>
                   
                   {/* Step Number Badge */}
-                  <div className="absolute -top-4 -left-4 w-12 h-12 bg-gradient-to-br from-white to-gray-100 border-4 border-orange-200 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
-                    <span className="text-xl font-bold bg-gradient-to-r from-orange-600 to-amber-600 bg-clip-text text-transparent">
+                  <div className="absolute -top-4 -left-4 w-12 h-12 bg-gradient-to-br from-white to-gray-100 border-4 border-primary/20 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                    <span className="text-xl font-bold bg-gradient-to-r from-primary to-primary/90 bg-clip-text text-transparent">
                       {index + 1}
                     </span>
                   </div>
@@ -140,7 +140,7 @@ const HowItWorks: React.FC = () => {
 
                   {/* Content */}
                   <div className="text-center">
-                    <h3 className="text-2xl font-bold text-gray-900 mb-4 group-hover:text-orange-600 transition-colors duration-300">
+                    <h3 className="text-2xl font-bold text-gray-900 mb-4 group-hover:text-primary transition-colors duration-300">
                       {step.title}
                     </h3>
                     
@@ -150,8 +150,8 @@ const HowItWorks: React.FC = () => {
 
                     {/* Feature Highlights */}
                     <div className="flex justify-center">
-                      <div className={`inline-flex items-center px-4 py-2 bg-white/80 backdrop-blur-sm rounded-full text-xs font-medium text-${step.accentColor}-700 border border-${step.accentColor}-200/50 shadow-sm`}>
-                        <CheckCircle className={`w-3 h-3 mr-2 text-${step.accentColor}-500`} />
+                      <div className={`inline-flex items-center px-4 py-2 bg-white/80 backdrop-blur-sm rounded-full text-xs font-medium ${step.accentColor === 'primary' ? 'text-primary border-primary/20' : `text-${step.accentColor}-700 border-${step.accentColor}-200/50`} shadow-sm`}>
+                        <CheckCircle className={`w-3 h-3 mr-2 ${step.accentColor === 'primary' ? 'text-primary' : `text-${step.accentColor}-500`}`} />
                         Step {index + 1}
                       </div>
                     </div>
@@ -164,8 +164,8 @@ const HowItWorks: React.FC = () => {
                 {/* Connection Arrow - Desktop Only */}
                 {index < steps.length - 1 && (
                   <div className="hidden lg:flex absolute top-1/2 -right-4 transform -translate-y-1/2 z-20">
-                    <div className="w-8 h-8 bg-white rounded-full shadow-lg flex items-center justify-center border-2 border-orange-200 group-hover:scale-110 transition-transform duration-300">
-                      <ArrowRight className="w-4 h-4 text-orange-600" />
+                    <div className="w-8 h-8 bg-white rounded-full shadow-lg flex items-center justify-center border-2 border-primary/20 group-hover:scale-110 transition-transform duration-300">
+                      <ArrowRight className="w-4 h-4 text-primary" />
                     </div>
                   </div>
                 )}
@@ -176,7 +176,7 @@ const HowItWorks: React.FC = () => {
 
         {/* Enhanced CTA Section */}
         <div className="mt-20 relative">
-          <div className="bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 rounded-3xl p-12 md:p-16 text-center text-white relative overflow-hidden shadow-2xl">
+          <div className="bg-gradient-to-r from-primary via-primary/90 to-primary/80 rounded-3xl p-12 md:p-16 text-center text-white relative overflow-hidden shadow-2xl">
             {/* Background Pattern */}
             <div className="absolute inset-0 opacity-10">
               <svg className="w-full h-full" viewBox="0 0 400 200">
@@ -212,11 +212,11 @@ const HowItWorks: React.FC = () => {
               </p>
               
               <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
-                <button className="group bg-white text-orange-600 px-10 py-5 rounded-2xl font-bold text-lg hover:bg-gray-50 transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl flex items-center">
+                <button className="group bg-white text-primary px-10 py-5 rounded-2xl font-bold text-lg hover:bg-gray-50 transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl flex items-center">
                   Browse Suppliers Now
                   <ArrowRight className="w-5 h-5 ml-3 group-hover:translate-x-1 transition-transform" />
                 </button>
-                <button className="border-3 border-white text-white px-10 py-5 rounded-2xl font-bold text-lg hover:bg-white hover:text-orange-600 transition-all duration-300 transform hover:scale-105 shadow-xl">
+                <button className="border-3 border-white text-white px-10 py-5 rounded-2xl font-bold text-lg hover:bg-white hover:text-primary transition-all duration-300 transform hover:scale-105 shadow-xl">
                   Register as Supplier
                 </button>
               </div>

@@ -290,7 +290,7 @@ export default function AdminSupplierDetailsPage() {
                         onClick={() => setSelectedImageIndex(idx)}
                         className={`w-16 h-16 rounded-lg overflow-hidden border-2 transition-all ${
                           selectedImageIndex === idx
-                            ? "border-orange-500"
+                            ? "border-primary"
                             : "border-gray-200 hover:border-gray-300"
                         }`}
                       >
@@ -312,7 +312,7 @@ export default function AdminSupplierDetailsPage() {
                     {selectedProduct.name}
                   </h3>
                   <div className="flex items-center gap-4 mb-4">
-                    <span className="px-3 py-1 bg-orange-100 text-orange-800 rounded-full text-sm font-medium">
+                    <span className="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm font-medium">
                       {selectedProduct.category}
                     </span>
                     <span
@@ -427,7 +427,7 @@ export default function AdminSupplierDetailsPage() {
               >
                 Close
               </button>
-              <button className="flex-1 px-4 py-3 bg-gradient-to-r from-orange-500 to-amber-500 text-white font-medium rounded-lg hover:from-orange-600 hover:to-amber-600 transition-colors flex items-center justify-center gap-2">
+              <button className="flex-1 px-4 py-3 bg-gradient-to-r from-primary to-primary/90 text-white font-medium rounded-lg hover:from-primary/90 hover:to-primary transition-colors flex items-center justify-center gap-2">
                 <Edit size={18} />
                 Edit Product
               </button>
@@ -444,7 +444,7 @@ export default function AdminSupplierDetailsPage() {
       <div className="flex items-center justify-between">
         <button
           onClick={() => navigate("/admin/suppliers")}
-          className="flex items-center gap-2 text-orange-600 hover:text-orange-700 font-medium transition-colors"
+          className="flex items-center gap-2 text-primary hover:text-primary/80 font-medium transition-colors"
         >
           <ChevronLeft size={20} />
           Back to Suppliers
@@ -453,11 +453,11 @@ export default function AdminSupplierDetailsPage() {
 
       {/* Supplier Header Card */}
       <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
-        <div className="bg-gradient-to-r from-orange-500 to-amber-500 h-32"></div>
+        <div className="bg-gradient-to-r from-primary to-primary/90 h-32"></div>
         <div className="px-6 pb-6">
           <div className="flex items-start justify-between -mt-16 relative z-10">
             <div className="flex items-end gap-4">
-              <div className="w-24 h-24 bg-gradient-to-br from-orange-400 to-orange-600 rounded-xl border-4 border-white flex items-center justify-center text-white text-4xl font-bold shadow-lg">
+              <div className="w-24 h-24 bg-gradient-to-br from-primary to-primary/80 rounded-xl border-4 border-white flex items-center justify-center text-white text-4xl font-bold shadow-lg">
                 {supplier.name.charAt(0)}
               </div>
               <div className="pb-2">
@@ -515,7 +515,7 @@ export default function AdminSupplierDetailsPage() {
             <span className="text-sm font-medium text-gray-600">
               Total Customers
             </span>
-            <Users className="text-orange-600" size={20} />
+            <Users className="text-primary" size={20} />
           </div>
           <p className="text-3xl font-bold text-gray-900">
             {supplier.customerCount}
@@ -528,7 +528,7 @@ export default function AdminSupplierDetailsPage() {
             <span className="text-sm font-medium text-gray-600">
               Total Orders
             </span>
-            <ShoppingCart className="text-orange-600" size={20} />
+            <ShoppingCart className="text-primary" size={20} />
           </div>
           <p className="text-3xl font-bold text-gray-900">
             {supplier.ordersCount}
@@ -541,7 +541,7 @@ export default function AdminSupplierDetailsPage() {
             <span className="text-sm font-medium text-gray-600">
               Products Listed
             </span>
-            <Package className="text-orange-600" size={20} />
+            <Package className="text-primary" size={20} />
           </div>
           <p className="text-3xl font-bold text-gray-900">
             {supplier.productCount}
@@ -554,7 +554,7 @@ export default function AdminSupplierDetailsPage() {
             <span className="text-sm font-medium text-gray-600">
               Member Since
             </span>
-            <Calendar className="text-orange-600" size={20} />
+            <Calendar className="text-primary" size={20} />
           </div>
           <p className="text-lg font-bold text-gray-900">
             {new Date(supplier.joinDate).getFullYear()}
@@ -574,7 +574,7 @@ export default function AdminSupplierDetailsPage() {
         {/* Contact Information */}
         <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
           <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-            <Mail size={20} className="text-orange-600" />
+            <Mail size={20} className="text-primary" />
             Contact Information
           </h3>
           <div className="space-y-4">
@@ -597,7 +597,7 @@ export default function AdminSupplierDetailsPage() {
         {/* Verification Details */}
         <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
           <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-            <Shield size={20} className="text-orange-600" />
+            <Shield size={20} className="text-primary" />
             Verification Details
           </h3>
           <div className="space-y-4">
@@ -648,7 +648,7 @@ export default function AdminSupplierDetailsPage() {
               onClick={() => setActiveTab("products")}
               className={`flex items-center gap-2 px-6 py-4 font-semibold transition-colors border-b-2 ${
                 activeTab === "products"
-                  ? "text-orange-600 border-orange-600"
+                  ? "text-primary border-primary"
                   : "text-gray-600 border-transparent hover:text-gray-900"
               }`}
             >
@@ -659,7 +659,7 @@ export default function AdminSupplierDetailsPage() {
               onClick={() => setActiveTab("services")}
               className={`flex items-center gap-2 px-6 py-4 font-semibold transition-colors border-b-2 ${
                 activeTab === "services"
-                  ? "text-orange-600 border-orange-600"
+                  ? "text-primary border-primary"
                   : "text-gray-600 border-transparent hover:text-gray-900"
               }`}
             >
@@ -711,8 +711,8 @@ export default function AdminSupplierDetailsPage() {
                   >
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
-                        <div className="p-2 bg-orange-100 rounded-lg">
-                          <Package size={16} className="text-orange-600" />
+                        <div className="p-2 bg-primary/10 rounded-lg">
+                          <Package size={16} className="text-primary" />
                         </div>
                         <span className="font-medium text-gray-900">
                           {product.name}
@@ -771,7 +771,7 @@ export default function AdminSupplierDetailsPage() {
                               `/admin/suppliers/${supplierId}/product/${product.id}`,
                             );
                           }}
-                          className="p-2 hover:bg-orange-100 rounded-lg transition-all text-orange-600"
+                          className="p-2 hover:bg-primary/10 rounded-lg transition-all text-primary"
                         >
                           <Eye size={16} />
                         </button>
@@ -890,7 +890,7 @@ export default function AdminSupplierDetailsPage() {
       <div className="flex gap-3">
         <button
           onClick={handleEditSupplier}
-          className="flex-1 px-6 py-3 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-medium rounded-lg transition-all flex items-center justify-center gap-2"
+          className="flex-1 px-6 py-3 bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary text-white font-medium rounded-lg transition-all flex items-center justify-center gap-2"
         >
           <Edit size={18} />
           Edit Supplier

@@ -116,7 +116,7 @@ export default function AdminCategoriesPage() {
         </div>
         <button
           onClick={() => setShowModal(true)}
-          className="flex items-center gap-2 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white px-4 py-2 rounded-lg transition-all"
+          className="flex items-center gap-2 bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary text-white px-4 py-2 rounded-lg transition-all"
         >
           <Plus size={20} />
           Add Category
@@ -132,7 +132,7 @@ export default function AdminCategoriesPage() {
             placeholder="Search categories..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
           />
         </div>
       </div>
@@ -150,8 +150,8 @@ export default function AdminCategoriesPage() {
                 <div className="flex items-start justify-between">
                   <div className="flex items-center gap-3">
                     {IconComponent && (
-                      <div className="p-3 bg-orange-100 rounded-lg">
-                        <IconComponent size={24} className="text-orange-600" />
+                      <div className="p-3 bg-primary/10 rounded-lg">
+                        <IconComponent size={24} className="text-primary" />
                       </div>
                     )}
                     <div>
@@ -195,7 +195,7 @@ export default function AdminCategoriesPage() {
                   {category.productCount > 0 ? "Active" : "Inactive"}
                 </p>
                 <div className="flex items-center gap-2">
-                  <button className="p-2 hover:bg-orange-100 rounded-lg transition-all text-orange-600">
+                  <button className="p-2 hover:bg-primary/10 rounded-lg transition-all text-primary">
                     <Eye size={16} />
                   </button>
                   <button
