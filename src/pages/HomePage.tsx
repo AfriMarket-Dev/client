@@ -1,53 +1,34 @@
-import { useNavigate } from 'react-router-dom';
-import Hero from '@/components/Hero';
-import CategoryGrid from '@/components/CategoryGrid';
-import Services from '@/components/Services';
-import FeaturedSuppliers from '@/components/FeaturedSuppliers';
-import ConstructionSuppliers from '@/components/ConstructionSuppliers';
-import SampleProducts from '@/components/SampleProducts';
-import HowItWorks from '@/components/HowItWorks';
-import Newsletter from '@/components/Newsletter';
-import Footer from '@/components/Footer';
-import { type Product } from '@/types';
+import React from "react";
+import { useSelector } from "react-redux";
+import { type RootState } from "@/app/store";
+import LandingPage from "./LandingPage";
+import UserDashboard from "./UserDashboard";
+import SupplierDashboardPage from "./SupplierDashboardPage";
+import Header from "@/components/Header";
 
 const HomePage = () => {
-  const navigate = useNavigate();
+  const { isAuthenticated, user } = useSelector((state: RootState) => state.auth);
 
-  const handleProductClick = (product: Product) => {
-    navigate(`/products/${product.id}`);
-  };
+  if (isAuthenticated) {
+    if (user?.role === "supplier") {
+      return <SupplierDashboardPage />;
+    }
+    
+    return (
+      <div className="min-h-screen bg-stone-50 flex flex-col">
+        <Header />
+        <main className="flex-grow pt-20">
+          <UserDashboard />
+        </main>
+      </div>
+    );
+  }
 
   return (
-    <>
-      <Hero 
-        onBrowseProducts={() => navigate('/products')} 
-        onBrowseSuppliers={() => navigate('/suppliers')} 
-        onSignUpClick={() => navigate('/auth/signup')} 
-      />
-      <CategoryGrid 
-        onViewCategory={() => navigate('/products')} 
-        onViewAllCategories={() => navigate('/categories')} 
-      />
-      <Services />
-      <ConstructionSuppliers 
-        onViewSupplier={(supplierId: string) => navigate(`/suppliers/${supplierId}`)} 
-        onViewAllSuppliers={() => navigate('/suppliers')} 
-      />
-      <SampleProducts 
-        onViewProducts={() => navigate('/products')} 
-        onProductClick={handleProductClick} 
-      />
-      <FeaturedSuppliers 
-        onViewSupplier={(supplierId: string) => navigate(`/suppliers/${supplierId}`)} 
-        onViewAllSuppliers={() => navigate('/suppliers')} 
-      />
-      <HowItWorks />
-      <Newsletter />
-      <Footer 
-        onAboutClick={() => navigate('/about')} 
-        onHelpClick={() => navigate('/help')} 
-      />
-    </>
+    <div className="flex flex-col min-h-screen">
+      <Header />
+      <LandingPage />
+    </div>
   );
 };
 

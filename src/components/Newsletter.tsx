@@ -1,116 +1,102 @@
-import React, { useState } from 'react';
-import { Mail, CheckCircle } from 'lucide-react';
+import React, { useState } from "react";
+import { Mail, CheckCircle, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 
 const Newsletter: React.FC = () => {
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState("");
   const [isSubscribed, setIsSubscribed] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (email) {
       setIsSubscribed(true);
-      setTimeout(() => {
-        setIsSubscribed(false);
-        setEmail('');
-      }, 3000);
+      setTimeout(() => setIsSubscribed(false), 3000);
+      setEmail("");
     }
   };
 
   return (
-    <section className="py-16 bg-gradient-to-br from-gray-900 to-gray-800 text-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
-          {/* Content */}
-          <div className="space-y-6">
-            <div className="inline-flex items-center px-4 py-2 bg-primary/20 backdrop-blur-sm rounded-full text-sm font-medium text-primary border border-primary/30">
-              <Mail className="w-4 h-4 mr-2" />
-              Stay Updated
-            </div>
-            
-            <h2 className="text-3xl md:text-4xl font-bold leading-tight">
-              Never Miss New
-              <span className="block bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
-                Suppliers & Deals
-              </span>
-            </h2>
-            
-            <p className="text-xl text-muted-foreground leading-relaxed">
-              Get weekly updates on new suppliers, exclusive deals, market insights, 
-              and industry trends delivered straight to your inbox.
-            </p>
+    <section className="py-24 bg-stone-100 section-divider">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="bg-white rounded-2xl p-8 md:p-12 shadow-sm border border-stone-200 relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-orange-100 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 opacity-50 pointer-events-none" />
 
-            <div className="space-y-4">
-              <div className="flex items-center text-muted-foreground">
-                <CheckCircle className="w-5 h-5 text-green-400 mr-3 flex-shrink-0" />
-                <span>Weekly supplier spotlights and new arrivals</span>
+          <div className="grid lg:grid-cols-2 gap-12 items-center relative z-10">
+            <div>
+              <div className="inline-flex items-center gap-2 text-orange-600 font-semibold uppercase tracking-wide text-sm mb-4">
+                <Mail className="w-4 h-4" />
+                Stay Ahead
               </div>
-              <div className="flex items-center text-muted-foreground">
-                <CheckCircle className="w-5 h-5 text-green-400 mr-3 flex-shrink-0" />
-                <span>Exclusive wholesale deals and bulk pricing</span>
-              </div>
-              <div className="flex items-center text-muted-foreground">
-                <CheckCircle className="w-5 h-5 text-green-400 mr-3 flex-shrink-0" />
-                <span>Market trends and business growth tips</span>
+              <h2 className="text-3xl md:text-4xl font-bold text-stone-900 mb-6">
+                Get the Latest Construction <br /> Market Insights
+              </h2>
+              <p className="text-stone-500 text-lg mb-8">
+                Join 50,000+ contractors and suppliers receiving weekly updates
+                on pricing trends, new machinery, and regulatory changes in
+                African construction.
+              </p>
+
+              <div className="space-y-3">
+                <div className="flex items-center text-stone-600">
+                  <CheckCircle className="w-5 h-5 text-orange-500 mr-3 flex-shrink-0" />
+                  <span>Weekly price watch for cement & steel</span>
+                </div>
+                <div className="flex items-center text-stone-600">
+                  <CheckCircle className="w-5 h-5 text-orange-500 mr-3 flex-shrink-0" />
+                  <span>New heavy equipment arrival alerts</span>
+                </div>
               </div>
             </div>
-          </div>
 
-          {/* Newsletter Form */}
-          <div className="relative">
-            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20">
+            <div className="bg-stone-50 p-8 rounded-xl border border-stone-100">
               {!isSubscribed ? (
-                <>
-                  <h3 className="text-2xl font-bold mb-6 text-center">
-                    Subscribe to Our Newsletter
+                <form onSubmit={handleSubmit}>
+                  <h3 className="text-xl font-bold text-stone-900 mb-2">
+                    Subscribe to Newsletter
                   </h3>
-                  
-                  <form onSubmit={handleSubmit} className="space-y-4">
+                  <p className="text-stone-500 text-sm mb-6">
+                    No spam, just valuable industry data.
+                  </p>
+
+                  <div className="space-y-4">
                     <div>
-                      <label htmlFor="email" className="block text-sm font-medium text-muted-foreground mb-2">
+                      <label htmlFor="email" className="sr-only">
                         Email Address
                       </label>
                       <Input
                         type="email"
                         id="email"
-                        placeholder="Enter your email address"
+                        placeholder="Enter your business email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        className="w-full px-4 py-6 bg-white/10 border-white/30 text-white placeholder-gray-400 focus:bg-background/20 transition-colors"
+                        className="w-full bg-white border-stone-200 focus:border-orange-500 focus:ring-orange-500"
                         required
                       />
                     </div>
-                    
                     <Button
                       type="submit"
-                      className="w-full bg-gradient-to-r from-primary to-primary/90 text-white hover:from-primary/90 hover:to-primary transition-all duration-300 transform hover:scale-105 py-6 h-auto"
+                      className="w-full bg-stone-900 hover:bg-stone-800 text-white font-semibold h-11"
                     >
-                      Subscribe Now
+                      Subscribe Free
+                      <ArrowRight className="ml-2 w-4 h-4" />
                     </Button>
-                  </form>
-                  
-                  <p className="text-sm text-muted-foreground text-center mt-4">
-                    We respect your privacy. Unsubscribe at any time.
-                  </p>
-                </>
+                  </div>
+                </form>
               ) : (
                 <div className="text-center py-8">
-                  <div className="inline-flex items-center justify-center w-16 h-16 bg-green-500 rounded-full mb-4">
-                    <CheckCircle className="w-8 h-8 text-white" />
+                  <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
+                    <CheckCircle className="w-8 h-8 text-green-600" />
                   </div>
-                  <h3 className="text-2xl font-bold mb-2">Thank You!</h3>
-                  <p className="text-muted-foreground">
-                    You've successfully subscribed to our newsletter. 
-                    Check your inbox for a confirmation email.
+                  <h3 className="text-xl font-bold text-stone-900 mb-2">
+                    Subscribed!
+                  </h3>
+                  <p className="text-stone-500">
+                    Check your inbox for the welcome report.
                   </p>
                 </div>
               )}
             </div>
-
-            {/* Decorative Elements */}
-            <div className="absolute -top-4 -right-4 w-24 h-24 bg-gradient-to-r from-primary/30 to-primary/20 rounded-full blur-xl"></div>
-            <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-full blur-xl"></div>
           </div>
         </div>
       </div>

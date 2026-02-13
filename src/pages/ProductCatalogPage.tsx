@@ -1,6 +1,6 @@
-import { useNavigate } from 'react-router-dom';
-import ProductCatalog from '@/components/ProductCatalog';
-import { type Product } from '@/types';
+import { useNavigate } from "react-router-dom";
+import ProductCatalog from "@/components/ProductCatalog";
+import { type Product } from "@/types";
 
 const ProductCatalogPage = () => {
   const navigate = useNavigate();
@@ -10,9 +10,10 @@ const ProductCatalogPage = () => {
   };
 
   return (
-    <ProductCatalog 
-      onBackToHome={() => navigate('/')}
-      onSupplierClick={(supplierId: string) => navigate(`/suppliers/${supplierId}`)}
+    <ProductCatalog
+      onSupplierClick={(supplierId: string) =>
+        navigate(`/suppliers/${supplierId}`)
+      }
       onProductClick={handleProductClick}
     />
   );

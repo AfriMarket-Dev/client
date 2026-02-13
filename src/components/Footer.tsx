@@ -1,5 +1,14 @@
-import React from 'react';
-import { Mail, Phone, MapPin, Facebook, Twitter, Instagram, Linkedin } from 'lucide-react';
+import React from "react";
+import {
+  Mail,
+  Phone,
+  MapPin,
+  Facebook,
+  Twitter,
+  Instagram,
+  Linkedin,
+  Globe,
+} from "lucide-react";
 
 interface FooterProps {
   onAboutClick?: () => void;
@@ -9,56 +18,56 @@ interface FooterProps {
 const Footer: React.FC<FooterProps> = ({ onAboutClick, onHelpClick }) => {
   const footerSections = [
     {
-      title: 'Marketplace',
+      title: "Marketplace",
       links: [
-        'Browse Suppliers',
-        'Product Categories',
-        'Featured Products',
-        'New Arrivals',
-        'Bulk Orders'
-      ]
+        "Browse Suppliers",
+        "Construction Materials",
+        "Heavy Equipment",
+        "Labor Services",
+        "Bulk Deals",
+      ],
     },
     {
-      title: 'For Suppliers',
+      title: "For Suppliers",
       links: [
-        'Join as Supplier',
-        'Supplier Dashboard',
-        'List Products',
-        'Manage Orders',
-        'Success Stories'
-      ]
+        "Join as Supplier",
+        "Supplier Dashboard",
+        "List Products",
+        "Verify Identity",
+        "Success Stories",
+      ],
     },
     {
-      title: 'Support',
+      title: "Support",
       links: [
-        { label: 'Help Center', onClick: onHelpClick },
-        'Contact Us',
-        'Shipping Info',
-        'Payment Methods',
-        'Return Policy'
-      ]
+        { label: "Help Center", onClick: onHelpClick },
+        "Contact Us",
+        "Safety Tips",
+        "Community Guidelines",
+        "Report a Problem",
+      ],
     },
     {
-      title: 'Company',
+      title: "Company",
       links: [
-        { label: 'About Us', onClick: onAboutClick },
-        'Our Mission',
-        'Careers',
-        'Press',
-        'Blog'
-      ]
-    }
+        { label: "About Us", onClick: onAboutClick },
+        "Mission & Vision",
+        "Careers in Kigali",
+        "Press",
+        "Blog",
+      ],
+    },
   ];
 
   const socialLinks = [
-    { icon: Facebook, href: '#', label: 'Facebook' },
-    { icon: Twitter, href: '#', label: 'Twitter' },
-    { icon: Instagram, href: '#', label: 'Instagram' },
-    { icon: Linkedin, href: '#', label: 'LinkedIn' }
+    { icon: Facebook, href: "#", label: "Facebook" },
+    { icon: Twitter, href: "#", label: "Twitter" },
+    { icon: Instagram, href: "#", label: "Instagram" },
+    { icon: Linkedin, href: "#", label: "LinkedIn" },
   ];
 
   return (
-    <footer className="bg-foreground text-background">
+    <footer className="bg-foreground text-background border-t border-background/10">
       {/* Main Footer */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8">
@@ -68,40 +77,44 @@ const Footer: React.FC<FooterProps> = ({ onAboutClick, onHelpClick }) => {
               <h2 className="text-2xl font-bold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
                 AfrikaMarket
               </h2>
-              <p className="text-sm text-muted-foreground mt-1">Wholesale Hub</p>
+              <p className="text-sm text-muted-foreground/60 mt-1">
+                Rwanda's #1 Construction Hub
+              </p>
             </div>
-            
+
             <p className="text-muted-foreground/80 mb-6 leading-relaxed">
-              Africa's premier wholesale marketplace connecting trusted suppliers 
-              with retailers across the continent. Building bridges for business growth.
+              connect verified local suppliers with contractors and individual
+              builders across all 30 districts of Rwanda.
             </p>
 
             {/* Contact Info */}
-            <div className="space-y-3">
-              <div className="flex items-center text-muted-foreground/80">
+            <div className="space-y-4">
+              <div className="flex items-center text-stone-400">
                 <MapPin className="w-5 h-5 mr-3 text-primary flex-shrink-0" />
-                <span className="text-sm">Pan-African Coverage</span>
+                <span className="text-sm">
+                  Kigali, Rwanda (Serving Nationwide)
+                </span>
               </div>
-              <div className="flex items-center text-muted-foreground/80">
+              <div className="flex items-center text-stone-400">
                 <Mail className="w-5 h-5 mr-3 text-primary flex-shrink-0" />
-                <span className="text-sm">support@afrikamarket.com</span>
+                <span className="text-sm">support@afrikamarket.rw</span>
               </div>
-              <div className="flex items-center text-muted-foreground/80">
+              <div className="flex items-center text-stone-400">
                 <Phone className="w-5 h-5 mr-3 text-primary flex-shrink-0" />
-                <span className="text-sm">24/7 Support Available</span>
+                <span className="text-sm">+250 788 000 000</span>
               </div>
             </div>
 
             {/* Social Links */}
-            <div className="flex space-x-4 mt-6">
+            <div className="flex space-x-4 mt-8">
               {socialLinks.map((social, index) => (
                 <a
                   key={index}
                   href={social.href}
                   aria-label={social.label}
-                  className="flex items-center justify-center w-10 h-10 bg-gray-800 rounded-lg hover:bg-gradient-to-r hover:from-primary hover:to-primary/80 transition-all duration-300 group"
+                  className="flex items-center justify-center w-10 h-10 bg-background/5 rounded-lg hover:bg-primary hover:text-primary-foreground transition-all duration-300 group text-muted-foreground"
                 >
-                  <social.icon className="w-5 h-5 text-gray-400 group-hover:text-white transition-colors" />
+                  <social.icon className="w-5 h-5" />
                 </a>
               ))}
             </div>
@@ -110,25 +123,25 @@ const Footer: React.FC<FooterProps> = ({ onAboutClick, onHelpClick }) => {
           {/* Footer Links */}
           {footerSections.map((section, index) => (
             <div key={index}>
-              <h3 className="text-lg font-semibold mb-4 text-white">
+              <h3 className="text-lg font-semibold mb-4 text-background">
                 {section.title}
               </h3>
               <ul className="space-y-3">
                 {section.links.map((link, linkIndex) => (
                   <li key={linkIndex}>
-                    {typeof link === 'object' && link.onClick ? (
+                    {typeof link === "object" && link.onClick ? (
                       <button
                         onClick={link.onClick}
-                        className="text-gray-400 hover:text-primary transition-colors text-sm"
+                        className="text-muted-foreground/70 hover:text-primary transition-colors text-sm text-left"
                       >
                         {link.label}
                       </button>
                     ) : (
                       <a
                         href="#"
-                        className="text-gray-400 hover:text-primary transition-colors text-sm"
+                        className="text-muted-foreground/70 hover:text-primary transition-colors text-sm"
                       >
-                        {typeof link === 'string' ? link : link.label}
+                        {typeof link === "string" ? link : link.label}
                       </a>
                     )}
                   </li>
@@ -140,25 +153,35 @@ const Footer: React.FC<FooterProps> = ({ onAboutClick, onHelpClick }) => {
       </div>
 
       {/* Bottom Bar */}
-      <div className="border-t border-border/20">
+      <div className="border-t border-background/5 bg-black/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <div className="text-sm text-muted-foreground mb-4 md:mb-0">
-              © 2024 AfrikaMarket. All rights reserved.
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+            <div className="text-sm text-muted-foreground/50 text-center md:text-left">
+              © 2024 AfrikaMarket Rwanda Ltd. All rights reserved.
             </div>
-            
-            <div className="flex flex-wrap justify-center md:justify-end space-x-6 text-sm">
-              <a href="#" className="text-gray-400 hover:text-primary transition-colors">
-                Privacy Policy
+
+            {/* Language & Links */}
+            <div className="flex flex-wrap justify-center items-center gap-6 text-sm">
+              <div className="flex items-center gap-2 text-muted-foreground/80 bg-background/5 px-3 py-1 rounded-full">
+                <Globe className="w-3 h-3" />
+                <span>English</span>
+                <span className="text-muted-foreground/30">|</span>
+                <span className="text-muted-foreground hover:text-background cursor-pointer">
+                  Kinyarwanda
+                </span>
+              </div>
+
+              <a
+                href="#"
+                className="text-stone-500 hover:text-primary transition-colors"
+              >
+                Privacy
               </a>
-              <a href="#" className="text-gray-400 hover:text-primary transition-colors">
-                Terms of Service
-              </a>
-              <a href="#" className="text-gray-400 hover:text-primary transition-colors">
-                Cookie Policy
-              </a>
-              <a href="#" className="text-gray-400 hover:text-primary transition-colors">
-                Sitemap
+              <a
+                href="#"
+                className="text-stone-500 hover:text-primary transition-colors"
+              >
+                Terms
               </a>
             </div>
           </div>

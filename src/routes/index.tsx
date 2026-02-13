@@ -11,6 +11,7 @@ import SignInPage from "@/pages/SignInPage";
 import SupplierDashboardPage from "@/pages/SupplierDashboardPage";
 import AboutPage from "@/pages/AboutPage";
 import HelpCenterPage from "@/pages/HelpCenterPage";
+import BuyerMessagesPage from "@/pages/BuyerMessagesPage";
 import AdminDashboard from "@/pages/AdminDashboard";
 import AdminSuppliersPage from "@/pages/AdminSuppliersPage";
 import AdminAddSupplierPage from "@/pages/AdminAddSupplierPage";
@@ -67,6 +68,10 @@ export const router = createBrowserRouter([
       {
         path: "help",
         element: <HelpCenterPage />,
+      },
+      {
+        path: "messages",
+        element: <BuyerMessagesPage />,
       },
       // protected public routes
       {

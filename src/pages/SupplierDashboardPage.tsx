@@ -1,25 +1,23 @@
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { type RootState } from '@/app/store';
+import { logout } from '@/app/features/authSlice';
 import SupplierDashboard from '@/components/SupplierDashboard';
 
 const SupplierDashboardPage = () => {
   const navigate = useNavigate();
-  // In a real app, this would come from a global state management solution or context
-  const [currentUser] = useState<any>({
-    type: 'supplier',
-    email: 'supplier@example.com',
-    name: 'AfroTech Imports',
-    representativeName: 'John Doe'
-  });
+  const dispatch = useDispatch();
+  const { user } = useSelector((state: RootState) => state.auth);
 
   const handleLogout = () => {
+    dispatch(logout());
     navigate('/');
   };
 
   return (
     <SupplierDashboard
       onLogout={handleLogout}
-      supplierData={currentUser}
+      supplierData={user}
     />
   );
 };

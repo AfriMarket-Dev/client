@@ -1,244 +1,143 @@
-import React from 'react';
-import { Search, Users, Handshake, TrendingUp, ArrowRight, CheckCircle, Star, Globe } from 'lucide-react';
+import React from "react";
+import {
+  Search,
+  MessageSquare,
+  Handshake,
+  Star,
+  CheckCircle,
+  FileText,
+  ShieldCheck,
+} from "lucide-react";
+import { Button } from "@/components/ui/Button";
+import { useNavigate } from "react-router-dom";
+import { Badge } from "@/components/ui/Badge";
+import { Card, CardContent } from "@/components/ui/Card";
 
 const HowItWorks: React.FC = () => {
+  const navigate = useNavigate();
+
   const steps = [
     {
       icon: Search,
-      title: 'Discover Suppliers',
-      description: 'Browse through thousands of verified wholesalers and importers across Africa. Use our advanced filters to find exactly what you need.',
-      color: 'from-blue-500 to-cyan-500',
-      bgColor: 'from-blue-50 to-cyan-50',
-      accentColor: 'blue'
+      title: "Discovery",
+      description: "Search local listings by category and district.",
+      color: "text-blue-600",
+      bgColor: "bg-blue-50",
     },
     {
-      icon: Users,
-      title: 'Connect & Communicate',
-      description: 'Reach out directly to suppliers through our platform. Ask questions, request samples, and negotiate terms that work for your business.',
-      color: 'from-green-500 to-emerald-500',
-      bgColor: 'from-green-50 to-emerald-50',
-      accentColor: 'green'
+      icon: MessageSquare,
+      title: "Negotiation",
+      description: "Direct chat with providers to discuss requirements.",
+      color: "text-purple-600",
+      bgColor: "bg-purple-50",
+    },
+    {
+      icon: FileText,
+      title: "The Quote",
+      description: "Receive and accept formal offers digitally.",
+      color: "text-orange-600",
+      bgColor: "bg-orange-50",
     },
     {
       icon: Handshake,
-      title: 'Build Relationships',
-      description: 'Establish long-term partnerships with reliable suppliers. Our platform facilitates secure connections and ongoing communication.',
-      color: 'from-primary to-primary/90',
-      bgColor: 'from-primary/5 to-primary/10',
-      accentColor: 'primary'
+      title: "Agreement",
+      description: "Lock in terms and pay the provider offline.",
+      color: "text-emerald-600",
+      bgColor: "bg-emerald-50",
     },
     {
-      icon: TrendingUp,
-      title: 'Grow Your Business',
-      description: 'Scale your operations with consistent supply chains. Access better pricing through bulk orders and exclusive supplier deals.',
-      color: 'from-purple-500 to-pink-500',
-      bgColor: 'from-purple-50 to-pink-50',
-      accentColor: 'purple'
-    }
+      icon: Star,
+      title: "Trust",
+      description: "Confirm delivery and leave a transparent review.",
+      color: "text-amber-600",
+      bgColor: "bg-amber-50",
+    },
   ];
 
   return (
-    <section className="py-20 bg-gradient-to-br from-gray-50 via-white to-primary/10 relative overflow-hidden">
-      {/* Enhanced African Pattern Background */}
-      <div className="absolute inset-0 opacity-5">
-        <svg className="w-full h-full" viewBox="0 0 1200 800">
-          <defs>
-            <pattern id="how-it-works-pattern" x="0" y="0" width="120" height="120" patternUnits="userSpaceOnUse">
-              <polygon points="60,20 90,50 60,80 30,50" fill="currentColor" opacity="0.4"/>
-              <circle cx="60" cy="60" r="15" fill="none" stroke="currentColor" strokeWidth="2" opacity="0.3"/>
-              <path d="M30,30 L90,90 M90,30 L30,90" stroke="currentColor" strokeWidth="1" opacity="0.2"/>
-              <circle cx="30" cy="30" r="3" fill="currentColor" opacity="0.6"/>
-              <circle cx="90" cy="30" r="3" fill="currentColor" opacity="0.6"/>
-              <circle cx="30" cy="90" r="3" fill="currentColor" opacity="0.6"/>
-              <circle cx="90" cy="90" r="3" fill="currentColor" opacity="0.6"/>
-            </pattern>
-          </defs>
-          <rect width="100%" height="100%" fill="url(#how-it-works-pattern)" className="text-primary"/>
-        </svg>
-      </div>
-
-      {/* Floating Decorative Elements */}
-      <div className="absolute top-20 left-10 w-20 h-20 bg-gradient-to-br from-primary/20 to-primary/30 rounded-full blur-xl animate-pulse"></div>
-      <div className="absolute top-40 right-20 w-32 h-32 bg-gradient-to-br from-blue-400/20 to-cyan-400/20 rounded-full blur-xl animate-pulse" style={{animationDelay: '1s'}}></div>
-      <div className="absolute bottom-40 left-1/4 w-16 h-16 bg-gradient-to-br from-green-400/20 to-emerald-400/20 rounded-full blur-xl animate-pulse" style={{animationDelay: '2s'}}></div>
-      <div className="absolute bottom-20 right-1/3 w-24 h-24 bg-gradient-to-br from-purple-400/20 to-pink-400/20 rounded-full blur-xl animate-pulse" style={{animationDelay: '3s'}}></div>
-
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Enhanced Header */}
-        <div className="text-center mb-20">
-          <div className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-primary/10 via-primary/5 to-white rounded-full text-sm font-semibold text-primary border-2 border-primary/20 mb-8 shadow-lg backdrop-blur-sm">
-            <Globe className="w-5 h-5 mr-3" />
-            <span className="bg-gradient-to-r from-primary to-primary/90 bg-clip-text text-transparent">
-              Simple Process, Powerful Results
-            </span>
-          </div>
-          
-          <h2 className="text-5xl md:text-6xl font-bold text-gray-900 mb-8 leading-tight">
-            How It
-            <span className="relative ml-4">
-              <span className="bg-gradient-to-r from-primary via-primary/90 to-primary/80 bg-clip-text text-transparent">
-                Works
-              </span>
-              <svg className="absolute -bottom-3 left-0 w-full h-4" viewBox="0 0 200 16">
-                <path d="M5,8 Q100,2 195,8" stroke="url(#works-gradient)" strokeWidth="4" fill="none" strokeLinecap="round"/>
-                <defs>
-                  <linearGradient id="works-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="var(--color-primary)"/>
-                    <stop offset="50%" stopColor="var(--color-primary)"/>
-                    <stop offset="100%" stopColor="var(--color-primary)"/>
-                  </linearGradient>
-                </defs>
-              </svg>
-            </span>
+    <section className="bg-background py-24 relative overflow-hidden">
+      <div className="absolute inset-0 african-pattern opacity-[0.03] pointer-events-none" />
+      
+      <div className="container mx-auto px-4">
+        <div className="text-center max-w-3xl mx-auto mb-20">
+          <Badge variant="outline" className="mb-4 border-primary/20 text-primary">
+            Safe & Simple
+          </Badge>
+          <h2 className="text-3xl md:text-5xl font-bold text-foreground mb-6 font-display">
+            How AfrikaMarket Works
           </h2>
-          
-          <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
-            Connect with trusted African suppliers in four simple steps. Our streamlined process 
-            makes it easy to find, connect, and build lasting business relationships.
+          <p className="text-muted-foreground text-lg">
+            We simplify the construction supply chain in Rwanda through a transparent, accountability-focused process.
           </p>
         </div>
 
-        {/* Enhanced Steps Grid */}
-        <div className="relative">
-          {/* Connection Lines - Desktop Only */}
-          <div className="hidden lg:block absolute top-1/2 left-0 right-0 h-1 bg-gradient-to-r from-blue-200 via-green-200 via-primary/20 to-purple-200 transform -translate-y-1/2 rounded-full opacity-60"></div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 relative z-10">
-            {steps.map((step, index) => (
-              <div 
-                key={index} 
-                className="group relative"
-                style={{
-                  animationDelay: `${index * 200}ms`
-                }}
-              >
-                {/* Step Card */}
-                <div className={`relative bg-gradient-to-br ${step.bgColor} rounded-3xl p-8 border-2 border-white/50 shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-3 hover:scale-105 backdrop-blur-sm`}>
-                  {/* African-inspired corner decorations */}
-                  <div className="absolute top-0 left-0 w-8 h-8 border-l-4 border-t-4 border-primary/30 rounded-tl-3xl"></div>
-                  <div className="absolute top-0 right-0 w-8 h-8 border-r-4 border-t-4 border-primary/30 rounded-tr-3xl"></div>
-                  <div className="absolute bottom-0 left-0 w-8 h-8 border-l-4 border-b-4 border-primary/30 rounded-bl-3xl"></div>
-                  <div className="absolute bottom-0 right-0 w-8 h-8 border-r-4 border-b-4 border-primary/30 rounded-br-3xl"></div>
-                  
-                  {/* Step Number Badge */}
-                  <div className="absolute -top-4 -left-4 w-12 h-12 bg-gradient-to-br from-white to-gray-100 border-4 border-primary/20 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
-                    <span className="text-xl font-bold bg-gradient-to-r from-primary to-primary/90 bg-clip-text text-transparent">
-                      {index + 1}
-                    </span>
-                  </div>
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-24 relative">
+          {/* Connecting Line (Desktop) */}
+          <div className="hidden md:block absolute top-1/2 left-0 w-full h-px bg-stone-200 -z-10 translate-y-[-2rem]" />
 
-                  {/* Icon Container */}
-                  <div className="relative mb-8">
-                    <div className={`inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br ${step.color} rounded-2xl text-white shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-300`}>
-                      <step.icon className="w-10 h-10" />
-                    </div>
-                    
-                    {/* Floating accent elements */}
-                    <div className={`absolute -top-2 -right-2 w-6 h-6 bg-gradient-to-br ${step.color} rounded-full opacity-60 group-hover:scale-125 transition-transform duration-300`}></div>
-                    <div className={`absolute -bottom-2 -left-2 w-4 h-4 bg-gradient-to-br ${step.color} rounded-full opacity-40 group-hover:scale-150 transition-transform duration-300`}></div>
-                  </div>
-
-                  {/* Content */}
-                  <div className="text-center">
-                    <h3 className="text-2xl font-bold text-gray-900 mb-4 group-hover:text-primary transition-colors duration-300">
-                      {step.title}
-                    </h3>
-                    
-                    <p className="text-gray-600 leading-relaxed mb-6 text-sm">
-                      {step.description}
-                    </p>
-
-                    {/* Feature Highlights */}
-                    <div className="flex justify-center">
-                      <div className={`inline-flex items-center px-4 py-2 bg-white/80 backdrop-blur-sm rounded-full text-xs font-medium ${step.accentColor === 'primary' ? 'text-primary border-primary/20' : `text-${step.accentColor}-700 border-${step.accentColor}-200/50`} shadow-sm`}>
-                        <CheckCircle className={`w-3 h-3 mr-2 ${step.accentColor === 'primary' ? 'text-primary' : `text-${step.accentColor}-500`}`} />
-                        Step {index + 1}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Hover Effect Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+          {steps.map((item, index) => (
+            <div key={index} className="flex flex-col items-center text-center group">
+              <div className={`w-20 h-20 rounded-2xl ${item.bgColor} ${item.color} flex items-center justify-center mb-6 shadow-sm border border-stone-100 group-hover:scale-110 transition-transform duration-300 relative bg-white`}>
+                <item.icon className="w-10 h-10" strokeWidth={1.5} />
+                <div className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-foreground text-white text-[10px] font-bold flex items-center justify-center border-2 border-background">
+                  {index + 1}
                 </div>
-
-                {/* Connection Arrow - Desktop Only */}
-                {index < steps.length - 1 && (
-                  <div className="hidden lg:flex absolute top-1/2 -right-4 transform -translate-y-1/2 z-20">
-                    <div className="w-8 h-8 bg-white rounded-full shadow-lg flex items-center justify-center border-2 border-primary/20 group-hover:scale-110 transition-transform duration-300">
-                      <ArrowRight className="w-4 h-4 text-primary" />
-                    </div>
-                  </div>
-                )}
               </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Enhanced CTA Section */}
-        <div className="mt-20 relative">
-          <div className="bg-gradient-to-r from-primary via-primary/90 to-primary/80 rounded-3xl p-12 md:p-16 text-center text-white relative overflow-hidden shadow-2xl">
-            {/* Background Pattern */}
-            <div className="absolute inset-0 opacity-10">
-              <svg className="w-full h-full" viewBox="0 0 400 200">
-                <defs>
-                  <pattern id="cta-pattern" x="0" y="0" width="50" height="50" patternUnits="userSpaceOnUse">
-                    <polygon points="25,5 45,25 25,45 5,25" fill="currentColor" opacity="0.6"/>
-                    <circle cx="25" cy="25" r="12" fill="none" stroke="currentColor" strokeWidth="1" opacity="0.4"/>
-                    <circle cx="25" cy="25" r="3" fill="currentColor" opacity="0.8"/>
-                  </pattern>
-                </defs>
-                <rect width="100%" height="100%" fill="url(#cta-pattern)" className="text-white"/>
-              </svg>
-            </div>
-            
-            {/* Floating Elements */}
-            <div className="absolute top-8 left-8 w-16 h-16 bg-white/20 rounded-full blur-xl animate-pulse"></div>
-            <div className="absolute bottom-8 right-8 w-20 h-20 bg-white/20 rounded-full blur-xl animate-pulse" style={{animationDelay: '1s'}}></div>
-            <div className="absolute top-1/2 left-1/4 w-12 h-12 bg-white/20 rounded-full blur-xl animate-pulse" style={{animationDelay: '2s'}}></div>
-            
-            <div className="relative z-10">
-              <div className="inline-flex items-center px-6 py-3 bg-white/20 backdrop-blur-sm rounded-full text-sm font-medium text-white/90 border border-white/30 mb-6">
-                <Star className="w-4 h-4 mr-2" />
-                Join Thousands of Successful Businesses
-              </div>
-              
-              <h3 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
-                Ready to Transform Your Business?
-              </h3>
-              
-              <p className="text-xl opacity-90 mb-10 max-w-3xl mx-auto leading-relaxed">
-                Join thousands of successful retailers who have transformed their businesses 
-                through our marketplace. Start connecting with suppliers today and unlock new opportunities.
+              <h3 className="text-lg font-bold text-foreground mb-2">{item.title}</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed px-4">
+                {item.description}
               </p>
-              
-              <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
-                <button className="group bg-white text-primary px-10 py-5 rounded-2xl font-bold text-lg hover:bg-gray-50 transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl flex items-center">
-                  Browse Suppliers Now
-                  <ArrowRight className="w-5 h-5 ml-3 group-hover:translate-x-1 transition-transform" />
-                </button>
-                <button className="border-3 border-white text-white px-10 py-5 rounded-2xl font-bold text-lg hover:bg-white hover:text-primary transition-all duration-300 transform hover:scale-105 shadow-xl">
-                  Register as Supplier
-                </button>
+            </div>
+          ))}
+        </div>
+
+        {/* CTA Section */}
+        <Card className="bg-foreground text-white overflow-hidden relative border-none rounded-3xl shadow-2xl">
+          <div className="absolute inset-0 african-pattern opacity-10 invert pointer-events-none"></div>
+          <div className="absolute top-0 right-0 w-1/2 h-full bg-primary/20 blur-3xl rounded-full translate-x-1/3 pointer-events-none"></div>
+
+          <CardContent className="relative z-10 px-6 py-16 md:py-24 md:px-12 text-center max-w-4xl mx-auto">
+            <h2 className="text-3xl md:text-5xl font-bold mb-6 font-display">
+              Ready to Start Building?
+            </h2>
+            <p className="text-stone-400 text-lg md:text-xl mb-12 max-w-2xl mx-auto font-light leading-relaxed">
+              Join Rwanda's fastest growing network of contractors and verified suppliers. Start your project with confidence today.
+            </p>
+
+            <div className="flex flex-col sm:flex-row justify-center gap-6 mb-12">
+              <Button
+                size="xl"
+                className="rounded-2xl px-12 font-bold shadow-xl shadow-primary/20"
+                onClick={() => navigate("/auth/signup")}
+              >
+                Create Free Account
+              </Button>
+              <Button
+                size="xl"
+                variant="outline"
+                className="rounded-2xl px-12 border-white/20 text-white hover:bg-white/10 hover:border-white font-bold"
+                onClick={() => navigate("/contact")}
+              >
+                Learn More
+              </Button>
+            </div>
+
+            <div className="flex flex-wrap justify-center gap-x-10 gap-y-4 text-stone-400 text-sm font-medium">
+              <div className="flex items-center gap-2">
+                <ShieldCheck className="w-5 h-5 text-primary" />
+                <span>Verified Providers</span>
               </div>
-              
-              {/* Trust Indicators */}
-              <div className="flex flex-wrap justify-center items-center gap-8 mt-12 pt-8 border-t border-white/20">
-                <div className="flex items-center text-white/90">
-                  <CheckCircle className="w-5 h-5 mr-2" />
-                  <span className="font-medium">2,500+ Verified Suppliers</span>
-                </div>
-                <div className="flex items-center text-white/90">
-                  <CheckCircle className="w-5 h-5 mr-2" />
-                  <span className="font-medium">50K+ Products Available</span>
-                </div>
-                <div className="flex items-center text-white/90">
-                  <CheckCircle className="w-5 h-5 mr-2" />
-                  <span className="font-medium">98% Connection Success</span>
-                </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle className="w-5 h-5 text-primary" />
+                <span>Rwanda-Only Focus</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle className="w-5 h-5 text-primary" />
+                <span>Accountability via Reviews</span>
               </div>
             </div>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
       </div>
     </section>
   );

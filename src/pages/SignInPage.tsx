@@ -15,11 +15,11 @@ const SignInPage = () => {
 
   const handleSignInComplete = async (
     _type: "customer" | "supplier",
-    email: string,
-    password: string,
+    phone: string,
+    otp?: string,
   ) => {
     try {
-      const result = await signIn({ email, password }).unwrap();
+      const result = await signIn({ phone, otp }).unwrap();
       dispatch(setToken(result.token));
       dispatch(
         setUser({
@@ -32,7 +32,7 @@ const SignInPage = () => {
 
       const isAdmin =
         result.user.role === "admin" || result.user.role === "agent";
-      const isSupplier = result.user.role === "supplier";
+      const isSupplier = result.user.role === "supplier" || result.user.role === "provider";
 
       if (from) {
         navigate(from, { replace: true });

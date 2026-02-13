@@ -69,3 +69,33 @@ export interface SearchFilters {
   services: string[];
   verified: boolean;
 }
+
+export interface Quote {
+  id: string;
+  listingId: string;
+  providerId: string;
+  buyerId: string;
+  total: number;
+  currency: string;
+  timeline: string;
+  status: "pending" | "accepted" | "rejected";
+  items: {
+    name: string;
+    quantity: number;
+    unitPrice: number;
+  }[];
+  createdAt: string;
+}
+
+export interface Agreement {
+  id: string;
+  quoteId: string;
+  buyerId: string;
+  providerId: string;
+  status: "active" | "completed" | "cancelled";
+  timestamps: {
+    acceptedAt: string;
+    deliveredAt?: string;
+    completedAt?: string;
+  };
+}

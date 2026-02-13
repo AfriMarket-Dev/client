@@ -5,52 +5,28 @@ import {
   User,
   Building,
   Check,
-  Eye,
-  EyeOff,
+  ShieldCheck,
   MapPin,
-  Phone,
-  Mail,
-  FileText,
-  Shield,
-  Users,
+  Smartphone,
+  ChevronRight,
+  BadgeCheck,
 } from "lucide-react";
-
-interface CustomerFormData {
-  fullName: string;
-  email: string;
-  address: string;
-  phoneNumber: string;
-  password: string;
-  confirmPassword: string;
-}
-
-interface SupplierStep1Data {
-  companyName: string;
-  industry: string;
-  registrationId: string;
-  representativeType: "individual" | "company-rep";
-  location: string;
-  district: string;
-  sector: string;
-  cell: string;
-  village: string;
-  sectorAddress: string;
-}
-
-interface SupplierStep2Data {
-  fullName: string;
-  email: string;
-  position: string;
-  contactNumber: string;
-  nationalId: string;
-  phoneNumber: string;
-  password: string;
-  confirmPassword: string;
-}
+import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/Input";
+import { Card, CardContent } from "@/components/ui/Card";
+import { Badge } from "@/components/ui/Badge";
+import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/InputGroup";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/Select";
 
 interface SignUpProps {
   onBack: () => void;
-  onSignUpComplete: (type: "customer" | "supplier", data: any) => void;
+  onSignUpComplete: (type: "buyer" | "provider", data: any) => void;
   isLoading?: boolean;
   serverError?: string;
 }
@@ -61,448 +37,117 @@ const SignUp: React.FC<SignUpProps> = ({
   isLoading,
   serverError,
 }) => {
-  const [accountType, setAccountType] = useState<
-    "customer" | "supplier" | null
-  >(null);
-  const [currentStep, setCurrentStep] = useState(1);
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [errors, setErrors] = useState<Record<string, string>>({});
-
-  // Form data states
-  const [customerData, setCustomerData] = useState<CustomerFormData>({
-    fullName: "",
-    email: "",
-    address: "",
-    phoneNumber: "",
-    password: "",
-    confirmPassword: "",
+  const [role, setRole] = useState<"buyer" | "provider" | null>(null);
+  const [step, setStep] = useState<"role" | "details" | "otp">("role");
+  const [lang, setLang] = useState<"en" | "rw">("en");
+  
+  const [formData, setFormData] = useState({
+    phone: "",
+    name: "",
+    district: "Kigali",
+    otp: "",
   });
 
-  const [supplierStep1Data, setSupplierStep1Data] = useState<SupplierStep1Data>(
-    {
-      companyName: "",
-      industry: "",
-      registrationId: "",
-      representativeType: "individual",
-      location: "",
-      district: "",
-      sector: "",
-      cell: "",
-      village: "",
-      sectorAddress: "",
+  const t = {
+    en: {
+      title: "Join AfrikaMarket",
+      subtitle: "Choose your role to get started",
+      buyer: "Buyer",
+      buyerDesc: "Find materials and services for your project.",
+      provider: "Provider",
+      providerDesc: "List your inventory and grow your business.",
+      details: "Almost There",
+      detailsSub: "Tell us a bit about yourself",
+      phone: "Phone Number",
+      fullName: "Full Name or Company Name",
+      district: "District",
+      create: "Create Account",
+      verify: "Verify Phone",
+      otpSent: "OTP sent to",
+      finish: "Complete Registration",
     },
-  );
+    rw: {
+      title: "Iyandikishe kuri AfrikaMarket",
+      subtitle: "Hitamo icyiciro urimo utangire",
+      buyer: "Ubuguzi",
+      buyerDesc: "Shaka ibikoresho n'abakozi b'umwuga.",
+      provider: "Umucuruzi",
+      providerDesc: "Garagaza ibyo ucuruza ubashe kwaguka.",
+      details: "Hasigaye gato",
+      detailsSub: "Tubwire bike kuri wowe",
+      phone: "Numero ya Telefone",
+      fullName: "Izina ryawe cyane ry'ubucuruzi",
+      district: "Akarere",
+      create: "Fungura Konti",
+      verify: "Emeza Telefone",
+      otpSent: "Imibare yoherejwe kuri",
+      finish: "Emeza kwiyandikisha",
+    }
+  }[lang];
 
-  const [supplierStep2Data, setSupplierStep2Data] = useState<SupplierStep2Data>(
-    {
-      fullName: "",
-      email: "",
-      position: "",
-      contactNumber: "",
-      nationalId: "",
-      phoneNumber: "",
-      password: "",
-      confirmPassword: "",
-    },
-  );
-
-  const industries = [
-    "Electronics",
-    "Fashion & Textiles",
-    "Home & Garden",
-    "Beauty & Health",
-    "Automotive",
-    "Industrial Equipment",
-    "Food & Beverages",
-    "Agriculture",
-    "Construction",
-    "Technology",
-    "Healthcare",
-    "Education",
-    "Other",
+  const districts = [
+    "Kigali", "Gasabo", "Kicukiro", "Nyarugenge", "Musanze", "Rubavu", "Huye", "Rwamagana", "Kayonza", "Nyagatare", "Bugesera", "Gicumbi", "Gakenke", "Burera", "Rulindo", "Muhanga", "Kamonyi", "Ruhango", "Nyanza", "Nyamagabe", "Nyaruguru", "Karongi", "Rutsiro", "Rubavu", "Nyabihu", "Ngororero", "Rusizi", "Nyamasheke"
   ];
 
-  const rwandaLocations = [
-    "Kigali City",
-    "Eastern Province",
-    "Northern Province",
-    "Southern Province",
-    "Western Province",
-  ];
-
-  // Validation functions
-  const validateEmail = (email: string) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
-
-  const validatePassword = (password: string) => {
-    return password.length >= 8;
-  };
-
-  const validatePhone = (phone: string) => {
-    const phoneRegex = /^[+]?[\d\s\-\(\)]{10,}$/;
-    return phoneRegex.test(phone);
-  };
-
-  const validateCustomerForm = (): boolean => {
-    const newErrors: Record<string, string> = {};
-
-    if (!customerData.fullName.trim())
-      newErrors.fullName = "Full name is required";
-    if (!customerData.email.trim()) newErrors.email = "Email is required";
-    else if (!validateEmail(customerData.email))
-      newErrors.email = "Invalid email format";
-    if (!customerData.address.trim()) newErrors.address = "Address is required";
-    if (!customerData.phoneNumber.trim())
-      newErrors.phoneNumber = "Phone number is required";
-    else if (!validatePhone(customerData.phoneNumber))
-      newErrors.phoneNumber = "Invalid phone number";
-    if (!customerData.password) newErrors.password = "Password is required";
-    else if (!validatePassword(customerData.password))
-      newErrors.password = "Password must be at least 8 characters";
-    if (customerData.password !== customerData.confirmPassword)
-      newErrors.confirmPassword = "Passwords do not match";
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const validateSupplierStep1 = (): boolean => {
-    const newErrors: Record<string, string> = {};
-
-    if (!supplierStep1Data.companyName.trim())
-      newErrors.companyName = "Company name is required";
-    if (!supplierStep1Data.industry)
-      newErrors.industry = "Industry is required";
-    if (!supplierStep1Data.registrationId.trim())
-      newErrors.registrationId = "Registration ID/TIN is required";
-    if (!supplierStep1Data.location)
-      newErrors.location = "Location is required";
-    if (!supplierStep1Data.district.trim())
-      newErrors.district = "District is required";
-    if (!supplierStep1Data.sector.trim())
-      newErrors.sector = "Sector is required";
-    if (!supplierStep1Data.cell.trim()) newErrors.cell = "Cell is required";
-    if (!supplierStep1Data.village.trim())
-      newErrors.village = "Village is required";
-    if (!supplierStep1Data.sectorAddress.trim())
-      newErrors.sectorAddress = "Sector address is required";
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const validateSupplierStep2 = (): boolean => {
-    const newErrors: Record<string, string> = {};
-
-    if (!supplierStep2Data.fullName.trim())
-      newErrors.fullName = "Full name is required";
-    if (!supplierStep2Data.email.trim()) newErrors.email = "Email is required";
-    else if (!validateEmail(supplierStep2Data.email))
-      newErrors.email = "Invalid email format";
-    if (!supplierStep2Data.position.trim())
-      newErrors.position = "Position is required";
-    if (!supplierStep2Data.contactNumber.trim())
-      newErrors.contactNumber = "Contact number is required";
-    else if (!validatePhone(supplierStep2Data.contactNumber))
-      newErrors.contactNumber = "Invalid contact number";
-    if (!supplierStep2Data.nationalId.trim())
-      newErrors.nationalId = "National ID/Passport is required";
-    if (!supplierStep2Data.phoneNumber.trim())
-      newErrors.phoneNumber = "Phone number is required";
-    else if (!validatePhone(supplierStep2Data.phoneNumber))
-      newErrors.phoneNumber = "Invalid phone number";
-    if (!supplierStep2Data.password)
-      newErrors.password = "Password is required";
-    else if (!validatePassword(supplierStep2Data.password))
-      newErrors.password = "Password must be at least 8 characters";
-    if (supplierStep2Data.password !== supplierStep2Data.confirmPassword)
-      newErrors.confirmPassword = "Passwords do not match";
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleNext = () => {
-    if (accountType === "supplier" && currentStep === 1) {
-      if (validateSupplierStep1()) {
-        setCurrentStep(2);
-        setErrors({});
-      }
-    }
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (accountType === "customer") {
-      if (validateCustomerForm()) {
-        onSignUpComplete("customer", customerData);
-      }
-    } else if (accountType === "supplier" && currentStep === 2) {
-      if (validateSupplierStep2()) {
-        onSignUpComplete("supplier", {
-          ...supplierStep1Data,
-          ...supplierStep2Data,
-        });
-      }
-    }
-  };
-
-  const InputField = ({
-    label,
-    type = "text",
-    value,
-    onChange,
-    error,
-    required = true,
-    placeholder,
-    icon: Icon,
-  }: {
-    label: string;
-    type?: string;
-    value: string;
-    onChange: (value: string) => void;
-    error?: string;
-    required?: boolean;
-    placeholder?: string;
-    icon?: React.ComponentType<any>;
-  }) => (
-    <div>
-      <label className="block text-sm font-medium text-gray-700 mb-2">
-        {label} {required && <span className="text-red-500">*</span>}
-      </label>
-      <div className="relative">
-        {Icon && (
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <Icon className="h-5 w-5 text-gray-400" />
-          </div>
-        )}
-        <input
-          type={type}
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          placeholder={placeholder}
-          className={`w-full ${Icon ? "pl-10" : "pl-4"} pr-4 py-3 border rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-colors ${
-            error ? "border-red-500 bg-red-50" : "border-gray-200"
-          }`}
-        />
-      </div>
-      {error && <p className="mt-1 text-sm text-red-600">{error}</p>}
-    </div>
-  );
-
-  const SelectField = ({
-    label,
-    value,
-    onChange,
-    options,
-    error,
-    required = true,
-    placeholder,
-    icon: Icon,
-  }: {
-    label: string;
-    value: string;
-    onChange: (value: string) => void;
-    options: string[] | { value: string; label: string }[];
-    error?: string;
-    required?: boolean;
-    placeholder?: string;
-    icon?: React.ComponentType<any>;
-  }) => (
-    <div>
-      <label className="block text-sm font-medium text-gray-700 mb-2">
-        {label} {required && <span className="text-red-500">*</span>}
-      </label>
-      <div className="relative">
-        {Icon && (
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <Icon className="h-5 w-5 text-gray-400" />
-          </div>
-        )}
-        <select
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          className={`w-full ${Icon ? "pl-10" : "pl-4"} pr-4 py-3 border rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-colors ${
-            error ? "border-red-500 bg-red-50" : "border-gray-200"
-          }`}
-        >
-          <option value="">
-            {placeholder || `Select ${label.toLowerCase()}`}
-          </option>
-          {options.map((option, index) => (
-            <option
-              key={index}
-              value={typeof option === "string" ? option : option.value}
-            >
-              {typeof option === "string" ? option : option.label}
-            </option>
-          ))}
-        </select>
-      </div>
-      {error && <p className="mt-1 text-sm text-red-600">{error}</p>}
-    </div>
-  );
-
-  const PasswordField = ({
-    label,
-    value,
-    onChange,
-    error,
-    show,
-    onToggleShow,
-  }: {
-    label: string;
-    value: string;
-    onChange: (value: string) => void;
-    error?: string;
-    show: boolean;
-    onToggleShow: () => void;
-  }) => (
-    <div>
-      <label className="block text-sm font-medium text-gray-700 mb-2">
-        {label} <span className="text-red-500">*</span>
-      </label>
-      <div className="relative">
-        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-          <Shield className="h-5 w-5 text-gray-400" />
-        </div>
-        <input
-          type={show ? "text" : "password"}
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          className={`w-full pl-10 pr-12 py-3 border rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-colors ${
-            error ? "border-red-500 bg-red-50" : "border-gray-200"
-          }`}
-          placeholder="Enter password"
-        />
-        <button
-          type="button"
-          onClick={onToggleShow}
-          className="absolute inset-y-0 right-0 pr-3 flex items-center"
-        >
-          {show ? (
-            <EyeOff className="h-5 w-5 text-gray-400 hover:text-gray-600" />
-          ) : (
-            <Eye className="h-5 w-5 text-gray-400 hover:text-gray-600" />
-          )}
-        </button>
-      </div>
-      {error && <p className="mt-1 text-sm text-red-600">{error}</p>}
-    </div>
-  );
-
-  // Account Type Selection
-  if (!accountType) {
+  if (step === "role") {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-primary/5 via-primary/10 to-transparent flex items-center justify-center p-4">
-        <div className="max-w-4xl w-full">
-          <div className="text-center mb-12">
-            <button
-              onClick={onBack}
-              className="inline-flex items-center text-gray-600 hover:text-primary transition-colors mb-6"
-            >
-              <ArrowLeft className="w-5 h-5 mr-2" />
-              Back to Home
-            </button>
+      <div className="min-h-screen bg-stone-50 flex items-center justify-center p-6 md:p-12 relative">
+        <div className="absolute top-8 right-8 flex items-center gap-2">
+          <Button variant="ghost" size="sm" className={`rounded-lg font-black text-[10px] ${lang === 'rw' ? 'bg-primary/10 text-primary' : 'text-stone-400'}`} onClick={() => setLang('rw')}>KINYARWANDA</Button>
+          <Button variant="ghost" size="sm" className={`rounded-lg font-black text-[10px] ${lang === 'en' ? 'bg-primary/10 text-primary' : 'text-stone-400'}`} onClick={() => setLang('en')}>ENGLISH</Button>
+        </div>
 
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">
-              Join AfrikaMarket
-            </h1>
-            <p className="text-xl text-gray-600">
-              Choose your account type to get started
-            </p>
+        <div className="w-full max-w-4xl flex flex-col items-center">
+          <Button variant="ghost" onClick={onBack} className="mb-12 text-stone-500 font-bold gap-2">
+            <ArrowLeft className="w-4 h-4" />
+            Back to Home
+          </Button>
+
+          <div className="text-center mb-16">
+            <h1 className="text-5xl md:text-7xl font-black text-stone-900 font-display mb-4 tracking-tight">{t.title}</h1>
+            <p className="text-xl text-stone-500 font-medium">{t.subtitle}</p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8">
-            {/* Customer Account */}
-            <div
-              onClick={() => setAccountType("customer")}
-              className="group relative bg-white rounded-3xl p-8 border-2 border-gray-200 hover:border-primary transition-all duration-300 cursor-pointer hover:shadow-2xl transform hover:-translate-y-2"
+          <div className="grid md:grid-cols-2 gap-8 w-full max-w-3xl">
+            {/* Buyer Card */}
+            <Card 
+              className={`group cursor-pointer rounded-[2.5rem] border-2 transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 overflow-hidden ${role === 'buyer' ? 'border-primary bg-primary/5' : 'border-stone-200 bg-white'}`}
+              onClick={() => {
+                setRole('buyer');
+                setTimeout(() => setStep('details'), 300);
+              }}
             >
-              <div className="text-center">
-                <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-2xl text-white mb-6 group-hover:scale-110 transition-transform duration-300">
+              <CardContent className="p-10 text-center flex flex-col items-center">
+                <div className={`w-20 h-20 rounded-3xl mb-8 flex items-center justify-center transition-all duration-500 ${role === 'buyer' ? 'bg-primary text-white scale-110 shadow-lg shadow-primary/30' : 'bg-stone-100 text-stone-400 group-hover:bg-primary/10 group-hover:text-primary'}`}>
                   <User className="w-10 h-10" />
                 </div>
-
-                <h3 className="text-2xl font-bold text-gray-900 mb-4">
-                  Customer Account
-                </h3>
-                <p className="text-gray-600 mb-6 leading-relaxed">
-                  Perfect for retailers and businesses looking to source quality
-                  products from verified African suppliers.
-                </p>
-
-                <div className="space-y-3 text-left">
-                  <div className="flex items-center text-gray-600">
-                    <Check className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" />
-                    <span>Browse thousands of products</span>
-                  </div>
-                  <div className="flex items-center text-gray-600">
-                    <Check className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" />
-                    <span>Connect with verified suppliers</span>
-                  </div>
-                  <div className="flex items-center text-gray-600">
-                    <Check className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" />
-                    <span>Access bulk pricing</span>
-                  </div>
-                  <div className="flex items-center text-gray-600">
-                    <Check className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" />
-                    <span>Secure payment options</span>
-                  </div>
+                <h3 className="text-3xl font-black text-stone-900 mb-4">{t.buyer}</h3>
+                <p className="text-stone-500 font-medium leading-relaxed mb-8">{t.buyerDesc}</p>
+                <div className={`flex items-center gap-2 font-black uppercase text-xs tracking-widest ${role === 'buyer' ? 'text-primary' : 'text-stone-300'}`}>
+                  Select Role <ChevronRight className="w-4 h-4" />
                 </div>
+              </CardContent>
+            </Card>
 
-                <button className="w-full mt-8 bg-gradient-to-r from-blue-500 to-cyan-500 text-white py-4 rounded-xl font-semibold hover:from-blue-600 hover:to-cyan-600 transition-colors">
-                  Sign Up as Customer
-                </button>
-              </div>
-            </div>
-
-            {/* Supplier Account */}
-            <div
-              onClick={() => setAccountType("supplier")}
-              className="group relative bg-white rounded-3xl p-8 border-2 border-gray-200 hover:border-primary transition-all duration-300 cursor-pointer hover:shadow-2xl transform hover:-translate-y-2"
+            {/* Provider Card */}
+            <Card 
+              className={`group cursor-pointer rounded-[2.5rem] border-2 transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 overflow-hidden ${role === 'provider' ? 'border-primary bg-primary/5' : 'border-stone-200 bg-white'}`}
+              onClick={() => {
+                setRole('provider');
+                setTimeout(() => setStep('details'), 300);
+              }}
             >
-              <div className="text-center">
-                <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-primary to-primary/80 rounded-2xl text-white mb-6 group-hover:scale-110 transition-transform duration-300">
+              <CardContent className="p-10 text-center flex flex-col items-center">
+                <div className={`w-20 h-20 rounded-3xl mb-8 flex items-center justify-center transition-all duration-500 ${role === 'provider' ? 'bg-primary text-white scale-110 shadow-lg shadow-primary/30' : 'bg-stone-100 text-stone-400 group-hover:bg-primary/10 group-hover:text-primary'}`}>
                   <Building className="w-10 h-10" />
                 </div>
-
-                <h3 className="text-2xl font-bold text-gray-900 mb-4">
-                  Supplier Account
-                </h3>
-                <p className="text-gray-600 mb-6 leading-relaxed">
-                  Ideal for wholesalers, importers, and manufacturers ready to
-                  expand their reach across Africa.
-                </p>
-
-                <div className="space-y-3 text-left">
-                  <div className="flex items-center text-gray-600">
-                    <Check className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" />
-                    <span>List unlimited products</span>
-                  </div>
-                  <div className="flex items-center text-gray-600">
-                    <Check className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" />
-                    <span>Reach thousands of buyers</span>
-                  </div>
-                  <div className="flex items-center text-gray-600">
-                    <Check className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" />
-                    <span>Verified supplier badge</span>
-                  </div>
-                  <div className="flex items-center text-gray-600">
-                    <Check className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" />
-                    <span>Analytics and insights</span>
-                  </div>
+                <h3 className="text-3xl font-black text-stone-900 mb-4">{t.provider}</h3>
+                <p className="text-stone-500 font-medium leading-relaxed mb-8">{t.providerDesc}</p>
+                <div className={`flex items-center gap-2 font-black uppercase text-xs tracking-widest ${role === 'provider' ? 'text-primary' : 'text-stone-300'}`}>
+                  Select Role <ChevronRight className="w-4 h-4" />
                 </div>
-
-                <button className="w-full mt-8 bg-gradient-to-r from-primary to-primary/80 text-primary-foreground py-4 rounded-xl font-semibold hover:from-primary/90 hover:to-primary transition-colors">
-                  Sign Up as Supplier
-                </button>
-              </div>
-            </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </div>
@@ -510,553 +155,136 @@ const SignUp: React.FC<SignUpProps> = ({
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary/5 via-primary/10 to-transparent flex">
-      {/* Left Side - Form */}
-      <div className="flex-1 py-8 px-4">
-        <div className="max-w-2xl mx-auto">
-          {/* Header */}
-          <div className="text-center mb-8">
-            <button
-              onClick={() => {
-                if (accountType === "supplier" && currentStep === 2) {
-                  setCurrentStep(1);
-                  setErrors({});
-                } else {
-                  setAccountType(null);
-                  setCurrentStep(1);
-                  setErrors({});
-                }
-              }}
-              className="inline-flex items-center text-gray-600 hover:text-primary transition-colors mb-6"
-            >
-              <ArrowLeft className="w-5 h-5 mr-2" />
-              {accountType === "supplier" && currentStep === 2
-                ? "Back to Step 1"
-                : "Back to Account Type"}
-            </button>
-
-            {/* Logo */}
-            <div className="mb-4">
-              <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
-                AfrikaMarket
-              </h1>
-              <p className="text-sm text-gray-500 -mt-1">Wholesale Hub</p>
-            </div>
-
-            <div className="flex items-center justify-center mb-4">
-              <div
-                className={`inline-flex items-center justify-center w-12 h-12 rounded-2xl text-white mr-3 ${
-                  accountType === "customer"
-                    ? "bg-gradient-to-br from-blue-500 to-cyan-500"
-                    : "bg-gradient-to-br from-primary to-primary/80"
-                }`}
-              >
-                {accountType === "customer" ? (
-                  <User className="w-6 h-6" />
-                ) : (
-                  <Building className="w-6 h-6" />
-                )}
-              </div>
-              <div>
-                <h1 className="text-3xl font-bold text-gray-900">
-                  {accountType === "customer" ? "Customer" : "Supplier"} Sign Up
-                </h1>
-                {accountType === "supplier" && (
-                  <p className="text-gray-600">Step {currentStep} of 2</p>
-                )}
-              </div>
-            </div>
-
-            {/* Progress Indicator for Supplier */}
-            {accountType === "supplier" && (
-              <div className="flex items-center justify-center space-x-4 mb-8">
-                <div
-                  className={`flex items-center ${currentStep >= 1 ? "text-primary" : "text-gray-400"}`}
-                >
-                  <div
-                    className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold ${
-                      currentStep >= 1
-                        ? "bg-primary text-primary-foreground"
-                        : "bg-gray-200 text-gray-600"
-                    }`}
-                  >
-                    {currentStep > 1 ? <Check className="w-4 h-4" /> : "1"}
-                  </div>
-                  <span className="ml-2 font-medium">Company Info</span>
-                </div>
-                <div
-                  className={`w-16 h-1 rounded-full ${currentStep >= 2 ? "bg-primary" : "bg-gray-200"}`}
-                ></div>
-                <div
-                  className={`flex items-center ${currentStep >= 2 ? "text-primary" : "text-gray-400"}`}
-                >
-                  <div
-                    className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold ${
-                      currentStep >= 2
-                        ? "bg-primary text-primary-foreground"
-                        : "bg-gray-200 text-gray-600"
-                    }`}
-                  >
-                    2
-                  </div>
-                  <span className="ml-2 font-medium">Representative</span>
-                </div>
-              </div>
-            )}
+    <div className="min-h-screen bg-stone-50 flex flex-col md:flex-row">
+      <div className="hidden md:flex md:w-1/3 bg-stone-900 relative overflow-hidden items-center justify-center p-12">
+        <div className="absolute inset-0 african-pattern opacity-10 invert" />
+        <div className="relative z-10">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/20 text-primary text-[10px] font-black uppercase tracking-widest mb-12">
+            <BadgeCheck className="w-4 h-4" /> 100% Rwandan Focus
           </div>
-
-          {/* Form */}
-          <div className="bg-white rounded-3xl shadow-xl p-8">
-            {serverError && (
-              <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 rounded-xl text-sm">
-                {serverError}
+          <h2 className="text-5xl font-black text-white leading-tight mb-8">
+            Building the <br />
+            <span className="text-primary italic text-6xl">Future of Rwanda</span>
+          </h2>
+          <div className="space-y-4">
+            {['No hidden listing fees', 'Direct customer interaction', 'District-based logistics', 'Verified business badge'].map((item, i) => (
+              <div key={i} className="flex items-center gap-3 text-stone-400 font-bold">
+                <Check className="w-5 h-5 text-emerald-500" /> {item}
               </div>
-            )}
-            <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Customer Form */}
-              {accountType === "customer" && (
-                <>
-                  <InputField
-                    label="Full Name"
-                    value={customerData.fullName}
-                    onChange={(value) =>
-                      setCustomerData({ ...customerData, fullName: value })
-                    }
-                    error={errors.fullName}
-                    placeholder="Enter your full name"
-                    icon={User}
-                  />
-
-                  <InputField
-                    label="Email Address"
-                    type="email"
-                    value={customerData.email}
-                    onChange={(value) =>
-                      setCustomerData({ ...customerData, email: value })
-                    }
-                    error={errors.email}
-                    placeholder="Enter your email address"
-                    icon={Mail}
-                  />
-
-                  <InputField
-                    label="Address"
-                    value={customerData.address}
-                    onChange={(value) =>
-                      setCustomerData({ ...customerData, address: value })
-                    }
-                    error={errors.address}
-                    placeholder="Enter your address"
-                    icon={MapPin}
-                  />
-
-                  <InputField
-                    label="Phone Number"
-                    type="tel"
-                    value={customerData.phoneNumber}
-                    onChange={(value) =>
-                      setCustomerData({ ...customerData, phoneNumber: value })
-                    }
-                    error={errors.phoneNumber}
-                    placeholder="Enter your phone number"
-                    icon={Phone}
-                  />
-
-                  <PasswordField
-                    label="Password"
-                    value={customerData.password}
-                    onChange={(value) =>
-                      setCustomerData({ ...customerData, password: value })
-                    }
-                    error={errors.password}
-                    show={showPassword}
-                    onToggleShow={() => setShowPassword(!showPassword)}
-                  />
-
-                  <PasswordField
-                    label="Confirm Password"
-                    value={customerData.confirmPassword}
-                    onChange={(value) =>
-                      setCustomerData({
-                        ...customerData,
-                        confirmPassword: value,
-                      })
-                    }
-                    error={errors.confirmPassword}
-                    show={showConfirmPassword}
-                    onToggleShow={() =>
-                      setShowConfirmPassword(!showConfirmPassword)
-                    }
-                  />
-                </>
-              )}
-
-              {/* Supplier Step 1 */}
-              {accountType === "supplier" && currentStep === 1 && (
-                <>
-                  <div className="mb-6">
-                    <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                      Company Information
-                    </h3>
-                    <p className="text-gray-600">Tell us about your business</p>
-                  </div>
-
-                  <InputField
-                    label="Company Name"
-                    value={supplierStep1Data.companyName}
-                    onChange={(value) =>
-                      setSupplierStep1Data({
-                        ...supplierStep1Data,
-                        companyName: value,
-                      })
-                    }
-                    error={errors.companyName}
-                    placeholder="Enter your company name"
-                    icon={Building}
-                  />
-
-                  <SelectField
-                    label="Industry"
-                    value={supplierStep1Data.industry}
-                    onChange={(value) =>
-                      setSupplierStep1Data({
-                        ...supplierStep1Data,
-                        industry: value,
-                      })
-                    }
-                    options={industries}
-                    error={errors.industry}
-                    icon={Users}
-                  />
-
-                  <InputField
-                    label="Registration ID or TIN Number"
-                    value={supplierStep1Data.registrationId}
-                    onChange={(value) =>
-                      setSupplierStep1Data({
-                        ...supplierStep1Data,
-                        registrationId: value,
-                      })
-                    }
-                    error={errors.registrationId}
-                    placeholder="Enter registration ID or TIN"
-                    icon={FileText}
-                  />
-
-                  <SelectField
-                    label="Representative Type"
-                    value={supplierStep1Data.representativeType}
-                    onChange={(value) =>
-                      setSupplierStep1Data({
-                        ...supplierStep1Data,
-                        representativeType: value as
-                          | "individual"
-                          | "company-rep",
-                      })
-                    }
-                    options={[
-                      { value: "individual", label: "Individual" },
-                      { value: "company-rep", label: "Company Representative" },
-                    ]}
-                    error={errors.representativeType}
-                    icon={User}
-                  />
-
-                  <SelectField
-                    label="Location (Province)"
-                    value={supplierStep1Data.location}
-                    onChange={(value) =>
-                      setSupplierStep1Data({
-                        ...supplierStep1Data,
-                        location: value,
-                      })
-                    }
-                    options={rwandaLocations}
-                    error={errors.location}
-                    icon={MapPin}
-                  />
-
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <InputField
-                      label="District"
-                      value={supplierStep1Data.district}
-                      onChange={(value) =>
-                        setSupplierStep1Data({
-                          ...supplierStep1Data,
-                          district: value,
-                        })
-                      }
-                      error={errors.district}
-                      placeholder="Enter district"
-                    />
-
-                    <InputField
-                      label="Sector"
-                      value={supplierStep1Data.sector}
-                      onChange={(value) =>
-                        setSupplierStep1Data({
-                          ...supplierStep1Data,
-                          sector: value,
-                        })
-                      }
-                      error={errors.sector}
-                      placeholder="Enter sector"
-                    />
-                  </div>
-
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <InputField
-                      label="Cell"
-                      value={supplierStep1Data.cell}
-                      onChange={(value) =>
-                        setSupplierStep1Data({
-                          ...supplierStep1Data,
-                          cell: value,
-                        })
-                      }
-                      error={errors.cell}
-                      placeholder="Enter cell"
-                    />
-
-                    <InputField
-                      label="Village"
-                      value={supplierStep1Data.village}
-                      onChange={(value) =>
-                        setSupplierStep1Data({
-                          ...supplierStep1Data,
-                          village: value,
-                        })
-                      }
-                      error={errors.village}
-                      placeholder="Enter village"
-                    />
-                  </div>
-
-                  <InputField
-                    label="Sector Address (Physical Location)"
-                    value={supplierStep1Data.sectorAddress}
-                    onChange={(value) =>
-                      setSupplierStep1Data({
-                        ...supplierStep1Data,
-                        sectorAddress: value,
-                      })
-                    }
-                    error={errors.sectorAddress}
-                    placeholder="Enter physical address of operations"
-                    icon={MapPin}
-                  />
-                </>
-              )}
-
-              {/* Supplier Step 2 */}
-              {accountType === "supplier" && currentStep === 2 && (
-                <>
-                  <div className="mb-6">
-                    <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                      Representative Information
-                    </h3>
-                    <p className="text-gray-600">
-                      Personal details of the company representative
-                    </p>
-                  </div>
-
-                  <InputField
-                    label="Full Name of Representative"
-                    value={supplierStep2Data.fullName}
-                    onChange={(value) =>
-                      setSupplierStep2Data({
-                        ...supplierStep2Data,
-                        fullName: value,
-                      })
-                    }
-                    error={errors.fullName}
-                    placeholder="Enter representative's full name"
-                    icon={User}
-                  />
-
-                  <InputField
-                    label="Email Address"
-                    type="email"
-                    value={supplierStep2Data.email}
-                    onChange={(value) =>
-                      setSupplierStep2Data({
-                        ...supplierStep2Data,
-                        email: value,
-                      })
-                    }
-                    error={errors.email}
-                    placeholder="Enter email address"
-                    icon={Mail}
-                  />
-
-                  <InputField
-                    label="Position in Company"
-                    value={supplierStep2Data.position}
-                    onChange={(value) =>
-                      setSupplierStep2Data({
-                        ...supplierStep2Data,
-                        position: value,
-                      })
-                    }
-                    error={errors.position}
-                    placeholder="e.g., CEO, Sales Manager, Owner"
-                    icon={Building}
-                  />
-
-                  <InputField
-                    label="Contact Number"
-                    type="tel"
-                    value={supplierStep2Data.contactNumber}
-                    onChange={(value) =>
-                      setSupplierStep2Data({
-                        ...supplierStep2Data,
-                        contactNumber: value,
-                      })
-                    }
-                    error={errors.contactNumber}
-                    placeholder="Enter contact number"
-                    icon={Phone}
-                  />
-
-                  <InputField
-                    label="National ID or Passport Number"
-                    value={supplierStep2Data.nationalId}
-                    onChange={(value) =>
-                      setSupplierStep2Data({
-                        ...supplierStep2Data,
-                        nationalId: value,
-                      })
-                    }
-                    error={errors.nationalId}
-                    placeholder="Enter National ID or Passport number"
-                    icon={FileText}
-                  />
-
-                  <InputField
-                    label="Phone Number"
-                    type="tel"
-                    value={supplierStep2Data.phoneNumber}
-                    onChange={(value) =>
-                      setSupplierStep2Data({
-                        ...supplierStep2Data,
-                        phoneNumber: value,
-                      })
-                    }
-                    error={errors.phoneNumber}
-                    placeholder="Enter phone number"
-                    icon={Phone}
-                  />
-
-                  <PasswordField
-                    label="Password"
-                    value={supplierStep2Data.password}
-                    onChange={(value) =>
-                      setSupplierStep2Data({
-                        ...supplierStep2Data,
-                        password: value,
-                      })
-                    }
-                    error={errors.password}
-                    show={showPassword}
-                    onToggleShow={() => setShowPassword(!showPassword)}
-                  />
-
-                  <PasswordField
-                    label="Confirm Password"
-                    value={supplierStep2Data.confirmPassword}
-                    onChange={(value) =>
-                      setSupplierStep2Data({
-                        ...supplierStep2Data,
-                        confirmPassword: value,
-                      })
-                    }
-                    error={errors.confirmPassword}
-                    show={showConfirmPassword}
-                    onToggleShow={() =>
-                      setShowConfirmPassword(!showConfirmPassword)
-                    }
-                  />
-                </>
-              )}
-
-              {/* Form Actions */}
-              <div className="flex gap-4 pt-6">
-                {accountType === "supplier" && currentStep === 1 ? (
-                  <button
-                    type="button"
-                    onClick={handleNext}
-                    disabled={isLoading}
-                    className="w-full bg-gradient-to-r from-primary to-primary/80 text-primary-foreground py-4 rounded-xl font-semibold hover:from-primary/90 hover:to-primary transition-colors flex items-center justify-center disabled:opacity-60 disabled:cursor-not-allowed"
-                  >
-                    Continue to Step 2
-                    <ArrowRight className="w-5 h-5 ml-2" />
-                  </button>
-                ) : (
-                  <button
-                    type="submit"
-                    disabled={isLoading}
-                    className="w-full bg-gradient-to-r from-primary to-primary/80 text-primary-foreground py-4 rounded-xl font-semibold hover:from-primary/90 hover:to-primary transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
-                  >
-                    {isLoading
-                      ? "Creating account..."
-                      : `Create ${accountType === "customer" ? "Customer" : "Supplier"} Account`}
-                  </button>
-                )}
-              </div>
-            </form>
-
-            {/* Terms and Privacy */}
-            <div className="mt-6 text-center text-sm text-gray-600">
-              By creating an account, you agree to our{" "}
-              <a
-                href="#"
-                className="text-primary hover:text-primary/80 font-medium"
-              >
-                Terms of Service
-              </a>{" "}
-              and{" "}
-              <a
-                href="#"
-                className="text-primary hover:text-primary/80 font-medium"
-              >
-                Privacy Policy
-              </a>
-            </div>
+            ))}
           </div>
         </div>
       </div>
 
-      {/* Right Side - Image */}
-      <div className="hidden lg:flex flex-1 relative">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-primary/10"></div>
-        <img
-          src="/ChatGPT Image Aug 2, 2025, 09_22_52 AM.png"
-          alt="African supplier and customer business discussion"
-          className="w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/20"></div>
+      <div className="flex-1 flex flex-col items-center justify-center p-6 md:p-16 relative">
+        <div className="w-full max-w-md">
+          <Button variant="ghost" onClick={() => setStep('role')} className="mb-8 -ml-2 text-stone-500 font-bold gap-2">
+            <ArrowLeft className="w-4 h-4" />
+            Change Role
+          </Button>
 
-        {/* Overlay Content */}
-        <div className="absolute bottom-8 left-8 right-8 text-white">
-          <div className="mb-4">
-            <h3 className="text-2xl font-bold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
-              AfrikaMarket
-            </h3>
-            <p className="text-sm opacity-90">Wholesale Hub</p>
+          <div className="mb-10 flex items-center justify-between">
+            <div>
+              <h3 className="text-4xl font-black text-stone-900 font-display mb-2">
+                {step === 'details' ? t.details : t.verify}
+              </h3>
+              <p className="text-stone-500 font-medium">
+                {step === 'details' ? t.detailsSub : `${t.otpSent} +250 ${formData.phone}`}
+              </p>
+            </div>
+            <Badge className="bg-stone-900 text-white border-none h-10 px-4 rounded-xl font-black text-[10px] uppercase">
+              {role}
+            </Badge>
           </div>
-          <h4 className="text-xl font-semibold mb-2">
-            Start Your Success Story
-          </h4>
-          <p className="text-sm opacity-90 leading-relaxed">
-            Whether you're a customer looking for quality products or a supplier
-            ready to expand your reach, AfrikaMarket is your gateway to success.
+
+          <Card className="border-stone-200 rounded-[2.5rem] shadow-2xl shadow-stone-200/50 bg-white overflow-hidden">
+            <CardContent className="p-8 md:p-10">
+              {step === 'details' ? (
+                <form onSubmit={(e) => { e.preventDefault(); setStep('otp'); }} className="space-y-6">
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-stone-400 ml-1">{t.fullName}</label>
+                    <Input 
+                      placeholder={role === 'buyer' ? "e.g. Jean-Paul Habimana" : "e.g. Kigali Steel Ltd"} 
+                      className="h-14 rounded-2xl border-stone-200 bg-stone-50 font-bold text-lg focus:ring-primary/10"
+                      value={formData.name}
+                      onChange={(e) => setFormData({...formData, name: e.target.value})}
+                      required
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-stone-400 ml-1">{t.phone}</label>
+                    <InputGroup className="h-14 rounded-2xl border-stone-200 bg-stone-50 shadow-none focus-within:ring-2 focus-within:ring-primary/10 transition-all">
+                      <InputGroupAddon className="ps-4">
+                        <div className="flex items-center gap-2 border-r border-stone-200 pe-3">
+                          <img src="https://flagcdn.com/w20/rw.png" className="w-5 h-3.5 rounded-sm object-cover" alt="RW" />
+                          <span className="text-sm font-black text-stone-900">+250</span>
+                        </div>
+                      </InputGroupAddon>
+                      <InputGroupInput 
+                        type="tel"
+                        placeholder="788 000 000"
+                        className="font-bold text-lg"
+                        value={formData.phone}
+                        onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                        required
+                      />
+                    </InputGroup>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-stone-400 ml-1">{t.district}</label>
+                    <Select value={formData.district} onValueChange={(val) => setFormData({...formData, district: val})}>
+                      <SelectTrigger className="h-14 rounded-2xl border-stone-200 bg-stone-50 font-bold text-lg">
+                        <div className="flex items-center gap-2">
+                          <MapPin className="w-4 h-4 text-primary" />
+                          <SelectValue placeholder="Select District" />
+                        </div>
+                      </SelectTrigger>
+                      <SelectContent className="rounded-2xl shadow-2xl border-stone-100 max-h-60">
+                        {districts.map(d => (
+                          <SelectItem key={d} value={d} className="rounded-lg h-11 font-bold">{d}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <Button type="submit" size="xl" className="w-full h-16 rounded-2xl font-black text-xl shadow-xl shadow-primary/20 group">
+                    {t.create}
+                    <ArrowRight className="w-6 h-6 ml-2 transition-transform group-hover:translate-x-1" />
+                  </Button>
+                </form>
+              ) : (
+                <form onSubmit={(e) => { e.preventDefault(); onSignUpComplete(role as any, formData); }} className="space-y-8">
+                  <div className="space-y-4">
+                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-stone-400 ml-1 text-center block">Enter 6-Digit Code</label>
+                    <Input 
+                      type="text"
+                      placeholder="· · · · · ·"
+                      className="h-16 rounded-2xl border-stone-200 bg-stone-50 font-black text-3xl text-center tracking-[0.5em] focus:ring-primary/10"
+                      maxLength={6}
+                      value={formData.otp}
+                      onChange={(e) => setFormData({...formData, otp: e.target.value})}
+                      required
+                    />
+                  </div>
+
+                  <Button type="submit" size="xl" className="w-full h-16 rounded-2xl font-black text-xl shadow-xl shadow-primary/20" disabled={isLoading}>
+                    {isLoading ? "..." : t.finish}
+                  </Button>
+
+                  <p className="text-center text-xs font-bold text-stone-400 uppercase tracking-widest">
+                    Didn't get the code? <button type="button" className="text-primary hover:underline">Resend</button>
+                  </p>
+                </form>
+              )}
+            </CardContent>
+          </Card>
+
+          <p className="mt-12 text-center text-xs text-stone-400 font-medium leading-relaxed px-8">
+            By registering, you agree to AfrikaMarket's <a href="#" className="text-stone-900 font-bold hover:underline">Terms of Service</a> and <a href="#" className="text-stone-900 font-bold hover:underline">Community Accountability Guidelines</a>.
           </p>
         </div>
-
-        {/* Decorative Elements */}
-        <div className="absolute top-8 right-8 w-16 h-16 border-2 border-white/30 rounded-full"></div>
-        <div className="absolute top-20 right-20 w-8 h-8 bg-white/20 rounded-full"></div>
-        <div className="absolute bottom-32 right-12 w-12 h-12 border border-white/40 transform rotate-45"></div>
       </div>
     </div>
   );

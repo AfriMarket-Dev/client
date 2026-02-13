@@ -67,11 +67,11 @@ export default function SupplierServicesAndProducts() {
       {/* Assigned Services Section */}
       <div>
         <div className="mb-4">
-          <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-            <Zap size={24} className="text-orange-600" />
+          <h2 className="text-2xl font-bold text-foreground flex items-center gap-2">
+            <Zap size={24} className="text-primary" />
             Your Assigned Services
           </h2>
-          <p className="text-gray-600 text-sm mt-1">
+          <p className="text-muted-foreground text-sm mt-1">
             Services you are authorized to offer on the platform
           </p>
         </div>
@@ -80,28 +80,28 @@ export default function SupplierServicesAndProducts() {
           {assignedServices.map((service) => (
             <div
               key={service.id}
-              className="bg-white rounded-lg shadow p-6 border-l-4 border-orange-600 hover:shadow-lg transition-all"
+              className="bg-card rounded-lg shadow p-6 border-l-4 border-primary hover:shadow-lg transition-all"
             >
               <div className="flex items-start justify-between mb-3">
                 <div className="flex-1">
-                  <h3 className="text-lg font-semibold text-gray-900">
+                  <h3 className="text-lg font-semibold text-foreground">
                     {service.name}
                   </h3>
-                  <p className="text-gray-600 text-sm mt-1">
+                  <p className="text-muted-foreground text-sm mt-1">
                     {service.description}
                   </p>
                 </div>
-                <div className="flex items-center gap-1 text-orange-600">
+                <div className="flex items-center gap-1 text-primary">
                   <CheckCircle size={20} />
                 </div>
               </div>
 
-              <div className="flex items-center justify-between pt-3 border-t border-gray-200">
-                <div className="flex items-center gap-2 text-xs text-gray-500">
+              <div className="flex items-center justify-between pt-3 border-t border-border">
+                <div className="flex items-center gap-2 text-xs text-muted-foreground">
                   <Calendar size={14} />
                   Assigned: {service.assignedDate}
                 </div>
-                <span className="px-3 py-1 bg-orange-100 text-orange-800 text-xs font-semibold rounded-full">
+                <span className="px-3 py-1 bg-primary/10 text-primary text-xs font-semibold rounded-full">
                   {service.status}
                 </span>
               </div>
@@ -113,67 +113,67 @@ export default function SupplierServicesAndProducts() {
       {/* Your Products Section */}
       <div>
         <div className="mb-4">
-          <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-            <Package size={24} className="text-emerald-600" />
+          <h2 className="text-2xl font-bold text-foreground flex items-center gap-2">
+            <Package size={24} className="text-success" />
             Your Products
           </h2>
-          <p className="text-gray-600 text-sm mt-1">
+          <p className="text-muted-foreground text-sm mt-1">
             Products you have created and published on the platform
           </p>
         </div>
 
         {ownedProducts.length > 0 ? (
-          <div className="bg-white rounded-lg shadow overflow-x-auto">
+          <div className="bg-card rounded-lg shadow overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="border-b border-gray-200 bg-gray-50">
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">
+                <tr className="border-b border-border bg-muted/50">
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">
                     Product Name
                   </th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">
                     Category
                   </th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">
                     Status
                   </th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">
                     Views
                   </th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">
                     Inquiries
                   </th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">
                     Created
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200">
+              <tbody className="divide-y divide-border">
                 {ownedProducts.map((product) => (
                   <tr
                     key={product.id}
-                    className="hover:bg-gray-50 transition-all"
+                    className="hover:bg-muted/50 transition-all"
                   >
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
-                        <div className="p-2 bg-emerald-100 rounded-lg">
-                          <Package size={16} className="text-emerald-600" />
+                        <div className="p-2 bg-success/20 rounded-lg">
+                          <Package size={16} className="text-success" />
                         </div>
-                        <span className="font-medium text-gray-900">
+                        <span className="font-medium text-foreground">
                           {product.name}
                         </span>
                       </div>
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-600">
+                    <td className="px-6 py-4 text-sm text-muted-foreground">
                       {product.category}
                     </td>
                     <td className="px-6 py-4">
                       <span
                         className={`text-xs font-semibold px-3 py-1 rounded-full ${
                           product.status === "active"
-                            ? "bg-green-100 text-green-800"
+                            ? "bg-success/20 text-success"
                             : product.status === "pending-review"
-                              ? "bg-yellow-100 text-yellow-800"
-                              : "bg-red-100 text-red-800"
+                              ? "bg-warning/20 text-warning"
+                              : "bg-destructive/20 text-destructive"
                         }`}
                       >
                         {product.status === "pending-review"
@@ -181,13 +181,13 @@ export default function SupplierServicesAndProducts() {
                           : product.status}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-sm font-semibold text-gray-900">
+                    <td className="px-6 py-4 text-sm font-semibold text-foreground">
                       {product.views}
                     </td>
-                    <td className="px-6 py-4 text-sm font-semibold text-gray-900">
+                    <td className="px-6 py-4 text-sm font-semibold text-foreground">
                       {product.inquiries}
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-600">
+                    <td className="px-6 py-4 text-sm text-muted-foreground">
                       {product.createdDate}
                     </td>
                   </tr>
@@ -196,10 +196,10 @@ export default function SupplierServicesAndProducts() {
             </table>
           </div>
         ) : (
-          <div className="bg-white rounded-lg shadow p-8 text-center">
-            <Package size={48} className="mx-auto text-gray-400 mb-4" />
-            <p className="text-gray-600">No products created yet</p>
-            <button className="mt-4 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-all">
+          <div className="bg-card rounded-lg shadow p-8 text-center">
+            <Package size={48} className="mx-auto text-muted-foreground mb-4" />
+            <p className="text-muted-foreground">No products created yet</p>
+            <button className="mt-4 px-4 py-2 bg-success hover:bg-success/90 text-success-foreground rounded-lg transition-all">
               Create Your First Product
             </button>
           </div>
@@ -207,11 +207,9 @@ export default function SupplierServicesAndProducts() {
       </div>
 
       {/* Integration Tips */}
-      <div className="bg-blue-50 rounded-lg p-6 border border-blue-200">
-        <h3 className="font-semibold text-blue-900 mb-2">
-          💡 Integration Note
-        </h3>
-        <p className="text-sm text-blue-800">
+      <div className="bg-info/10 rounded-lg p-6 border border-info/30">
+        <h3 className="font-semibold text-info mb-2">💡 Integration Note</h3>
+        <p className="text-sm text-info">
           This component can be integrated into your existing Supplier Dashboard
           page. It shows suppliers their assigned services and the products they
           have created, providing complete visibility into their platform

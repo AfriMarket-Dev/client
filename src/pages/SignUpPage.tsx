@@ -10,14 +10,16 @@ const SignUpPage = () => {
   const [signUp, { isLoading, error }] = useSignUpMutation();
 
   const handleSignUpComplete = async (
-    _type: "customer" | "supplier",
-    data: { email: string; password: string; fullName: string },
+    role: "buyer" | "provider",
+    data: { phone: string; name: string; district: string; otp?: string },
   ) => {
     try {
       const result = await signUp({
-        email: data.email,
-        password: data.password,
-        name: data.fullName,
+        phone: data.phone,
+        name: data.name,
+        district: data.district,
+        role: role,
+        otp: data.otp,
       }).unwrap();
 
       dispatch(setToken(result.token));
@@ -30,7 +32,11 @@ const SignUpPage = () => {
         }),
       );
 
-      navigate("/", { replace: true });
+      if (role === "provider") {
+        navigate("/dashboard", { replace: true });
+      } else {
+        navigate("/", { replace: true });
+      }
     } catch {}
   };
 
