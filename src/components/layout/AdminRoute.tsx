@@ -1,8 +1,10 @@
+"use no memo"
+
 import { Navigate, Outlet } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { type RootState } from "@/app/store";
 
-const AdminRoute = () => {
+export const AdminRoute = () => {
   const { isAuthenticated, user } = useSelector(
     (state: RootState) => state.auth,
   );
@@ -18,5 +20,3 @@ const AdminRoute = () => {
 
   return <Outlet />;
 };
-
-export default AdminRoute;

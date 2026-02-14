@@ -1,8 +1,10 @@
+"use no memo"
+
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { type RootState } from "@/app/store";
 
-const ProtectedRoute = () => {
+export const ProtectedRoute = () => {
   const { isAuthenticated } = useSelector((state: RootState) => state.auth);
   const location = useLocation();
 
@@ -12,5 +14,3 @@ const ProtectedRoute = () => {
 
   return <Outlet />;
 };
-
-export default ProtectedRoute;

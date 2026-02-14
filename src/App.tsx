@@ -1,6 +1,6 @@
 import { RouterProvider } from "react-router-dom";
 import { router } from "@/routes";
-import ErrorBoundary from "@/components/routing/ErrorBoundary";
+import { ErrorBoundary } from "@/components/layout";
 import { TooltipProvider } from "./components/ui/Tooltip";
 
 function App() {

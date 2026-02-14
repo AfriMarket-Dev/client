@@ -26,11 +26,13 @@ import AdminProductsPage from "@/pages/AdminProductsPage";
 import AdminAssignmentsPage from "@/pages/AdminAssignmentsPage";
 import AdminCustomersPage from "@/pages/AdminCustomersPage";
 import AdminProfileSettingsPage from "@/pages/AdminProfileSettingsPage";
-import { MainLayout } from "@/components/layout/MainLayout";
-import { AuthLayout } from "@/components/layout/AuthLayout";
-import { AdminLayout } from "@/components/layout/AdminLayout";
-import ProtectedRoute from "@/components/routing/ProtectedRoute";
-import AdminRoute from "@/components/routing/AdminRoute";
+import { 
+  MainLayout, 
+  AuthLayout, 
+  AdminLayout, 
+  ProtectedRoute, 
+  AdminRoute 
+} from "@/components/layout";
 
 export const router = createBrowserRouter([
   {
