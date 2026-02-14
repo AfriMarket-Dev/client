@@ -1,17 +1,8 @@
 import { useState } from "react";
-import {
-  User,
-  Mail,
-  Phone,
-  MapPin,
-  Lock,
-  Bell,
-  Shield,
-  Eye,
-  EyeOff,
-  Save,
-  X,
-} from "lucide-react";
+import { User, Lock, Bell, Shield, Eye, EyeOff, Save, X, Activity } from "lucide-react";
+import { AdminPageHeader, AdminCard, AdminTable } from "@/components/admin";
+import { Button } from "@/components/ui/Button";
+import { Badge } from "@/components/ui/Badge";
 
 export default function AdminProfileSettingsPage() {
   const [isEditing, setIsEditing] = useState(false);
@@ -23,7 +14,7 @@ export default function AdminProfileSettingsPage() {
     email: "admin@afrimarket.com",
     phone: "+234-123-456-7890",
     location: "Lagos, Nigeria",
-    bio: "Platform administrator managing AfriMarket operations and customer relationships.",
+    bio: "Platform administrator managing AfrikaMarket operations and customer relationships.",
     avatar:
       "https://images.pexels.com/photos/5668473/pexels-photo-5668473.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&fit=crop",
   });
@@ -87,195 +78,210 @@ export default function AdminProfileSettingsPage() {
   };
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div>
-        <h1 className="text-3xl font-bold text-gray-900">Profile Settings</h1>
-        <p className="text-gray-600 mt-2">
-          Manage your account settings and preferences
-        </p>
-      </div>
+    <div className="space-y-6 pb-20">
+      <AdminPageHeader
+        title="Settings"
+        subtitle="Manage secure account parameters"
+        badge="Account Config"
+      />
 
       {/* Profile Information Card */}
-      <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
-        <div className="bg-gradient-to-r from-primary to-primary/90 h-24"></div>
+      <AdminCard noPadding className="overflow-hidden">
+        <div className="bg-muted h-32 relative">
+          <div className="absolute inset-0 african-pattern opacity-10" />
+          <div className="absolute inset-0 bg-linear-to-t from-muted/80 to-transparent" />
+        </div>
 
         <div className="px-6 pb-6">
-          <div className="flex flex-col md:flex-row gap-6 -mt-16 mb-6">
-            <div className="relative">
-              <img
-                src={formData.avatar}
-                alt="Profile"
-                className="w-32 h-32 rounded-full border-4 border-white shadow-lg object-cover"
-              />
-              <button className="absolute bottom-2 right-2 bg-primary text-white p-2 rounded-full hover:bg-primary/90 transition-colors shadow-lg">
-                <User size={18} />
+          <div className="flex flex-col md:flex-row gap-8 -mt-12 relative z-10">
+            <div className="relative group shrink-0">
+              <div className="w-28 h-28 rounded-sm border-4 border-background overflow-hidden shadow-xl">
+                <img
+                  src={formData.avatar}
+                  alt="Profile"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+              </div>
+              <button className="absolute bottom-0 right-0 bg-primary text-white p-2 rounded-sm hover:bg-primary/90 transition-all shadow-lg translate-y-1/4 translate-x-1/4 border-2 border-background">
+                <User size={16} />
               </button>
             </div>
 
-            <div className="flex flex-col justify-end flex-1">
-              <h2 className="text-2xl font-bold text-gray-900 mb-1">
-                {formData.fullName}
-              </h2>
-              <p className="text-gray-600 mb-4">Platform Administrator</p>
-              <div className="flex flex-wrap gap-3">
-                <span className="bg-blue-100 text-blue-800 text-xs font-semibold px-3 py-1 rounded-full">
-                  Admin Access
-                </span>
-                <span className="bg-primary/10 text-primary text-xs font-semibold px-3 py-1 rounded-full">
-                  Active
-                </span>
+            <div className="flex flex-col justify-end flex-1 pt-12 md:pt-0">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-1">
+                <div>
+                  <h2 className="text-3xl font-heading font-bold text-foreground uppercase tracking-tight leading-none mb-3">
+                    {formData.fullName}
+                  </h2>
+                  <div className="flex flex-wrap gap-3">
+                    <Badge variant="outline" className="bg-primary/5 text-primary border-primary/20 font-heading font-bold text-[9px] uppercase tracking-widest px-2.5 py-1">
+                      Platform Root
+                    </Badge>
+                    <Badge variant="outline" className="bg-green-50 text-green-700 border-green-100 font-heading font-bold text-[9px] uppercase tracking-widest px-2.5 py-1">
+                      Stream Active
+                    </Badge>
+                  </div>
+                </div>
+
+                {!isEditing && (
+                  <Button
+                    onClick={() => setIsEditing(true)}
+                    className="rounded-sm h-11 px-8 font-heading font-bold uppercase text-xs tracking-widest shadow-xl shadow-primary/20"
+                  >
+                    Modify Profile
+                  </Button>
+                )}
               </div>
             </div>
-
-            {!isEditing && (
-              <button
-                onClick={() => setIsEditing(true)}
-                className="h-fit px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors font-medium"
-              >
-                Edit Profile
-              </button>
-            )}
           </div>
         </div>
-      </div>
+      </AdminCard>
 
       {/* Profile Details */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Personal Information */}
-        <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
-          <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-            <User size={20} className="text-primary" />
-            Personal Information
-          </h3>
-
+        <AdminCard title="Identity Stream" subtitle="Primary agent identifiers" headerActions={<User size={16} className="text-primary" />}>
           {isEditing ? (
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Full Name
+            <div className="space-y-6">
+              <div className="space-y-2">
+                <label className="block text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground ml-1">
+                  Full Identification
                 </label>
                 <input
                   type="text"
                   name="fullName"
                   value={formData.fullName}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                  className="w-full px-4 py-3 border-2 border-border rounded-sm focus:outline-none focus:ring-1 focus:ring-primary h-12 text-sm bg-background font-bold uppercase tracking-wider"
                 />
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Email Address
+              <div className="space-y-2">
+                <label className="block text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground ml-1">
+                  Secure Email
                 </label>
                 <input
                   type="email"
                   name="email"
                   value={formData.email}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                  className="w-full px-4 py-3 border-2 border-border rounded-sm focus:outline-none focus:ring-1 focus:ring-primary h-12 text-sm bg-background font-mono font-bold"
                 />
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Phone Number
-                </label>
-                <input
-                  type="tel"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <label className="block text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground ml-1">
+                    Phone Link
+                  </label>
+                  <input
+                    type="tel"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-3 border-2 border-border rounded-sm focus:outline-none focus:ring-1 focus:ring-primary h-12 text-sm bg-background font-mono font-bold"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <label className="block text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground ml-1">
+                    Operational Grid
+                  </label>
+                  <input
+                    type="text"
+                    name="location"
+                    value={formData.location}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-3 border-2 border-border rounded-sm focus:outline-none focus:ring-1 focus:ring-primary h-12 text-sm bg-background font-bold uppercase tracking-wider"
+                  />
+                </div>
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Location
-                </label>
-                <input
-                  type="text"
-                  name="location"
-                  value={formData.location}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Bio
+              <div className="space-y-2">
+                <label className="block text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground ml-1">
+                  Agent Dossier
                 </label>
                 <textarea
                   name="bio"
                   value={formData.bio}
                   onChange={handleInputChange}
                   rows={3}
-                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent resize-none"
+                  className="w-full px-4 py-3 border-2 border-border rounded-sm focus:outline-none focus:ring-1 focus:ring-primary text-sm resize-none bg-background font-medium uppercase tracking-wider"
                 />
               </div>
 
-              <div className="flex gap-3 pt-4">
-                <button
+              <div className="flex gap-3 pt-4 border-t-2 border-border">
+                <Button
                   onClick={handleSaveProfile}
-                  className="flex items-center gap-2 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors font-medium"
+                  className="flex-1 rounded-sm h-12 font-heading font-bold uppercase text-xs tracking-widest shadow-xl shadow-primary/20"
                 >
-                  <Save size={18} />
-                  Save Changes
-                </button>
-                <button
+                  <Save size={16} className="mr-2" />
+                  Synchronize
+                </Button>
+                <Button
+                  variant="outline"
                   onClick={() => setIsEditing(false)}
-                  className="flex items-center gap-2 px-4 py-2 border border-gray-200 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+                  className="flex-1 rounded-sm h-12 border-2 border-border font-heading font-bold uppercase text-xs tracking-widest"
                 >
-                  <X size={18} />
-                  Cancel
-                </button>
+                  <X size={16} className="mr-2" />
+                  Abort
+                </Button>
               </div>
             </div>
           ) : (
-            <div className="space-y-4">
-              <div>
-                <p className="text-sm text-gray-600 mb-1">Full Name</p>
-                <p className="text-gray-900 font-medium">{formData.fullName}</p>
-              </div>
-              <div>
-                <p className="text-sm text-gray-600 mb-1 flex items-center gap-1">
-                  <Mail size={14} /> Email Address
+            <div className="space-y-8">
+              <div className="border-b-2 border-border border-dashed pb-4">
+                <p className="text-[10px] uppercase tracking-widest text-muted-foreground font-heading font-bold mb-2">
+                  Full Identification
                 </p>
-                <p className="text-gray-900 font-medium">{formData.email}</p>
-              </div>
-              <div>
-                <p className="text-sm text-gray-600 mb-1 flex items-center gap-1">
-                  <Phone size={14} /> Phone Number
+                <p className="text-foreground font-black text-sm uppercase tracking-tight">
+                  {formData.fullName}
                 </p>
-                <p className="text-gray-900 font-medium">{formData.phone}</p>
               </div>
-              <div>
-                <p className="text-sm text-gray-600 mb-1 flex items-center gap-1">
-                  <MapPin size={14} /> Location
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 border-b-2 border-border border-dashed pb-4">
+                <div>
+                  <p className="text-[10px] uppercase tracking-widest text-muted-foreground font-heading font-bold mb-2">
+                    Secure Email
+                  </p>
+                  <p className="text-foreground font-bold text-xs font-mono">
+                    {formData.email}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-[10px] uppercase tracking-widest text-muted-foreground font-heading font-bold mb-2">
+                    Phone Link
+                  </p>
+                  <p className="text-foreground font-bold text-xs font-mono">
+                    {formData.phone}
+                  </p>
+                </div>
+              </div>
+              <div className="border-b-2 border-border border-dashed pb-4">
+                <p className="text-[10px] uppercase tracking-widest text-muted-foreground font-heading font-bold mb-2">
+                  Operational Grid
                 </p>
-                <p className="text-gray-900 font-medium">{formData.location}</p>
+                <p className="text-foreground font-bold text-sm uppercase tracking-wide">
+                  {formData.location}
+                </p>
               </div>
               <div>
-                <p className="text-sm text-gray-600 mb-1">Bio</p>
-                <p className="text-gray-900 font-medium">{formData.bio}</p>
+                <p className="text-[10px] uppercase tracking-widest text-muted-foreground font-heading font-bold mb-2">
+                  Agent Dossier
+                </p>
+                <p className="text-muted-foreground font-medium text-xs italic leading-relaxed border-l-4 border-primary/10 pl-4 py-2 bg-muted/5">
+                  "{formData.bio}"
+                </p>
               </div>
             </div>
           )}
-        </div>
+        </AdminCard>
 
         {/* Change Password */}
-        <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
-          <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-            <Lock size={20} className="text-primary" />
-            Change Password
-          </h3>
-
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Current Password
+        <AdminCard title="Encryption Key" subtitle="Rotate access credentials" headerActions={<Lock size={16} className="text-primary" />}>
+          <div className="space-y-6">
+            <div className="space-y-2">
+              <label className="block text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground ml-1">
+                Active Key
               </label>
               <div className="relative">
                 <input
@@ -283,21 +289,21 @@ export default function AdminProfileSettingsPage() {
                   name="currentPassword"
                   value={passwordData.currentPassword}
                   onChange={handlePasswordChange}
-                  placeholder="Enter current password"
-                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent pr-10"
+                  placeholder="ENTER CURRENT..."
+                  className="w-full px-4 py-3 border-2 border-border rounded-sm focus:outline-none focus:ring-1 focus:ring-primary h-12 text-sm bg-background font-mono"
                 />
                 <button
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-2.5 text-gray-500 hover:text-gray-700"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-primary transition-colors"
                 >
-                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
               </div>
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                New Password
+            <div className="space-y-2">
+              <label className="block text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground ml-1">
+                New Key Matrix
               </label>
               <div className="relative">
                 <input
@@ -305,221 +311,229 @@ export default function AdminProfileSettingsPage() {
                   name="newPassword"
                   value={passwordData.newPassword}
                   onChange={handlePasswordChange}
-                  placeholder="Enter new password"
-                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent pr-10"
+                  placeholder="ENTER NEW..."
+                  className="w-full px-4 py-3 border-2 border-border rounded-sm focus:outline-none focus:ring-1 focus:ring-primary h-12 text-sm bg-background font-mono"
                 />
                 <button
                   onClick={() => setShowNewPassword(!showNewPassword)}
-                  className="absolute right-3 top-2.5 text-gray-500 hover:text-gray-700"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-primary transition-colors"
                 >
-                  {showNewPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  {showNewPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
               </div>
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Confirm Password
+            <div className="space-y-2">
+              <label className="block text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground ml-1">
+                Key Verification
               </label>
               <input
                 type="password"
                 name="confirmPassword"
                 value={passwordData.confirmPassword}
                 onChange={handlePasswordChange}
-                placeholder="Confirm new password"
-                className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                placeholder="RE-ENTER NEW..."
+                className="w-full px-4 py-3 border-2 border-border rounded-sm focus:outline-none focus:ring-1 focus:ring-primary h-12 text-sm bg-background font-mono"
               />
             </div>
 
-            <button className="w-full px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors font-medium">
-              Update Password
-            </button>
+            <Button className="w-full h-12 rounded-sm font-heading font-bold uppercase text-xs tracking-widest mt-2 shadow-lg shadow-primary/10">
+              Rotate Access Key
+            </Button>
           </div>
-        </div>
+        </AdminCard>
       </div>
 
       {/* Notification Settings */}
-      <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
-        <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-          <Bell size={20} className="text-primary" />
-          Notification Preferences
-        </h3>
-
-        <div className="space-y-4">
+      <AdminCard title="Broadcast Logic" subtitle="Manage signal preferences" headerActions={<Bell size={16} className="text-primary" />}>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {[
             {
               key: "emailNotifications",
-              label: "Email Notifications",
-              description: "Receive email updates about platform activities",
+              label: "Email Protocol",
+              description: "Primary outbound communication stream",
             },
             {
               key: "orderAlerts",
-              label: "Order Alerts",
-              description: "Get notified about new orders and updates",
+              label: "Supply Signal",
+              description: "Real-time verification of new inventory flow",
             },
             {
               key: "customerMessages",
-              label: "Customer Messages",
-              description: "Receive notifications for customer inquiries",
+              label: "Inquiry Stream",
+              description: "Intercept buyer communication signals",
             },
             {
               key: "systemUpdates",
-              label: "System Updates",
-              description:
-                "Stay informed about platform maintenance and updates",
+              label: "Core Matrix",
+              description: "Critical platform infrastructure updates",
             },
           ].map(({ key, label, description }) => (
             <div
               key={key}
-              className="flex items-center justify-between p-4 bg-gray-50 rounded-lg"
+              className="flex items-center justify-between p-5 bg-muted/20 border-2 border-border border-dashed rounded-sm hover:border-primary/20 transition-colors group"
             >
-              <div>
-                <p className="font-medium text-gray-900">{label}</p>
-                <p className="text-sm text-gray-600">{description}</p>
+              <div className="min-w-0 pr-4">
+                <p className="font-heading font-bold text-sm text-foreground uppercase tracking-widest leading-none mb-2">
+                  {label}
+                </p>
+                <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-tight">
+                  {description}
+                </p>
               </div>
               <button
                 onClick={() =>
                   handleNotificationToggle(key as keyof typeof notifications)
                 }
-                className={`relative w-12 h-6 rounded-full transition-colors ${
+                className={`relative w-12 h-6 rounded-sm transition-all border-2 ${
                   notifications[key as keyof typeof notifications]
-                    ? "bg-primary"
-                    : "bg-gray-300"
+                    ? "bg-primary border-primary"
+                    : "bg-muted border-border"
                 }`}
               >
                 <div
-                  className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-transform ${
+                  className={`absolute top-1 w-3 h-3 rounded-sm transition-all ${
                     notifications[key as keyof typeof notifications]
-                      ? "translate-x-6"
-                      : "translate-x-1"
+                      ? "translate-x-7 bg-white"
+                      : "translate-x-1 bg-muted-foreground"
                   }`}
                 />
               </button>
             </div>
           ))}
         </div>
-      </div>
+      </AdminCard>
 
       {/* Security Settings */}
-      <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
-        <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-          <Shield size={20} className="text-primary" />
-          Security Settings
-        </h3>
-
-        <div className="space-y-4">
-          <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-            <div>
-              <p className="font-medium text-gray-900">
-                Two-Factor Authentication
-              </p>
-              <p className="text-sm text-gray-600">
-                Add an extra layer of security to your account
-              </p>
-            </div>
-            <button
-              onClick={() => handleSecurityToggle("twoFactorAuth")}
-              className={`relative w-12 h-6 rounded-full transition-colors ${
-                securitySettings.twoFactorAuth ? "bg-primary" : "bg-gray-300"
-              }`}
-            >
-              <div
-                className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-transform ${
+      <AdminCard title="Hardened Protocol" subtitle="Account fortification parameters" headerActions={<Shield size={16} className="text-primary" />}>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="space-y-6">
+            <div className="flex items-center justify-between p-5 bg-muted/30 border-2 border-border rounded-sm">
+              <div className="min-w-0 pr-4">
+                <p className="font-heading font-bold text-sm text-foreground uppercase tracking-widest leading-none mb-2">
+                  Double Factor
+                </p>
+                <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-tight">
+                  Cryptographic verification requirement
+                </p>
+              </div>
+              <button
+                onClick={() => handleSecurityToggle("twoFactorAuth")}
+                className={`relative w-12 h-6 rounded-sm transition-all border-2 ${
                   securitySettings.twoFactorAuth
-                    ? "translate-x-6"
-                    : "translate-x-1"
+                    ? "bg-primary border-primary"
+                    : "bg-muted border-border"
                 }`}
-              />
-            </button>
-          </div>
-
-          <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-            <div>
-              <p className="font-medium text-gray-900">Login Alerts</p>
-              <p className="text-sm text-gray-600">
-                Receive alerts when someone logs into your account
-              </p>
+              >
+                <div
+                  className={`absolute top-1 w-3 h-3 rounded-sm transition-all ${
+                    securitySettings.twoFactorAuth
+                      ? "translate-x-7 bg-white"
+                      : "translate-x-1 bg-muted-foreground"
+                  }`}
+                />
+              </button>
             </div>
-            <button
-              onClick={() => handleSecurityToggle("loginAlerts")}
-              className={`relative w-12 h-6 rounded-full transition-colors ${
-                securitySettings.loginAlerts ? "bg-primary" : "bg-gray-300"
-              }`}
-            >
-              <div
-                className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-transform ${
+
+            <div className="flex items-center justify-between p-5 bg-muted/30 border-2 border-border rounded-sm">
+              <div className="min-w-0 pr-4">
+                <p className="font-heading font-bold text-sm text-foreground uppercase tracking-widest leading-none mb-2">
+                  Access Alerts
+                </p>
+                <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-tight">
+                  Notify on new session establishment
+                </p>
+              </div>
+              <button
+                onClick={() => handleSecurityToggle("loginAlerts")}
+                className={`relative w-12 h-6 rounded-sm transition-all border-2 ${
                   securitySettings.loginAlerts
-                    ? "translate-x-6"
-                    : "translate-x-1"
+                    ? "bg-primary border-primary"
+                    : "bg-muted border-border"
                 }`}
-              />
-            </button>
+              >
+                <div
+                  className={`absolute top-1 w-3 h-3 rounded-sm transition-all ${
+                    securitySettings.loginAlerts
+                      ? "translate-x-7 bg-white"
+                      : "translate-x-1 bg-muted-foreground"
+                  }`}
+                />
+              </button>
+            </div>
           </div>
 
-          <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-            <div>
-              <p className="font-medium text-gray-900">Session Timeout</p>
-              <p className="text-sm text-gray-600">
-                Auto logout after inactivity
-              </p>
+          <div className="p-6 bg-foreground text-background rounded-sm relative overflow-hidden flex flex-col justify-center">
+            <div className="absolute inset-0 african-pattern opacity-10 invert" />
+            <div className="relative z-10">
+              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-primary mb-2">Auto-Termination</p>
+              <h4 className="text-xl font-heading font-bold uppercase mb-4 leading-none">Session Pulse</h4>
+              <div className="space-y-4">
+                <select
+                  value={securitySettings.sessionTimeout}
+                  onChange={(e) =>
+                    setSecuritySettings((prev) => ({
+                      ...prev,
+                      sessionTimeout: parseInt(e.target.value),
+                    }))
+                  }
+                  className="w-full px-4 py-3 border-2 border-background/20 rounded-sm focus:outline-none focus:ring-1 focus:ring-primary text-xs font-heading font-bold uppercase tracking-widest h-12 bg-background/5 text-background"
+                >
+                  <option value={30} className="text-foreground">30 CYCLE PULSE</option>
+                  <option value={60} className="text-foreground">60 CYCLE PULSE</option>
+                  <option value={120} className="text-foreground">120 CYCLE PULSE</option>
+                  <option value={480} className="text-foreground">EXTENDED PULSE (8H)</option>
+                </select>
+                <p className="text-[9px] text-muted-foreground uppercase font-bold tracking-widest">
+                  Active sessions will be purged after the specified interval of inactivity.
+                </p>
+              </div>
             </div>
-            <select
-              value={securitySettings.sessionTimeout}
-              onChange={(e) =>
-                setSecuritySettings((prev) => ({
-                  ...prev,
-                  sessionTimeout: parseInt(e.target.value),
-                }))
-              }
-              className="px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-            >
-              <option value={30}>30 minutes</option>
-              <option value={60}>1 hour</option>
-              <option value={120}>2 hours</option>
-              <option value={480}>8 hours</option>
-            </select>
           </div>
         </div>
-      </div>
+      </AdminCard>
 
       {/* Account Activity */}
-      <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
-        <h3 className="text-lg font-bold text-gray-900 mb-4">
-          Recent Account Activity
-        </h3>
-
-        <div className="space-y-3">
+      <AdminCard title="Signal Logs" subtitle="Verified access audit stream" headerActions={<Activity size={16} className="text-primary" />}>
+        <AdminTable headers={["Signal Type", "Terminal ID", "Temporal Marker"]}>
           {[
             {
-              action: "Login",
-              device: "Chrome on Windows",
-              time: "2 hours ago",
+              action: "AUTH_ESTABLISHED",
+              device: "CHROME_WIN_NT_10.0",
+              time: "2.0 HOURS_AGO",
             },
             {
-              action: "Password Changed",
-              device: "Mobile Safari",
-              time: "1 day ago",
+              action: "KEY_ROTATION",
+              device: "IOS_MOBILE_SAFARI",
+              time: "1.0 DAYS_AGO",
             },
-            { action: "Login", device: "Firefox on Mac", time: "3 days ago" },
             {
-              action: "Settings Updated",
-              device: "Chrome on Windows",
-              time: "5 days ago",
+              action: "AUTH_ESTABLISHED",
+              device: "MACOS_FIREFOX_ENT",
+              time: "3.0 DAYS_AGO",
+            },
+            {
+              action: "PARAMETER_SYNC",
+              device: "CHROME_WIN_NT_10.0",
+              time: "5.0 DAYS_AGO",
             },
           ].map((activity, index) => (
-            <div
-              key={index}
-              className="flex items-center justify-between p-3 border border-gray-100 rounded-lg"
-            >
-              <div>
-                <p className="font-medium text-gray-900">{activity.action}</p>
-                <p className="text-sm text-gray-600">{activity.device}</p>
-              </div>
-              <p className="text-sm text-gray-500">{activity.time}</p>
-            </div>
+            <tr key={index} className="hover:bg-muted/50 transition-colors">
+              <td className="px-4 py-4">
+                <Badge variant="outline" className="bg-primary/5 text-primary border-primary/20 font-mono text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded-sm">
+                  {activity.action}
+                </Badge>
+              </td>
+              <td className="px-4 py-4 text-[10px] text-muted-foreground font-mono font-bold uppercase tracking-widest">
+                {activity.device}
+              </td>
+              <td className="px-4 py-4 text-[10px] text-foreground font-mono font-black text-right uppercase tracking-tighter">
+                {activity.time}
+              </td>
+            </tr>
           ))}
-        </div>
-      </div>
+        </AdminTable>
+      </AdminCard>
     </div>
   );
 }

@@ -1,16 +1,18 @@
 import { useNavigate } from "react-router-dom";
-import SupplierListing from "@/components/SupplierListing";
+import { useCallback } from "react";
+import SupplierListing from "@/components/supplier/SupplierListing";
 
 const SupplierListingPage = () => {
   const navigate = useNavigate();
 
-  return (
-    <SupplierListing
-      onSupplierClick={(supplierId: string) =>
-        navigate(`/suppliers/${supplierId}`)
-      }
-    />
+  const handleSupplierClick = useCallback(
+    (supplierId: string) => {
+      navigate(`/suppliers/${supplierId}`);
+    },
+    [navigate],
   );
+
+  return <SupplierListing onSupplierClick={handleSupplierClick} />;
 };
 
 export default SupplierListingPage;

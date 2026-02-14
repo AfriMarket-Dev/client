@@ -1,4 +1,4 @@
-import { type Category, type Supplier, type Product } from "@/types";
+import { type Category, type Supplier, type Product, type Order, type Inquiry, type Service } from "@/types";
 
 export const categories: Category[] = [
   {
@@ -209,5 +209,112 @@ export const products: Product[] = [
       "Grade": "B500B",
     },
     tags: ["Steel", "Rebar", "Reinforcement"],
+  },
+];
+
+export const orders: Order[] = [
+  {
+    id: "ord-1",
+    productId: "prod-1",
+    buyerName: "Jean Bosco",
+    buyerEmail: "bosco@example.rw",
+    quantity: 100,
+    totalPrice: 1300000,
+    status: "completed",
+    shippingStatus: "delivered",
+    orderDate: "2023-11-15T10:30:00Z",
+  },
+  {
+    id: "ord-2",
+    productId: "prod-3",
+    buyerName: "Marie Claire",
+    buyerEmail: "claire@example.rw",
+    quantity: 50,
+    totalPrice: 700000,
+    status: "pending",
+    shippingStatus: "processing",
+    orderDate: "2023-12-01T14:20:00Z",
+  },
+];
+
+export const inquiries: Inquiry[] = [
+  {
+    id: "inq-1",
+    productId: "prod-1",
+    buyerName: "David Habimana",
+    buyerEmail: "david@construction.rw",
+    status: "pending",
+    message: "I am interested in buying 500 bags of cement. Do you offer additional discounts for this volume?",
+    quantity: 500,
+    createdAt: "2023-12-05T09:15:00Z",
+  },
+  {
+    id: "inq-2",
+    productId: "prod-2",
+    buyerName: "Sarah Uwase",
+    buyerEmail: "sarah@rentals.rw",
+    status: "replied",
+    message: "Is the excavator available for rent next week in Musanze?",
+    quantity: 1,
+    createdAt: "2023-12-03T16:45:00Z",
+  },
+];
+
+import { Wrench, Zap, PaintBucket } from "lucide-react";
+
+export const services: Service[] = [
+  {
+    id: 1,
+    name: "Electrical Installation",
+    description: "Full residential and commercial electrical wiring and maintenance.",
+    icon: Zap,
+    image: "https://images.pexels.com/photos/1435183/pexels-photo-1435183.jpeg?auto=compress&cs=tinysrgb&w=800",
+    price: "From RWF 50,000",
+    totalRequests: 45,
+    pendingRequests: 3,
+    provider: {
+      fullName: "Emmanuel Nkurunziza",
+      role: "Certified Electrician",
+      rating: 4.8,
+      experience: "8 years",
+      phone: "+250 788 000 111",
+      email: "emmanuel@electric.rw",
+    },
+  },
+  {
+    id: 2,
+    name: "Plumbing Services",
+    description: "Expert plumbing repairs, installation, and drainage solutions.",
+    icon: Wrench,
+    image: "https://images.pexels.com/photos/10846051/pexels-photo-10846051.jpeg?auto=compress&cs=tinysrgb&w=800",
+    price: "From RWF 30,000",
+    totalRequests: 32,
+    pendingRequests: 5,
+    provider: {
+      fullName: "Alice Umutoni",
+      role: "Master Plumber",
+      rating: 4.9,
+      experience: "10 years",
+      phone: "+250 788 222 333",
+      email: "alice@plumbing.rw",
+    },
+  },
+  {
+    id: 3,
+    name: "Interior Painting",
+    description: "Professional interior and exterior painting for any building type.",
+    icon: PaintBucket,
+    image: "https://images.pexels.com/photos/6444249/pexels-photo-6444249.jpeg?auto=compress&cs=tinysrgb&w=800",
+    price: "From RWF 100,000",
+    totalRequests: 28,
+    pendingRequests: 2,
+    provider: {
+      fullName: "Patrick Murenzi",
+      role: "Professional Painter",
+      rating: 4.7,
+      experience: "5 years",
+      phone: "+250 788 444 555",
+      email: "patrick@painting.rw",
+    },
   },
 ];

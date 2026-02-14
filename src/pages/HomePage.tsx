@@ -1,33 +1,35 @@
 import React from "react";
-import { useSelector } from "react-redux";
-import { type RootState } from "@/app/store";
-import LandingPage from "./LandingPage";
-import UserDashboard from "./UserDashboard";
-import SupplierDashboardPage from "./SupplierDashboardPage";
-import Header from "@/components/Header";
+import Hero from "@/components/home/Hero";
+import CategoryGrid from "@/components/marketplace/CategoryGrid";
+import TrendingProducts from "@/components/marketplace/TrendingProducts";
+import FeaturedSuppliers from "@/components/supplier/FeaturedSuppliers";
+import HotDeals from "@/components/home/HotDeals";
+import CTASection from "@/components/home/CTASection";
 
-const HomePage = () => {
-  const { isAuthenticated, user } = useSelector((state: RootState) => state.auth);
-
-  if (isAuthenticated) {
-    if (user?.role === "supplier") {
-      return <SupplierDashboardPage />;
-    }
-    
-    return (
-      <div className="min-h-screen bg-stone-50 flex flex-col">
-        <Header />
-        <main className="flex-grow pt-20">
-          <UserDashboard />
-        </main>
-      </div>
-    );
-  }
-
+const HomePage: React.FC = () => {
   return (
-    <div className="flex flex-col min-h-screen">
-      <Header />
-      <LandingPage />
+    <div className="flex flex-col gap-24 pb-24">
+      <Hero />
+
+      <section className="container mx-auto px-4">
+        <CategoryGrid />
+      </section>
+
+      <div className="bg-muted/30 py-24 border-y-2 border-border">
+        <section className="container mx-auto px-4">
+          <TrendingProducts />
+        </section>
+      </div>
+
+      <section className="container mx-auto px-4">
+        <HotDeals />
+      </section>
+
+      <section className="container mx-auto px-4">
+        <FeaturedSuppliers />
+      </section>
+
+      <CTASection />
     </div>
   );
 };

@@ -1,16 +1,15 @@
 import { apiSlice } from "@/app/api/apiEntry";
 
 export interface SignInRequest {
-  phone: string;
-  otp?: string;
+  email: string;
+  password?: string;
 }
 
 export interface SignUpRequest {
-  phone: string;
   name: string;
-  district: string;
+  email: string;
+  password?: string;
   role: "buyer" | "provider";
-  otp?: string;
 }
 
 export interface SessionUser {
@@ -32,9 +31,12 @@ export const authApi = apiSlice.injectEndpoints({
     signIn: builder.mutation<AuthResponse, SignInRequest>({
       queryFn: async (args, _api, _extraOptions, baseQuery) => {
         const result = await baseQuery({
-          url: "/api/auth/sign-in/phone",
+          url: "/api/auth/sign-in/email",
           method: "POST",
-          body: args,
+          body: {
+            email: args.email,
+            password: args.password,
+          },
         });
 
         if (result.error) {
@@ -59,7 +61,7 @@ export const authApi = apiSlice.injectEndpoints({
     signUp: builder.mutation<AuthResponse, SignUpRequest>({
       queryFn: async (args, _api, _extraOptions, baseQuery) => {
         const result = await baseQuery({
-          url: "/api/auth/sign-up/phone",
+          url: "/api/auth/sign-up/email",
           method: "POST",
           body: args,
         });

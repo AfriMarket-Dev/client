@@ -11,6 +11,13 @@ import {
   Camera,
   Edit,
 } from "lucide-react";
+import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/Input";
+import { Textarea } from "@/components/ui/Textarea";
+import { AdminCard } from "@/components/admin/AdminCard";
+import { Switch } from "@/components/ui/Switch";
+import { Label } from "@/components/ui/Label";
+import { cn } from "@/lib/utils";
 
 interface ProfileSettingsProps {
   supplierData: any;
@@ -33,7 +40,7 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ supplierData }) => {
       "https://images.pexels.com/photos/5668473/pexels-photo-5668473.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&fit=crop",
   });
 
-  const [companyData, setCompanyData] = useState({
+  const [companyData] = useState({
     companyName: supplierData?.name || "AfroTech Imports",
     description:
       supplierData?.description ||
@@ -70,26 +77,6 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ supplierData }) => {
     currency: "USD",
   });
 
-  const handleSaveProfile = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("Saving profile:", profileData);
-  };
-
-  const handleSaveCompany = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("Saving company:", companyData);
-  };
-
-  const handleSaveSecurity = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("Saving security:", securityData);
-  };
-
-  const handleSavePreferences = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("Saving preferences:", preferencesData);
-  };
-
   const tabs = [
     { id: "profile", label: "Personal Profile", icon: User },
     { id: "company", label: "Company Info", icon: Building },
@@ -97,123 +84,99 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ supplierData }) => {
     { id: "preferences", label: "Preferences", icon: Globe },
   ];
 
-  const industries = [
-    "Electronics",
-    "Fashion & Textiles",
-    "Home & Garden",
-    "Beauty & Health",
-    "Automotive",
-    "Industrial Equipment",
-    "Food & Beverages",
-    "Agriculture",
-  ];
-
-  const languages = [
-    { code: "en", name: "English" },
-    { code: "fr", name: "French" },
-    { code: "sw", name: "Swahili" },
-    { code: "ar", name: "Arabic" },
-  ];
-
-  const timezones = [
-    "Africa/Lagos",
-    "Africa/Cairo",
-    "Africa/Johannesburg",
-    "Africa/Nairobi",
-    "Africa/Casablanca",
-  ];
-
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div>
-        <h2 className="text-2xl font-bold text-gray-900">Profile Settings</h2>
-        <p className="text-gray-600">
-          Manage your account and company information
-        </p>
+    <div className="space-y-8 ">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b-2 border-border pb-6">
+        <div>
+          <h2 className="text-4xl font-heading font-bold text-foreground uppercase tracking-tight">
+            Configuration
+          </h2>
+          <p className="text-muted-foreground font-medium uppercase text-xs tracking-widest mt-1">
+            Manage entity & secure parameters
+          </p>
+        </div>
       </div>
 
-      <div className="flex flex-col lg:flex-row gap-6">
+      <div className="flex flex-col lg:flex-row gap-8">
         {/* Sidebar Navigation */}
-        <div className="lg:w-64 flex-shrink-0">
-          <div className="bg-white rounded-xl border border-gray-100 p-4">
-            <nav className="space-y-2">
+        <div className="lg:w-72 flex-shrink-0">
+          <AdminCard noPadding className="sticky top-24">
+            <nav className="p-2 space-y-1">
               {tabs.map((tab) => (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id as any)}
-                  className={`w-full flex items-center px-3 py-3 text-sm font-medium rounded-lg transition-colors ${
+                  className={cn(
+                    "w-full flex items-center px-4 py-3 text-xs font-heading font-bold uppercase tracking-widest rounded-sm transition-all border-2",
                     activeTab === tab.id
-                      ? "bg-gradient-to-r from-primary to-primary/90 text-white"
-                      : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
-                  }`}
+                      ? "bg-foreground text-background border-foreground shadow-md"
+                      : "text-muted-foreground border-transparent hover:border-border hover:bg-muted hover:text-foreground",
+                  )}
                 >
-                  <tab.icon className="w-5 h-5 mr-3" />
+                  <tab.icon
+                    className={cn(
+                      "w-4 h-4 mr-3",
+                      activeTab === tab.id ? "text-primary" : "opacity-70",
+                    )}
+                  />
                   {tab.label}
                 </button>
               ))}
             </nav>
-          </div>
+          </AdminCard>
         </div>
 
         {/* Content Area */}
         <div className="flex-1">
-          <div className="bg-white rounded-xl border border-gray-100 p-6">
-            {/* Personal Profile Tab */}
+          <AdminCard
+            title={tabs.find((t) => t.id === activeTab)?.label}
+            subtitle="Secure update protocol"
+            headerActions={
+              <Button
+                size="sm"
+                className="font-heading font-bold uppercase text-[10px] tracking-widest h-9 px-4 shadow-none"
+              >
+                <Save className="w-3.5 h-3.5 mr-1.5" /> Save State
+              </Button>
+            }
+          >
             {activeTab === "profile" && (
-              <form onSubmit={handleSaveProfile} className="space-y-6">
-                <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-xl font-semibold text-gray-900">
-                    Personal Profile
-                  </h3>
-                  <button
-                    type="submit"
-                    className="bg-gradient-to-r from-primary to-primary/90 text-white px-6 py-2 rounded-lg font-medium hover:from-primary/90 hover:to-primary transition-colors flex items-center"
-                  >
-                    <Save className="w-4 h-4 mr-2" />
-                    Save Changes
-                  </button>
-                </div>
-
-                {/* Avatar Upload */}
-                <div className="flex items-center space-x-6">
-                  <div className="relative">
+              <div className="space-y-10">
+                {/* Avatar */}
+                <div className="flex flex-col sm:flex-row items-center gap-8 p-6 bg-muted/20 border-2 border-border border-dashed rounded-sm">
+                  <div className="relative shrink-0">
                     <img
                       src={profileData.avatar}
                       alt="Profile"
-                      className="w-24 h-24 rounded-full object-cover border-4 border-white shadow-lg"
+                      className="w-28 h-28 rounded-sm object-cover border-4 border-background shadow-xl"
                     />
-                    <button
-                      type="button"
-                      className="absolute bottom-0 right-0 bg-primary text-white p-2 rounded-full hover:bg-primary/90 transition-colors"
-                    >
+                    <button className="absolute -bottom-2 -right-2 bg-primary text-primary-foreground p-2.5 rounded-sm hover:scale-110 transition-transform shadow-lg border-2 border-background">
                       <Camera className="w-4 h-4" />
                     </button>
                   </div>
-                  <div>
-                    <h4 className="font-medium text-gray-900 mb-1">
-                      Profile Photo
+                  <div className="text-center sm:text-left flex-1">
+                    <h4 className="font-heading font-bold text-foreground uppercase tracking-wider mb-1">
+                      Identity Image
                     </h4>
-                    <p className="text-sm text-gray-600 mb-3">
-                      Upload a professional photo for your profile
+                    <p className="text-[10px] text-muted-foreground uppercase font-black tracking-widest mb-4">
+                      Maximum size: 2MB • Format: JPG, PNG
                     </p>
-                    <button
-                      type="button"
-                      className="flex items-center px-4 py-2 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="font-heading font-bold uppercase text-[10px] tracking-widest h-9 px-4 border-2 border-border hover:bg-muted shadow-none"
                     >
-                      <Upload className="w-4 h-4 mr-2" />
-                      Upload New Photo
-                    </button>
+                      <Upload className="w-3.5 h-3.5 mr-1.5" /> Patch Image
+                    </Button>
                   </div>
                 </div>
 
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Full Name
+                <div className="grid md:grid-cols-2 gap-8">
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground ml-1">
+                      Full Identity
                     </label>
-                    <input
-                      type="text"
+                    <Input
                       value={profileData.fullName}
                       onChange={(e) =>
                         setProfileData({
@@ -221,15 +184,14 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ supplierData }) => {
                           fullName: e.target.value,
                         })
                       }
-                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
+                      className="h-12 bg-muted/10 font-bold uppercase tracking-wider shadow-none"
                     />
                   </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Position
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground ml-1">
+                      Protocol Role
                     </label>
-                    <input
-                      type="text"
+                    <Input
                       value={profileData.position}
                       onChange={(e) =>
                         setProfileData({
@@ -237,503 +199,289 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ supplierData }) => {
                           position: e.target.value,
                         })
                       }
-                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
+                      className="h-12 bg-muted/10 font-bold uppercase tracking-wider shadow-none"
                     />
                   </div>
-                </div>
-
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Email Address
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground ml-1">
+                      Secure Email
                     </label>
-                    <input
-                      type="email"
+                    <Input
                       value={profileData.email}
-                      onChange={(e) =>
-                        setProfileData({
-                          ...profileData,
-                          email: e.target.value,
-                        })
-                      }
-                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
+                      type="email"
+                      className="h-12 bg-muted/10 font-mono font-bold lowercase shadow-none"
                     />
                   </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Phone Number
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground ml-1">
+                      Comm Link
                     </label>
-                    <input
-                      type="tel"
+                    <Input
                       value={profileData.phone}
-                      onChange={(e) =>
-                        setProfileData({
-                          ...profileData,
-                          phone: e.target.value,
-                        })
-                      }
-                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
+                      type="tel"
+                      className="h-12 bg-muted/10 font-mono font-bold shadow-none"
                     />
                   </div>
                 </div>
-              </form>
+              </div>
             )}
 
-            {/* Company Info Tab */}
             {activeTab === "company" && (
-              <form onSubmit={handleSaveCompany} className="space-y-6">
-                <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-xl font-semibold text-gray-900">
-                    Company Information
-                  </h3>
-                  <button
-                    type="submit"
-                    className="bg-gradient-to-r from-primary to-primary/90 text-white px-6 py-2 rounded-lg font-medium hover:from-primary/90 hover:to-primary transition-colors flex items-center"
-                  >
-                    <Save className="w-4 h-4 mr-2" />
-                    Save Changes
+              <div className="space-y-8">
+                <div className="relative group">
+                  <img
+                    src={companyData.coverImage}
+                    alt="Cover"
+                    className="w-full h-40 rounded-sm object-cover border-2 border-border"
+                  />
+                  <div className="absolute inset-0 african-pattern opacity-10 pointer-events-none" />
+                  <button className="absolute top-4 right-4 bg-background/90 text-foreground p-2 rounded-sm hover:bg-primary hover:text-primary-foreground transition-all shadow-lg border border-border">
+                    <Edit className="w-4 h-4" />
                   </button>
                 </div>
 
-                {/* Cover Image */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Cover Image
-                  </label>
-                  <div className="relative">
-                    <img
-                      src={companyData.coverImage}
-                      alt="Company Cover"
-                      className="w-full h-32 rounded-xl object-cover"
-                    />
-                    <button
-                      type="button"
-                      className="absolute top-2 right-2 bg-black/50 text-white p-2 rounded-lg hover:bg-black/70 transition-colors"
-                    >
-                      <Edit className="w-4 h-4" />
-                    </button>
-                  </div>
-                </div>
-
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Company Name
+                <div className="grid md:grid-cols-2 gap-8">
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground ml-1">
+                      Corporate Name
                     </label>
-                    <input
-                      type="text"
+                    <Input
                       value={companyData.companyName}
-                      onChange={(e) =>
-                        setCompanyData({
-                          ...companyData,
-                          companyName: e.target.value,
-                        })
-                      }
-                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
+                      className="h-12 font-bold uppercase tracking-wider shadow-none"
                     />
                   </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Industry
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground ml-1">
+                      Industry Stream
                     </label>
-                    <select
+                    <Input
                       value={companyData.industry}
-                      onChange={(e) =>
-                        setCompanyData({
-                          ...companyData,
-                          industry: e.target.value,
-                        })
-                      }
-                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
-                    >
-                      {industries.map((industry) => (
-                        <option key={industry} value={industry}>
-                          {industry}
-                        </option>
-                      ))}
-                    </select>
+                      className="h-12 font-bold uppercase tracking-wider shadow-none"
+                    />
                   </div>
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Company Description
+                <div className="space-y-2">
+                  <label className="text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground ml-1">
+                    Stream Description
                   </label>
-                  <textarea
-                    rows={4}
+                  <Textarea
                     value={companyData.description}
-                    onChange={(e) =>
-                      setCompanyData({
-                        ...companyData,
-                        description: e.target.value,
-                      })
-                    }
-                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent resize-none"
+                    rows={4}
+                    className="bg-muted/5 font-medium uppercase tracking-wide shadow-none border-2"
                   />
                 </div>
 
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Registration ID/TIN
+                <div className="grid md:grid-cols-2 gap-8">
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground ml-1">
+                      Registry ID (TIN)
                     </label>
-                    <input
-                      type="text"
+                    <Input
                       value={companyData.registrationId}
-                      onChange={(e) =>
-                        setCompanyData({
-                          ...companyData,
-                          registrationId: e.target.value,
-                        })
-                      }
-                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
+                      className="h-12 font-mono font-bold shadow-none"
                     />
                   </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Website
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground ml-1">
+                      Network Node (URL)
                     </label>
-                    <input
-                      type="url"
+                    <Input
                       value={companyData.website}
-                      onChange={(e) =>
-                        setCompanyData({
-                          ...companyData,
-                          website: e.target.value,
-                        })
-                      }
-                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
+                      className="h-12 font-mono font-bold shadow-none"
                     />
                   </div>
                 </div>
-
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Location
-                    </label>
-                    <input
-                      type="text"
-                      value={companyData.location}
-                      onChange={(e) =>
-                        setCompanyData({
-                          ...companyData,
-                          location: e.target.value,
-                        })
-                      }
-                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Full Address
-                    </label>
-                    <input
-                      type="text"
-                      value={companyData.address}
-                      onChange={(e) =>
-                        setCompanyData({
-                          ...companyData,
-                          address: e.target.value,
-                        })
-                      }
-                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
-                    />
-                  </div>
-                </div>
-              </form>
+              </div>
             )}
 
-            {/* Security Tab */}
             {activeTab === "security" && (
-              <form onSubmit={handleSaveSecurity} className="space-y-6">
-                <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-xl font-semibold text-gray-900">
-                    Security Settings
-                  </h3>
-                  <button
-                    type="submit"
-                    className="bg-gradient-to-r from-primary to-primary/90 text-white px-6 py-2 rounded-lg font-medium hover:from-primary/90 hover:to-primary transition-colors flex items-center"
-                  >
-                    <Save className="w-4 h-4 mr-2" />
-                    Update Security
-                  </button>
-                </div>
-
-                <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 mb-6">
-                  <div className="flex items-center">
-                    <Shield className="w-5 h-5 text-yellow-600 mr-2" />
-                    <span className="text-sm font-medium text-yellow-800">
-                      Keep your account secure by using a strong password and
-                      enabling two-factor authentication.
-                    </span>
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Current Password
-                  </label>
-                  <div className="relative">
-                    <input
-                      type={showCurrentPassword ? "text" : "password"}
-                      value={securityData.currentPassword}
-                      onChange={(e) =>
-                        setSecurityData({
-                          ...securityData,
-                          currentPassword: e.target.value,
-                        })
-                      }
-                      className="w-full px-4 py-3 pr-12 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
-                      placeholder="Enter current password"
-                    />
-                    <button
-                      type="button"
-                      onClick={() =>
-                        setShowCurrentPassword(!showCurrentPassword)
-                      }
-                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                    >
-                      {showCurrentPassword ? (
-                        <EyeOff className="w-5 h-5" />
-                      ) : (
-                        <Eye className="w-5 h-5" />
-                      )}
-                    </button>
-                  </div>
-                </div>
-
-                <div className="grid md:grid-cols-2 gap-6">
+              <div className="space-y-8">
+                <div className="bg-warning/10 border-2 border-warning/20 rounded-sm p-6 flex items-start gap-4">
+                  <Shield className="w-6 h-6 text-warning shrink-0" />
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      New Password
+                    <p className="text-sm font-heading font-bold text-warning uppercase tracking-widest">
+                      Security Protocol
+                    </p>
+                    <p className="text-[10px] text-warning/80 mt-1 uppercase font-bold tracking-wider leading-relaxed">
+                      System requires a minimum of 12 characters including
+                      industrial markers (#,$,@) for fortified access.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="space-y-6">
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground ml-1">
+                      Current Key
                     </label>
                     <div className="relative">
-                      <input
-                        type={showNewPassword ? "text" : "password"}
-                        value={securityData.newPassword}
-                        onChange={(e) =>
-                          setSecurityData({
-                            ...securityData,
-                            newPassword: e.target.value,
-                          })
-                        }
-                        className="w-full px-4 py-3 pr-12 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
-                        placeholder="Enter new password"
+                      <Input
+                        type={showCurrentPassword ? "text" : "password"}
+                        className="h-12 pr-12 shadow-none"
+                        placeholder="••••••••••••"
                       />
                       <button
-                        type="button"
-                        onClick={() => setShowNewPassword(!showNewPassword)}
-                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                        onClick={() =>
+                          setShowCurrentPassword(!showCurrentPassword)
+                        }
+                        className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
                       >
-                        {showNewPassword ? (
-                          <EyeOff className="w-5 h-5" />
+                        {showCurrentPassword ? (
+                          <EyeOff className="w-4 h-4" />
                         ) : (
-                          <Eye className="w-5 h-5" />
+                          <Eye className="w-4 h-4" />
                         )}
                       </button>
                     </div>
                   </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Confirm New Password
-                    </label>
-                    <input
-                      type="password"
-                      value={securityData.confirmPassword}
-                      onChange={(e) =>
-                        setSecurityData({
-                          ...securityData,
-                          confirmPassword: e.target.value,
-                        })
-                      }
-                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
-                      placeholder="Confirm new password"
-                    />
+
+                  <div className="grid md:grid-cols-2 gap-8">
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground ml-1">
+                        New Key
+                      </label>
+                      <div className="relative">
+                        <Input
+                          type={showNewPassword ? "text" : "password"}
+                          className="h-12 pr-12 shadow-none"
+                        />
+                        <button
+                          onClick={() => setShowNewPassword(!showNewPassword)}
+                          className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                        >
+                          {showNewPassword ? (
+                            <EyeOff className="w-4 h-4" />
+                          ) : (
+                            <Eye className="w-4 h-4" />
+                          )}
+                        </button>
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground ml-1">
+                        Verify Key
+                      </label>
+                      <Input type="password" className="h-12 shadow-none" />
+                    </div>
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
-                  <div>
-                    <h4 className="font-medium text-gray-900">
+                <div className="flex items-center justify-between p-6 bg-muted/20 border-2 border-border border-dashed rounded-sm">
+                  <div className="space-y-1">
+                    <h4 className="font-heading font-bold text-foreground uppercase text-sm">
                       Two-Factor Authentication
                     </h4>
-                    <p className="text-sm text-gray-600">
-                      Add an extra layer of security to your account
+                    <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest">
+                      Fortified identity verification via mobile
                     </p>
                   </div>
-                  <label className="relative inline-flex items-center cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={securityData.twoFactorEnabled}
-                      onChange={(e) =>
-                        setSecurityData({
-                          ...securityData,
-                          twoFactorEnabled: e.target.checked,
-                        })
-                      }
-                      className="sr-only peer"
-                    />
-                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/30 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-                  </label>
+                  <Switch
+                    checked={securityData.twoFactorEnabled}
+                    onCheckedChange={(c) =>
+                      setSecurityData({ ...securityData, twoFactorEnabled: c })
+                    }
+                  />
                 </div>
-              </form>
+              </div>
             )}
 
-            {/* Preferences Tab */}
             {activeTab === "preferences" && (
-              <form onSubmit={handleSavePreferences} className="space-y-6">
-                <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-xl font-semibold text-gray-900">
-                    Preferences
-                  </h3>
-                  <button
-                    type="submit"
-                    className="bg-gradient-to-r from-primary to-primary/90 text-white px-6 py-2 rounded-lg font-medium hover:from-primary/90 hover:to-primary transition-colors flex items-center"
-                  >
-                    <Save className="w-4 h-4 mr-2" />
-                    Save Preferences
-                  </button>
-                </div>
-
-                {/* Notification Settings */}
-                <div>
-                  <h4 className="font-medium text-gray-900 mb-4">
-                    Notification Settings
+              <div className="space-y-10">
+                <div className="space-y-4">
+                  <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-primary mb-6 border-b-2 border-primary/10 pb-2">
+                    Transmission Matrix
                   </h4>
-                  <div className="space-y-4">
+                  <div className="grid gap-4">
                     {[
                       {
                         key: "emailNotifications",
-                        label: "Email Notifications",
-                        description: "Receive notifications via email",
+                        label: "Email Node",
+                        sub: "Primary data stream",
                       },
                       {
                         key: "smsNotifications",
-                        label: "SMS Notifications",
-                        description: "Receive notifications via SMS",
+                        label: "SMS Node",
+                        sub: "Secondary cellular stream",
                       },
                       {
                         key: "inquiryAlerts",
-                        label: "Inquiry Alerts",
-                        description: "Get notified about new inquiries",
+                        label: "Lead Alerts",
+                        sub: "Priority trade signals",
                       },
-                      {
-                        key: "marketingEmails",
-                        label: "Marketing Emails",
-                        description: "Receive marketing and promotional emails",
-                      },
-                    ].map((setting) => (
+                    ].map((s) => (
                       <div
-                        key={setting.key}
-                        className="flex items-center justify-between p-4 bg-gray-50 rounded-xl"
+                        key={s.key}
+                        className="flex items-center justify-between p-4 bg-muted/10 border-2 border-border rounded-sm hover:border-primary/20 transition-colors"
                       >
-                        <div>
-                          <h5 className="font-medium text-gray-900">
-                            {setting.label}
-                          </h5>
-                          <p className="text-sm text-gray-600">
-                            {setting.description}
+                        <div className="space-y-0.5">
+                          <Label
+                            className="font-heading font-bold text-foreground uppercase text-xs cursor-pointer"
+                            htmlFor={s.key}
+                          >
+                            {s.label}
+                          </Label>
+                          <p className="text-[9px] text-muted-foreground uppercase font-black tracking-widest">
+                            {s.sub}
                           </p>
                         </div>
-                        <label className="relative inline-flex items-center cursor-pointer">
-                          <input
-                            type="checkbox"
-                            checked={
-                              preferencesData[
-                                setting.key as keyof typeof preferencesData
-                              ] as boolean
-                            }
-                            onChange={(e) =>
-                              setPreferencesData({
-                                ...preferencesData,
-                                [setting.key]: e.target.checked,
-                              })
-                            }
-                            className="sr-only peer"
-                          />
-                          <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/30 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-                        </label>
+                        <Switch
+                          id={s.key}
+                          checked={
+                            preferencesData[
+                              s.key as keyof typeof preferencesData
+                            ] as boolean
+                          }
+                          onCheckedChange={(c) =>
+                            setPreferencesData({
+                              ...preferencesData,
+                              [s.key]: c,
+                            })
+                          }
+                        />
                       </div>
                     ))}
                   </div>
                 </div>
 
-                {/* Regional Settings */}
-                <div>
-                  <h4 className="font-medium text-gray-900 mb-4">
-                    Regional Settings
+                <div className="space-y-6">
+                  <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-primary mb-6 border-b-2 border-primary/10 pb-2">
+                    Localization Parameters
                   </h4>
-                  <div className="grid md:grid-cols-3 gap-6">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Language
+                  <div className="grid md:grid-cols-3 gap-8">
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground ml-1">
+                        Lexicon (Language)
                       </label>
-                      <select
-                        value={preferencesData.language}
-                        onChange={(e) =>
-                          setPreferencesData({
-                            ...preferencesData,
-                            language: e.target.value,
-                          })
-                        }
-                        className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
-                      >
-                        {languages.map((lang) => (
-                          <option key={lang.code} value={lang.code}>
-                            {lang.name}
-                          </option>
-                        ))}
+                      <select className="w-full px-4 py-3 border-2 border-border rounded-sm bg-background font-bold uppercase text-[10px] h-11 tracking-widest">
+                        <option value="en">ENGLISH [EN]</option>
+                        <option value="fr">FRENCH [FR]</option>
+                        <option value="sw">SWAHILI [SW]</option>
                       </select>
                     </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Timezone
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground ml-1">
+                        Temporal Marker (TZ)
                       </label>
-                      <select
-                        value={preferencesData.timezone}
-                        onChange={(e) =>
-                          setPreferencesData({
-                            ...preferencesData,
-                            timezone: e.target.value,
-                          })
-                        }
-                        className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
-                      >
-                        {timezones.map((tz) => (
-                          <option key={tz} value={tz}>
-                            {tz}
-                          </option>
-                        ))}
+                      <select className="w-full px-4 py-3 border-2 border-border rounded-sm bg-background font-bold uppercase text-[10px] h-11 tracking-widest">
+                        <option value="CAT">AFRICA/KIGALI [CAT]</option>
+                        <option value="GMT">UTC/LONDON [GMT]</option>
                       </select>
                     </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Currency
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground ml-1">
+                        Valuation Unit (Currency)
                       </label>
-                      <select
-                        value={preferencesData.currency}
-                        onChange={(e) =>
-                          setPreferencesData({
-                            ...preferencesData,
-                            currency: e.target.value,
-                          })
-                        }
-                        className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
-                      >
-                        <option value="USD">USD - US Dollar</option>
-                        <option value="EUR">EUR - Euro</option>
-                        <option value="GBP">GBP - British Pound</option>
-                        <option value="NGN">NGN - Nigerian Naira</option>
-                        <option value="KES">KES - Kenyan Shilling</option>
-                        <option value="ZAR">ZAR - South African Rand</option>
+                      <select className="w-full px-4 py-3 border-2 border-border rounded-sm bg-background font-bold uppercase text-[10px] h-11 tracking-widest">
+                        <option value="RWF">RWANDAN FRANC [RWF]</option>
+                        <option value="USD">US DOLLAR [USD]</option>
                       </select>
                     </div>
                   </div>
                 </div>
-              </form>
+              </div>
             )}
-          </div>
+          </AdminCard>
         </div>
       </div>
     </div>

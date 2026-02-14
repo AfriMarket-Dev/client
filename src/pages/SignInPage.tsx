@@ -1,6 +1,7 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import SignIn from "@/components/SignIn";
+import { ArrowLeft } from "lucide-react";
+import { SignInForm } from "@/components/forms/SignInForm";
 import { useSignInMutation } from "@/app/api/auth";
 import { setUser, setToken } from "@/app/features/authSlice";
 
@@ -13,13 +14,9 @@ const SignInPage = () => {
   const from = (location.state as { from?: { pathname: string } })?.from
     ?.pathname;
 
-  const handleSignInComplete = async (
-    _type: "customer" | "supplier",
-    phone: string,
-    otp?: string,
-  ) => {
+  const handleSignIn = async (data: { email: string; password?: string }) => {
     try {
-      const result = await signIn({ phone, otp }).unwrap();
+      const result = await signIn(data).unwrap();
       dispatch(setToken(result.token));
       dispatch(
         setUser({
@@ -32,7 +29,8 @@ const SignInPage = () => {
 
       const isAdmin =
         result.user.role === "admin" || result.user.role === "agent";
-      const isSupplier = result.user.role === "supplier" || result.user.role === "provider";
+      const isSupplier =
+        result.user.role === "supplier" || result.user.role === "provider";
 
       if (from) {
         navigate(from, { replace: true });
@@ -43,7 +41,9 @@ const SignInPage = () => {
       } else {
         navigate("/", { replace: true });
       }
-    } catch {}
+    } catch (err) {
+      console.error("SignIn failed", err);
+    }
   };
 
   const serverError =
@@ -54,13 +54,44 @@ const SignInPage = () => {
         : undefined;
 
   return (
-    <SignIn
-      onBack={() => navigate("/")}
-      onSignInComplete={handleSignInComplete}
-      onSwitchToSignUp={() => navigate("/auth/signup")}
-      isLoading={isLoading}
-      serverError={serverError}
-    />
+    <>
+      <button
+        onClick={() => navigate("/")}
+        className="flex items-center text-muted-foreground hover:text-foreground transition-colors mb-8 group"
+      >
+        <ArrowLeft className="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" />
+        <span className="text-xs font-heading font-bold uppercase tracking-wider">
+          Return Home
+        </span>
+      </button>
+
+      <div className="mb-10">
+        <h2 className="text-3xl font-heading font-bold uppercase mb-2 text-foreground">
+          Sign In
+        </h2>
+        <p className="text-muted-foreground">
+          Enter your credentials to access your account.
+        </p>
+      </div>
+
+      <SignInForm
+        onSubmit={handleSignIn}
+        isLoading={isLoading}
+        serverError={serverError}
+      />
+
+      <div className="mt-8 text-center">
+        <p className="text-sm text-muted-foreground font-medium">
+          New to the platform?{" "}
+          <button
+            onClick={() => navigate("/auth/signup")}
+            className="text-primary font-bold hover:underline"
+          >
+            Create Account
+          </button>
+        </p>
+      </div>
+    </>
   );
 };
 

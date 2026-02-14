@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from 'react-router-dom';
-import ProductDetails from '@/components/ProductDetails';
+import ProductDetails from '@/components/marketplace/ProductDetails';
 
 const ProductDetailsPage = () => {
   const navigate = useNavigate();

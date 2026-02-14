@@ -1,650 +1,99 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ChevronLeft, Building, User, CheckCircle } from "lucide-react";
-
-interface SupplierFormData {
-  companyName: string;
-  industry: string;
-  registrationId: string;
-  location: string;
-  district: string;
-  sector: string;
-  cell: string;
-  village: string;
-  sectorAddress: string;
-  fullName: string;
-  email: string;
-  position: string;
-  contactNumber: string;
-  nationalId: string;
-  phoneNumber: string;
-  password: string;
-  confirmPassword: string;
-}
+import { AdminPageHeader, AdminCard } from "@/components/admin";
+import { Button } from "@/components/ui/Button";
+import { SupplierProvisionForm } from "@/components/forms/SupplierProvisionForm";
 
 export default function AdminAddSupplierPage() {
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(1);
-  const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const industries = [
-    "Electronics",
-    "Fashion & Textiles",
-    "Home & Garden",
-    "Beauty & Health",
-    "Automotive",
-    "Industrial Equipment",
-    "Food & Beverages",
-    "Agriculture",
-    "Construction",
-    "Technology",
-    "Healthcare",
-    "Education",
-    "Other",
+  const handleSubmit = (values: any) => {
+    console.log("Adding supplier:", values);
+    alert("Supplier added successfully!");
+    navigate("/admin/suppliers");
+  };
+
+  const steps = [
+    { step: 1, label: "Identity", icon: Building },
+    { step: 2, label: "Authorized", icon: User },
+    { step: 3, label: "Confirm", icon: CheckCircle },
   ];
-
-  const rwandaLocations = [
-    "Kigali City",
-    "Eastern Province",
-    "Northern Province",
-    "Southern Province",
-    "Western Province",
-  ];
-
-  const [formData, setFormData] = useState<SupplierFormData>({
-    companyName: "",
-    industry: "",
-    registrationId: "",
-    location: "",
-    district: "",
-    sector: "",
-    cell: "",
-    village: "",
-    sectorAddress: "",
-    fullName: "",
-    email: "",
-    position: "",
-    contactNumber: "",
-    nationalId: "",
-    phoneNumber: "",
-    password: "",
-    confirmPassword: "",
-  });
-
-  const validateStep1 = (): boolean => {
-    const newErrors: Record<string, string> = {};
-
-    if (!formData.companyName.trim())
-      newErrors.companyName = "Company name is required";
-    if (!formData.industry) newErrors.industry = "Industry is required";
-    if (!formData.registrationId.trim())
-      newErrors.registrationId = "Registration ID/TIN is required";
-    if (!formData.location) newErrors.location = "Location is required";
-    if (!formData.district.trim()) newErrors.district = "District is required";
-    if (!formData.sector.trim()) newErrors.sector = "Sector is required";
-    if (!formData.cell.trim()) newErrors.cell = "Cell is required";
-    if (!formData.village.trim()) newErrors.village = "Village is required";
-    if (!formData.sectorAddress.trim())
-      newErrors.sectorAddress = "Address is required";
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const validateStep2 = (): boolean => {
-    const newErrors: Record<string, string> = {};
-
-    if (!formData.fullName.trim()) newErrors.fullName = "Full name is required";
-    if (!formData.email.trim()) newErrors.email = "Email is required";
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email))
-      newErrors.email = "Invalid email format";
-    if (!formData.position.trim()) newErrors.position = "Position is required";
-    if (!formData.contactNumber.trim())
-      newErrors.contactNumber = "Contact number is required";
-    if (!formData.nationalId.trim())
-      newErrors.nationalId = "National ID/Passport is required";
-    if (!formData.phoneNumber.trim())
-      newErrors.phoneNumber = "Phone number is required";
-    if (!formData.password) newErrors.password = "Password is required";
-    else if (formData.password.length < 8)
-      newErrors.password = "Password must be at least 8 characters";
-    if (formData.password !== formData.confirmPassword)
-      newErrors.confirmPassword = "Passwords do not match";
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleNext = () => {
-    if (validateStep1()) {
-      setCurrentStep(2);
-      setErrors({});
-    }
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (validateStep2()) {
-      console.log("Form submitted:", formData);
-      navigate("/admin/suppliers", { state: { success: true } });
-    }
-  };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-white border-b border-gray-100 sticky top-0 z-10">
-        <div className="max-w-full mx-auto px-6 py-4 flex items-center justify-between">
-          <button
-            onClick={() =>
-              currentStep === 1
-                ? navigate("/admin/suppliers")
-                : setCurrentStep(1)
-            }
-            className="flex items-center gap-2 text-primary hover:text-primary/80 font-medium transition-colors"
-          >
-            <ChevronLeft size={20} />
-            {currentStep === 1 ? "Back to Suppliers" : "Back"}
-          </button>
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900">
-              Add New Supplier
-            </h1>
-            <p className="text-gray-600 text-sm mt-1">
-              Step {currentStep} of 2:{" "}
-              {currentStep === 1
-                ? "Company Information"
-                : "Contact Person & Credentials"}
-            </p>
-          </div>
-          <div className="w-20"></div>
-        </div>
-
-        {/* Progress Bar */}
-        <div className="max-w-4xl mx-auto px-6 pb-4">
-          <div className="flex gap-2">
-            <div
-              className={`flex-1 h-2 rounded-full transition-colors ${
-                currentStep >= 1 ? "bg-primary" : "bg-gray-200"
-              }`}
-            ></div>
-            <div
-              className={`flex-1 h-2 rounded-full transition-colors ${
-                currentStep >= 2 ? "bg-primary" : "bg-gray-200"
-              }`}
-            ></div>
-          </div>
-        </div>
+    <div className="space-y-6 pb-20">
+      <div className="flex items-center justify-between">
+        <Button
+          variant="ghost"
+          onClick={() => navigate("/admin/suppliers")}
+          className="group flex items-center gap-2 text-foreground hover:bg-muted py-2 px-3 rounded-sm transition-colors font-heading font-bold uppercase text-xs tracking-wider shadow-none"
+        >
+          <ChevronLeft
+            size={16}
+            className="group-hover:-translate-x-1 transition-transform"
+          />
+          Back to Suppliers
+        </Button>
       </div>
 
-      {/* Content */}
-      <div className="max-w-full mx-auto px-6 py-8">
-        <form
-          onSubmit={handleSubmit}
-          className="bg-white rounded-xl shadow-sm p-8"
-        >
-          {/* Step 1: Company Information */}
-          {currentStep === 1 && (
-            <div className="space-y-6">
-              <div>
-                <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center gap-2">
-                  <Building className="text-primary" size={24} />
-                  Company Information
-                </h2>
-              </div>
+      <AdminPageHeader
+        title="New Provision"
+        subtitle="Onboard a new authorized partner entity"
+        badge="Entity Management"
+      />
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Company Name *
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.companyName}
-                    onChange={(e) =>
-                      setFormData({ ...formData, companyName: e.target.value })
-                    }
-                    placeholder="Enter company name"
-                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary ${
-                      errors.companyName ? "border-red-500" : "border-gray-300"
-                    }`}
-                  />
-                  {errors.companyName && (
-                    <p className="text-red-600 text-sm mt-1">
-                      {errors.companyName}
-                    </p>
-                  )}
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Industry *
-                  </label>
-                  <select
-                    value={formData.industry}
-                    onChange={(e) =>
-                      setFormData({ ...formData, industry: e.target.value })
-                    }
-                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary ${
-                      errors.industry ? "border-red-500" : "border-gray-300"
-                    }`}
-                  >
-                    <option value="">Select Industry</option>
-                    {industries.map((ind) => (
-                      <option key={ind} value={ind}>
-                        {ind}
-                      </option>
-                    ))}
-                  </select>
-                  {errors.industry && (
-                    <p className="text-red-600 text-sm mt-1">
-                      {errors.industry}
-                    </p>
-                  )}
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Registration ID / TIN *
-                </label>
-                <input
-                  type="text"
-                  value={formData.registrationId}
-                  onChange={(e) =>
-                    setFormData({ ...formData, registrationId: e.target.value })
-                  }
-                  placeholder="Enter registration ID or TIN"
-                  className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary ${
-                    errors.registrationId ? "border-red-500" : "border-gray-300"
-                  }`}
-                />
-                {errors.registrationId && (
-                  <p className="text-red-600 text-sm mt-1">
-                    {errors.registrationId}
-                  </p>
-                )}
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Province/Location *
-                  </label>
-                  <select
-                    value={formData.location}
-                    onChange={(e) =>
-                      setFormData({ ...formData, location: e.target.value })
-                    }
-                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary ${
-                      errors.location ? "border-red-500" : "border-gray-300"
-                    }`}
-                  >
-                    <option value="">Select Location</option>
-                    {rwandaLocations.map((loc) => (
-                      <option key={loc} value={loc}>
-                        {loc}
-                      </option>
-                    ))}
-                  </select>
-                  {errors.location && (
-                    <p className="text-red-600 text-sm mt-1">
-                      {errors.location}
-                    </p>
-                  )}
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    District *
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.district}
-                    onChange={(e) =>
-                      setFormData({ ...formData, district: e.target.value })
-                    }
-                    placeholder="Enter district"
-                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary ${
-                      errors.district ? "border-red-500" : "border-gray-300"
-                    }`}
-                  />
-                  {errors.district && (
-                    <p className="text-red-600 text-sm mt-1">
-                      {errors.district}
-                    </p>
-                  )}
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Sector *
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.sector}
-                    onChange={(e) =>
-                      setFormData({ ...formData, sector: e.target.value })
-                    }
-                    placeholder="Enter sector"
-                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary ${
-                      errors.sector ? "border-red-500" : "border-gray-300"
-                    }`}
-                  />
-                  {errors.sector && (
-                    <p className="text-red-600 text-sm mt-1">{errors.sector}</p>
-                  )}
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Cell *
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.cell}
-                    onChange={(e) =>
-                      setFormData({ ...formData, cell: e.target.value })
-                    }
-                    placeholder="Enter cell"
-                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary ${
-                      errors.cell ? "border-red-500" : "border-gray-300"
-                    }`}
-                  />
-                  {errors.cell && (
-                    <p className="text-red-600 text-sm mt-1">{errors.cell}</p>
-                  )}
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Village *
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.village}
-                    onChange={(e) =>
-                      setFormData({ ...formData, village: e.target.value })
-                    }
-                    placeholder="Enter village"
-                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary ${
-                      errors.village ? "border-red-500" : "border-gray-300"
-                    }`}
-                  />
-                  {errors.village && (
-                    <p className="text-red-600 text-sm mt-1">
-                      {errors.village}
-                    </p>
-                  )}
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Detailed Sector Address *
-                </label>
-                <textarea
-                  value={formData.sectorAddress}
-                  onChange={(e) =>
-                    setFormData({ ...formData, sectorAddress: e.target.value })
-                  }
-                  placeholder="Enter detailed address"
-                  rows={4}
-                  className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary ${
-                    errors.sectorAddress ? "border-red-500" : "border-gray-300"
-                  }`}
-                />
-                {errors.sectorAddress && (
-                  <p className="text-red-600 text-sm mt-1">
-                    {errors.sectorAddress}
-                  </p>
-                )}
-              </div>
-            </div>
-          )}
-
-          {/* Step 2: Contact Person & Credentials */}
-          {currentStep === 2 && (
-            <div className="space-y-6">
-              <div>
-                <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center gap-2">
-                  <User className="text-primary" size={24} />
-                  Contact Person & Credentials
-                </h2>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Full Name *
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.fullName}
-                    onChange={(e) =>
-                      setFormData({ ...formData, fullName: e.target.value })
-                    }
-                    placeholder="Enter full name"
-                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary ${
-                      errors.fullName ? "border-red-500" : "border-gray-300"
-                    }`}
-                  />
-                  {errors.fullName && (
-                    <p className="text-red-600 text-sm mt-1">
-                      {errors.fullName}
-                    </p>
-                  )}
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Position/Title *
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.position}
-                    onChange={(e) =>
-                      setFormData({ ...formData, position: e.target.value })
-                    }
-                    placeholder="e.g., Manager, Director"
-                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary ${
-                      errors.position ? "border-red-500" : "border-gray-300"
-                    }`}
-                  />
-                  {errors.position && (
-                    <p className="text-red-600 text-sm mt-1">
-                      {errors.position}
-                    </p>
-                  )}
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Email Address *
-                  </label>
-                  <input
-                    type="email"
-                    value={formData.email}
-                    onChange={(e) =>
-                      setFormData({ ...formData, email: e.target.value })
-                    }
-                    placeholder="Enter email"
-                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary ${
-                      errors.email ? "border-red-500" : "border-gray-300"
-                    }`}
-                  />
-                  {errors.email && (
-                    <p className="text-red-600 text-sm mt-1">{errors.email}</p>
-                  )}
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Contact Number *
-                  </label>
-                  <input
-                    type="tel"
-                    value={formData.contactNumber}
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        contactNumber: e.target.value,
-                      })
-                    }
-                    placeholder="Enter contact number"
-                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary ${
-                      errors.contactNumber
-                        ? "border-red-500"
-                        : "border-gray-300"
-                    }`}
-                  />
-                  {errors.contactNumber && (
-                    <p className="text-red-600 text-sm mt-1">
-                      {errors.contactNumber}
-                    </p>
-                  )}
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    National ID / Passport *
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.nationalId}
-                    onChange={(e) =>
-                      setFormData({ ...formData, nationalId: e.target.value })
-                    }
-                    placeholder="Enter national ID or passport"
-                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary ${
-                      errors.nationalId ? "border-red-500" : "border-gray-300"
-                    }`}
-                  />
-                  {errors.nationalId && (
-                    <p className="text-red-600 text-sm mt-1">
-                      {errors.nationalId}
-                    </p>
-                  )}
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Phone Number *
-                  </label>
-                  <input
-                    type="tel"
-                    value={formData.phoneNumber}
-                    onChange={(e) =>
-                      setFormData({ ...formData, phoneNumber: e.target.value })
-                    }
-                    placeholder="Enter phone number"
-                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary ${
-                      errors.phoneNumber ? "border-red-500" : "border-gray-300"
-                    }`}
-                  />
-                  {errors.phoneNumber && (
-                    <p className="text-red-600 text-sm mt-1">
-                      {errors.phoneNumber}
-                    </p>
-                  )}
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Password *
-                  </label>
-                  <input
-                    type="password"
-                    value={formData.password}
-                    onChange={(e) =>
-                      setFormData({ ...formData, password: e.target.value })
-                    }
-                    placeholder="Enter password (min 8 characters)"
-                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary ${
-                      errors.password ? "border-red-500" : "border-gray-300"
-                    }`}
-                  />
-                  {errors.password && (
-                    <p className="text-red-600 text-sm mt-1">
-                      {errors.password}
-                    </p>
-                  )}
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Confirm Password *
-                  </label>
-                  <input
-                    type="password"
-                    value={formData.confirmPassword}
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        confirmPassword: e.target.value,
-                      })
-                    }
-                    placeholder="Confirm password"
-                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary ${
-                      errors.confirmPassword
-                        ? "border-red-500"
-                        : "border-gray-300"
-                    }`}
-                  />
-                  {errors.confirmPassword && (
-                    <p className="text-red-600 text-sm mt-1">
-                      {errors.confirmPassword}
-                    </p>
-                  )}
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Action Buttons */}
-          <div className="flex gap-4 pt-8 border-t border-gray-200">
-            <button
-              type="button"
-              onClick={() => {
-                if (currentStep === 2) {
-                  setCurrentStep(1);
-                  setErrors({});
-                } else {
-                  navigate("/admin/suppliers");
-                }
-              }}
-              className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-all"
+      {/* Progress Steps moved to Page */}
+      <AdminCard noPadding>
+        <div className="flex justify-between items-center max-w-3xl mx-auto px-8 py-6">
+          {steps.map((item, index) => (
+            <div
+              key={item.step}
+              className="flex flex-col items-center relative z-10 w-1/3"
             >
-              {currentStep === 1 ? "Cancel" : "Back"}
-            </button>
-            {currentStep === 1 && (
-              <button
-                type="button"
-                onClick={handleNext}
-                className="flex-1 px-6 py-3 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary text-white font-medium rounded-lg transition-all flex items-center justify-center gap-2"
+              <div className="relative flex items-center justify-center">
+                <div
+                  className={`w-12 h-12 rounded-sm flex items-center justify-center border-2 transition-all duration-500 z-10 shadow-lg ${
+                    currentStep >= item.step
+                      ? "bg-primary border-primary text-primary-foreground scale-110 shadow-primary/20"
+                      : "bg-background border-border text-muted-foreground shadow-none"
+                  }`}
+                >
+                  <item.icon size={20} />
+                </div>
+                {index < 2 && (
+                  <div
+                    className={`absolute left-1/2 top-1/2 w-full h-[2px] -z-10 -translate-y-1/2 translate-x-6 border-t-2 border-dashed ${
+                      currentStep > item.step
+                        ? "border-primary"
+                        : "border-border"
+                    }`}
+                    style={{ width: "calc(300% - 3rem)" }}
+                  />
+                )}
+              </div>
+
+              <span
+                className={`text-[10px] font-heading font-bold uppercase tracking-widest mt-4 transition-colors duration-500 ${
+                  currentStep >= item.step
+                    ? "text-primary"
+                    : "text-muted-foreground"
+                }`}
               >
-                Next
-              </button>
-            )}
-            {currentStep === 2 && (
-              <button
-                type="submit"
-                className="flex-1 px-6 py-3 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary text-white font-medium rounded-lg transition-all flex items-center justify-center gap-2"
-              >
-                <CheckCircle size={20} />
-                Create Supplier
-              </button>
-            )}
-          </div>
-        </form>
+                {item.label}
+              </span>
+            </div>
+          ))}
+        </div>
+      </AdminCard>
+
+      <div className="max-w-3xl mx-auto w-full">
+        <SupplierProvisionForm
+          currentStep={currentStep}
+          onStepChange={setCurrentStep}
+          onSubmit={handleSubmit}
+          onCancel={() => navigate("/admin/suppliers")}
+        />
       </div>
     </div>
   );

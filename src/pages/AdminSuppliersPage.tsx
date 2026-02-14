@@ -1,7 +1,6 @@
-import { useState } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-  Search,
   Plus,
   Edit,
   Trash2,
@@ -9,8 +8,23 @@ import {
   CheckCircle,
   AlertCircle,
   Pause,
+  MoreHorizontal,
 } from "lucide-react";
-import ConfirmationModal from "@/components/ConfirmationModal";
+import { ConfirmationModal } from "@/components/common/ConfirmationModal";
+import { AdminPageHeader, AdminCard } from "@/components/admin";
+import { Button } from "@/components/ui/Button";
+import { DataTable } from "@/components/ui/DataTable";
+import { DataTableColumnHeader } from "@/components/ui/DataTableColumnHeader";
+import type { ColumnDef } from "@tanstack/react-table";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/DropdownMenu";
+import { Badge } from "@/components/ui/Badge";
 
 interface Supplier {
   id: string;
@@ -24,10 +38,6 @@ interface Supplier {
 }
 
 export default function AdminSuppliersPage() {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [statusFilter, setStatusFilter] = useState<
-    "all" | "active" | "pending" | "inactive"
-  >("all");
   const [deleteModal, setDeleteModal] = useState({
     isOpen: false,
     supplierId: "",
@@ -40,257 +50,248 @@ export default function AdminSuppliersPage() {
   });
   const navigate = useNavigate();
 
-  const suppliers: Supplier[] = [
-    {
-      id: "1",
-      name: "TechHub Limited",
-      email: "contact@techhub.com",
-      location: "Lagos, Nigeria",
-      status: "pending",
-      verificationStatus: "unverified",
-      joinDate: "2024-01-15",
-      productCount: 0,
-    },
-    {
-      id: "2",
-      name: "Global Exports Ltd",
-      email: "info@globalexports.com",
-      location: "Cairo, Egypt",
-      status: "active",
-      verificationStatus: "verified",
-      joinDate: "2023-08-20",
-      productCount: 45,
-    },
-    {
-      id: "3",
-      name: "African Traders Co",
-      email: "support@africantrade.com",
-      location: "Nairobi, Kenya",
-      status: "active",
-      verificationStatus: "verified",
-      joinDate: "2023-11-10",
-      productCount: 32,
-    },
-  ];
+  const suppliers: Supplier[] = useMemo(
+    () => [
+      {
+        id: "1",
+        name: "TechHub Limited",
+        email: "contact@techhub.com",
+        location: "Lagos, Nigeria",
+        status: "pending",
+        verificationStatus: "unverified",
+        joinDate: "2024-01-15",
+        productCount: 0,
+      },
+      {
+        id: "2",
+        name: "Global Exports Ltd",
+        email: "info@globalexports.com",
+        location: "Cairo, Egypt",
+        status: "active",
+        verificationStatus: "verified",
+        joinDate: "2023-08-20",
+        productCount: 45,
+      },
+      {
+        id: "3",
+        name: "African Traders Co",
+        email: "support@africantrade.com",
+        location: "Nairobi, Kenya",
+        status: "active",
+        verificationStatus: "verified",
+        joinDate: "2023-11-10",
+        productCount: 32,
+      },
+    ],
+    [],
+  );
 
-  const handleViewDetails = (supplierId: string) => {
-    navigate(`/admin/suppliers/${supplierId}`);
-  };
+  const handleViewDetails = useCallback(
+    (supplierId: string) => {
+      navigate(`/admin/suppliers/${supplierId}`);
+    },
+    [navigate],
+  );
 
-  const handleEditSupplier = (supplierId: string) => {
-    navigate(`/admin/suppliers/${supplierId}/edit`);
-  };
+  const handleEditSupplier = useCallback(
+    (supplierId: string) => {
+      navigate(`/admin/suppliers/${supplierId}/edit`);
+    },
+    [navigate],
+  );
 
-  const handleDeleteClick = (supplier: Supplier) => {
+  const handleDeleteClick = useCallback((supplier: Supplier) => {
     setDeleteModal({
       isOpen: true,
       supplierId: supplier.id,
       supplierName: supplier.name,
     });
-  };
+  }, []);
 
-  const handleConfirmDelete = () => {
+  const handleConfirmDelete = useCallback(() => {
     console.log("Deleting supplier:", deleteModal.supplierId);
     setDeleteModal({ isOpen: false, supplierId: "", supplierName: "" });
-    // Here you would call your API to delete the supplier
-  };
+  }, [deleteModal.supplierId]);
 
-  const handleSuspendClick = (supplier: Supplier) => {
+  const handleSuspendClick = useCallback((supplier: Supplier) => {
     setSuspendModal({
       isOpen: true,
       supplierId: supplier.id,
       supplierName: supplier.name,
     });
-  };
+  }, []);
 
-  const handleConfirmSuspend = () => {
+  const handleConfirmSuspend = useCallback(() => {
     console.log("Suspending supplier:", suspendModal.supplierId);
     setSuspendModal({ isOpen: false, supplierId: "", supplierName: "" });
-    // Here you would call your API to suspend the supplier
-  };
+  }, [suspendModal.supplierId]);
 
-  const filteredSuppliers = suppliers.filter((supplier) => {
-    const matchesSearch =
-      supplier.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      supplier.email.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus =
-      statusFilter === "all" || supplier.status === statusFilter;
-    return matchesSearch && matchesStatus;
-  });
+  const columns: ColumnDef<Supplier>[] = useMemo(
+    () => [
+      {
+        accessorKey: "name",
+        header: ({ column }) => (
+          <DataTableColumnHeader column={column} title="Supplier" />
+        ),
+        cell: ({ row }) => {
+          const supplier = row.original;
+          return (
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-primary rounded-sm flex items-center justify-center text-primary-foreground font-heading font-bold text-sm border border-primary/20">
+                {supplier.name.charAt(0)}
+              </div>
+              <div>
+                <p className="font-heading font-bold text-sm text-foreground">
+                  {supplier.name}
+                </p>
+                <div className="flex items-center gap-1 mt-0.5">
+                  {supplier.verificationStatus === "verified" ? (
+                    <>
+                      <CheckCircle size={12} className="text-success" />
+                      <span className="text-[10px] font-heading font-bold text-success uppercase tracking-wider">
+                        Verified
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      <AlertCircle size={12} className="text-warning" />
+                      <span className="text-[10px] font-heading font-bold text-warning uppercase tracking-wider">
+                        Unverified
+                      </span>
+                    </>
+                  )}
+                </div>
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        accessorKey: "email",
+        header: ({ column }) => (
+          <DataTableColumnHeader column={column} title="Email" />
+        ),
+      },
+      {
+        accessorKey: "location",
+        header: ({ column }) => (
+          <DataTableColumnHeader column={column} title="Location" />
+        ),
+      },
+      {
+        accessorKey: "status",
+        header: ({ column }) => (
+          <DataTableColumnHeader column={column} title="Status" />
+        ),
+        cell: ({ row }) => {
+          const status = row.getValue("status") as string;
+          return (
+            <Badge
+              variant={
+                status === "active"
+                  ? "success"
+                  : status === "pending"
+                    ? "warning"
+                    : "destructive"
+              }
+              className="uppercase tracking-wider text-[10px]"
+            >
+              {status}
+            </Badge>
+          );
+        },
+      },
+      {
+        accessorKey: "productCount",
+        header: ({ column }) => (
+          <DataTableColumnHeader column={column} title="Products" />
+        ),
+      },
+      {
+        accessorKey: "joinDate",
+        header: ({ column }) => (
+          <DataTableColumnHeader column={column} title="Join Date" />
+        ),
+        cell: ({ row }) => (
+          <span className="font-mono text-xs">{row.getValue("joinDate")}</span>
+        ),
+      },
+      {
+        id: "actions",
+        cell: ({ row }) => {
+          const supplier = row.original;
+
+          return (
+            <DropdownMenu>
+              <DropdownMenuTrigger
+                render={
+                  <Button variant="ghost" className="h-8 w-8 p-0">
+                    <span className="sr-only">Open menu</span>
+                    <MoreHorizontal className="h-4 w-4" />
+                  </Button>
+                }
+              />
+              <DropdownMenuContent align="end">
+                <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                <DropdownMenuItem
+                  onClick={() => handleViewDetails(supplier.id)}
+                >
+                  <Eye className="mr-2 h-4 w-4" /> View details
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => handleEditSupplier(supplier.id)}
+                >
+                  <Edit className="mr-2 h-4 w-4" /> Edit supplier
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => handleSuspendClick(supplier)}>
+                  <Pause className="mr-2 h-4 w-4" /> Suspend supplier
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className="text-destructive"
+                  onClick={() => handleDeleteClick(supplier)}
+                >
+                  <Trash2 className="mr-2 h-4 w-4" /> Delete supplier
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          );
+        },
+      },
+    ],
+    [
+      handleEditSupplier,
+      handleViewDetails,
+      handleDeleteClick,
+      handleSuspendClick,
+    ],
+  );
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">
-            Suppliers Management
-          </h1>
-          <p className="text-gray-600 text-sm mt-1">
-            Manage all platform suppliers
-          </p>
-        </div>
-        <button
-          onClick={() => navigate("/admin/suppliers/new")}
-          className="flex items-center gap-2 bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary text-white px-4 py-2 rounded-lg transition-all"
-        >
-          <Plus size={20} />
-          Add Supplier
-        </button>
-      </div>
+    <div className="space-y-6 pb-12">
+      <AdminPageHeader
+        title="Suppliers"
+        subtitle="Manage all platform suppliers"
+        actions={
+          <Button
+            onClick={() => navigate("/admin/suppliers/new")}
+            className="rounded-sm h-11 px-6 font-heading font-bold uppercase text-sm tracking-wider shadow-none"
+          >
+            <Plus size={18} className="mr-2" />
+            Add Supplier
+          </Button>
+        }
+      />
 
-      {/* Filters */}
-      <div className="bg-white rounded-lg shadow p-4 flex flex-col md:flex-row gap-4">
-        <div className="flex-1 relative">
-          <Search className="absolute left-3 top-3 text-gray-400" size={20} />
-          <input
-            type="text"
-            placeholder="Search by name or email..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-          />
-        </div>
-        <select
-          value={statusFilter}
-          onChange={(e) => setStatusFilter(e.target.value as any)}
-          className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-        >
-          <option value="all">All Status</option>
-          <option value="active">Active</option>
-          <option value="pending">Pending</option>
-          <option value="inactive">Inactive</option>
-        </select>
-      </div>
+      <AdminCard noPadding className="p-4">
+        <DataTable
+          columns={columns}
+          data={suppliers}
+          filterColumn="name"
+          filterPlaceholder="SEARCH BY NAME..."
+        />
+      </AdminCard>
 
-      {/* Suppliers Table */}
-      <div className="bg-white rounded-lg shadow overflow-x-auto">
-        <table className="w-full">
-          <thead>
-            <tr className="border-b border-gray-200 bg-gray-50">
-              <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">
-                Supplier
-              </th>
-              <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">
-                Email
-              </th>
-              <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">
-                Location
-              </th>
-              <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">
-                Status
-              </th>
-              <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">
-                Products
-              </th>
-              <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">
-                Join Date
-              </th>
-              <th className="px-6 py-4 text-center text-sm font-semibold text-gray-900">
-                Actions
-              </th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-200">
-            {filteredSuppliers.map((supplier) => (
-              <tr key={supplier.id} className="hover:bg-gray-50 transition-all">
-                <td className="px-6 py-4">
-                  <div className="flex items-center gap-2">
-                    <div className="w-10 h-10 bg-gradient-to-br from-primary to-primary/80 rounded-full flex items-center justify-center text-white font-bold">
-                      {supplier.name.charAt(0)}
-                    </div>
-                    <div>
-                      <p className="font-medium text-gray-900">
-                        {supplier.name}
-                      </p>
-                      <div className="flex items-center gap-1 mt-1">
-                        {supplier.verificationStatus === "verified" ? (
-                          <>
-                            <CheckCircle size={14} className="text-green-600" />
-                            <span className="text-xs text-green-600">
-                              Verified
-                            </span>
-                          </>
-                        ) : (
-                          <>
-                            <AlertCircle
-                              size={14}
-                              className="text-yellow-600"
-                            />
-                            <span className="text-xs text-yellow-600">
-                              Unverified
-                            </span>
-                          </>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </td>
-                <td className="px-6 py-4 text-sm text-gray-600">
-                  {supplier.email}
-                </td>
-                <td className="px-6 py-4 text-sm text-gray-600">
-                  {supplier.location}
-                </td>
-                <td className="px-6 py-4">
-                  <span
-                    className={`text-xs font-semibold px-3 py-1 rounded-full ${
-                      supplier.status === "active"
-                        ? "bg-green-100 text-green-800"
-                        : supplier.status === "pending"
-                          ? "bg-yellow-100 text-yellow-800"
-                          : "bg-red-100 text-red-800"
-                    }`}
-                  >
-                    {supplier.status.charAt(0).toUpperCase() +
-                      supplier.status.slice(1)}
-                  </span>
-                </td>
-                <td className="px-6 py-4 text-sm text-gray-900 font-medium">
-                  {supplier.productCount}
-                </td>
-                <td className="px-6 py-4 text-sm text-gray-600">
-                  {supplier.joinDate}
-                </td>
-                <td className="px-6 py-4">
-                  <div className="flex items-center justify-center gap-2">
-                    <button
-                      onClick={() => handleViewDetails(supplier.id)}
-                      className="p-2 hover:bg-primary/10 rounded-lg transition-all text-primary tooltip"
-                      title="View Details"
-                    >
-                      <Eye size={16} />
-                    </button>
-                    <button
-                      onClick={() => handleEditSupplier(supplier.id)}
-                      className="p-2 hover:bg-blue-100 rounded-lg transition-all text-blue-600 tooltip"
-                      title="Edit Supplier"
-                    >
-                      <Edit size={16} />
-                    </button>
-                    <button
-                      onClick={() => handleSuspendClick(supplier)}
-                      className="p-2 hover:bg-yellow-100 rounded-lg transition-all text-yellow-600 tooltip"
-                      title="Suspend Supplier"
-                    >
-                      <Pause size={16} />
-                    </button>
-                    <button
-                      onClick={() => handleDeleteClick(supplier)}
-                      className="p-2 hover:bg-red-100 rounded-lg transition-all text-red-600 tooltip"
-                      title="Delete Supplier"
-                    >
-                      <Trash2 size={16} />
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      {/* Delete Confirmation Modal */}
       <ConfirmationModal
         isOpen={deleteModal.isOpen}
         title="Delete Supplier"
@@ -304,7 +305,6 @@ export default function AdminSuppliersPage() {
         }
       />
 
-      {/* Suspend Confirmation Modal */}
       <ConfirmationModal
         isOpen={suspendModal.isOpen}
         title="Suspend Supplier"

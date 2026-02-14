@@ -99,3 +99,45 @@ export interface Agreement {
     completedAt?: string;
   };
 }
+
+export interface Order {
+  id: string;
+  productId: string;
+  buyerName: string;
+  buyerEmail: string;
+  quantity: number;
+  totalPrice: number;
+  status: string;
+  shippingStatus: string;
+  orderDate: string;
+}
+
+export interface Inquiry {
+  id: string;
+  productId: string;
+  buyerName: string;
+  buyerEmail: string;
+  status: string;
+  message: string;
+  quantity: number;
+  createdAt: string;
+}
+
+export interface Service {
+  id: number;
+  name: string;
+  description: string;
+  icon: any;
+  image: string;
+  price: string;
+  totalRequests: number;
+  pendingRequests: number;
+  provider: {
+    fullName: string;
+    role: string;
+    rating: number;
+    experience: string;
+    phone: string;
+    email: string;
+  };
+}

@@ -26,11 +26,11 @@ import AdminProductsPage from "@/pages/AdminProductsPage";
 import AdminAssignmentsPage from "@/pages/AdminAssignmentsPage";
 import AdminCustomersPage from "@/pages/AdminCustomersPage";
 import AdminProfileSettingsPage from "@/pages/AdminProfileSettingsPage";
-import MainLayout from "@/layouts/MainLayout";
-import AuthLayout from "@/layouts/AuthLayout";
-import AdminLayout from "@/layouts/AdminLayout";
-import ProtectedRoute from "@/components/ProtectedRoute";
-import AdminRoute from "@/components/AdminRoute";
+import { MainLayout } from "@/components/layout/MainLayout";
+import { AuthLayout } from "@/components/layout/AuthLayout";
+import { AdminLayout } from "@/components/layout/AdminLayout";
+import ProtectedRoute from "@/components/routing/ProtectedRoute";
+import AdminRoute from "@/components/routing/AdminRoute";
 
 export const router = createBrowserRouter([
   {
@@ -73,7 +73,6 @@ export const router = createBrowserRouter([
         path: "messages",
         element: <BuyerMessagesPage />,
       },
-      // protected public routes
       {
         element: <ProtectedRoute />,
         children: [
@@ -99,7 +98,6 @@ export const router = createBrowserRouter([
       },
     ],
   },
-  // protected supplier dashboard
   {
     element: <ProtectedRoute />,
     children: [
@@ -109,7 +107,6 @@ export const router = createBrowserRouter([
       },
     ],
   },
-  // admin routes
   {
     element: <AdminRoute />,
     children: [

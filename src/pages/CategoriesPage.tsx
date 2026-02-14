@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import CategoriesPage from '@/components/CategoriesPage';
+import CategoriesPage from '@/components/marketplace/CategoriesPage';
 
 const CategoriesPageWrapper = () => {
   const navigate = useNavigate();

@@ -1,7 +1,9 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { ChevronLeft, Save } from "lucide-react";
+import { ChevronLeft, Save, Package, DollarSign } from "lucide-react";
 import { useState } from "react";
 import { products, suppliers } from "@/data/mockData";
+import { AdminPageHeader, AdminCard } from "@/components/admin";
+import { Button } from "@/components/ui/Button";
 
 export default function AdminEditProductPage() {
   const { supplierId, productId } = useParams();
@@ -22,10 +24,9 @@ export default function AdminEditProductPage() {
     availability: product?.availability || "in-stock",
   });
 
-  const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
 
-  const handleInputChange = (e: any) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
@@ -35,249 +36,179 @@ export default function AdminEditProductPage() {
 
   const handleSave = async () => {
     setLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    alert("Product updated successfully!");
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    alert("SKU updated successfully!");
     setLoading(false);
     navigate(`/admin/suppliers/${supplierId}/product/${productId}`);
   };
 
   if (!product || !supplier) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900">
-            Product Not Found
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <AdminCard className="text-center p-8 max-w-sm">
+          <h1 className="text-xl font-heading font-bold text-foreground mb-4 uppercase tracking-widest">
+            SKU Not Found
           </h1>
-          <button
+          <Button
             onClick={() => navigate(`/admin/suppliers/${supplierId}`)}
-            className="mt-6 px-6 py-2 bg-primary text-primary-foreground rounded-lg"
+            className="w-full rounded-sm h-11 font-heading font-bold uppercase text-xs tracking-wider"
           >
-            Back to Supplier
-          </button>
-        </div>
+            Return to Provider
+          </Button>
+        </AdminCard>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="space-y-6 pb-20">
       {/* Header */}
-      <div className="bg-white border-b border-gray-100 sticky top-0 z-40">
-        <div className="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <button
-              onClick={() =>
-                navigate(`/admin/suppliers/${supplierId}/product/${productId}`)
-              }
-              className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-            >
-              <ChevronLeft size={20} className="text-gray-600" />
-            </button>
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900">Edit Product</h1>
-              <p className="text-sm text-gray-600">Updating: {product.name}</p>
-            </div>
-          </div>
-        </div>
+      <div className="flex items-center justify-between">
+        <Button
+          variant="ghost"
+          onClick={() => navigate(`/admin/suppliers/${supplierId}/product/${productId}`)}
+          className="group flex items-center gap-2 text-foreground hover:bg-muted py-2 px-3 rounded-sm transition-colors font-heading font-bold uppercase text-xs tracking-wider"
+        >
+          <ChevronLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
+          Cancel Modification
+        </Button>
       </div>
 
-      <div className="max-w-4xl mx-auto px-6 py-8">
-        {/* Progress Bar */}
-        <div className="mb-8">
-          <div className="flex gap-2">
-            {[1, 2].map((s) => (
-              <div key={s} className="flex items-center">
-                <button
-                  onClick={() => setStep(s)}
-                  className={`px-6 py-3 rounded-lg font-medium transition-all ${
-                    step === s
-                      ? "bg-primary text-primary-foreground shadow-lg"
-                      : "bg-white text-gray-600 border border-gray-200 hover:border-primary/50"
-                  }`}
-                >
-                  Step {s}
-                </button>
-                {s < 2 && <div className="w-8 h-0.5 bg-gray-200 mx-2"></div>}
-              </div>
-            ))}
-          </div>
-        </div>
+      <AdminPageHeader
+        title="Modify Inventory"
+        subtitle={`Updating SKU: ${product.id}`}
+        badge="SKU Management"
+      />
 
-        <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-8">
-          {/* Step 1: Basic Information */}
-          {step === 1 && (
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* Main Info */}
+        <div className="lg:col-span-2 space-y-8">
+          <AdminCard title="Identity Parameters" subtitle="Override primary SKU data" headerActions={<Package size={16} className="text-primary" />}>
             <div className="space-y-6">
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Product Name *
+              <div className="space-y-2">
+                <label className="block text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground ml-1">
+                  Product Descriptor
                 </label>
                 <input
                   type="text"
                   name="name"
                   value={formData.name}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-primary transition-colors"
+                  className="w-full px-4 py-3 border-2 border-border rounded-sm focus:outline-none focus:ring-1 focus:ring-primary h-12 text-sm bg-background font-bold uppercase tracking-wider"
+                  placeholder="SKU NAME..."
                 />
               </div>
-
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Description *
+              <div className="space-y-2">
+                <label className="block text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground ml-1">
+                  Technical Description
                 </label>
                 <textarea
                   name="description"
                   value={formData.description}
                   onChange={handleInputChange}
-                  rows={5}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-primary transition-colors"
+                  rows={4}
+                  className="w-full px-4 py-3 border-2 border-border rounded-sm focus:outline-none focus:ring-1 focus:ring-primary text-sm resize-none bg-background font-medium uppercase tracking-wider leading-relaxed"
+                  placeholder="SKU PARAMETERS..."
                 />
               </div>
-
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Category *
+                <div className="space-y-2">
+                  <label className="block text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground ml-1">
+                    Primary Stream
                   </label>
-                  <select
+                  <input
+                    type="text"
                     name="category"
                     value={formData.category}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-primary transition-colors"
-                  >
-                    <option>Electronics</option>
-                    <option>Fashion & Textiles</option>
-                    <option>Home & Garden</option>
-                    <option>Beauty & Health</option>
-                  </select>
+                    className="w-full px-4 py-3 border-2 border-border rounded-sm focus:outline-none focus:ring-1 focus:ring-primary h-12 text-sm bg-background font-bold uppercase tracking-wider"
+                  />
                 </div>
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Subcategory *
+                <div className="space-y-2">
+                  <label className="block text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground ml-1">
+                    Sub-Classification
                   </label>
                   <input
                     type="text"
                     name="subcategory"
                     value={formData.subcategory}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-primary transition-colors"
+                    className="w-full px-4 py-3 border-2 border-border rounded-sm focus:outline-none focus:ring-1 focus:ring-primary h-12 text-sm bg-background font-bold uppercase tracking-wider"
                   />
                 </div>
               </div>
-
-              <div className="flex gap-4 pt-6 border-t border-gray-200">
-                <button
-                  onClick={() =>
-                    navigate(
-                      `/admin/suppliers/${supplierId}/product/${productId}`,
-                    )
-                  }
-                  className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={() => setStep(2)}
-                  className="flex-1 px-6 py-3 bg-primary text-primary-foreground font-medium rounded-lg hover:bg-primary/90 transition-colors"
-                >
-                  Next
-                </button>
-              </div>
             </div>
-          )}
+          </AdminCard>
+        </div>
 
-          {/* Step 2: Pricing & Availability */}
-          {step === 2 && (
+        {/* Sidebar */}
+        <div className="space-y-8">
+          <AdminCard title="Financial Controls" subtitle="Margin & Flow parameters" headerActions={<DollarSign size={16} className="text-primary" />}>
             <div className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Minimum Price (USD) *
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <label className="block text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground ml-1">
+                    Floor Price
                   </label>
                   <input
                     type="number"
                     name="minPrice"
                     value={formData.minPrice}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-primary transition-colors"
+                    className="w-full px-4 py-3 border-2 border-border rounded-sm focus:outline-none focus:ring-1 focus:ring-primary h-12 text-sm bg-background font-mono font-bold"
                   />
                 </div>
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Maximum Price (USD) *
+                <div className="space-y-2">
+                  <label className="block text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground ml-1">
+                    Ceiling Price
                   </label>
                   <input
                     type="number"
                     name="maxPrice"
                     value={formData.maxPrice}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-primary transition-colors"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Minimum Order *
-                  </label>
-                  <input
-                    type="number"
-                    name="minimumOrder"
-                    value={formData.minimumOrder}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-primary transition-colors"
+                    className="w-full px-4 py-3 border-2 border-border rounded-sm focus:outline-none focus:ring-1 focus:ring-primary h-12 text-sm bg-background font-mono font-bold"
                   />
                 </div>
               </div>
-
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Availability *
+              <div className="space-y-2">
+                <label className="block text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground ml-1">
+                  Volume Threshold (Min)
+                </label>
+                <input
+                  type="number"
+                  name="minimumOrder"
+                  value={formData.minimumOrder}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-3 border-2 border-border rounded-sm focus:outline-none focus:ring-1 focus:ring-primary h-12 text-sm bg-background font-bold"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="block text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground ml-1">
+                  Provision Status
                 </label>
                 <select
                   name="availability"
                   value={formData.availability}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-primary transition-colors"
+                  className="w-full px-4 py-3 border-2 border-border rounded-sm focus:outline-none focus:ring-1 focus:ring-primary h-12 text-sm bg-background font-heading font-bold uppercase tracking-widest"
                 >
                   <option value="in-stock">In Stock</option>
-                  <option value="pre-order">Pre-Order</option>
+                  <option value="low-stock">Low Stock</option>
                   <option value="out-of-stock">Out of Stock</option>
                 </select>
               </div>
-
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                <p className="text-sm text-blue-800">
-                  <strong>Note:</strong> Image and specification updates will be
-                  available in the next version.
-                </p>
-              </div>
-
-              <div className="flex gap-4 pt-6 border-t border-gray-200">
-                <button
-                  onClick={() => setStep(1)}
-                  className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors"
-                >
-                  Previous
-                </button>
-                <button
-                  onClick={() =>
-                    navigate(
-                      `/admin/suppliers/${supplierId}/product/${productId}`,
-                    )
-                  }
-                  className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={handleSave}
-                  disabled={loading}
-                  className="flex-1 px-6 py-3 bg-primary hover:bg-primary/90 disabled:bg-primary/50 text-white font-medium rounded-lg transition-colors flex items-center justify-center gap-2"
-                >
-                  <Save size={18} />
-                  {loading ? "Saving..." : "Save Changes"}
-                </button>
-              </div>
             </div>
-          )}
+          </AdminCard>
+
+          <Button
+            onClick={handleSave}
+            disabled={loading}
+            className="w-full h-14 rounded-sm shadow-xl shadow-primary/20 font-heading font-bold uppercase text-xs tracking-widest"
+          >
+            {loading ? "Synchronizing..." : "Synchronize SKU"}
+            {!loading && <Save size={18} className="ml-2" />}
+          </Button>
         </div>
       </div>
     </div>
