@@ -324,7 +324,7 @@ const AboutPage: React.FC = () => {
         </section>
 
         {/* team */}
-        <section className="py-24 bg-muted/20 border-2 border-border rounded-sm">
+        <section className="py-24 bg-muted/10 border border-border rounded-sm">
           <div className="px-4">
             <div className="text-center mb-16">
               <h2 className="text-4xl font-heading font-bold uppercase text-foreground mb-4">
@@ -337,9 +337,9 @@ const AboutPage: React.FC = () => {
               {team.map((member, index) => (
                 <div
                   key={index}
-                  className="group bg-background border-2 border-border hover:border-primary transition-all duration-300 p-4 rounded-sm"
+                  className="group bg-background border border-border hover:border-primary transition-all duration-300 p-4 rounded-sm"
                 >
-                  <div className="relative mb-6 overflow-hidden aspect-square border-b-2 border-border group-hover:border-primary transition-colors">
+                  <div className="relative mb-6 overflow-hidden aspect-square border-b border-border group-hover:border-primary transition-colors">
                     <img
                       src={member.image}
                       alt={member.name}
@@ -367,7 +367,7 @@ const AboutPage: React.FC = () => {
         </section>
 
         {/* timeline */}
-        <section className="py-24 bg-background border-2 border-border rounded-sm">
+        <section className="py-24 bg-background border border-border rounded-sm">
           <div className="px-4">
             <div className="text-center mb-16">
               <h2 className="text-4xl font-heading font-bold uppercase text-foreground mb-4">
@@ -377,7 +377,7 @@ const AboutPage: React.FC = () => {
             </div>
 
             <div className="relative">
-              <div className="absolute left-1/2 transform -translate-x-1/2 w-0.5 h-full bg-border"></div>
+              <div className="absolute left-1/2 transform -translate-x-1/2 w-px h-full bg-border"></div>
               <div className="space-y-12">
                 {milestones.map((milestone, index) => (
                   <div
@@ -405,7 +405,7 @@ const AboutPage: React.FC = () => {
                         </p>
                       </div>
                     </div>
-                    <div className="relative z-10 flex items-center justify-center w-4 h-4 bg-background border-2 border-primary rounded-full">
+                    <div className="relative z-10 flex items-center justify-center w-4 h-4 bg-background border border-primary rounded-full">
                       <div className="w-1.5 h-1.5 bg-primary rounded-full"></div>
                     </div>
                     <div className="w-1/2"></div>
@@ -417,7 +417,7 @@ const AboutPage: React.FC = () => {
         </section>
 
         {/* how it works */}
-        <section className="py-24 bg-background border-2 border-border rounded-sm">
+        <section className="py-24 bg-background border border-border rounded-sm">
           <div className="px-4">
             <div className="text-center mb-16">
               <h2 className="text-4xl font-heading font-bold uppercase text-foreground mb-4">
@@ -431,7 +431,7 @@ const AboutPage: React.FC = () => {
             </div>
 
             <div className="grid md:grid-cols-5 gap-8 relative max-w-5xl mx-auto">
-              <div className="hidden md:block absolute top-8 left-[10%] right-[10%] h-0.5 bg-border -z-10" />
+              <div className="hidden md:block absolute top-8 left-[10%] right-[10%] h-px bg-border -z-10" />
               {[
                 {
                   icon: Search,

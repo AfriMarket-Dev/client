@@ -85,7 +85,7 @@ const CTASection: React.FC = () => {
                     Active Projects
                   </div>
                 </div>
-                <div className="bg-background/5 backdrop-blur-md p-6 rounded-sm border-2 border-background/10 shadow-xl">
+                <div className="bg-background/5 backdrop-blur-md p-6 rounded-sm border border-background/10">
                   <Building2 className="w-8 h-8 text-info mb-4" />
                   <div className="text-2xl font-heading font-bold text-background mb-1">
                     2.5k
@@ -96,7 +96,7 @@ const CTASection: React.FC = () => {
                 </div>
               </div>
               <div className="space-y-4">
-                <div className="bg-background/5 backdrop-blur-md p-6 rounded-sm border-2 border-background/10 shadow-xl">
+                <div className="bg-background/5 backdrop-blur-md p-6 rounded-sm border border-background/10">
                   <Building2 className="w-8 h-8 text-success mb-4" />
                   <div className="text-2xl font-heading font-bold text-background mb-1">
                     98%
@@ -105,7 +105,7 @@ const CTASection: React.FC = () => {
                     Satisfaction Rate
                   </div>
                 </div>
-                <div className="bg-background/5 backdrop-blur-md p-6 rounded-sm border-2 border-background/10 shadow-xl">
+                <div className="bg-background/5 backdrop-blur-md p-6 rounded-sm border border-background/10">
                   <Building2 className="w-8 h-8 text-warning mb-4" />
                   <div className="text-2xl font-heading font-bold text-background mb-1">
                     24/7

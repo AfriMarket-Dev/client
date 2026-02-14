@@ -98,7 +98,7 @@ const Hero: React.FC = () => {
             <Button
               size="lg"
               onClick={() => navigate("/products")}
-              className="h-14 px-10 text-base font-bold uppercase tracking-widest rounded-lg bg-primary text-primary-foreground hover:bg-primary/90"
+              className="h-14 px-10 text-base font-bold uppercase tracking-widest rounded-sm bg-primary text-primary-foreground hover:bg-primary/90"
             >
               Browse Products
               <ArrowRight className="ml-2 w-5 h-5" />
@@ -107,7 +107,7 @@ const Hero: React.FC = () => {
               size="lg"
               variant="outline"
               onClick={() => navigate("/services")}
-              className="h-14 px-10 text-base font-bold uppercase tracking-widest rounded-lg border-2 border-border hover:border-foreground/30 hover:bg-muted/50 text-foreground bg-transparent shadow-none transition-all hover:-translate-y-0.5"
+              className="h-14 px-10 text-base font-bold uppercase tracking-widest rounded-sm border border-border hover:border-foreground/30 hover:bg-muted/50 text-foreground bg-transparent shadow-none transition-all hover:-translate-y-0.5"
             >
               Find Services
             </Button>

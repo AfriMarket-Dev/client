@@ -32,7 +32,7 @@ export const PromoCard: React.FC<PromoCardProps> = ({
   return (
     <div
       className={cn(
-        "bg-background rounded-lg p-6 border-2 border-border group hover:shadow-xl transition-all duration-300 relative overflow-hidden",
+        "bg-background rounded-sm p-6 border border-border group hover:border-primary/50 transition-all duration-300 relative overflow-hidden",
         hoverBorder,
       )}
     >

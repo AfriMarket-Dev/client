@@ -188,7 +188,7 @@ export const HeaderUserNav: React.FC<HeaderUserNavProps> = ({
           </Button>
           <Button
             onClick={() => navigate("/auth/signup")}
-            className="h-10 px-6 font-heading font-bold uppercase tracking-wide rounded-sm bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm"
+            className="h-10 px-6 font-heading font-bold uppercase tracking-wide rounded-sm bg-primary text-primary-foreground hover:bg-primary/90 shadow-none border border-primary"
           >
             Join
           </Button>

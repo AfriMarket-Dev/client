@@ -77,7 +77,7 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
   onAddProduct,
 }) => (
   <div className="space-y-8 max-w-7xl mx-auto ">
-    <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b-2 border-border pb-6">
+    <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-border pb-6">
       <div>
         <h1 className="text-4xl md:text-5xl font-heading font-bold text-foreground uppercase tracking-tight mb-2">
           Overview
@@ -88,7 +88,7 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
       </div>
       <Button
         onClick={onAddProduct}
-        className="rounded-sm h-12 px-6 font-heading font-bold uppercase tracking-wider shadow-none"
+        className="rounded-sm h-12 px-6 font-heading font-bold uppercase tracking-wider shadow-none border border-primary hover:bg-primary/90"
       >
         <Package className="w-4 h-4 mr-2" />
         Add New Product
@@ -100,13 +100,13 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
         <AdminCard
           key={index}
           noPadding
-          className="hover:border-primary transition-colors"
+          className="hover:border-primary transition-colors border border-border"
         >
           <CardContent className="p-6">
             <div className="flex justify-between items-start mb-4">
               <div
                 className={cn(
-                  "w-12 h-12 rounded-sm flex items-center justify-center border-2 border-transparent transition-transform hover:scale-105",
+                  "w-12 h-12 rounded-sm flex items-center justify-center border border-transparent transition-transform hover:scale-105",
                   stat.bgColor,
                 )}
               >
@@ -114,7 +114,7 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
               </div>
               <Badge
                 variant="outline"
-                className="border-border bg-muted/30 text-muted-foreground font-heading font-bold text-[9px] uppercase tracking-wider"
+                className="border-border bg-muted/30 text-muted-foreground font-heading font-bold text-[9px] uppercase tracking-wider rounded-sm"
               >
                 {stat.change}
               </Badge>
@@ -138,23 +138,23 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
           <Button
             variant="ghost"
             size="sm"
-            className="font-bold text-[10px] uppercase"
+            className="font-bold text-[10px] uppercase border border-transparent hover:border-border"
           >
             View All
           </Button>
         }
         noPadding
-        className="lg:col-span-2"
+        className="lg:col-span-2 border border-border"
       >
-        <div className="divide-y-2 divide-border">
+        <div className="divide-y divide-border">
           {recentActivities.map((activity, index) => (
             <div
               key={index}
-              className="p-6 flex items-start gap-4 hover:bg-muted/30 transition-colors group"
+              className="p-6 flex items-start gap-4 hover:bg-muted/10 transition-colors group"
             >
               <div
                 className={cn(
-                  "w-10 h-10 rounded-sm flex items-center justify-center shrink-0 border-2 border-transparent transition-all group-hover:scale-110",
+                  "w-10 h-10 rounded-sm flex items-center justify-center shrink-0 border border-transparent transition-all group-hover:scale-110",
                   activity.type === "inquiry"
                     ? "bg-warning/10 text-warning"
                     : activity.type === "quote"
@@ -190,10 +190,10 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
         className="bg-foreground text-background border-none relative overflow-hidden"
         noPadding
       >
-        <div className="absolute inset-0 african-pattern opacity-10 invert pointer-events-none" />
+        <div className="absolute inset-0 african-pattern opacity-[0.05] invert pointer-events-none" />
         <CardContent className="p-8 relative z-10 flex flex-col h-full justify-between min-h-[320px]">
           <div>
-            <div className="w-12 h-12 bg-background/10 border-2 border-background/20 rounded-sm flex items-center justify-center mb-6 backdrop-blur-md">
+            <div className="w-12 h-12 bg-background/10 border border-background/20 rounded-sm flex items-center justify-center mb-6 backdrop-blur-md">
               <TrendingUp className="w-6 h-6 text-primary" />
             </div>
             <h3 className="text-2xl font-heading font-bold uppercase mb-3 tracking-wide">
@@ -204,7 +204,7 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
               requests.
             </p>
           </div>
-          <Button className="w-full bg-background text-foreground hover:bg-muted font-heading font-bold uppercase tracking-widest h-12 rounded-sm border-none shadow-xl">
+          <Button className="w-full bg-background text-foreground hover:bg-muted font-heading font-bold uppercase tracking-widest h-12 rounded-sm border-none shadow-none">
             Optimize Response
             <ArrowUpRight className="ml-2 w-4 h-4" />
           </Button>

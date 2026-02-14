@@ -171,15 +171,15 @@ const CategoriesPage: React.FC<CategoriesPageProps> = ({
                 <div
                   key={category.id}
                   onClick={() => setSelectedCategory(category.id)}
-                  className="group relative bg-card p-6 border-2 border-border hover:border-primary transition-all duration-300 cursor-pointer overflow-hidden"
+                  className="group relative bg-card p-6 border border-border hover:border-primary transition-all duration-300 cursor-pointer overflow-hidden"
                   style={{
                     animationDelay: `${index * 100}ms`,
                   }}
                 >
-                  <div className="absolute top-0 left-0 w-3 h-3 border-l-2 border-t-2 border-primary/40 group-hover:border-primary transition-colors duration-300 pointer-events-none" />
-                  <div className="absolute top-0 right-0 w-3 h-3 border-r-2 border-t-2 border-primary/40 group-hover:border-primary transition-colors duration-300 pointer-events-none" />
-                  <div className="absolute bottom-0 left-0 w-3 h-3 border-l-2 border-b-2 border-primary/40 group-hover:border-primary transition-colors duration-300 pointer-events-none" />
-                  <div className="absolute bottom-0 right-0 w-3 h-3 border-r-2 border-b-2 border-primary/40 group-hover:border-primary transition-colors duration-300 pointer-events-none" />
+                  <div className="absolute top-0 left-0 w-3 h-3 border-l border-t border-primary/40 group-hover:border-primary transition-colors duration-300 pointer-events-none" />
+                  <div className="absolute top-0 right-0 w-3 h-3 border-r border-t border-primary/40 group-hover:border-primary transition-colors duration-300 pointer-events-none" />
+                  <div className="absolute bottom-0 left-0 w-3 h-3 border-l border-b border-primary/40 group-hover:border-primary transition-colors duration-300 pointer-events-none" />
+                  <div className="absolute bottom-0 right-0 w-3 h-3 border-r border-b border-primary/40 group-hover:border-primary transition-colors duration-300 pointer-events-none" />
 
                   <div className="relative z-10">
                     <div className="flex items-center justify-between mb-6">
