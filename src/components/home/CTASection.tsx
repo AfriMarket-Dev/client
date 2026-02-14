@@ -20,7 +20,7 @@ const CTASection: React.FC = () => {
         <div className="absolute top-0 right-0 w-1/2 h-full bg-linear-to-l from-primary/10 to-transparent" />
       </div>
 
-      <div className="container mx-auto px-4 relative z-10">
+      <div className="container max-w-7xl mx-auto px-4 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div className="max-w-2xl">
             <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary/20 text-primary-foreground text-[10px] font-bold uppercase tracking-widest mb-6 rounded-sm border border-primary/20">

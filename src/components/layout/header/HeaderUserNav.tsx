@@ -42,22 +42,46 @@ export const HeaderUserNav: React.FC<HeaderUserNavProps> = ({
 
   return (
     <div className="flex items-center gap-3">
-      <div className="hidden lg:flex items-center gap-2 mr-2">
+      <div className="hidden lg:flex items-center gap-1 mr-2">
         <Button
           variant="ghost"
           size="sm"
           onClick={() => navigate("/products")}
-          className="font-heading font-bold uppercase tracking-wide text-muted-foreground hover:text-foreground hover:bg-transparent"
+          className="font-heading font-bold uppercase tracking-wide text-muted-foreground hover:text-foreground hover:bg-transparent text-xs"
         >
-          Marketplace
+          Products
+        </Button>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => navigate("/categories")}
+          className="font-heading font-bold uppercase tracking-wide text-muted-foreground hover:text-foreground hover:bg-transparent text-xs"
+        >
+          Categories
         </Button>
         <Button
           variant="ghost"
           size="sm"
           onClick={() => navigate("/suppliers")}
-          className="font-heading font-bold uppercase tracking-wide text-muted-foreground hover:text-foreground hover:bg-transparent"
+          className="font-heading font-bold uppercase tracking-wide text-muted-foreground hover:text-foreground hover:bg-transparent text-xs"
         >
           Suppliers
+        </Button>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => navigate("/services")}
+          className="font-heading font-bold uppercase tracking-wide text-muted-foreground hover:text-foreground hover:bg-transparent text-xs"
+        >
+          Services
+        </Button>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => navigate("/about")}
+          className="font-heading font-bold uppercase tracking-wide text-muted-foreground hover:text-foreground hover:bg-transparent text-xs"
+        >
+          About
         </Button>
       </div>
 
