@@ -73,7 +73,7 @@ const UserDashboard: React.FC = () => {
           <Button
             size="lg"
             variant="outline"
-            className="rounded-sm border-2 border-border h-12 w-12 p-0"
+            className="rounded-sm border border-border h-12 w-12 p-0"
           >
             <Settings className="w-5 h-5" />
           </Button>
@@ -82,7 +82,7 @@ const UserDashboard: React.FC = () => {
 
       {/* stats grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-        <Card className="rounded-sm border-2 border-border shadow-none bg-card group hover:border-primary transition-all duration-300">
+        <Card className="rounded-sm border border-border shadow-none bg-card group hover:border-primary transition-all duration-300">
           <CardContent className="p-6">
             <div className="flex justify-between items-start mb-5">
               <div className="h-12 w-12 bg-primary/10 rounded-sm flex items-center justify-center text-primary border border-primary/20">
@@ -105,7 +105,7 @@ const UserDashboard: React.FC = () => {
           </CardContent>
         </Card>
 
-        <Card className="rounded-sm border-2 border-border shadow-none bg-card group hover:border-primary transition-all duration-300">
+        <Card className="rounded-sm border border-border shadow-none bg-card group hover:border-primary transition-all duration-300">
           <CardContent className="p-6">
             <div className="flex justify-between items-start mb-5">
               <div className="h-12 w-12 bg-muted rounded-sm flex items-center justify-center text-foreground border border-border">
@@ -131,7 +131,7 @@ const UserDashboard: React.FC = () => {
           </CardContent>
         </Card>
 
-        <Card className="rounded-sm border-2 border-border shadow-none bg-card group hover:border-primary transition-all duration-300">
+        <Card className="rounded-sm border border-border shadow-none bg-card group hover:border-primary transition-all duration-300">
           <CardContent className="p-6">
             <div className="flex justify-between items-start mb-5">
               <div className="h-12 w-12 bg-muted rounded-sm flex items-center justify-center text-foreground border border-border">
@@ -178,7 +178,7 @@ const UserDashboard: React.FC = () => {
             {agreements.map((agreement) => (
               <Card
                 key={agreement.id}
-                className="border-2 border-border hover:border-primary transition-all duration-300 shadow-none rounded-sm bg-card"
+                className="border border-border hover:border-primary transition-all duration-300 shadow-none rounded-sm bg-card"
               >
                 <CardContent className="p-6">
                   <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4">
@@ -276,9 +276,9 @@ const UserDashboard: React.FC = () => {
             </CardContent>
           </Card>
 
-          <Card className="rounded-sm border-2 border-dashed border-border bg-muted/50">
+          <Card className="rounded-sm border border-dashed border-border bg-muted/50">
             <CardContent className="p-6 text-center">
-              <div className="w-14 h-14 bg-background rounded-sm border-2 border-border flex items-center justify-center mx-auto mb-5">
+              <div className="w-14 h-14 bg-background rounded-sm border border-border flex items-center justify-center mx-auto mb-5">
                 <Star className="w-7 h-7 text-amber-500 fill-amber-500" />
               </div>
               <h3 className="font-heading font-bold uppercase text-foreground mb-2 tracking-wide">

@@ -249,7 +249,7 @@ export default function AdminCustomersPage() {
         actions={
           <Button
             variant="outline"
-            className="rounded-sm h-11 px-6 border-2 border-border font-heading font-bold uppercase text-xs tracking-wider"
+            className="rounded-sm h-11 px-6 border border-border font-heading font-bold uppercase text-xs tracking-wider"
           >
             <Download size={16} className="mr-2" />
             Export

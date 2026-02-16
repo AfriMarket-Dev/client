@@ -12,10 +12,10 @@ const FeaturedSuppliers: React.FC = () => {
   const companies = data?.data ?? [];
 
   return (
-    <div className="container mx-auto max-w-6xl">
+    <div className="container mx-auto max-w-7xl">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-6 border-b-2 border-border pb-6">
         <div>
-          <h2 className="text-4xl md:text-5xl font-heading font-bold uppercase text-foreground mb-2">
+          <h2 className="text-3xl md:text-5xl font-heading font-bold uppercase text-foreground mb-2">
             Featured Suppliers
           </h2>
           <p className="text-muted-foreground text-lg font-medium">
@@ -50,11 +50,11 @@ const FeaturedSuppliers: React.FC = () => {
             return (
               <Card
                 key={company.id}
-                className="group border-2 border-border shadow-none hover:border-primary/50 transition-all duration-200 rounded-sm bg-card cursor-pointer relative overflow-hidden"
+                className="group border border-border shadow-none hover:border-primary/50 transition-all duration-200 rounded-sm bg-card cursor-pointer relative overflow-hidden"
                 onClick={() => navigate(`/suppliers/${company.id}`)}
               >
                 <CardContent className="p-6 flex flex-col items-start text-left h-full">
-                  <div className="w-16 h-16 rounded-sm p-1 bg-muted/50 border-2 border-border mb-6 group-hover:border-primary transition-colors duration-200 flex items-center justify-center text-2xl font-bold text-muted-foreground">
+                  <div className="w-16 h-16 rounded-sm p-1 bg-muted/50 border border-border mb-6 group-hover:border-primary transition-colors duration-200 flex items-center justify-center text-2xl font-bold text-muted-foreground">
                     {company.name?.charAt(0) ?? "?"}
                   </div>
 

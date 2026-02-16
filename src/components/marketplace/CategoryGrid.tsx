@@ -10,10 +10,10 @@ const CategoryGrid: React.FC = () => {
   const categories = data?.data ?? [];
 
   return (
-    <div className="container mx-auto max-w-6xl">
+    <div className="container mx-auto max-w-7xl">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-6 border-b border-border pb-6">
         <div>
-          <h2 className="text-4xl md:text-5xl font-heading font-bold uppercase text-foreground mb-2">
+          <h2 className="text-3xl md:text-5xl font-heading font-bold uppercase text-foreground mb-2">
             Browse by Category
           </h2>
           <p className="text-muted-foreground text-lg max-w-md font-medium">

@@ -128,7 +128,7 @@ export const SupplierProvisionForm: React.FC<SupplierProvisionFormProps> = ({
                     value={field.state.value}
                     onBlur={field.handleBlur}
                     onChange={(e) => field.handleChange(e.target.value)}
-                    className="w-full px-4 py-3 border-2 border-border rounded-sm focus:outline-none focus:ring-1 focus:ring-primary h-12 text-sm bg-background font-bold uppercase tracking-widest"
+                    className="w-full px-4 py-3 border border-border rounded-sm focus:outline-none focus:ring-1 focus:ring-primary h-12 text-sm bg-background font-bold uppercase tracking-widest"
                     required
                   >
                     <option value="">SELECT STREAM...</option>
@@ -175,7 +175,7 @@ export const SupplierProvisionForm: React.FC<SupplierProvisionFormProps> = ({
                     value={field.state.value}
                     onBlur={field.handleBlur}
                     onChange={(e) => field.handleChange(e.target.value)}
-                    className="w-full px-4 py-3 border-2 border-border rounded-sm focus:outline-none focus:ring-1 focus:ring-primary h-12 text-sm bg-background font-bold uppercase tracking-widest"
+                    className="w-full px-4 py-3 border border-border rounded-sm focus:outline-none focus:ring-1 focus:ring-primary h-12 text-sm bg-background font-bold uppercase tracking-widest"
                     required
                   >
                     <option value="">SELECT REGION...</option>
@@ -360,7 +360,7 @@ export const SupplierProvisionForm: React.FC<SupplierProvisionFormProps> = ({
                 type="button"
                 variant="outline"
                 onClick={handleBack}
-                className="rounded-sm h-12 px-6 border-2 border-border font-heading font-bold uppercase text-xs tracking-widest shadow-none"
+                className="rounded-sm h-12 px-6 border border-border font-heading font-bold uppercase text-xs tracking-widest shadow-none"
               >
                 <ArrowLeft size={16} className="mr-2" />
                 Back
@@ -381,7 +381,7 @@ export const SupplierProvisionForm: React.FC<SupplierProvisionFormProps> = ({
         <AdminCard title="Final Review" subtitle="Verify data stream integrity">
           <div className="space-y-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className="bg-muted/30 p-6 border-2 border-border border-dashed rounded-sm">
+              <div className="bg-muted/30 p-6 border border-border border-dashed rounded-sm">
                 <h3 className="text-[10px] font-heading font-bold uppercase tracking-widest text-primary mb-4 border-b border-primary/20 pb-2">
                   Entity Parameters
                 </h3>
@@ -414,7 +414,7 @@ export const SupplierProvisionForm: React.FC<SupplierProvisionFormProps> = ({
                 </div>
               </div>
 
-              <div className="bg-muted/30 p-6 border-2 border-border border-dashed rounded-sm">
+              <div className="bg-muted/30 p-6 border border-border border-dashed rounded-sm">
                 <h3 className="text-[10px] font-heading font-bold uppercase tracking-widest text-primary mb-4 border-b border-primary/20 pb-2">
                   Agent Parameters
                 </h3>
@@ -447,7 +447,7 @@ export const SupplierProvisionForm: React.FC<SupplierProvisionFormProps> = ({
               </div>
             </div>
 
-            <div className="bg-green-50 border-2 border-green-200 p-6 rounded-sm flex items-start gap-4">
+            <div className="bg-green-50 border border-green-200 p-6 rounded-sm flex items-start gap-4">
               <div className="p-2 bg-green-100 rounded-sm">
                 <CheckCircle className="h-6 w-6 text-green-600" />
               </div>
@@ -471,7 +471,7 @@ export const SupplierProvisionForm: React.FC<SupplierProvisionFormProps> = ({
             type="button"
             variant="outline"
             onClick={handleBack}
-            className="flex-1 items-center gap-2 px-6 h-12 border-2 border-border rounded-sm font-heading font-bold uppercase text-xs tracking-widest transition-all shadow-none"
+            className="flex-1 items-center gap-2 px-6 h-12 border border-border rounded-sm font-heading font-bold uppercase text-xs tracking-widest transition-all shadow-none"
           >
             <ArrowLeft size={16} />
             {currentStep === 1 ? "Cancel" : "Back"}

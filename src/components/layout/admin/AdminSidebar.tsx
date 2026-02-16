@@ -88,7 +88,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ user }) => {
                     isActive={isActive(item.path)}
                     onClick={() => navigate(item.path)}
                     className={cn(
-                      "h-12 rounded-sm transition-all duration-200 font-heading font-bold uppercase text-[10px] tracking-widest border-2",
+                      "h-12 rounded-sm transition-all duration-200 font-heading font-bold uppercase text-[10px] tracking-widest border",
                       isActive(item.path)
                         ? "bg-foreground text-background border-foreground shadow-md"
                         : "bg-background text-muted-foreground border-transparent hover:border-border hover:bg-muted hover:text-foreground",
@@ -154,7 +154,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ user }) => {
                   }
                 />
                 <DropdownMenuContent
-                  className="w-56 p-2 rounded-sm border-2 border-border"
+                  className="w-56 p-2 rounded-sm border border-border"
                   side="right"
                   align="end"
                 >

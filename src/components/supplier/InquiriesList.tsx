@@ -118,7 +118,7 @@ const InquiriesList: React.FC = () => {
             placeholder="FILTER INQUIRIES..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10 h-12 rounded-sm bg-background border-2 border-border uppercase text-xs font-bold tracking-widest shadow-none"
+            className="pl-10 h-12 rounded-sm bg-background border border-border uppercase text-xs font-bold tracking-widest shadow-none"
           />
         </div>
       </div>
@@ -139,10 +139,10 @@ const InquiriesList: React.FC = () => {
                       <div className="relative shrink-0">
                         <img
                           src={inquiry.customerAvatar}
-                          className="w-12 h-12 rounded-sm object-cover border-2 border-border shadow-md"
+                          className="w-12 h-12 rounded-sm object-cover border border-border shadow-md"
                           alt=""
                         />
-                        <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-success rounded-full border-2 border-background shadow-sm" />
+                        <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-success rounded-full border border-background shadow-sm" />
                       </div>
                       <div className="overflow-hidden">
                         <p className="font-heading font-bold text-foreground uppercase text-sm truncate">
@@ -181,7 +181,7 @@ const InquiriesList: React.FC = () => {
                     <div className="relative shrink-0">
                       <img
                         src={inquiry.productImage}
-                        className="w-24 h-24 rounded-sm object-cover border-2 border-border shadow-lg"
+                        className="w-24 h-24 rounded-sm object-cover border border-border shadow-lg"
                         alt=""
                       />
                       <div className="absolute inset-0 african-pattern opacity-10 pointer-events-none" />
@@ -214,7 +214,7 @@ const InquiriesList: React.FC = () => {
                     </div>
                   </div>
 
-                  <div className="bg-muted/10 border-2 border-border border-dashed rounded-sm p-6 mb-8 relative">
+                  <div className="bg-muted/10 border border-border border-dashed rounded-sm p-6 mb-8 relative">
                     <div className="absolute -top-3 left-6 px-2 bg-background text-[9px] font-black uppercase tracking-[0.2em] text-muted-foreground">
                       Transmission Content
                     </div>
@@ -230,7 +230,7 @@ const InquiriesList: React.FC = () => {
                     </Button>
                     <Button
                       variant="outline"
-                      className="flex-1 rounded-sm h-14 font-heading font-bold uppercase tracking-widest border-2 border-border hover:bg-muted shadow-none gap-2"
+                      className="flex-1 rounded-sm h-14 font-heading font-bold uppercase tracking-widest border border-border hover:bg-muted shadow-none gap-2"
                     >
                       <BadgeCheck className="w-5 h-5 text-primary" />
                       Acknowledge Stream

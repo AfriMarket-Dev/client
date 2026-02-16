@@ -1,14 +1,12 @@
 import React from "react";
-import { ArrowRight, Heart } from "lucide-react";
+import { Heart } from "lucide-react";
 import { Button } from "@/components/ui/Button";
-import { Card, CardContent } from "@/components/ui/Card";
-import { Badge } from "@/components/ui/Badge";
 import type { Listing, CompanyRef } from "@/app/api/listings";
 
 interface ProductCardProps {
   listing: Listing;
-  viewMode: "grid" | "list";
-  onSupplierClick: (e: React.MouseEvent) => void;
+  viewMode?: "grid" | "list";
+  onSupplierClick?: (e: React.MouseEvent) => void;
   onClick: () => void;
   isInWishlist?: boolean;
   onToggleWishlist?: (e: React.MouseEvent) => void;
@@ -26,104 +24,169 @@ function firstImage(listing: Listing): string | null {
 }
 
 export const ProductCard: React.FC<ProductCardProps> = React.memo(
-  ({ listing, viewMode, onSupplierClick, onClick, isInWishlist, onToggleWishlist }) => {
+  ({ listing, viewMode = "grid", onSupplierClick, onClick, isInWishlist, onToggleWishlist }) => {
     const company = listing.company as CompanyRef | undefined;
     const price = firstPrice(listing);
     const img = firstImage(listing);
 
+    if (viewMode === "list") {
+       return (
+        <div
+            className="group flex gap-4 bg-card border border-border/50 hover:border-primary/50 rounded-sm p-3 transition-all duration-200 hover:shadow-sm cursor-pointer"
+            onClick={onClick}
+        >
+             <div className="relative w-48 aspect-4/3 shrink-0 overflow-hidden rounded-sm bg-muted">
+                 {img ? (
+                    <img
+                      src={img}
+                      alt={listing.name}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-muted-foreground bg-muted/50">
+                      <span className="text-[10px] font-bold uppercase tracking-wider">No image</span>
+                    </div>
+                  )}
+             </div>
+             
+             <div className="flex flex-col grow py-1">
+                 <div className="flex justify-between items-start">
+                     <div>
+                        <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-1">
+                          {listing.category?.name ?? "General"}
+                        </div>
+                        <h3 className="text-base font-heading font-semibold text-foreground group-hover:text-primary transition-colors line-clamp-1">
+                          {listing.name}
+                        </h3>
+                     </div>
+                      {onToggleWishlist && (
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-7 w-7 -mt-1 -mr-1 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-full"
+                          onClick={(e) => {
+                              e.stopPropagation();
+                              onToggleWishlist(e);
+                          }}
+                        >
+                          <Heart className={`w-4 h-4 ${isInWishlist ? "fill-destructive text-destructive" : ""}`} />
+                        </Button>
+                      )}
+                 </div>
+                 
+                 <p className="text-xs text-muted-foreground line-clamp-2 mt-2 max-w-2xl">
+                    {listing.description}
+                 </p>
+
+                 <div className="mt-auto flex items-end justify-between">
+                     <div>
+                        <div className="text-lg font-bold text-foreground">
+                            RWF {price.toLocaleString()}
+                        </div>
+                        {company && (
+                             <div 
+                                className="flex items-center gap-1.5 mt-1 text-xs text-muted-foreground hover:text-foreground transition-colors cursor-pointer w-fit"
+                                onClick={(e) => {
+                                    if(onSupplierClick) {
+                                        e.stopPropagation();
+                                        onSupplierClick(e);
+                                    }
+                                }}
+                             >
+                                <span className="w-4 h-4 rounded-full bg-muted flex items-center justify-center text-[8px] font-bold">
+                                    {company.name?.charAt(0) ?? "?"}
+                                </span>
+                                {company.name}
+                             </div>
+                        )}
+                     </div>
+                 </div>
+             </div>
+        </div>
+       )
+    }
+
     return (
-      <Card
-        className={`group border border-border bg-card hover:border-primary transition-all duration-300 overflow-hidden flex cursor-pointer ${
-          viewMode === "list" ? "flex-row h-52" : "flex-col"
-        }`}
+      <div
+        className="group flex flex-col bg-card border border-border/50 hover:border-primary/50 transition-all duration-300 hover:shadow-[0_2px_12px_-4px_rgba(0,0,0,0.1)] rounded-sm overflow-hidden cursor-pointer h-full"
         onClick={onClick}
       >
-        <div
-          className={`relative overflow-hidden bg-muted ${
-            viewMode === "list" ? "w-64 shrink-0" : "aspect-[4/3]"
-          }`}
-        >
+        {/* Image Container */}
+        <div className="relative aspect-4/3 overflow-hidden bg-muted">
           {img ? (
             <img
               src={img}
               alt={listing.name}
-              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center text-muted-foreground">
-              <span className="text-xs font-bold uppercase">No image</span>
+            <div className="w-full h-full flex items-center justify-center text-muted-foreground bg-muted/50">
+              <span className="text-[10px] font-bold uppercase tracking-wider opacity-50">No image</span>
             </div>
           )}
+          
+          {/* Wishlist Button - Only visible on hover/active */}
           {onToggleWishlist && (
             <Button
-              variant="ghost"
+              variant="secondary"
               size="icon"
-              className="absolute top-2 right-2 rounded-sm bg-background/90 h-8 w-8"
-              onClick={onToggleWishlist}
+              className="absolute top-2 right-2 h-7 w-7 rounded-full bg-white/90 backdrop-blur-sm shadow-sm opacity-0 group-hover:opacity-100 transition-opacity hover:bg-white hover:text-destructive text-muted-foreground"
+              onClick={(e) => {
+                  e.stopPropagation();
+                  onToggleWishlist(e);
+              }}
             >
-              <Heart className={`w-4 h-4 ${isInWishlist ? "fill-destructive text-destructive" : ""}`} />
+              <Heart className={`w-3.5 h-3.5 ${isInWishlist ? "fill-destructive text-destructive" : ""}`} />
             </Button>
           )}
-          <div className="absolute top-2 left-2">
-            <Badge className="bg-background/90 text-foreground border-none shadow-none font-bold text-[10px] uppercase tracking-wider">
-              {listing.type}
-            </Badge>
+
+          {/* Badges */}
+          <div className="absolute top-2 left-2 flex flex-col gap-1">
+             {/* Add badges here if needed based on valid data */}
           </div>
         </div>
 
-        <CardContent className="p-5 flex flex-col grow">
-          <div className="grow">
-            <div className="flex items-center gap-2 mb-2">
-              <Badge
-                variant="secondary"
-                className="bg-muted text-muted-foreground text-[10px] font-bold border-none uppercase tracking-tight"
-              >
-                {listing.category?.name ?? "—"}
-              </Badge>
+        {/* Content */}
+        <div className="p-3 flex flex-col grow gap-2">
+          <div>
+            <div className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground mb-1 truncate">
+               {listing.category?.name ?? "General"}
             </div>
-            <h3 className="text-lg font-heading font-bold text-foreground mb-2 group-hover:text-primary transition-colors leading-tight uppercase tracking-wide">
+            <h3 className="text-sm font-medium text-foreground group-hover:text-primary transition-colors line-clamp-2 leading-tight min-h-10">
               {listing.name}
             </h3>
-            <p className="text-muted-foreground text-sm line-clamp-2 mb-4 leading-relaxed">
-              {listing.description || "—"}
-            </p>
           </div>
 
           <div className="mt-auto">
-            <div className="flex items-baseline gap-1 mb-4">
-              <span className="text-2xl font-heading font-black text-primary">
-                RWF {price.toLocaleString()}
-              </span>
-              <span className="text-xs text-muted-foreground font-bold uppercase">
-                / unit
-              </span>
-            </div>
-
-            {company && (
-              <div className="pt-3 border-t border-border flex items-center justify-between">
-                <div
-                  className="flex items-center gap-2 hover:opacity-80 transition-opacity cursor-pointer"
-                  onClick={onSupplierClick}
-                >
-                  <div className="w-6 h-6 rounded-sm bg-muted flex items-center justify-center text-[10px] font-bold text-muted-foreground">
-                    {company.name?.charAt(0) ?? "?"}
-                  </div>
-                  <span className="text-xs font-bold text-foreground uppercase tracking-wide">
-                    {company.name}
+             {/* Divider */}
+             <div className="h-px w-full bg-border/40 mb-2.5" />
+             
+            <div className="flex items-center justify-between">
+               <div className="flex flex-col">
+                  <span className="text-xs text-muted-foreground font-medium">From</span>
+                  <span className="text-sm font-bold text-foreground">
+                    RWF {price.toLocaleString()}
                   </span>
-                </div>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="h-8 w-8 p-0 rounded-sm text-primary hover:bg-primary/5"
-                >
-                  <ArrowRight className="w-4 h-4" />
-                </Button>
-              </div>
-            )}
+               </div>
+               
+               {company && (
+                  <div 
+                    className="flex items-center justify-center w-6 h-6 rounded-full bg-muted/50 text-[10px] text-muted-foreground font-bold hover:bg-primary/10 hover:text-primary transition-colors"
+                    title={company.name}
+                    onClick={(e) => {
+                        if (onSupplierClick) {
+                            e.stopPropagation();
+                            onSupplierClick(e);
+                        }
+                    }}
+                  >
+                     {company.name?.charAt(0) ?? "?"}
+                  </div>
+               )}
+            </div>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     );
   },
 );

@@ -88,7 +88,7 @@ const SupplierListing: React.FC<SupplierListingProps> = ({
               </div>
               <Button
                 variant="outline"
-                className="rounded-sm border-2 border-border lg:hidden font-heading uppercase tracking-wider text-xs"
+                className="rounded-sm border border-border lg:hidden font-heading uppercase tracking-wider text-xs"
                 onClick={() => setShowFilters(!showFilters)}
               >
                 <Filter className="w-4 h-4 mr-2" />
@@ -111,7 +111,7 @@ const SupplierListing: React.FC<SupplierListingProps> = ({
                   placeholder="Search suppliers..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="h-11 pl-10 rounded-sm bg-background border-2 border-border uppercase placeholder:text-xs"
+                  className="h-11 pl-10 rounded-sm bg-background border border-border uppercase placeholder:text-xs"
                 />
               </div>
 
@@ -192,7 +192,7 @@ const SupplierListing: React.FC<SupplierListingProps> = ({
                 </div>
 
                 {companies.length === 0 && (
-                  <div className="text-center py-20 bg-card rounded-sm border-2 border-border">
+                  <div className="text-center py-20 bg-card rounded-sm border border-border">
                     <div className="w-16 h-16 bg-muted rounded-sm flex items-center justify-center mx-auto mb-6">
                       <Users className="w-8 h-8 text-muted-foreground" />
                     </div>
@@ -204,7 +204,7 @@ const SupplierListing: React.FC<SupplierListingProps> = ({
                     </p>
                     <Button
                       variant="outline"
-                      className="rounded-sm border-2 border-border font-heading uppercase tracking-wider"
+                      className="rounded-sm border border-border font-heading uppercase tracking-wider"
                       onClick={() => {
                         setSearchQuery("");
                         setSelectedCategoryId("all");

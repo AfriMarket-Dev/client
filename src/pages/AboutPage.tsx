@@ -177,7 +177,7 @@ const AboutPage: React.FC = () => {
           />
 
           <div className="relative z-10 text-center px-4">
-            <div className="inline-flex items-center px-4 py-1.5 border-2 border-primary/20 rounded-lg bg-primary/5 text-primary text-sm font-heading font-bold uppercase tracking-wider mb-8">
+            <div className="inline-flex items-center px-4 py-1.5 border border-primary/20 rounded-lg bg-primary/5 text-primary text-sm font-heading font-bold uppercase tracking-wider mb-8">
               <Globe className="w-4 h-4 mr-2" />
               Empowering Rwanda's Construction Industry
             </div>
@@ -259,7 +259,7 @@ const AboutPage: React.FC = () => {
               {/* vision */}
               <div className="relative p-8 border-l-4 border-foreground bg-card/50">
                 <div className="flex items-center mb-6">
-                  <div className="flex items-center justify-center w-12 h-12 border-2 border-foreground text-foreground mr-4 rounded-sm">
+                  <div className="flex items-center justify-center w-12 h-12 border border-foreground text-foreground mr-4 rounded-sm">
                     <Eye className="w-6 h-6" />
                   </div>
                   <h2 className="text-3xl font-heading font-bold uppercase text-foreground">
@@ -463,12 +463,12 @@ const AboutPage: React.FC = () => {
                   key={index}
                   className="text-center group relative bg-background"
                 >
-                  <div className="inline-flex items-center justify-center w-16 h-16 bg-card border-2 border-border rounded-lg mb-6 shadow-sm group-hover:border-primary group-hover:text-primary transition-all duration-300 relative z-10">
+                  <div className="inline-flex items-center justify-center w-16 h-16 bg-card border border-border rounded-lg mb-6 shadow-sm group-hover:border-primary group-hover:text-primary transition-all duration-300 relative z-10">
                     <step.icon
                       className="w-7 h-7 text-muted-foreground group-hover:text-primary transition-colors"
                       strokeWidth={1.5}
                     />
-                    <div className="absolute -top-3 -right-3 w-6 h-6 rounded bg-foreground text-background text-xs font-bold flex items-center justify-center border-2 border-background">
+                    <div className="absolute -top-3 -right-3 w-6 h-6 rounded bg-foreground text-background text-xs font-bold flex items-center justify-center border border-background">
                       {index + 1}
                     </div>
                   </div>
@@ -483,7 +483,7 @@ const AboutPage: React.FC = () => {
             </div>
           </div>
         </section>
-        <section className="py-24 bg-muted/20 border-2 border-border rounded-sm">
+        <section className="py-24 bg-muted/20 border border-border rounded-sm">
           <div className="px-4 max-w-6xl mx-auto">
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               <div>
@@ -514,7 +514,7 @@ const AboutPage: React.FC = () => {
                     },
                   ].map((item, i) => (
                     <div key={i} className="flex gap-4">
-                      <div className="shrink-0 w-12 h-12 bg-background border-2 border-border rounded-sm flex items-center justify-center text-primary">
+                      <div className="shrink-0 w-12 h-12 bg-background border border-border rounded-sm flex items-center justify-center text-primary">
                         <item.icon className="w-6 h-6" />
                       </div>
                       <div>
@@ -529,7 +529,7 @@ const AboutPage: React.FC = () => {
                   ))}
                 </div>
               </div>
-              <div className="relative h-[500px] border-2 border-border rounded-sm overflow-hidden group">
+              <div className="relative h-[500px] border border-border rounded-sm overflow-hidden group">
                 <img
                   src="https://images.pexels.com/photos/1216589/pexels-photo-1216589.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
                   alt="Construction Site"
@@ -542,7 +542,7 @@ const AboutPage: React.FC = () => {
         </section>
 
         {/* cta section */}
-        <section className="py-24 bg-foreground text-background rounded-sm border-2 border-border overflow-hidden relative">
+        <section className="py-24 bg-foreground text-background rounded-sm border border-border overflow-hidden relative">
           <div className="absolute inset-0 african-pattern opacity-10 pointer-events-none" />
           <div className="relative z-10 text-center px-4">
             <Building
@@ -569,7 +569,7 @@ const AboutPage: React.FC = () => {
                 variant="outline"
                 size="lg"
                 onClick={() => navigate("/products")}
-                className="border-2 border-background text-background hover:bg-background hover:text-foreground font-heading font-bold uppercase tracking-widest text-lg h-14 px-8 rounded-sm bg-transparent"
+                className="border border-background text-background hover:bg-background hover:text-foreground font-heading font-bold uppercase tracking-widest text-lg h-14 px-8 rounded-sm bg-transparent"
               >
                 Start Sourcing
               </Button>

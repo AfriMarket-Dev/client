@@ -71,7 +71,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
               value={field.state.value}
               onBlur={field.handleBlur}
               onChange={(e) => field.handleChange(e.target.value)}
-              className="w-full px-3 py-2 border-2 border-border rounded-sm focus:outline-none focus:ring-1 focus:ring-primary h-11 font-heading font-bold uppercase text-xs tracking-widest bg-background"
+              className="w-full px-3 py-2 border border-border rounded-sm focus:outline-none focus:ring-1 focus:ring-primary h-11 font-heading font-bold uppercase text-xs tracking-widest bg-background"
               required
             >
               <option value="">Select category</option>
@@ -109,7 +109,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
           type="button"
           variant="outline"
           onClick={onCancel}
-          className="flex-1 rounded-sm border-2 border-border h-11 font-heading font-bold uppercase text-xs tracking-wider"
+          className="flex-1 rounded-sm border border-border h-11 font-heading font-bold uppercase text-xs tracking-wider"
         >
           Cancel
         </Button>

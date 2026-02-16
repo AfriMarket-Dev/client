@@ -6,6 +6,7 @@ import { HeaderSearch } from "./header/HeaderSearch";
 import { HeaderUserNav } from "./header/HeaderUserNav";
 import { Button } from "@/components/ui/Button";
 import { Menu } from "lucide-react";
+import { Input } from "@/components/ui/Input";
 
 export const Header: React.FC = () => {
   const { isAuthenticated, user } = useSelector(
@@ -39,6 +40,31 @@ export const Header: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Mobile Menu */}
+      {isMenuOpen && (
+        <div className="md:hidden border-t border-border bg-background px-4 py-4 space-y-4">
+          <div className="relative">
+             <Input
+              placeholder="Search..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="h-10 w-full rounded-sm border-border bg-muted/20"
+            />
+          </div>
+          <nav className="flex flex-col space-y-2">
+            <Button variant="ghost" className="justify-start font-heading uppercase text-sm tracking-wider">
+              Marketplace
+            </Button>
+            <Button variant="ghost" className="justify-start font-heading uppercase text-sm tracking-wider">
+              Suppliers
+            </Button>
+             <Button variant="ghost" className="justify-start font-heading uppercase text-sm tracking-wider">
+              Services
+            </Button>
+          </nav>
+        </div>
+      )}
     </header>
   );
 };

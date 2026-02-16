@@ -61,64 +61,67 @@ export default function ServiceDetailsPage() {
       {/* service overview */}
       <Card className="border border-border rounded-sm shadow-none">
         <CardContent className="p-6">
-          <div className="flex items-start justify-between gap-6 mb-6">
-            <div className="flex items-start gap-4">
-              <div className="p-4 bg-primary/10 rounded-sm border border-primary/20">
+          <div className="flex flex-col md:flex-row items-start justify-between gap-6 mb-6">
+            <div className="flex items-start gap-4 w-full">
+              <div className="p-4 bg-primary/10 rounded-sm border border-primary/20 shrink-0">
                 <IconComponent size={36} className="text-primary" />
               </div>
               <div>
-                <h1 className="text-3xl font-heading font-bold uppercase text-foreground tracking-wide mb-2">
+                <h1 className="text-2xl md:text-3xl font-heading font-bold uppercase text-foreground tracking-wide mb-2 leading-tight">
                   {service.name}
                 </h1>
-                <p className="text-muted-foreground leading-relaxed">
+                <p className="text-muted-foreground leading-relaxed text-sm md:text-base">
                   {service.description}
                 </p>
               </div>
             </div>
-            <div className="text-right">
-              <div className="text-3xl font-heading font-black text-primary mb-1">
-                {service.price}
-              </div>
-              <div className="text-xs text-muted-foreground font-bold uppercase tracking-widest">
-                Pricing
+            <div className="text-left md:text-right w-full md:w-auto flex flex-row md:flex-col items-center md:items-end justify-between md:justify-start border-t md:border-t-0 border-border pt-4 md:pt-0 pl-3 md:pl-0">
+              <span className="text-sm text-muted-foreground font-bold uppercase tracking-widest md:hidden">Pricing</span>
+              <div>
+                <div className="text-3xl font-heading font-black text-primary mb-1">
+                  {service.price}
+                </div>
+                <div className="text-xs text-muted-foreground font-bold uppercase tracking-widest hidden md:block">
+                  Pricing
+                </div>
               </div>
             </div>
           </div>
 
           {/* key stats */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="bg-muted/50 border border-border rounded-sm p-4">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
+            <div className="bg-muted/50 border border-border rounded-sm p-3 md:p-4">
               <div className="flex items-center gap-2 mb-2">
-                <Users size={18} className="text-primary" />
-                <span className="text-xs font-heading font-bold uppercase tracking-widest text-muted-foreground">
+                <Users size={16} className="text-primary" />
+                <span className="text-[10px] md:text-xs font-heading font-bold uppercase tracking-widest text-muted-foreground">
                   Requests
                 </span>
               </div>
-              <p className="text-2xl font-heading font-bold text-foreground">
+              <p className="text-xl md:text-2xl font-heading font-bold text-foreground">
                 {service.totalRequests || 0}
               </p>
             </div>
 
-            <div className="bg-muted/50 border border-border rounded-sm p-4">
+            <div className="bg-muted/50 border border-border rounded-sm p-3 md:p-4">
               <div className="flex items-center gap-2 mb-2">
-                <MessageSquare size={18} className="text-primary" />
-                <span className="text-xs font-heading font-bold uppercase tracking-widest text-muted-foreground">
+                <MessageSquare size={16} className="text-primary" />
+                <span className="text-[10px] md:text-xs font-heading font-bold uppercase tracking-widest text-muted-foreground">
                   Pending
                 </span>
               </div>
-              <p className="text-2xl font-heading font-bold text-foreground">
+              <p className="text-xl md:text-2xl font-heading font-bold text-foreground">
                 {service.pendingRequests || 0}
               </p>
             </div>
 
-            <div className="bg-muted/50 border border-border rounded-sm p-4">
+            <div className="bg-muted/50 border border-border rounded-sm p-3 md:p-4 col-span-2 md:col-span-1">
               <div className="flex items-center gap-2 mb-2">
-                <Clock size={18} className="text-primary" />
-                <span className="text-xs font-heading font-bold uppercase tracking-widest text-muted-foreground">
+                <Clock size={16} className="text-primary" />
+                <span className="text-[10px] md:text-xs font-heading font-bold uppercase tracking-widest text-muted-foreground">
                   Response Time
                 </span>
               </div>
-              <p className="text-2xl font-heading font-bold text-foreground">
+              <p className="text-xl md:text-2xl font-heading font-bold text-foreground">
                 2-4 hrs
               </p>
             </div>
@@ -129,7 +132,7 @@ export default function ServiceDetailsPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* provider info */}
         <div className="lg:col-span-2 space-y-6">
-          <Card className="border-2 border-border rounded-sm shadow-none">
+          <Card className="border border-border rounded-sm shadow-none">
             <CardContent className="p-6">
               <h2 className="text-lg font-heading font-bold uppercase text-foreground mb-5 tracking-widest flex items-center gap-2 border-b-2 border-primary pb-2">
                 <Briefcase size={20} className="text-primary" />
@@ -192,7 +195,7 @@ export default function ServiceDetailsPage() {
           </Card>
 
           {/* recent requests */}
-          <Card className="border-2 border-border rounded-sm shadow-none">
+          <Card className="border border-border rounded-sm shadow-none">
             <CardContent className="p-6">
               <h2 className="text-lg font-heading font-bold uppercase text-foreground mb-5 tracking-widest flex items-center gap-2 border-b-2 border-primary pb-2">
                 <Clock size={20} className="text-primary" />
@@ -265,7 +268,7 @@ export default function ServiceDetailsPage() {
         {/* contact & performance */}
         <div className="space-y-6">
           {/* contact card */}
-          <Card className="border-2 border-border rounded-sm shadow-none">
+          <Card className="border border-border rounded-sm shadow-none">
             <CardContent className="p-6">
               <h3 className="text-sm font-heading font-bold uppercase text-foreground mb-5 tracking-widest">
                 Contact
@@ -306,7 +309,7 @@ export default function ServiceDetailsPage() {
           </Card>
 
           {/* performance stats */}
-          <Card className="border-2 border-border rounded-sm shadow-none">
+          <Card className="border border-border rounded-sm shadow-none">
             <CardContent className="p-6">
               <h3 className="text-sm font-heading font-bold uppercase text-foreground mb-5 tracking-widest">
                 Performance
@@ -354,7 +357,7 @@ export default function ServiceDetailsPage() {
             </Button>
             <Button
               variant="outline"
-              className="w-full rounded-sm border-2 border-border h-12 font-heading font-bold uppercase tracking-widest text-xs"
+              className="w-full rounded-sm border border-border h-12 font-heading font-bold uppercase tracking-widest text-xs"
             >
               View More Services
             </Button>
@@ -365,7 +368,7 @@ export default function ServiceDetailsPage() {
       {/* contact modal */}
       {showContactModal && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-          <div className="bg-background rounded-sm border-2 border-border max-w-md w-full p-6">
+          <div className="bg-background rounded-sm border border-border max-w-md w-full p-6">
             <h2 className="text-xl font-heading font-bold uppercase text-foreground mb-4 tracking-wide">
               Send Message
             </h2>
@@ -385,7 +388,7 @@ export default function ServiceDetailsPage() {
                 <input
                   type="text"
                   placeholder="Service inquiry"
-                  className="w-full px-4 py-3 border-2 border-border rounded-sm bg-background focus:ring-2 focus:ring-primary focus:border-transparent outline-none text-sm"
+                  className="w-full px-4 py-3 border border-border rounded-sm bg-background focus:ring-2 focus:ring-primary focus:border-transparent outline-none text-sm"
                 />
               </div>
 
@@ -398,7 +401,7 @@ export default function ServiceDetailsPage() {
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   placeholder="Enter your message..."
-                  className="w-full px-4 py-3 border-2 border-border rounded-sm bg-background focus:ring-2 focus:ring-primary focus:border-transparent outline-none resize-none text-sm"
+                  className="w-full px-4 py-3 border border-border rounded-sm bg-background focus:ring-2 focus:ring-primary focus:border-transparent outline-none resize-none text-sm"
                 />
               </div>
 
@@ -410,7 +413,7 @@ export default function ServiceDetailsPage() {
                     setShowContactModal(false);
                     setMessage("");
                   }}
-                  className="flex-1 rounded-sm border-2 border-border h-11 font-heading uppercase tracking-wider"
+                  className="flex-1 rounded-sm border border-border h-11 font-heading uppercase tracking-wider"
                 >
                   Cancel
                 </Button>

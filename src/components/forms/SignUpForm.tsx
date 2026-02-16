@@ -59,7 +59,7 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({
                   onBlur={field.handleBlur}
                   onChange={(e) => field.handleChange(e.target.value)}
                   type="text"
-                  className="pl-12 h-14 bg-muted/30 border-2 border-transparent focus:border-primary rounded-sm transition-all text-lg shadow-none"
+                  className="pl-12 h-14 bg-muted/30 border border-transparent focus:border-primary rounded-sm transition-all text-lg shadow-none"
                   placeholder="John Doe"
                   required
                 />
@@ -83,7 +83,7 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({
                   onBlur={field.handleBlur}
                   onChange={(e) => field.handleChange(e.target.value)}
                   type="email"
-                  className="pl-12 h-14 bg-muted/30 border-2 border-transparent focus:border-primary rounded-sm transition-all text-lg shadow-none"
+                  className="pl-12 h-14 bg-muted/30 border border-transparent focus:border-primary rounded-sm transition-all text-lg shadow-none"
                   placeholder="name@company.com"
                   required
                 />
@@ -107,7 +107,7 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({
                   onBlur={field.handleBlur}
                   onChange={(e) => field.handleChange(e.target.value)}
                   type="password"
-                  className="pl-12 h-14 bg-muted/30 border-2 border-transparent focus:border-primary rounded-sm transition-all text-lg shadow-none"
+                  className="pl-12 h-14 bg-muted/30 border border-transparent focus:border-primary rounded-sm transition-all text-lg shadow-none"
                   placeholder="Min 8 characters"
                   required
                   minLength={8}

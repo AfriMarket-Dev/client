@@ -40,7 +40,7 @@ export function ReviewModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-md rounded-2xl p-0 overflow-hidden bg-background border-2 border-border shadow-2xl">
+      <DialogContent className="sm:max-w-md rounded-2xl p-0 overflow-hidden bg-background border border-border shadow-2xl">
         <div className="bg-foreground p-8 text-center relative overflow-hidden">
           <div className="absolute inset-0 african-pattern opacity-10 invert pointer-events-none" />
           <DialogHeader className="relative z-10">
@@ -96,7 +96,7 @@ export function ReviewModal({
               value={comment}
               onChange={(e) => setComment(e.target.value)}
               placeholder={`Share details about your experience with ${itemName}...`}
-              className="min-h-[120px] rounded-sm bg-muted/10 border-2 border-border p-4 focus:ring-2 focus:ring-primary/20 shadow-none font-mono text-sm italic"
+              className="min-h-[120px] rounded-sm bg-muted/10 border border-border p-4 focus:ring-2 focus:ring-primary/20 shadow-none font-mono text-sm italic"
             />
           </div>
         </div>

@@ -244,7 +244,7 @@ export default function AdminSupplierDetailsPage() {
                 <div className="flex flex-wrap items-center gap-4">
                   <Badge
                     variant="outline"
-                    className={`rounded-sm border-2 font-heading font-bold uppercase text-[10px] tracking-widest px-2.5 py-1 ${
+                    className={`rounded-sm border font-heading font-bold uppercase text-[10px] tracking-widest px-2.5 py-1 ${
                       supplier.verificationStatus === "verified"
                         ? "bg-green-50 text-green-700 border-green-100"
                         : "bg-yellow-50 text-yellow-700 border-yellow-100"
@@ -272,7 +272,7 @@ export default function AdminSupplierDetailsPage() {
               <Button
                 onClick={handleEditSupplier}
                 variant="outline"
-                className="rounded-sm h-11 px-6 border-2 border-border font-heading font-bold uppercase text-xs tracking-wider"
+                className="rounded-sm h-11 px-6 border border-border font-heading font-bold uppercase text-xs tracking-wider"
               >
                 <Edit size={14} className="mr-2" />
                 Edit

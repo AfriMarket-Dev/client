@@ -129,7 +129,7 @@ export class ErrorBoundary extends React.Component<
                 </div>
 
                 {this.state.error?.stack && (
-                  <div className="bg-muted/30 rounded-sm border-2 border-border overflow-hidden">
+                  <div className="bg-muted/30 rounded-sm border border-border overflow-hidden">
                     <button
                       onClick={() => this.toggleSection("stackTrace")}
                       className="w-full px-6 py-4 flex items-center justify-between group hover:bg-muted/50 transition-colors"
@@ -155,7 +155,7 @@ export class ErrorBoundary extends React.Component<
                 )}
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="bg-muted/20 border-2 border-border border-dashed rounded-sm p-4">
+                  <div className="bg-muted/20 border border-border border-dashed rounded-sm p-4">
                     <p className="text-[9px] font-black text-muted-foreground uppercase tracking-widest mb-2">
                       Temporal Marker
                     </p>
@@ -163,7 +163,7 @@ export class ErrorBoundary extends React.Component<
                       {new Date().toISOString()}
                     </p>
                   </div>
-                  <div className="bg-muted/20 border-2 border-border border-dashed rounded-sm p-4 md:col-span-2">
+                  <div className="bg-muted/20 border border-border border-dashed rounded-sm p-4 md:col-span-2">
                     <p className="text-[9px] font-black text-muted-foreground uppercase tracking-widest mb-2">
                       Network Location
                     </p>
@@ -181,7 +181,7 @@ export class ErrorBoundary extends React.Component<
                   onClick={this.handleCopyError}
                   variant="outline"
                   className={cn(
-                    "rounded-sm font-heading font-bold uppercase text-[10px] tracking-widest h-11 px-6 border-2 border-border shadow-none",
+                    "rounded-sm font-heading font-bold uppercase text-[10px] tracking-widest h-11 px-6 border border-border shadow-none",
                     "rounded-sm font-heading font-bold uppercase text-[10px] tracking-widest h-11 px-6 border border-border shadow-none",
                     this.state.copyFeedback &&
                       "bg-success text-success-foreground border-success hover:bg-success",

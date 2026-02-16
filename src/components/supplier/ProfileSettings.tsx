@@ -148,7 +148,7 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ supplierData }) => {
                     <img
                       src={profileData.avatar}
                       alt="Profile"
-                      className="w-28 h-28 rounded-sm object-cover border-2 border-background shadow-none"
+                      className="w-28 h-28 rounded-sm object-cover border border-background shadow-none"
                     />
                     <button className="absolute -bottom-2 -right-2 bg-primary text-primary-foreground p-2.5 rounded-sm hover:scale-110 transition-transform shadow-none border border-background">
                       <Camera className="w-4 h-4" />

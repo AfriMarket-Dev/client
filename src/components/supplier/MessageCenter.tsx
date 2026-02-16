@@ -89,7 +89,7 @@ const MessageCenter: React.FC<MessageCenterProps> = () => {
   ];
 
   return (
-    <div className="flex h-full bg-background border-2 border-border rounded-sm overflow-hidden shadow-2xl">
+    <div className="flex h-full bg-background border border-border rounded-sm overflow-hidden shadow-2xl">
       {/* Sidebar */}
       <div
         className={cn(
@@ -105,7 +105,7 @@ const MessageCenter: React.FC<MessageCenterProps> = () => {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4" />
             <Input
               placeholder="SEARCH CHANNELS..."
-              className="pl-10 h-11 bg-muted/20 border-2 border-border uppercase text-[10px] font-bold tracking-widest shadow-none"
+              className="pl-10 h-11 bg-muted/20 border border-border uppercase text-[10px] font-bold tracking-widest shadow-none"
             />
           </div>
         </div>
@@ -123,14 +123,14 @@ const MessageCenter: React.FC<MessageCenterProps> = () => {
               )}
             >
               <div className="relative shrink-0">
-                <Avatar className="h-12 w-12 rounded-sm border-2 border-border shadow-md">
+                <Avatar className="h-12 w-12 rounded-sm border border-border shadow-md">
                   <AvatarImage src={chat.avatar} />
                   <AvatarFallback className="font-heading font-bold">
                     {chat.name.charAt(0)}
                   </AvatarFallback>
                 </Avatar>
                 {chat.online && (
-                  <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-success rounded-full border-2 border-background" />
+                  <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-success rounded-full border border-background" />
                 )}
               </div>
               <div className="flex-1 min-w-0">
@@ -176,7 +176,7 @@ const MessageCenter: React.FC<MessageCenterProps> = () => {
                   <ChevronLeft className="w-5 h-5" />
                 </Button>
                 <div className="flex items-center gap-3">
-                  <Avatar className="h-10 w-10 rounded-sm border-2 border-border">
+                  <Avatar className="h-10 w-10 rounded-sm border border-border">
                     <AvatarImage
                       src={chats.find((c) => c.id === activeChat)?.avatar}
                     />
@@ -199,21 +199,21 @@ const MessageCenter: React.FC<MessageCenterProps> = () => {
                 <Button
                   variant="outline"
                   size="icon"
-                  className="h-10 w-10 border-2 border-border rounded-sm hover:border-primary"
+                  className="h-10 w-10 border border-border rounded-sm hover:border-primary"
                 >
                   <Phone className="w-4 h-4 text-muted-foreground" />
                 </Button>
                 <Button
                   variant="outline"
                   size="icon"
-                  className="h-10 w-10 border-2 border-border rounded-sm hover:border-primary"
+                  className="h-10 w-10 border border-border rounded-sm hover:border-primary"
                 >
                   <Video className="w-4 h-4 text-muted-foreground" />
                 </Button>
                 <Button
                   variant="outline"
                   size="icon"
-                  className="h-10 w-10 border-2 border-border rounded-sm hover:border-primary"
+                  className="h-10 w-10 border border-border rounded-sm hover:border-primary"
                 >
                   <MoreVertical className="w-4 h-4 text-muted-foreground" />
                 </Button>
@@ -232,7 +232,7 @@ const MessageCenter: React.FC<MessageCenterProps> = () => {
                 >
                   <div
                     className={cn(
-                      "max-w-[80%] lg:max-w-[60%] rounded-sm p-4 relative border-2",
+                      "max-w-[80%] lg:max-w-[60%] rounded-sm p-4 relative border",
                       msg.isOwn
                         ? "bg-foreground text-background border-foreground shadow-xl"
                         : "bg-background text-foreground border-border",
@@ -269,7 +269,7 @@ const MessageCenter: React.FC<MessageCenterProps> = () => {
                 <Button
                   variant="outline"
                   size="icon"
-                  className="h-12 w-12 border-2 border-border rounded-sm hover:bg-muted shrink-0"
+                  className="h-12 w-12 border border-border rounded-sm hover:bg-muted shrink-0"
                 >
                   <Paperclip className="w-5 h-5 text-muted-foreground" />
                 </Button>
@@ -278,7 +278,7 @@ const MessageCenter: React.FC<MessageCenterProps> = () => {
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
                     placeholder="TYPE TRANSMISSION..."
-                    className="h-12 bg-muted/10 border-2 border-border rounded-sm px-4 pr-12 font-bold uppercase text-xs tracking-wider shadow-none focus:bg-background"
+                    className="h-12 bg-muted/10 border border-border rounded-sm px-4 pr-12 font-bold uppercase text-xs tracking-wider shadow-none focus:bg-background"
                   />
                   <button
                     type="button"

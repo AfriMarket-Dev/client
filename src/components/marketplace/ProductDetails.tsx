@@ -111,7 +111,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({
       <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="grid lg:grid-cols-2 gap-8">
           <div className="space-y-4">
-            <Card className="overflow-hidden border-2 border-border shadow-none rounded-sm aspect-square relative bg-muted">
+            <Card className="overflow-hidden border border-border shadow-none rounded-sm aspect-square relative bg-muted">
               {images[selectedImageIndex] ? (
                 <img
                   src={images[selectedImageIndex]}
@@ -131,7 +131,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({
                     key={index}
                     type="button"
                     onClick={() => setSelectedImageIndex(index)}
-                    className={`aspect-square rounded-sm overflow-hidden border-2 transition-all ${
+                    className={`aspect-square rounded-sm overflow-hidden border transition-all ${
                       selectedImageIndex === index
                         ? "border-primary"
                         : "border-border hover:border-muted-foreground"
@@ -150,12 +150,12 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({
                 <Badge className="bg-primary/10 text-primary border-none hover:bg-primary/20 uppercase text-xs font-bold tracking-wider">
                   {listing.category?.name ?? "—"}
                 </Badge>
-                <Badge variant="outline" className="border-2 border-border uppercase text-xs font-semibold tracking-wide">
+                <Badge variant="outline" className="border border-border uppercase text-xs font-semibold tracking-wide">
                   {listing.type}
                 </Badge>
               </div>
 
-              <h1 className="text-3xl font-heading font-bold uppercase text-foreground mb-4 tracking-wide leading-tight">
+              <h1 className="text-2xl md:text-3xl font-heading font-bold uppercase text-foreground mb-4 tracking-wide leading-tight">
                 {listing.name}
               </h1>
 
@@ -175,10 +175,10 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({
               </p>
             </div>
 
-            <Card className="border-2 border-primary bg-muted/30 rounded-sm overflow-hidden shadow-none">
+            <Card className="border border-primary bg-muted/30 rounded-sm overflow-hidden shadow-none">
               <CardContent className="p-6">
                 <div className="flex items-baseline gap-2 mb-2">
-                  <span className="text-4xl font-heading font-black text-primary">
+                  <span className="text-3xl md:text-4xl font-heading font-black text-primary">
                     RWF {price.toLocaleString()}
                   </span>
                   <span className="text-muted-foreground font-bold uppercase text-xs">
@@ -198,7 +198,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({
                 <div className="h-16 bg-primary/5" />
                 <CardContent className="px-5 pb-5 relative">
                   <div className="flex justify-between items-end -translate-y-6">
-                    <div className="w-14 h-14 rounded-sm border-2 border-background bg-muted flex items-center justify-center text-lg font-bold text-muted-foreground">
+                    <div className="w-14 h-14 rounded-sm border border-background bg-muted flex items-center justify-center text-lg font-bold text-muted-foreground">
                       {company.name?.charAt(0) ?? "?"}
                     </div>
                     <Button

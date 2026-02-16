@@ -118,7 +118,7 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
               className="w-10 h-10 rounded-sm object-cover border border-background/20"
               alt=""
             />
-            <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-success rounded-full border-2 border-foreground"></div>
+            <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-success rounded-full border border-foreground"></div>
           </div>
           <div className="flex-1 overflow-hidden min-w-0">
             <p className="text-sm font-bold truncate text-background">
@@ -132,7 +132,7 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
 
         <button
           onClick={onLogout}
-          className="w-full flex items-center justify-center px-4 py-3 text-xs font-heading font-bold uppercase tracking-widest text-destructive hover:bg-destructive/10 rounded-sm transition-colors border-2 border-transparent hover:border-destructive/20"
+          className="w-full flex items-center justify-center px-4 py-3 text-xs font-heading font-bold uppercase tracking-widest text-destructive hover:bg-destructive/10 rounded-sm transition-colors border border-transparent hover:border-destructive/20"
         >
           <LogOut className="w-4 h-4 mr-2" />
           Sign Out

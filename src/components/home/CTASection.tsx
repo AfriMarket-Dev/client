@@ -7,7 +7,7 @@ const CTASection: React.FC = () => {
   const navigate = useNavigate();
 
   return (
-    <section className="relative py-24 overflow-hidden bg-foreground text-background border-t border-border">
+    <section className="relative py-12 md:py-24 overflow-hidden bg-foreground text-background border-t border-border">
       <div className="absolute inset-0 opacity-10 pointer-events-none">
         <div
           className="absolute inset-0"
@@ -28,7 +28,7 @@ const CTASection: React.FC = () => {
               Join the Network
             </div>
 
-            <h2 className="text-4xl md:text-5xl font-heading font-bold text-background mb-6 uppercase leading-tight">
+            <h2 className="text-3xl md:text-5xl font-heading font-bold text-background mb-6 uppercase leading-tight">
               Ready to Build <br />
               <span className="text-primary">Something Great?</span>
             </h2>

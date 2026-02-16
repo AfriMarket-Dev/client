@@ -81,7 +81,7 @@ export const AdminTopBar: React.FC<AdminTopBarProps> = ({ user }) => {
             size={18}
             className="text-muted-foreground group-hover:text-primary transition-colors"
           />
-          <span className="absolute top-[-2px] right-[-2px] w-3 h-3 bg-primary border-2 border-background rounded-full"></span>
+          <span className="absolute top-[-2px] right-[-2px] w-3 h-3 bg-primary border border-background rounded-full"></span>
         </Button>
 
         <Separator orientation="vertical" className="h-8 bg-border w-[2px]" />

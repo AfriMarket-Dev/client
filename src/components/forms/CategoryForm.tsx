@@ -108,7 +108,7 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
           type="button"
           variant="outline"
           onClick={onCancel}
-          className="flex-1 rounded-sm border-2 border-border h-11 font-heading font-bold uppercase text-xs tracking-wider shadow-none"
+          className="flex-1 rounded-sm border border-border h-11 font-heading font-bold uppercase text-xs tracking-wider shadow-none"
         >
           Cancel
         </Button>

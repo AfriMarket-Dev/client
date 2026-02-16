@@ -98,7 +98,7 @@ const SignUpPage = () => {
         <div className="space-y-4">
           <button
             onClick={() => handleRoleSelect("buyer")}
-            className="w-full p-6 border-2 border-muted hover:border-primary/50 bg-muted/10 hover:bg-muted/20 rounded-sm transition-all text-left group flex items-start space-x-4"
+            className="w-full p-6 border border-muted hover:border-primary/50 bg-muted/10 hover:bg-muted/20 rounded-sm transition-all text-left group flex items-start space-x-4"
           >
             <div className="p-3 bg-background rounded-sm group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
               <Briefcase className="w-6 h-6" />
@@ -115,7 +115,7 @@ const SignUpPage = () => {
 
           <button
             onClick={() => handleRoleSelect("provider")}
-            className="w-full p-6 border-2 border-muted hover:border-primary/50 bg-muted/10 hover:bg-muted/20 rounded-sm transition-all text-left group flex items-start space-x-4"
+            className="w-full p-6 border border-muted hover:border-primary/50 bg-muted/10 hover:bg-muted/20 rounded-sm transition-all text-left group flex items-start space-x-4"
           >
             <div className="p-3 bg-background rounded-sm group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
               <Store className="w-6 h-6" />

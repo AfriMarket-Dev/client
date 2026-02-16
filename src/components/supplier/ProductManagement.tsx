@@ -134,13 +134,13 @@ const ProductManagement: React.FC = () => {
               placeholder="SEARCH CATALOG..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 h-11 bg-background border-2 border-border uppercase text-xs font-bold tracking-widest shadow-none"
+              className="pl-10 h-11 bg-background border border-border uppercase text-xs font-bold tracking-widest shadow-none"
             />
           </div>
           <select
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
-            className="px-4 py-2 border-2 border-border rounded-sm focus:outline-none focus:ring-1 focus:ring-primary bg-background h-11 font-heading font-bold uppercase text-[10px] tracking-widest"
+            className="px-4 py-2 border border-border rounded-sm focus:outline-none focus:ring-1 focus:ring-primary bg-background h-11 font-heading font-bold uppercase text-[10px] tracking-widest"
           >
             {categories.map((category) => (
               <option key={category} value={category}>
@@ -148,7 +148,7 @@ const ProductManagement: React.FC = () => {
               </option>
             ))}
           </select>
-          <div className="flex items-center bg-muted border-2 border-border rounded-sm p-1">
+          <div className="flex items-center bg-muted border border-border rounded-sm p-1">
             <button
               onClick={() => setViewMode("grid")}
               className={cn(
@@ -274,14 +274,14 @@ const ProductManagement: React.FC = () => {
                 <Button
                   variant="outline"
                   size="icon"
-                  className="h-10 w-10 border-2 border-border rounded-sm hover:border-primary"
+                  className="h-10 w-10 border border-border rounded-sm hover:border-primary"
                 >
                   <Eye className="w-4 h-4 text-muted-foreground" />
                 </Button>
                 <Button
                   variant="outline"
                   size="icon"
-                  className="h-10 w-10 border-2 border-border rounded-sm hover:border-destructive hover:bg-destructive/5 group"
+                  className="h-10 w-10 border border-border rounded-sm hover:border-destructive hover:bg-destructive/5 group"
                 >
                   <Trash2 className="w-4 h-4 text-muted-foreground group-hover:text-destructive" />
                 </Button>
@@ -292,7 +292,7 @@ const ProductManagement: React.FC = () => {
       </div>
 
       {filteredProducts.length === 0 && (
-        <div className="text-center py-20 bg-muted/5 border-2 border-dashed border-border rounded-sm">
+        <div className="text-center py-20 bg-muted/5 border border-dashed border-border rounded-sm">
           <Package className="w-16 h-16 text-muted-foreground/20 mx-auto mb-6" />
           <h3 className="text-xl font-heading font-bold text-foreground mb-2 uppercase tracking-widest">
             Stream Empty
@@ -311,7 +311,7 @@ const ProductManagement: React.FC = () => {
 
       {/* Forms using base components */}
       <Dialog open={showAddProduct} onOpenChange={setShowAddProduct}>
-        <DialogContent className="max-w-md p-0 overflow-hidden shadow-none border-2 border-border rounded-sm">
+        <DialogContent className="max-w-md p-0 overflow-hidden shadow-none border border-border rounded-sm">
           <div className="bg-muted/30 p-6 border-b-2 border-border relative overflow-hidden">
             <div className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-primary/20" />
             <DialogHeader>
@@ -336,7 +336,7 @@ const ProductManagement: React.FC = () => {
         open={!!editingProduct}
         onOpenChange={(o) => !o && setEditingProduct(null)}
       >
-        <DialogContent className="max-w-md p-0 overflow-hidden shadow-none border-2 border-border rounded-sm">
+        <DialogContent className="max-w-md p-0 overflow-hidden shadow-none border border-border rounded-sm">
           <div className="bg-muted/30 p-6 border-b-2 border-border relative overflow-hidden">
             <div className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-primary/20" />
             <DialogHeader>

@@ -242,7 +242,7 @@ const Wishlist: React.FC<WishlistProps> = ({
         {activeTab === "suppliers" && (
           <div>
             {wishlistSuppliers.length === 0 ? (
-              <div className="text-center py-20 bg-card rounded-sm border-2 border-border">
+              <div className="text-center py-20 bg-card rounded-sm border border-border">
                 <div className="w-16 h-16 bg-muted rounded-sm flex items-center justify-center mx-auto mb-6">
                   <Users className="w-8 h-8 text-muted-foreground" />
                 </div>
@@ -270,7 +270,7 @@ const Wishlist: React.FC<WishlistProps> = ({
                 {wishlistSuppliers.map((supplier) => (
                   <Card
                     key={supplier.id}
-                    className="rounded-sm border-2 border-border shadow-none hover:border-primary transition-all duration-300 overflow-hidden group cursor-pointer"
+                    className="rounded-sm border border-border shadow-none hover:border-primary transition-all duration-300 overflow-hidden group cursor-pointer"
                     onClick={() => onSupplierClick(supplier.id)}
                   >
                     <div className="relative h-32 overflow-hidden">

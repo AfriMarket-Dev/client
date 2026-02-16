@@ -41,7 +41,7 @@ export const SystemActions: React.FC = () => (
         <Separator className="bg-border h-[2px]" />
         <Button
           variant="outline"
-          className="w-full rounded-sm border-2 border-border font-heading font-bold uppercase tracking-wider h-11 hover:bg-muted text-xs shadow-none"
+          className="w-full rounded-sm border border-border font-heading font-bold uppercase tracking-wider h-11 hover:bg-muted text-xs shadow-none"
         >
           Configure Rules
         </Button>

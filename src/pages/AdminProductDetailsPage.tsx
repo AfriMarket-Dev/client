@@ -78,7 +78,7 @@ export default function AdminProductDetailsPage() {
           Back to Supplier
         </Button>
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="icon" className="rounded-sm border-2 border-border h-10 w-10">
+          <Button variant="outline" size="icon" className="rounded-sm border border-border h-10 w-10">
             <Share2 size={18} />
           </Button>
         </div>
@@ -110,7 +110,7 @@ export default function AdminProductDetailsPage() {
                   <button
                     key={idx}
                     onClick={() => setSelectedImageIndex(idx)}
-                    className={`w-20 h-20 rounded-sm border-2 overflow-hidden flex-shrink-0 transition-all ${
+                    className={`w-20 h-20 rounded-sm border overflow-hidden flex-shrink-0 transition-all ${
                       selectedImageIndex === idx
                         ? "border-primary scale-105 shadow-lg"
                         : "border-border hover:border-primary/50"
@@ -154,7 +154,7 @@ export default function AdminProductDetailsPage() {
 
             {/* Pricing Grid */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="bg-muted/30 rounded-sm p-5 border-2 border-border relative overflow-hidden group hover:border-primary transition-colors">
+              <div className="bg-muted/30 rounded-sm p-5 border border-border relative overflow-hidden group hover:border-primary transition-colors">
                 <div className="absolute top-0 right-0 w-2 h-2 border-t-2 border-r-2 border-primary/20 group-hover:border-primary transition-colors" />
                 <div className="flex items-center gap-2 mb-3">
                   <DollarSign size={16} className="text-primary" />
@@ -167,7 +167,7 @@ export default function AdminProductDetailsPage() {
                 </p>
               </div>
 
-              <div className="bg-muted/30 rounded-sm p-5 border-2 border-border relative overflow-hidden group hover:border-primary transition-colors">
+              <div className="bg-muted/30 rounded-sm p-5 border border-border relative overflow-hidden group hover:border-primary transition-colors">
                 <div className="absolute top-0 right-0 w-2 h-2 border-t-2 border-r-2 border-primary/20 group-hover:border-primary transition-colors" />
                 <div className="flex items-center gap-2 mb-3">
                   <ShoppingCart size={16} className="text-primary" />
@@ -180,7 +180,7 @@ export default function AdminProductDetailsPage() {
                 </p>
               </div>
 
-              <div className="bg-muted/30 rounded-sm p-5 border-2 border-border relative overflow-hidden group hover:border-primary transition-colors">
+              <div className="bg-muted/30 rounded-sm p-5 border border-border relative overflow-hidden group hover:border-primary transition-colors">
                 <div className="absolute top-0 right-0 w-2 h-2 border-t-2 border-r-2 border-primary/20 group-hover:border-primary transition-colors" />
                 <div className="flex items-center gap-2 mb-3">
                   <Package size={16} className="text-primary" />
@@ -201,7 +201,7 @@ export default function AdminProductDetailsPage() {
               {Object.entries(product.specifications).map(([key, value]) => (
                 <div
                   key={key}
-                  className="p-4 bg-muted/10 rounded-sm border-2 border-border border-dashed flex justify-between items-center"
+                  className="p-4 bg-muted/10 rounded-sm border border-border border-dashed flex justify-between items-center"
                 >
                   <p className="text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground">
                     {key}
@@ -240,8 +240,8 @@ export default function AdminProductDetailsPage() {
         <div className="space-y-8">
           {/* Supplier Card */}
           <AdminCard title="Provider" headerActions={<Building2 size={16} className="text-primary" />}>
-            <div className="flex items-center gap-4 mb-6 p-4 bg-muted/20 border-2 border-border rounded-sm">
-              <div className="w-14 h-14 rounded-sm bg-primary text-primary-foreground flex items-center justify-center font-heading font-bold text-2xl border-2 border-background shadow-lg">
+            <div className="flex items-center gap-4 mb-6 p-4 bg-muted/20 border border-border rounded-sm">
+              <div className="w-14 h-14 rounded-sm bg-primary text-primary-foreground flex items-center justify-center font-heading font-bold text-2xl border border-background shadow-lg">
                 {supplier.name.charAt(0)}
               </div>
               <div className="flex-1 min-w-0">
@@ -259,7 +259,7 @@ export default function AdminProductDetailsPage() {
             <Button
               variant="outline"
               onClick={() => navigate(`/admin/suppliers/${supplierId}`)}
-              className="w-full border-2 border-border rounded-sm h-11 font-heading font-bold uppercase text-[10px] tracking-widest"
+              className="w-full border border-border rounded-sm h-11 font-heading font-bold uppercase text-[10px] tracking-widest"
             >
               Access Profile
             </Button>
@@ -268,7 +268,7 @@ export default function AdminProductDetailsPage() {
           {/* Performance Stats */}
           <AdminCard title="Metrics" subtitle="Real-time listing reach">
             <div className="space-y-4">
-              <div className="flex items-center justify-between p-4 bg-muted/30 border-2 border-border border-dashed rounded-sm">
+              <div className="flex items-center justify-between p-4 bg-muted/30 border border-border border-dashed rounded-sm">
                 <div className="flex items-center gap-2">
                   <Eye size={16} className="text-primary" />
                   <span className="text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground">
@@ -279,7 +279,7 @@ export default function AdminProductDetailsPage() {
                   1,245
                 </span>
               </div>
-              <div className="flex items-center justify-between p-4 bg-muted/30 border-2 border-border border-dashed rounded-sm">
+              <div className="flex items-center justify-between p-4 bg-muted/30 border border-border border-dashed rounded-sm">
                 <div className="flex items-center gap-2">
                   <MessageSquare size={16} className="text-primary" />
                   <span className="text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground">
@@ -290,7 +290,7 @@ export default function AdminProductDetailsPage() {
                   87
                 </span>
               </div>
-              <div className="flex items-center justify-between p-4 bg-muted/30 border-2 border-border border-dashed rounded-sm">
+              <div className="flex items-center justify-between p-4 bg-muted/30 border border-border border-dashed rounded-sm">
                 <div className="flex items-center gap-2">
                   <Calendar size={16} className="text-primary" />
                   <span className="text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground">
@@ -320,7 +320,7 @@ export default function AdminProductDetailsPage() {
             <Button
               variant="outline"
               onClick={() => setShowDeleteModal(true)}
-              className="w-full h-14 border-2 border-red-200 text-red-600 bg-red-50/50 hover:bg-red-50 font-heading font-bold uppercase text-xs tracking-widest"
+              className="w-full h-14 border border-red-200 text-red-600 bg-red-50/50 hover:bg-red-50 font-heading font-bold uppercase text-xs tracking-widest"
             >
               <Trash2 size={16} className="mr-2" />
               Purge Listing
@@ -415,7 +415,7 @@ export default function AdminProductDetailsPage() {
                     ))}
                 </AdminTable>
               ) : (
-                <div className="text-center py-20 border-2 border-dashed border-border rounded-sm bg-muted/5">
+                <div className="text-center py-20 border border-dashed border-border rounded-sm bg-muted/5">
                   <FileText size={40} className="text-muted-foreground/10 mx-auto mb-4" />
                   <p className="text-[10px] text-muted-foreground font-heading font-bold uppercase tracking-widest">
                     Zero transaction history detected
@@ -433,7 +433,7 @@ export default function AdminProductDetailsPage() {
                   .map((inquiry) => (
                     <div
                       key={inquiry.id}
-                      className="border-2 border-border rounded-sm p-6 hover:border-primary/50 transition-all bg-background relative overflow-hidden group"
+                      className="border border-border rounded-sm p-6 hover:border-primary/50 transition-all bg-background relative overflow-hidden group"
                     >
                       <div className="absolute top-0 right-0 w-2 h-2 border-t-2 border-r-2 border-primary/10 group-hover:border-primary transition-colors" />
                       
@@ -479,14 +479,14 @@ export default function AdminProductDetailsPage() {
                             {new Date(inquiry.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
                           </div>
                         </div>
-                        <Button variant="outline" className="px-4 py-1.5 h-9 bg-primary/5 text-primary font-heading font-bold uppercase text-[9px] tracking-widest rounded-sm border-2 border-primary/10 hover:border-primary">
+                        <Button variant="outline" className="px-4 py-1.5 h-9 bg-primary/5 text-primary font-heading font-bold uppercase text-[9px] tracking-widest rounded-sm border border-primary/10 hover:border-primary">
                           Intercept Stream
                         </Button>
                       </div>
                     </div>
                   ))
               ) : (
-                <div className="text-center py-20 border-2 border-dashed border-border rounded-sm bg-muted/5">
+                <div className="text-center py-20 border border-dashed border-border rounded-sm bg-muted/5">
                   <MessageSquare size={40} className="text-muted-foreground/10 mx-auto mb-4" />
                   <p className="text-[10px] text-muted-foreground font-heading font-bold uppercase tracking-widest">
                     No active leads for this SKU

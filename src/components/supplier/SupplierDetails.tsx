@@ -92,7 +92,7 @@ const SupplierDetails: React.FC<SupplierDetailsProps> = ({
           <div className="flex flex-col md:flex-row md:items-start gap-8">
             <div className="flex-1">
               <div className="flex items-start gap-6">
-                <div className="w-20 h-20 rounded-sm border-2 border-background bg-muted flex items-center justify-center text-2xl font-bold text-muted-foreground shrink-0">
+                <div className="w-20 h-20 rounded-sm border border-background bg-muted flex items-center justify-center text-2xl font-bold text-muted-foreground shrink-0">
                   {company.name?.charAt(0) ?? "?"}
                 </div>
                 <div>

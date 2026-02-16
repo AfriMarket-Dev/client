@@ -120,7 +120,7 @@ export default function AdminAssignmentsPage() {
               placeholder="SEARCH ASSIGNMENTS..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border-2 border-border rounded-sm focus:outline-none focus:ring-1 focus:ring-primary uppercase text-sm tracking-wider placeholder:text-muted-foreground/60 h-11 bg-background"
+              className="w-full pl-10 pr-4 py-2 border border-border rounded-sm focus:outline-none focus:ring-1 focus:ring-primary uppercase text-sm tracking-wider placeholder:text-muted-foreground/60 h-11 bg-background"
             />
           </div>
         </div>
@@ -172,7 +172,7 @@ export default function AdminAssignmentsPage() {
               {assignment.assignedDate}
             </td>
             <td className="px-4 py-4">
-              <span className="inline-flex items-center justify-center px-2 py-0.5 bg-muted border-2 border-border text-foreground rounded-sm text-[10px] font-black uppercase tracking-widest">
+              <span className="inline-flex items-center justify-center px-2 py-0.5 bg-muted border border-border text-foreground rounded-sm text-[10px] font-black uppercase tracking-widest">
                 {assignment.assignments} links
               </span>
             </td>
@@ -212,7 +212,7 @@ export default function AdminAssignmentsPage() {
                 <select
                   value={selectedSupplier}
                   onChange={(e) => setSelectedSupplier(e.target.value)}
-                  className="w-full px-4 py-3 border-2 border-border rounded-sm focus:outline-none focus:ring-1 focus:ring-primary h-12 font-heading font-bold uppercase text-xs tracking-widest bg-background"
+                  className="w-full px-4 py-3 border border-border rounded-sm focus:outline-none focus:ring-1 focus:ring-primary h-12 font-heading font-bold uppercase text-xs tracking-widest bg-background"
                   required
                 >
                   <option value="">CHOOSE PROVIDER...</option>
@@ -229,7 +229,7 @@ export default function AdminAssignmentsPage() {
                 <label className="text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground block ml-1">
                   Available Service Streams
                 </label>
-                <div className="space-y-1.5 max-h-48 overflow-y-auto border-2 border-border rounded-sm p-3 bg-muted/10 font-mono">
+                <div className="space-y-1.5 max-h-48 overflow-y-auto border border-border rounded-sm p-3 bg-muted/10 font-mono">
                   {services.map((service) => (
                     <label
                       key={service.id}
@@ -239,7 +239,7 @@ export default function AdminAssignmentsPage() {
                         type="checkbox"
                         checked={selectedServices.includes(service.id)}
                         onChange={() => toggleService(service.id)}
-                        className="w-4 h-4 text-primary border-2 border-border rounded-sm focus:ring-primary bg-background"
+                        className="w-4 h-4 text-primary border border-border rounded-sm focus:ring-primary bg-background"
                       />
                       <span className="text-[10px] font-black uppercase tracking-widest text-foreground group-hover:text-primary transition-colors">
                         {service.name}
@@ -255,7 +255,7 @@ export default function AdminAssignmentsPage() {
                   type="button"
                   variant="outline"
                   onClick={handleCloseModal}
-                  className="flex-1 rounded-sm border-2 border-border h-12 font-heading font-bold uppercase text-xs tracking-wider"
+                  className="flex-1 rounded-sm border border-border h-12 font-heading font-bold uppercase text-xs tracking-wider"
                 >
                   Cancel
                 </Button>

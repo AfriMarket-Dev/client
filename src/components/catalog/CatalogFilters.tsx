@@ -1,8 +1,26 @@
-import React from "react";
-import { Search, ShieldCheck, Filter } from "lucide-react";
+import React, { useState } from "react";
+import { Search, X, SlidersHorizontal, ChevronDown, Check } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
-import { Card } from "@/components/ui/Card";
+import { Badge } from "@/components/ui/Badge";
+import { Separator } from "@/components/ui/Separator";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/Select";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+  SheetClose,
+} from "@/components/ui/Sheet";
 import type { ListingCategory } from "@/app/api/listing-categories";
 
 export interface CatalogFiltersState {
@@ -19,12 +37,12 @@ export interface CatalogFiltersState {
 interface CatalogFiltersProps {
   filters: CatalogFiltersState;
   onFiltersChange: (f: Partial<CatalogFiltersState>) => void;
+  onClearFilters: () => void;
   categories: ListingCategory[];
-  showFilters: boolean;
   isLoading?: boolean;
 }
 
-const defaultFilters: CatalogFiltersState = {
+export const defaultCatalogFiltersState = (): CatalogFiltersState => ({
   searchQuery: "",
   categoryId: "all",
   type: "all",
@@ -33,172 +51,263 @@ const defaultFilters: CatalogFiltersState = {
   district: "",
   sortBy: "createdAt",
   sortOrder: "DESC",
-};
-
-export const defaultCatalogFiltersState = (): CatalogFiltersState => ({ ...defaultFilters });
+});
 
 export const CatalogFilters: React.FC<CatalogFiltersProps> = ({
   filters,
   onFiltersChange,
+  onClearFilters,
   categories,
-  showFilters,
   isLoading,
 }) => {
-  const set = (key: keyof CatalogFiltersState, value: string | number) =>
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
+
+  const set = (key: keyof CatalogFiltersState, value: string) =>
     onFiltersChange({ [key]: value });
 
+  // Helper to handle combined sort change
+  const handleSortChange = (value: string) => {
+    const [field, order] = value.split("-");
+    onFiltersChange({
+      sortBy: field as CatalogFiltersState["sortBy"],
+      sortOrder: order as CatalogFiltersState["sortOrder"],
+    });
+  };
+
+  const activeFilterCount = [
+    filters.categoryId !== "all",
+    filters.type !== "all",
+    filters.minPrice !== "",
+    filters.maxPrice !== "",
+    filters.district !== "",
+  ].filter(Boolean).length;
+
   return (
-    <aside
-      className={`lg:w-72 space-y-6 ${showFilters ? "block" : "hidden lg:block"}`}
-    >
-      <div className="space-y-4 sticky top-24">
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-          <Input
-            placeholder="Search materials..."
-            value={filters.searchQuery}
-            onChange={(e) => set("searchQuery", e.target.value)}
-            className="h-11 pl-10 rounded-sm bg-background border border-border uppercase placeholder:text-xs"
-          />
-        </div>
-
-        <div>
-          <h3 className="font-heading font-bold text-foreground mb-3 px-1 uppercase text-xs tracking-widest flex items-center gap-2">
-            <Filter className="w-3 h-3" />
-            Type
-          </h3>
-          <div className="flex flex-col gap-1">
-            {(["all", "PRODUCT", "SERVICE"] as const).map((t) => (
-              <Button
-                key={t}
-                variant={filters.type === t ? "secondary" : "ghost"}
-                className="justify-start rounded-sm font-bold uppercase text-xs tracking-wider"
-                onClick={() => set("type", t)}
+    <div className="bg-background border-b border-border sticky top-0 z-30 shadow-sm">
+      <div className="max-w-7xl mx-auto px-4 py-3 flex flex-col gap-3">
+        {/* TOP BAR: Search + Sort + Filter Trigger */}
+        <div className="flex items-center gap-3">
+          {/* Search Input (Flex Grow) */}
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <Input
+              placeholder="Search products..."
+              value={filters.searchQuery}
+              onChange={(e) => set("searchQuery", e.target.value)}
+              className="h-10 pl-9 pr-8 bg-muted/40 hover:bg-muted/60 transition-colors border-border focus:bg-background rounded-sm"
+            />
+            {filters.searchQuery && (
+              <button
+                onClick={() => set("searchQuery", "")}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
               >
-                {t === "all" ? "All" : t === "PRODUCT" ? "Products" : "Services"}
+                <X className="w-3.5 h-3.5" />
+              </button>
+            )}
+          </div>
+
+          {/* Sort Dropdown (Hidden on very small screens? No, keep it) */}
+          <div className="hidden sm:block w-[180px]">
+            <Select
+              value={`${filters.sortBy}-${filters.sortOrder}`}
+              onValueChange={handleSortChange}
+            >
+              <SelectTrigger className="h-10 bg-background border-border rounded-sm">
+                <SelectValue placeholder="Sort by" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="createdAt-DESC">Newest Arrivals</SelectItem>
+                <SelectItem value="price-ASC">Price: Low to High</SelectItem>
+                <SelectItem value="price-DESC">Price: High to Low</SelectItem>
+                <SelectItem value="name-ASC">Name: A to Z</SelectItem>
+                <SelectItem value="views-DESC">Most Popular</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Filter Sheet Trigger */}
+          <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
+            <SheetTrigger asChild>
+              <Button 
+                variant={activeFilterCount > 0 ? "secondary" : "outline"} 
+                className={`h-10 gap-2 rounded-sm border-border ${activeFilterCount > 0 ? "text-foreground bg-secondary/80 hover:bg-secondary" : ""}`}
+              >
+                <SlidersHorizontal className="w-4 h-4" />
+                <span className="hidden xs:inline">Filters</span>
+                {activeFilterCount > 0 && (
+                  <Badge variant="default" className="ml-1 h-5 w-5 p-0 flex items-center justify-center rounded-full text-[10px]">
+                    {activeFilterCount}
+                  </Badge>
+                )}
               </Button>
-            ))}
-          </div>
+            </SheetTrigger>
+            
+            <SheetContent side="right" className="w-full sm:max-w-md p-0 flex flex-col h-full bg-background border-l border-border">
+              <SheetHeader className="px-6 py-4 border-b border-border">
+                <SheetTitle>Filter Products</SheetTitle>
+                <SheetDescription>Refine your search results.</SheetDescription>
+              </SheetHeader>
+              
+              <div className="flex-1 overflow-y-auto px-6 py-6 flex flex-col gap-6">
+                {/* Mobile Sort (Visible only in sheet on small screens if needed, but we keep it separate generally. Let's add it here for mobile convenience) */}
+                <div className="sm:hidden space-y-3">
+                  <label className="text-sm font-medium">Sort By</label>
+                  <Select
+                    value={`${filters.sortBy}-${filters.sortOrder}`}
+                    onValueChange={handleSortChange}
+                  >
+                    <SelectTrigger className="w-full">
+                       <SelectValue placeholder="Sort by" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="createdAt-DESC">Newest Arrivals</SelectItem>
+                        <SelectItem value="price-ASC">Price: Low to High</SelectItem>
+                        <SelectItem value="price-DESC">Price: High to Low</SelectItem>
+                        <SelectItem value="name-ASC">Name: A to Z</SelectItem>
+                        <SelectItem value="views-DESC">Most Popular</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                {/* Category */}
+                <div className="space-y-3">
+                  <label className="text-sm font-medium">Category</label>
+                  <Select
+                    value={filters.categoryId}
+                    onValueChange={(value) => set("categoryId", value)}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select Category" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Categories</SelectItem>
+                      {!isLoading &&
+                        categories.map((cat) => (
+                          <SelectItem key={cat.id} value={cat.id}>
+                            {cat.name}
+                          </SelectItem>
+                        ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <Separator />
+
+                {/* Type */}
+                <div className="space-y-3">
+                  <label className="text-sm font-medium">Listing Type</label>
+                  <div className="grid grid-cols-3 gap-2">
+                    {["all", "PRODUCT", "SERVICE"].map((type) => (
+                        <Button
+                            key={type}
+                            type="button"
+                            variant={filters.type === type ? "default" : "outline"}
+                            size="sm"
+                            onClick={() => set("type", type as any)}
+                            className="w-full capitalize"
+                        >
+                            {type.toLowerCase()}
+                        </Button>
+                    ))}
+                  </div>
+                </div>
+
+                <Separator />
+
+                {/* Price Range */}
+                <div className="space-y-3">
+                  <label className="text-sm font-medium">Price Range (RWF)</label>
+                  <div className="flex items-center gap-3">
+                    <Input
+                      type="number"
+                      placeholder="Min"
+                      value={filters.minPrice}
+                      onChange={(e) => set("minPrice", e.target.value)}
+                      className="h-10"
+                    />
+                    <span className="text-muted-foreground">-</span>
+                    <Input
+                      type="number"
+                      placeholder="Max"
+                      value={filters.maxPrice}
+                      onChange={(e) => set("maxPrice", e.target.value)}
+                      className="h-10"
+                    />
+                  </div>
+                </div>
+
+                <Separator />
+
+                {/* District */}
+                <div className="space-y-3">
+                  <label className="text-sm font-medium">Location / District</label>
+                  <Input
+                    placeholder="e.g. Gasabo"
+                    value={filters.district}
+                    onChange={(e) => set("district", e.target.value)}
+                    className="h-10"
+                  />
+                </div>
+              </div>
+
+              <SheetFooter className="border-t border-border p-6 bg-muted/20 mt-auto">
+                 <div className="flex w-full gap-3">
+                    <Button 
+                        variant="outline" 
+                        className="flex-1"
+                        onClick={onClearFilters}
+                    >
+                        Reset
+                    </Button>
+                    <SheetClose asChild>
+                        <Button className="flex-1" type="submit">
+                            Show Results
+                        </Button>
+                    </SheetClose>
+                 </div>
+              </SheetFooter>
+            </SheetContent>
+          </Sheet>
         </div>
 
-        <div>
-          <h3 className="font-heading font-bold text-foreground mb-3 px-1 uppercase text-xs tracking-widest">
-            Category
-          </h3>
-          <div className="flex flex-col gap-1">
-            <Button
-              variant={filters.categoryId === "all" ? "secondary" : "ghost"}
-              className="justify-start rounded-sm font-bold uppercase text-xs tracking-wider"
-              onClick={() => set("categoryId", "all")}
+        {/* ACTIVE FILTERS (Chips) */}
+        {activeFilterCount > 0 && (
+          <div className="flex flex-wrap items-center gap-2 pb-1 animate-in fade-in slide-in-from-top-1">
+            {filters.categoryId !== "all" && (
+                <Badge variant="secondary" className="rounded-sm px-2 py-1 gap-1 text-xs font-normal border-border hover:bg-secondary/80">
+                    Category: {categories.find(c => c.id === filters.categoryId)?.name || filters.categoryId}
+                    <button onClick={() => set("categoryId", "all")} className="ml-1 hover:text-foreground/70"><X className="w-3 h-3" /></button>
+                </Badge>
+            )}
+            {filters.type !== "all" && (
+                <Badge variant="secondary" className="rounded-sm px-2 py-1 gap-1 text-xs font-normal border-border hover:bg-secondary/80 capitalize">
+                    Type: {filters.type.toLowerCase()}
+                    <button onClick={() => set("type", "all")} className="ml-1 hover:text-foreground/70"><X className="w-3 h-3" /></button>
+                </Badge>
+            )}
+            {(filters.minPrice || filters.maxPrice) && (
+                <Badge variant="secondary" className="rounded-sm px-2 py-1 gap-1 text-xs font-normal border-border hover:bg-secondary/80">
+                   Price: {filters.minPrice || "0"} - {filters.maxPrice || "Any"}
+                   <button onClick={() => onFiltersChange({ minPrice: "", maxPrice: "" })} className="ml-1 hover:text-foreground/70"><X className="w-3 h-3" /></button>
+                </Badge>
+            )}
+            {filters.district && (
+                <Badge variant="secondary" className="rounded-sm px-2 py-1 gap-1 text-xs font-normal border-border hover:bg-secondary/80">
+                   Location: {filters.district}
+                   <button onClick={() => set("district", "")} className="ml-1 hover:text-foreground/70"><X className="w-3 h-3" /></button>
+                </Badge>
+            )}
+            <Button 
+                variant="link" 
+                size="sm" 
+                onClick={onClearFilters}
+                className="h-auto p-0 text-xs text-muted-foreground hover:text-destructive transition-colors ml-auto"
             >
-              All
-            </Button>
-            {!isLoading &&
-              categories.map((cat) => (
-                <Button
-                  key={cat.id}
-                  variant={filters.categoryId === cat.id ? "secondary" : "ghost"}
-                  className="justify-start rounded-sm font-semibold text-xs uppercase tracking-wide hover:text-primary"
-                  onClick={() => set("categoryId", cat.id)}
-                >
-                  {cat.name}
-                </Button>
-              ))}
-          </div>
-        </div>
-
-        <div>
-          <h3 className="font-heading font-bold text-foreground mb-3 px-1 uppercase text-xs tracking-widest">
-            Price range (RWF)
-          </h3>
-          <div className="flex gap-2">
-            <Input
-              type="number"
-              min={0}
-              step={100}
-              placeholder="Min"
-              value={filters.minPrice}
-              onChange={(e) => set("minPrice", e.target.value)}
-              className="h-10"
-            />
-            <Input
-              type="number"
-              min={0}
-              step={100}
-              placeholder="Max"
-              value={filters.maxPrice}
-              onChange={(e) => set("maxPrice", e.target.value)}
-              className="h-10"
-            />
-          </div>
-        </div>
-
-        <div>
-          <h3 className="font-heading font-bold text-foreground mb-3 px-1 uppercase text-xs tracking-widest">
-            District
-          </h3>
-          <Input
-            placeholder="e.g. Gasabo"
-            value={filters.district}
-            onChange={(e) => set("district", e.target.value)}
-            className="h-10"
-          />
-        </div>
-
-        <div>
-          <h3 className="font-heading font-bold text-foreground mb-3 px-1 uppercase text-xs tracking-widest">
-            Sort by
-          </h3>
-          <select
-            value={filters.sortBy}
-            onChange={(e) => set("sortBy", e.target.value as CatalogFiltersState["sortBy"])}
-            className="w-full h-10 px-3 rounded-sm border border-border bg-background text-foreground text-sm"
-          >
-            <option value="createdAt">Newest</option>
-            <option value="name">Name</option>
-            <option value="price">Price</option>
-            <option value="views">Views</option>
-          </select>
-        </div>
-
-        <div>
-          <h3 className="font-heading font-bold text-foreground mb-3 px-1 uppercase text-xs tracking-widest">
-            Order
-          </h3>
-          <div className="flex gap-1">
-            <Button
-              variant={filters.sortOrder === "ASC" ? "secondary" : "ghost"}
-              size="sm"
-              className="flex-1 rounded-sm text-xs"
-              onClick={() => set("sortOrder", "ASC")}
-            >
-              A–Z
-            </Button>
-            <Button
-              variant={filters.sortOrder === "DESC" ? "secondary" : "ghost"}
-              size="sm"
-              className="flex-1 rounded-sm text-xs"
-              onClick={() => set("sortOrder", "DESC")}
-            >
-              Z–A
+                Clear All
             </Button>
           </div>
-        </div>
-
-        <Card className="rounded-sm border border-primary/20 bg-primary/5 p-5 shadow-none">
-          <div className="flex items-start gap-3">
-            <ShieldCheck className="w-5 h-5 text-primary shrink-0 mt-0.5" />
-            <div>
-              <p className="text-xs font-heading font-bold uppercase text-foreground mb-1 tracking-wide">
-                Direct from Source
-              </p>
-              <p className="text-xs text-muted-foreground leading-relaxed">
-                Connect directly with suppliers. No markup.
-              </p>
-            </div>
-          </div>
-        </Card>
+        )}
       </div>
-    </aside>
+    </div>
   );
 };

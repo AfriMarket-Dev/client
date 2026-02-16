@@ -53,7 +53,7 @@ export default function AdminAddSupplierPage() {
             >
               <div className="relative flex items-center justify-center">
                 <div
-                  className={`w-12 h-12 rounded-sm flex items-center justify-center border-2 transition-all duration-500 z-10 shadow-lg ${
+                  className={`w-12 h-12 rounded-sm flex items-center justify-center border transition-all duration-500 z-10 shadow-lg ${
                     currentStep >= item.step
                       ? "bg-primary border-primary text-primary-foreground scale-110 shadow-primary/20"
                       : "bg-background border-border text-muted-foreground shadow-none"

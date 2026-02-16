@@ -39,7 +39,7 @@ export default function AdminServicesPage() {
               placeholder="SEARCH SERVICES..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border-2 border-border rounded-sm focus:outline-none focus:ring-1 focus:ring-primary uppercase text-sm tracking-wider placeholder:text-muted-foreground/60 h-11 bg-background"
+              className="w-full pl-10 pr-4 py-2 border border-border rounded-sm focus:outline-none focus:ring-1 focus:ring-primary uppercase text-sm tracking-wider placeholder:text-muted-foreground/60 h-11 bg-background"
             />
           </div>
         </div>
@@ -146,16 +146,16 @@ export default function AdminServicesPage() {
                 <div className="flex items-center gap-2 pt-4 border-t-2 border-border mt-auto">
                   <button
                     onClick={() => handleNavigateToService(String(service.id))}
-                    className="flex-1 h-10 px-2 hover:bg-primary text-primary hover:text-primary-foreground rounded-sm transition-all font-heading font-bold text-xs uppercase tracking-widest border-2 border-primary/20 hover:border-primary"
+                    className="flex-1 h-10 px-2 hover:bg-primary text-primary hover:text-primary-foreground rounded-sm transition-all font-heading font-bold text-xs uppercase tracking-widest border border-primary/20 hover:border-primary"
                   >
                     <Eye size={14} className="inline mr-1.5" />
                     View
                   </button>
-                  <button className="flex-1 h-10 px-2 hover:bg-muted rounded-sm transition-colors text-muted-foreground font-heading font-bold text-xs uppercase tracking-widest border-2 border-border">
+                  <button className="flex-1 h-10 px-2 hover:bg-muted rounded-sm transition-colors text-muted-foreground font-heading font-bold text-xs uppercase tracking-widest border border-border">
                     <Edit size={14} className="inline mr-1.5" />
                     Edit
                   </button>
-                  <button className="flex-1 h-10 px-2 hover:bg-destructive hover:text-destructive-foreground rounded-sm transition-all text-destructive font-heading font-bold text-xs uppercase tracking-widest border-2 border-destructive/20 hover:border-destructive">
+                  <button className="flex-1 h-10 px-2 hover:bg-destructive hover:text-destructive-foreground rounded-sm transition-all text-destructive font-heading font-bold text-xs uppercase tracking-widest border border-destructive/20 hover:border-destructive">
                     <Trash2 size={14} className="inline mr-1.5" />
                     Del
                   </button>

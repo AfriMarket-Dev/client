@@ -102,12 +102,12 @@ const ConstructionSuppliers: React.FC<ConstructionSuppliersProps> = ({
   ];
 
   return (
-    <section className="py-24 bg-foreground text-background relative overflow-hidden rounded-sm border-2 border-border shadow-2xl">
+    <section className="py-24 bg-foreground text-background relative overflow-hidden rounded-sm border border-border shadow-2xl">
       <div className="absolute inset-0 african-pattern opacity-10 pointer-events-none invert" />
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-20">
-          <div className="inline-flex items-center px-4 py-1.5 bg-background/5 border-2 border-background/10 rounded-sm text-[10px] font-heading font-bold uppercase tracking-widest text-primary mb-8">
+          <div className="inline-flex items-center px-4 py-1.5 bg-background/5 border border-background/10 rounded-sm text-[10px] font-heading font-bold uppercase tracking-widest text-primary mb-8">
             <HardHat className="w-4 h-4 mr-2" /> Authorized Equipment Nodes
           </div>
 
@@ -125,7 +125,7 @@ const ConstructionSuppliers: React.FC<ConstructionSuppliersProps> = ({
             {stats.map((stat, index) => (
               <div
                 key={index}
-                className="bg-background/5 border-2 border-background/10 p-8 rounded-sm group hover:border-primary/40 transition-colors"
+                className="bg-background/5 border border-background/10 p-8 rounded-sm group hover:border-primary/40 transition-colors"
               >
                 <div
                   className={cn(
@@ -151,7 +151,7 @@ const ConstructionSuppliers: React.FC<ConstructionSuppliersProps> = ({
           {constructionSuppliers.map((supplier) => (
             <div
               key={supplier.id}
-              className="group bg-background rounded-sm overflow-hidden border-2 border-background/10 hover:border-primary transition-all duration-500 cursor-pointer"
+              className="group bg-background rounded-sm overflow-hidden border border-background/10 hover:border-primary transition-all duration-500 cursor-pointer"
               onClick={() => onViewSupplier?.(supplier.id)}
             >
               <div className="relative h-40 overflow-hidden border-b-2 border-background/10">
@@ -170,7 +170,7 @@ const ConstructionSuppliers: React.FC<ConstructionSuppliersProps> = ({
                   <img
                     src={supplier.avatar}
                     alt={supplier.name}
-                    className="w-12 h-12 rounded-sm border-2 border-background object-cover shadow-xl"
+                    className="w-12 h-12 rounded-sm border border-background object-cover shadow-xl"
                   />
                 </div>
               </div>
@@ -234,7 +234,7 @@ const ConstructionSuppliers: React.FC<ConstructionSuppliersProps> = ({
                   <Button
                     variant="outline"
                     size="icon"
-                    className="h-9 w-9 rounded-sm border-2"
+                    className="h-9 w-9 rounded-sm border"
                   >
                     <MessageCircle className="w-4 h-4" />
                   </Button>
@@ -244,7 +244,7 @@ const ConstructionSuppliers: React.FC<ConstructionSuppliersProps> = ({
           ))}
         </div>
 
-        <div className="text-center bg-background/5 border-2 border-background/10 p-12 rounded-sm relative overflow-hidden">
+        <div className="text-center bg-background/5 border border-background/10 p-12 rounded-sm relative overflow-hidden">
           <div className="absolute inset-0 african-pattern opacity-5 pointer-events-none" />
           <h3 className="text-3xl font-heading font-bold uppercase mb-6 text-background">
             Initialize New Project Stream
@@ -260,7 +260,7 @@ const ConstructionSuppliers: React.FC<ConstructionSuppliersProps> = ({
             <Button
               variant="outline"
               size="lg"
-              className="px-8 h-12 font-heading font-bold uppercase text-xs tracking-widest border-2 border-background/20 text-background bg-transparent hover:bg-background/10 shadow-none"
+              className="px-8 h-12 font-heading font-bold uppercase text-xs tracking-widest border border-background/20 text-background bg-transparent hover:bg-background/10 shadow-none"
             >
               Request Transmission
             </Button>

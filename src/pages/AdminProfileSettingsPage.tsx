@@ -102,7 +102,7 @@ export default function AdminProfileSettingsPage() {
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                 />
               </div>
-              <button className="absolute bottom-0 right-0 bg-primary text-white p-2 rounded-sm hover:bg-primary/90 transition-all shadow-lg translate-y-1/4 translate-x-1/4 border-2 border-background">
+              <button className="absolute bottom-0 right-0 bg-primary text-white p-2 rounded-sm hover:bg-primary/90 transition-all shadow-lg translate-y-1/4 translate-x-1/4 border border-background">
                 <User size={16} />
               </button>
             </div>
@@ -152,7 +152,7 @@ export default function AdminProfileSettingsPage() {
                   name="fullName"
                   value={formData.fullName}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 border-2 border-border rounded-sm focus:outline-none focus:ring-1 focus:ring-primary h-12 text-sm bg-background font-bold uppercase tracking-wider"
+                  className="w-full px-4 py-3 border border-border rounded-sm focus:outline-none focus:ring-1 focus:ring-primary h-12 text-sm bg-background font-bold uppercase tracking-wider"
                 />
               </div>
 
@@ -165,7 +165,7 @@ export default function AdminProfileSettingsPage() {
                   name="email"
                   value={formData.email}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 border-2 border-border rounded-sm focus:outline-none focus:ring-1 focus:ring-primary h-12 text-sm bg-background font-mono font-bold"
+                  className="w-full px-4 py-3 border border-border rounded-sm focus:outline-none focus:ring-1 focus:ring-primary h-12 text-sm bg-background font-mono font-bold"
                 />
               </div>
 
@@ -179,7 +179,7 @@ export default function AdminProfileSettingsPage() {
                     name="phone"
                     value={formData.phone}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 border-2 border-border rounded-sm focus:outline-none focus:ring-1 focus:ring-primary h-12 text-sm bg-background font-mono font-bold"
+                    className="w-full px-4 py-3 border border-border rounded-sm focus:outline-none focus:ring-1 focus:ring-primary h-12 text-sm bg-background font-mono font-bold"
                   />
                 </div>
 
@@ -192,7 +192,7 @@ export default function AdminProfileSettingsPage() {
                     name="location"
                     value={formData.location}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 border-2 border-border rounded-sm focus:outline-none focus:ring-1 focus:ring-primary h-12 text-sm bg-background font-bold uppercase tracking-wider"
+                    className="w-full px-4 py-3 border border-border rounded-sm focus:outline-none focus:ring-1 focus:ring-primary h-12 text-sm bg-background font-bold uppercase tracking-wider"
                   />
                 </div>
               </div>
@@ -206,7 +206,7 @@ export default function AdminProfileSettingsPage() {
                   value={formData.bio}
                   onChange={handleInputChange}
                   rows={3}
-                  className="w-full px-4 py-3 border-2 border-border rounded-sm focus:outline-none focus:ring-1 focus:ring-primary text-sm resize-none bg-background font-medium uppercase tracking-wider"
+                  className="w-full px-4 py-3 border border-border rounded-sm focus:outline-none focus:ring-1 focus:ring-primary text-sm resize-none bg-background font-medium uppercase tracking-wider"
                 />
               </div>
 
@@ -221,7 +221,7 @@ export default function AdminProfileSettingsPage() {
                 <Button
                   variant="outline"
                   onClick={() => setIsEditing(false)}
-                  className="flex-1 rounded-sm h-12 border-2 border-border font-heading font-bold uppercase text-xs tracking-widest"
+                  className="flex-1 rounded-sm h-12 border border-border font-heading font-bold uppercase text-xs tracking-widest"
                 >
                   <X size={16} className="mr-2" />
                   Abort
@@ -290,7 +290,7 @@ export default function AdminProfileSettingsPage() {
                   value={passwordData.currentPassword}
                   onChange={handlePasswordChange}
                   placeholder="ENTER CURRENT..."
-                  className="w-full px-4 py-3 border-2 border-border rounded-sm focus:outline-none focus:ring-1 focus:ring-primary h-12 text-sm bg-background font-mono"
+                  className="w-full px-4 py-3 border border-border rounded-sm focus:outline-none focus:ring-1 focus:ring-primary h-12 text-sm bg-background font-mono"
                 />
                 <button
                   onClick={() => setShowPassword(!showPassword)}
@@ -312,7 +312,7 @@ export default function AdminProfileSettingsPage() {
                   value={passwordData.newPassword}
                   onChange={handlePasswordChange}
                   placeholder="ENTER NEW..."
-                  className="w-full px-4 py-3 border-2 border-border rounded-sm focus:outline-none focus:ring-1 focus:ring-primary h-12 text-sm bg-background font-mono"
+                  className="w-full px-4 py-3 border border-border rounded-sm focus:outline-none focus:ring-1 focus:ring-primary h-12 text-sm bg-background font-mono"
                 />
                 <button
                   onClick={() => setShowNewPassword(!showNewPassword)}
@@ -333,7 +333,7 @@ export default function AdminProfileSettingsPage() {
                 value={passwordData.confirmPassword}
                 onChange={handlePasswordChange}
                 placeholder="RE-ENTER NEW..."
-                className="w-full px-4 py-3 border-2 border-border rounded-sm focus:outline-none focus:ring-1 focus:ring-primary h-12 text-sm bg-background font-mono"
+                className="w-full px-4 py-3 border border-border rounded-sm focus:outline-none focus:ring-1 focus:ring-primary h-12 text-sm bg-background font-mono"
               />
             </div>
 
@@ -371,7 +371,7 @@ export default function AdminProfileSettingsPage() {
           ].map(({ key, label, description }) => (
             <div
               key={key}
-              className="flex items-center justify-between p-5 bg-muted/20 border-2 border-border border-dashed rounded-sm hover:border-primary/20 transition-colors group"
+              className="flex items-center justify-between p-5 bg-muted/20 border border-border border-dashed rounded-sm hover:border-primary/20 transition-colors group"
             >
               <div className="min-w-0 pr-4">
                 <p className="font-heading font-bold text-sm text-foreground uppercase tracking-widest leading-none mb-2">
@@ -385,7 +385,7 @@ export default function AdminProfileSettingsPage() {
                 onClick={() =>
                   handleNotificationToggle(key as keyof typeof notifications)
                 }
-                className={`relative w-12 h-6 rounded-sm transition-all border-2 ${
+                className={`relative w-12 h-6 rounded-sm transition-all border ${
                   notifications[key as keyof typeof notifications]
                     ? "bg-primary border-primary"
                     : "bg-muted border-border"
@@ -408,7 +408,7 @@ export default function AdminProfileSettingsPage() {
       <AdminCard title="Hardened Protocol" subtitle="Account fortification parameters" headerActions={<Shield size={16} className="text-primary" />}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div className="space-y-6">
-            <div className="flex items-center justify-between p-5 bg-muted/30 border-2 border-border rounded-sm">
+            <div className="flex items-center justify-between p-5 bg-muted/30 border border-border rounded-sm">
               <div className="min-w-0 pr-4">
                 <p className="font-heading font-bold text-sm text-foreground uppercase tracking-widest leading-none mb-2">
                   Double Factor
@@ -419,7 +419,7 @@ export default function AdminProfileSettingsPage() {
               </div>
               <button
                 onClick={() => handleSecurityToggle("twoFactorAuth")}
-                className={`relative w-12 h-6 rounded-sm transition-all border-2 ${
+                className={`relative w-12 h-6 rounded-sm transition-all border ${
                   securitySettings.twoFactorAuth
                     ? "bg-primary border-primary"
                     : "bg-muted border-border"
@@ -435,7 +435,7 @@ export default function AdminProfileSettingsPage() {
               </button>
             </div>
 
-            <div className="flex items-center justify-between p-5 bg-muted/30 border-2 border-border rounded-sm">
+            <div className="flex items-center justify-between p-5 bg-muted/30 border border-border rounded-sm">
               <div className="min-w-0 pr-4">
                 <p className="font-heading font-bold text-sm text-foreground uppercase tracking-widest leading-none mb-2">
                   Access Alerts
@@ -446,7 +446,7 @@ export default function AdminProfileSettingsPage() {
               </div>
               <button
                 onClick={() => handleSecurityToggle("loginAlerts")}
-                className={`relative w-12 h-6 rounded-sm transition-all border-2 ${
+                className={`relative w-12 h-6 rounded-sm transition-all border ${
                   securitySettings.loginAlerts
                     ? "bg-primary border-primary"
                     : "bg-muted border-border"
@@ -477,7 +477,7 @@ export default function AdminProfileSettingsPage() {
                       sessionTimeout: parseInt(e.target.value),
                     }))
                   }
-                  className="w-full px-4 py-3 border-2 border-background/20 rounded-sm focus:outline-none focus:ring-1 focus:ring-primary text-xs font-heading font-bold uppercase tracking-widest h-12 bg-background/5 text-background"
+                  className="w-full px-4 py-3 border border-background/20 rounded-sm focus:outline-none focus:ring-1 focus:ring-primary text-xs font-heading font-bold uppercase tracking-widest h-12 bg-background/5 text-background"
                 >
                   <option value={30} className="text-foreground">30 CYCLE PULSE</option>
                   <option value={60} className="text-foreground">60 CYCLE PULSE</option>

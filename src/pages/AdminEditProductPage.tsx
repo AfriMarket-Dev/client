@@ -94,7 +94,7 @@ export default function AdminEditProductPage() {
                   name="name"
                   value={formData.name}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 border-2 border-border rounded-sm focus:outline-none focus:ring-1 focus:ring-primary h-12 text-sm bg-background font-bold uppercase tracking-wider"
+                  className="w-full px-4 py-3 border border-border rounded-sm focus:outline-none focus:ring-1 focus:ring-primary h-12 text-sm bg-background font-bold uppercase tracking-wider"
                   placeholder="SKU NAME..."
                 />
               </div>
@@ -107,7 +107,7 @@ export default function AdminEditProductPage() {
                   value={formData.description}
                   onChange={handleInputChange}
                   rows={4}
-                  className="w-full px-4 py-3 border-2 border-border rounded-sm focus:outline-none focus:ring-1 focus:ring-primary text-sm resize-none bg-background font-medium uppercase tracking-wider leading-relaxed"
+                  className="w-full px-4 py-3 border border-border rounded-sm focus:outline-none focus:ring-1 focus:ring-primary text-sm resize-none bg-background font-medium uppercase tracking-wider leading-relaxed"
                   placeholder="SKU PARAMETERS..."
                 />
               </div>
@@ -121,7 +121,7 @@ export default function AdminEditProductPage() {
                     name="category"
                     value={formData.category}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 border-2 border-border rounded-sm focus:outline-none focus:ring-1 focus:ring-primary h-12 text-sm bg-background font-bold uppercase tracking-wider"
+                    className="w-full px-4 py-3 border border-border rounded-sm focus:outline-none focus:ring-1 focus:ring-primary h-12 text-sm bg-background font-bold uppercase tracking-wider"
                   />
                 </div>
                 <div className="space-y-2">
@@ -133,7 +133,7 @@ export default function AdminEditProductPage() {
                     name="subcategory"
                     value={formData.subcategory}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 border-2 border-border rounded-sm focus:outline-none focus:ring-1 focus:ring-primary h-12 text-sm bg-background font-bold uppercase tracking-wider"
+                    className="w-full px-4 py-3 border border-border rounded-sm focus:outline-none focus:ring-1 focus:ring-primary h-12 text-sm bg-background font-bold uppercase tracking-wider"
                   />
                 </div>
               </div>
@@ -155,7 +155,7 @@ export default function AdminEditProductPage() {
                     name="minPrice"
                     value={formData.minPrice}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 border-2 border-border rounded-sm focus:outline-none focus:ring-1 focus:ring-primary h-12 text-sm bg-background font-mono font-bold"
+                    className="w-full px-4 py-3 border border-border rounded-sm focus:outline-none focus:ring-1 focus:ring-primary h-12 text-sm bg-background font-mono font-bold"
                   />
                 </div>
                 <div className="space-y-2">
@@ -167,7 +167,7 @@ export default function AdminEditProductPage() {
                     name="maxPrice"
                     value={formData.maxPrice}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 border-2 border-border rounded-sm focus:outline-none focus:ring-1 focus:ring-primary h-12 text-sm bg-background font-mono font-bold"
+                    className="w-full px-4 py-3 border border-border rounded-sm focus:outline-none focus:ring-1 focus:ring-primary h-12 text-sm bg-background font-mono font-bold"
                   />
                 </div>
               </div>
@@ -180,7 +180,7 @@ export default function AdminEditProductPage() {
                   name="minimumOrder"
                   value={formData.minimumOrder}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 border-2 border-border rounded-sm focus:outline-none focus:ring-1 focus:ring-primary h-12 text-sm bg-background font-bold"
+                  className="w-full px-4 py-3 border border-border rounded-sm focus:outline-none focus:ring-1 focus:ring-primary h-12 text-sm bg-background font-bold"
                 />
               </div>
               <div className="space-y-2">
@@ -191,7 +191,7 @@ export default function AdminEditProductPage() {
                   name="availability"
                   value={formData.availability}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 border-2 border-border rounded-sm focus:outline-none focus:ring-1 focus:ring-primary h-12 text-sm bg-background font-heading font-bold uppercase tracking-widest"
+                  className="w-full px-4 py-3 border border-border rounded-sm focus:outline-none focus:ring-1 focus:ring-primary h-12 text-sm bg-background font-heading font-bold uppercase tracking-widest"
                 >
                   <option value="in-stock">In Stock</option>
                   <option value="low-stock">Low Stock</option>

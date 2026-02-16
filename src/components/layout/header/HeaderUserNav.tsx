@@ -51,10 +51,10 @@ export const HeaderUserNav: React.FC<HeaderUserNavProps> = ({
         <Button
           variant="ghost"
           size="sm"
-          onClick={() => navigate("/products")}
+          onClick={() => navigate("/Marketplace")}
           className="font-heading font-bold uppercase tracking-wide text-muted-foreground hover:text-foreground hover:bg-transparent text-xs"
         >
-          Products
+          marketplace
         </Button>
         <Button
           variant="ghost"
@@ -205,7 +205,7 @@ export const HeaderUserNav: React.FC<HeaderUserNavProps> = ({
           </Link>
           <Link to="/auth/signup">
             <Button className="font-heading font-bold uppercase tracking-wider text-xs h-9 px-4 rounded-sm shadow-none border border-border hover:border-primary hover:bg-primary hover:text-primary-foreground transition-all duration-200 bg-transparent text-foreground">
-              Join Network
+              Sign up
             </Button>
           </Link>
         </div>
