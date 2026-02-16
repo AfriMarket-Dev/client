@@ -15,7 +15,7 @@ export const CatalogHeader: React.FC<CatalogHeaderProps> = ({
   onToggleFilters,
   showFilters,
 }) => (
-  <div className="bg-background border-b-2 border-border sticky top-0 z-30 h-20 flex items-center">
+  <div className="bg-background border-b border-border sticky top-0 z-30 h-20 flex items-center">
     <div className="max-w-7xl mx-auto px-4 w-full flex items-center justify-between">
       <div className="py-4">
         <div className="flex items-center gap-2 text-primary font-bold text-xs uppercase tracking-widest mb-2">
@@ -48,7 +48,7 @@ export const CatalogHeader: React.FC<CatalogHeaderProps> = ({
         </div>
         <Button
           variant="outline"
-          className="rounded-sm border-2 border-border lg:hidden font-heading uppercase tracking-wider text-xs"
+          className="rounded-sm border border-border lg:hidden font-heading uppercase tracking-wider text-xs"
           onClick={onToggleFilters}
         >
           <Filter className="w-4 h-4 mr-2" />

@@ -3,52 +3,13 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/Button";
 import { Card, CardContent } from "@/components/ui/Card";
 import { ArrowRight, Star, MapPin, CheckCircle } from "lucide-react";
+import { useGetCompaniesQuery } from "@/app/api/companies";
+import type { Company } from "@/app/api/companies";
 
 const FeaturedSuppliers: React.FC = () => {
   const navigate = useNavigate();
-
-  const suppliers = [
-    {
-      id: 1,
-      name: "Kigali Building Supplies",
-      category: "Building Materials",
-      rating: 4.9,
-      reviews: 127,
-      district: "Gasabo",
-      verified: true,
-      logo: "https://images.pexels.com/photos/1216589/pexels-photo-1216589.jpeg?auto=compress&cs=tinysrgb&w=100",
-    },
-    {
-      id: 2,
-      name: "Rwanda Heavy Equipment",
-      category: "Machinery Rental",
-      rating: 5.0,
-      reviews: 84,
-      district: "Kicukiro",
-      verified: true,
-      logo: "https://images.pexels.com/photos/1108101/pexels-photo-1108101.jpeg?auto=compress&cs=tinysrgb&w=100",
-    },
-    {
-      id: 3,
-      name: "East Africa Steel Ltd",
-      category: "Metals & Steel",
-      rating: 4.8,
-      reviews: 156,
-      district: "Nyarugenge",
-      verified: true,
-      logo: "https://images.pexels.com/photos/162568/steel-reinforcement-bar-rebar-162568.jpeg?auto=compress&cs=tinysrgb&w=100",
-    },
-    {
-      id: 4,
-      name: "Modern Aggregates",
-      category: "Sand & Gravel",
-      rating: 4.7,
-      reviews: 93,
-      district: "Musanze",
-      verified: true,
-      logo: "https://images.pexels.com/photos/3316921/pexels-photo-3316921.jpeg?auto=compress&cs=tinysrgb&w=100",
-    },
-  ];
+  const { data } = useGetCompaniesQuery({ limit: 6 });
+  const companies = data?.data ?? [];
 
   return (
     <div className="container mx-auto max-w-6xl">
@@ -72,61 +33,76 @@ const FeaturedSuppliers: React.FC = () => {
         </Button>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {suppliers.map((supplier) => (
-          <Card
-            key={supplier.id}
-            className="group border-2 border-border shadow-none hover:border-primary/50 transition-all duration-200 rounded-sm bg-card cursor-pointer relative overflow-hidden"
-            onClick={() => navigate(`/suppliers/${supplier.id}`)}
-          >
-            <CardContent className="p-6 flex flex-col items-start text-left h-full">
-              <div className="w-16 h-16 rounded-sm p-1 bg-muted/50 border-2 border-border mb-6 group-hover:border-primary transition-colors duration-200">
-                <img
-                  src={supplier.logo}
-                  alt={supplier.name}
-                  className="w-full h-full object-cover rounded-sm"
-                />
-              </div>
+      {companies.length === 0 ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <div
+              key={i}
+              className="h-48 rounded-sm border border-border bg-muted/30 animate-pulse"
+            />
+          ))}
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {companies.map((company: Company) => {
+            const categoryName = (company.category as { name?: string })?.name;
+            const rating = Number(company.averageRating ?? 0);
+            return (
+              <Card
+                key={company.id}
+                className="group border-2 border-border shadow-none hover:border-primary/50 transition-all duration-200 rounded-sm bg-card cursor-pointer relative overflow-hidden"
+                onClick={() => navigate(`/suppliers/${company.id}`)}
+              >
+                <CardContent className="p-6 flex flex-col items-start text-left h-full">
+                  <div className="w-16 h-16 rounded-sm p-1 bg-muted/50 border-2 border-border mb-6 group-hover:border-primary transition-colors duration-200 flex items-center justify-center text-2xl font-bold text-muted-foreground">
+                    {company.name?.charAt(0) ?? "?"}
+                  </div>
 
-              <div className="mb-4 w-full">
-                <div className="flex items-center gap-2 mb-1">
-                  <h3 className="text-lg font-heading font-bold uppercase text-foreground leading-tight group-hover:text-primary transition-colors">
-                    {supplier.name}
-                  </h3>
-                  {supplier.verified && (
-                    <CheckCircle className="w-4 h-4 text-primary shrink-0" />
-                  )}
-                </div>
-                <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-3">
-                  {supplier.category}
-                </p>
+                  <div className="mb-4 w-full">
+                    <div className="flex items-center gap-2 mb-1">
+                      <h3 className="text-lg font-heading font-bold uppercase text-foreground leading-tight group-hover:text-primary transition-colors">
+                        {company.name}
+                      </h3>
+                      {company.isVerified && (
+                        <CheckCircle className="w-4 h-4 text-primary shrink-0" />
+                      )}
+                    </div>
+                    {categoryName && (
+                      <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-3">
+                        {categoryName}
+                      </p>
+                    )}
 
-                <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-muted-foreground/80">
-                  <MapPin className="w-3 h-3" />
-                  {supplier.district}
-                </div>
-              </div>
+                    {company.district && (
+                      <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-muted-foreground/80">
+                        <MapPin className="w-3 h-3" />
+                        {company.district}
+                      </div>
+                    )}
+                  </div>
 
-              <div className="flex items-center gap-3 pt-4 border-t border-border w-full mt-auto">
-                <div className="flex items-center gap-1 text-warning">
-                  <Star className="w-4 h-4 fill-warning" />
-                  <span className="font-black text-foreground text-xs uppercase tracking-tighter">
-                    {supplier.rating}
-                  </span>
-                </div>
-                <span className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest">
-                  ({supplier.reviews})
-                </span>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+                  <div className="flex items-center gap-3 pt-4 border-t border-border w-full mt-auto">
+                    <div className="flex items-center gap-1 text-warning">
+                      <Star className="w-4 h-4 fill-warning" />
+                      <span className="font-bold text-foreground text-xs uppercase tracking-tighter">
+                        {rating.toFixed(1)}
+                      </span>
+                    </div>
+                    <span className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest">
+                      ({company.reviewCount ?? 0})
+                    </span>
+                  </div>
+                </CardContent>
+              </Card>
+            );
+          })}
+        </div>
+      )}
 
       <div className="mt-12 md:hidden">
         <Button
           variant="outline"
-          className="w-full rounded-sm h-12 uppercase font-bold border-2 border-border shadow-none"
+          className="w-full rounded-sm h-12 uppercase font-bold border border-border shadow-none"
           onClick={() => navigate("/suppliers")}
         >
           View all suppliers

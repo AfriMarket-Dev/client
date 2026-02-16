@@ -1,11 +1,8 @@
 import React from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import {
-  Settings,
   Package,
-  Zap,
   Users,
-  ShoppingCart,
   LogOut,
   LayoutDashboard,
   ChevronDown,
@@ -33,7 +30,6 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/DropdownMenu";
 
@@ -60,17 +56,15 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ user }) => {
   const menuItems = [
     { label: "Dashboard", path: "/admin", icon: LayoutDashboard },
     { label: "Suppliers", path: "/admin/suppliers", icon: Users },
-    { label: "Customers", path: "/admin/customers", icon: ShoppingCart },
     { label: "Categories", path: "/admin/categories", icon: Package },
-    { label: "Services", path: "/admin/services", icon: Zap },
     { label: "Products", path: "/admin/products", icon: Package },
   ];
 
   return (
-    <Sidebar collapsible="icon" className="border-r-2 border-border">
-      <SidebarHeader className="h-20 flex items-center px-6 border-b-2 border-border bg-foreground text-background">
+    <Sidebar collapsible="icon" className="border-r border-border">
+      <SidebarHeader className="h-20 flex items-center px-6 border-b border-border bg-foreground text-background">
         <Link to="/admin" className="flex items-center gap-3 overflow-hidden">
-          <div className="w-10 h-10 bg-primary rounded-sm flex items-center justify-center shrink-0 shadow-lg shadow-primary/20 border border-primary/20 transition-transform hover:scale-105">
+          <div className="w-10 h-10 bg-primary rounded-sm flex items-center justify-center shrink-0 shadow-none border border-primary/20 transition-transform hover:scale-105">
             <Package className="w-6 h-6 text-white" />
           </div>
           <div className="flex flex-col group-data-[collapsible=icon]:hidden animate-in fade-in duration-300">
@@ -113,32 +107,17 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ user }) => {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="p-4 border-t-2 border-border bg-muted/30">
+      <SidebarFooter className="p-4 border-t border-border bg-muted/30">
         <div className="space-y-4">
-          <SidebarMenu>
-            <SidebarMenuItem>
-              <SidebarMenuButton
-                onClick={() => navigate("/admin/settings")}
-                className="h-10 rounded-sm font-heading font-bold uppercase text-[10px] tracking-widest text-muted-foreground hover:text-foreground"
-                tooltip="Settings"
-              >
-                <Settings className="w-4 h-4" />
-                <span className="group-data-[collapsible=icon]:hidden ml-2">
-                  Settings
-                </span>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          </SidebarMenu>
-
           <div className="group-data-[collapsible=icon]:hidden px-2">
-            <div className="p-4 bg-foreground rounded-sm border-2 border-border relative overflow-hidden shadow-xl">
+            <div className="p-4 bg-foreground rounded-sm border border-border relative overflow-hidden shadow-none">
               <div className="absolute inset-0 african-pattern opacity-10 pointer-events-none" />
               <div className="relative z-10">
                 <p className="text-[9px] font-black uppercase tracking-widest text-primary mb-1">
                   Status
                 </p>
                 <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                  <div className="w-2 h-2 rounded-full bg-success animate-pulse" />
                   <p className="text-[10px] font-bold text-background uppercase tracking-widest">
                     Network Live
                   </p>
@@ -153,7 +132,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ user }) => {
                 <DropdownMenuTrigger
                   render={
                     <SidebarMenuButton
-                      className="h-12 rounded-sm bg-background border-2 border-border hover:border-primary transition-all overflow-hidden"
+                      className="h-12 rounded-sm bg-background border border-border hover:border-primary transition-all overflow-hidden"
                       tooltip={user?.name || "Admin"}
                     >
                       <Avatar className="h-6 w-6 rounded-sm border border-border shrink-0">
@@ -190,13 +169,6 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ user }) => {
                         </p>
                       </div>
                     </DropdownMenuLabel>
-                    <DropdownMenuItem
-                      onClick={() => navigate("/admin/settings")}
-                      className="rounded-sm h-10 font-heading font-bold text-[10px] uppercase tracking-widest"
-                    >
-                      Profile Config
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator className="my-2 bg-border h-[2px]" />
                     <DropdownMenuItem
                       onClick={handleLogout}
                       className="rounded-sm h-10 font-heading font-bold text-[10px] uppercase tracking-widest text-destructive focus:text-destructive focus:bg-destructive/10"

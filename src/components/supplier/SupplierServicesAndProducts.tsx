@@ -80,11 +80,11 @@ export default function SupplierServicesAndProducts() {
           {assignedServices.map((service) => (
             <div
               key={service.id}
-              className="bg-card rounded-lg shadow p-6 border-l-4 border-primary hover:shadow-lg transition-all"
+              className="bg-card rounded-sm shadow-none p-6 border border-border hover:border-primary transition-all"
             >
               <div className="flex items-start justify-between mb-3">
                 <div className="flex-1">
-                  <h3 className="text-lg font-semibold text-foreground">
+                  <h3 className="text-lg font-heading font-bold uppercase text-foreground">
                     {service.name}
                   </h3>
                   <p className="text-muted-foreground text-sm mt-1">
@@ -101,7 +101,7 @@ export default function SupplierServicesAndProducts() {
                   <Calendar size={14} />
                   Assigned: {service.assignedDate}
                 </div>
-                <span className="px-3 py-1 bg-primary/10 text-primary text-xs font-semibold rounded-full">
+                <span className="px-3 py-1 bg-primary/10 text-primary text-xs font-bold rounded-sm uppercase tracking-wider">
                   {service.status}
                 </span>
               </div>
@@ -123,26 +123,26 @@ export default function SupplierServicesAndProducts() {
         </div>
 
         {ownedProducts.length > 0 ? (
-          <div className="bg-card rounded-lg shadow overflow-x-auto">
+          <div className="bg-card rounded-sm shadow-none border border-border overflow-x-auto">
             <table className="w-full">
               <thead>
                 <tr className="border-b border-border bg-muted/50">
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">
+                  <th className="px-6 py-4 text-left text-xs font-bold uppercase text-foreground tracking-wider">
                     Product Name
                   </th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">
+                  <th className="px-6 py-4 text-left text-xs font-bold uppercase text-foreground tracking-wider">
                     Category
                   </th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">
+                  <th className="px-6 py-4 text-left text-xs font-bold uppercase text-foreground tracking-wider">
                     Status
                   </th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">
+                  <th className="px-6 py-4 text-left text-xs font-bold uppercase text-foreground tracking-wider">
                     Views
                   </th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">
+                  <th className="px-6 py-4 text-left text-xs font-bold uppercase text-foreground tracking-wider">
                     Inquiries
                   </th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">
+                  <th className="px-6 py-4 text-left text-xs font-bold uppercase text-foreground tracking-wider">
                     Created
                   </th>
                 </tr>
@@ -151,14 +151,14 @@ export default function SupplierServicesAndProducts() {
                 {ownedProducts.map((product) => (
                   <tr
                     key={product.id}
-                    className="hover:bg-muted/50 transition-all"
+                    className="hover:bg-muted/50 transition-all text-sm"
                   >
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
-                        <div className="p-2 bg-success/20 rounded-lg">
+                        <div className="p-2 bg-success/10 rounded-sm border border-success/20">
                           <Package size={16} className="text-success" />
                         </div>
-                        <span className="font-medium text-foreground">
+                        <span className="font-heading font-bold text-foreground uppercase">
                           {product.name}
                         </span>
                       </div>
@@ -168,12 +168,12 @@ export default function SupplierServicesAndProducts() {
                     </td>
                     <td className="px-6 py-4">
                       <span
-                        className={`text-xs font-semibold px-3 py-1 rounded-full ${
+                        className={`text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-sm border ${
                           product.status === "active"
-                            ? "bg-success/20 text-success"
+                            ? "bg-success/10 text-success border-success/20"
                             : product.status === "pending-review"
-                              ? "bg-warning/20 text-warning"
-                              : "bg-destructive/20 text-destructive"
+                              ? "bg-warning/10 text-warning border-warning/20"
+                              : "bg-destructive/10 text-destructive border-destructive/20"
                         }`}
                       >
                         {product.status === "pending-review"
@@ -181,13 +181,13 @@ export default function SupplierServicesAndProducts() {
                           : product.status}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-sm font-semibold text-foreground">
+                    <td className="px-6 py-4 font-bold text-foreground">
                       {product.views}
                     </td>
-                    <td className="px-6 py-4 text-sm font-semibold text-foreground">
+                    <td className="px-6 py-4 font-bold text-foreground">
                       {product.inquiries}
                     </td>
-                    <td className="px-6 py-4 text-sm text-muted-foreground">
+                    <td className="px-6 py-4 text-muted-foreground">
                       {product.createdDate}
                     </td>
                   </tr>
@@ -196,10 +196,10 @@ export default function SupplierServicesAndProducts() {
             </table>
           </div>
         ) : (
-          <div className="bg-card rounded-lg shadow p-8 text-center">
+          <div className="bg-card rounded-sm shadow-none p-8 text-center border border-border">
             <Package size={48} className="mx-auto text-muted-foreground mb-4" />
             <p className="text-muted-foreground">No products created yet</p>
-            <button className="mt-4 px-4 py-2 bg-success hover:bg-success/90 text-success-foreground rounded-lg transition-all">
+            <button className="mt-4 px-4 py-2 bg-success hover:bg-success/90 text-success-foreground rounded-sm transition-all font-bold uppercase tracking-wide">
               Create Your First Product
             </button>
           </div>
@@ -207,8 +207,10 @@ export default function SupplierServicesAndProducts() {
       </div>
 
       {/* Integration Tips */}
-      <div className="bg-info/10 rounded-lg p-6 border border-info/30">
-        <h3 className="font-semibold text-info mb-2">💡 Integration Note</h3>
+      <div className="bg-info/10 rounded-sm p-6 border border-info/30">
+        <h3 className="font-bold text-info mb-2 uppercase tracking-wide text-xs">
+          💡 Integration Note
+        </h3>
         <p className="text-sm text-info">
           This component can be integrated into your existing Supplier Dashboard
           page. It shows suppliers their assigned services and the products they

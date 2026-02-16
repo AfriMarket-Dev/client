@@ -24,7 +24,7 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
   return (
     <div
       className={cn(
-        "rounded-sm p-8 relative overflow-hidden border-2 border-border shadow-none",
+        "rounded-sm p-8 relative overflow-hidden border border-border shadow-none",
         dark
           ? "bg-foreground text-background"
           : "bg-background text-foreground",
@@ -32,20 +32,7 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
       )}
     >
       {showPattern && (
-        <>
-          <div
-            className={cn(
-              "absolute inset-0 z-0 opacity-10 pointer-events-none",
-              dark
-                ? "bg-[linear-gradient(#fff_1px,transparent_1px),linear-gradient(90deg,#fff_1px,transparent_1px)]"
-                : "bg-[linear-gradient(#000_1px,transparent_1px),linear-gradient(90deg,#000_1px,transparent_1px)]",
-            )}
-            style={{
-              backgroundSize: "20px 20px",
-            }}
-          />
-          <div className="absolute inset-0 african-pattern opacity-10 pointer-events-none" />
-        </>
+        <div className="absolute inset-0 african-pattern pointer-events-none" />
       )}
 
       <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">

@@ -113,14 +113,14 @@ export const Footer: React.FC<FooterProps> = ({
                     {typeof link === "object" && link.onClick ? (
                       <button
                         onClick={link.onClick}
-                        className="text-muted-foreground hover:text-primary transition-colors text-left text-sm font-bold uppercase tracking-wide"
+                        className="text-muted-foreground hover:text-primary transition-colors text-left text-sm font-medium uppercase tracking-wide"
                       >
                         {link.label}
                       </button>
                     ) : (
                       <a
                         href="#"
-                        className="text-muted-foreground hover:text-primary transition-colors text-sm font-bold uppercase tracking-wide"
+                        className="text-muted-foreground hover:text-primary transition-colors text-sm font-medium uppercase tracking-wide"
                       >
                         {typeof link === "string" ? link : link.label}
                       </a>

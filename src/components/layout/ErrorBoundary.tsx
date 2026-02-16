@@ -100,15 +100,16 @@ export class ErrorBoundary extends React.Component<
         <div className="min-h-screen bg-muted/30 flex items-center justify-center p-4 relative overflow-hidden">
           <div className="absolute inset-0 african-pattern opacity-5 pointer-events-none" />
           <div className="w-full max-w-3xl relative z-10">
-            <div className="bg-background border-2 border-border rounded-sm shadow-2xl overflow-hidden">
+            <div className="bg-background border border-border rounded-sm overflow-hidden">
               <div className="bg-destructive p-8 text-destructive-foreground">
                 <div className="flex items-start gap-6">
-                  <div className="p-3 bg-background/20 rounded-sm border border-background/20">
-                    <AlertTriangle size={40} className="shrink-0" />
-                  </div>
-                  <div>
-                    <h1 className="text-4xl font-heading font-bold uppercase tracking-tight mb-2">
-                      System Exception
+                  <div className="bg-card w-full max-w-lg p-8 rounded-sm border border-border text-center">
+                    <div className="w-16 h-16 bg-destructive/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                      <AlertTriangle className="w-8 h-8 text-destructive" />
+                    </div>
+
+                    <h1 className="text-2xl font-bold font-heading uppercase text-foreground mb-4 tracking-wide">
+                      System Encountered an Error
                     </h1>
                     <p className="text-background/80 font-medium uppercase text-xs tracking-widest">
                       An unhandled stream interruption occurred
@@ -181,6 +182,7 @@ export class ErrorBoundary extends React.Component<
                   variant="outline"
                   className={cn(
                     "rounded-sm font-heading font-bold uppercase text-[10px] tracking-widest h-11 px-6 border-2 border-border shadow-none",
+                    "rounded-sm font-heading font-bold uppercase text-[10px] tracking-widest h-11 px-6 border border-border shadow-none",
                     this.state.copyFeedback &&
                       "bg-success text-success-foreground border-success hover:bg-success",
                   )}
@@ -198,7 +200,7 @@ export class ErrorBoundary extends React.Component<
                 <Button
                   variant="outline"
                   onClick={() => (window.location.href = "/")}
-                  className="rounded-sm font-heading font-bold uppercase text-[10px] tracking-widest h-11 px-6 border-2 border-border shadow-none ml-auto"
+                  className="rounded-sm font-heading font-bold uppercase text-[10px] tracking-widest h-11 px-6 border border-border shadow-none ml-auto"
                 >
                   <Home size={16} className="mr-2" />
                   Root Home
@@ -213,5 +215,3 @@ export class ErrorBoundary extends React.Component<
     return this.props.children;
   }
 }
-
-

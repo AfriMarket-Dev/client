@@ -98,7 +98,7 @@ const HelpCenterPage: React.FC = () => {
         />
 
         {/* Hero Search Section */}
-        <section className="bg-muted/30 py-16 border-2 border-border rounded-sm">
+        <section className="bg-muted/30 py-16 border border-border rounded-sm">
           <div className="max-w-3xl mx-auto px-4 text-center">
             <div className="inline-flex items-center px-3 py-1 bg-primary/10 text-primary rounded-sm font-bold text-xs uppercase tracking-widest mb-6 border border-primary/20">
               <HelpCircle className="w-3 h-3 mr-2" />
@@ -115,7 +115,7 @@ const HelpCenterPage: React.FC = () => {
                 placeholder="SEARCH DOCUMENTATION..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-12 pr-4 h-14 bg-background border-2 border-border focus:border-primary rounded-sm font-heading uppercase tracking-wider text-lg shadow-sm"
+                className="pl-12 pr-4 h-14 bg-background border border-border focus:border-primary rounded-sm font-heading uppercase tracking-wider text-lg shadow-sm"
               />
             </div>
           </div>
@@ -136,7 +136,7 @@ const HelpCenterPage: React.FC = () => {
                 {categories.map((category, index) => (
                   <div
                     key={index}
-                    className="group p-6 bg-card border-2 border-border hover:border-primary transition-all duration-300 cursor-pointer rounded-sm"
+                    className="group p-6 bg-card border border-border hover:border-primary transition-all duration-300 cursor-pointer rounded-sm"
                   >
                     <div className="flex items-start">
                       <div className="bg-muted p-3 text-foreground group-hover:bg-primary group-hover:text-primary-foreground transition-colors mr-4 rounded-sm border border-border">
@@ -168,7 +168,7 @@ const HelpCenterPage: React.FC = () => {
                 {faqs.map((faq, index) => (
                   <div
                     key={index}
-                    className={`border-2 rounded-sm transition-all duration-300 ${
+                    className={`border rounded-sm transition-all duration-300 ${
                       openFaqIndex === index
                         ? "border-primary bg-primary/5"
                         : "border-border bg-card hover:border-primary/50"
@@ -208,7 +208,7 @@ const HelpCenterPage: React.FC = () => {
 
           {/* Sidebar */}
           <div className="space-y-8">
-            <div className="bg-muted/30 border-2 border-border p-6 rounded-sm">
+            <div className="bg-muted/30 border border-border p-6 rounded-sm">
               <h3 className="text-xl font-heading font-bold uppercase text-foreground mb-4 flex items-center">
                 <Phone className="w-5 h-5 mr-2 text-primary" />
                 Direct Contact
@@ -224,7 +224,7 @@ const HelpCenterPage: React.FC = () => {
                 </Button>
                 <Button
                   variant="outline"
-                  className="w-full border-2 border-foreground bg-transparent hover:bg-foreground hover:text-background font-heading font-bold uppercase tracking-wider rounded-sm justify-start pl-6 h-12"
+                  className="w-full border border-foreground bg-transparent hover:bg-foreground hover:text-background font-heading font-bold uppercase tracking-wider rounded-sm justify-start pl-6 h-12"
                 >
                   <Mail className="w-4 h-4 mr-3" />
                   support@afriamarket.com
@@ -232,7 +232,7 @@ const HelpCenterPage: React.FC = () => {
               </div>
             </div>
 
-            <div className="bg-card border-2 border-border p-6 relative overflow-hidden group rounded-sm">
+            <div className="bg-card border border-border p-6 relative overflow-hidden group rounded-sm">
               <div className="absolute top-0 right-0 w-16 h-16 bg-primary/10 rounded-bl-full -mr-8 -mt-8 pointer-events-none group-hover:scale-150 transition-transform duration-500"></div>
               <h3 className="text-xl font-heading font-bold uppercase text-foreground mb-4">
                 Documentation

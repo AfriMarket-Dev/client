@@ -1,14 +1,5 @@
 import React from "react";
-import {
-  ArrowRight,
-  Eye,
-  MapPin,
-  User,
-  Building,
-  Package,
-  Star,
-  Heart,
-} from "lucide-react";
+import { ArrowRight, MapPin, Package, Star, Heart } from "lucide-react";
 import { products, suppliers } from "@/data/mockData";
 import { type Product } from "@/types";
 import { useWishlist } from "@/hooks/useWishlist";
@@ -30,92 +21,20 @@ const SampleProducts: React.FC<SampleProductsProps> = ({
     suppliers.find((s) => s.id === supplierId);
 
   return (
-    <section className="py-20 bg-background relative overflow-hidden">
-      {/* African-inspired background pattern */}
-      <div className="absolute inset-0 opacity-5">
-        <svg className="w-full h-full" viewBox="0 0 1200 800">
-          <defs>
-            <pattern
-              id="products-pattern"
-              x="0"
-              y="0"
-              width="100"
-              height="100"
-              patternUnits="userSpaceOnUse"
-            >
-              <path
-                d="M50,10 L90,50 L50,90 L10,50 Z"
-                fill="currentColor"
-                opacity="0.1"
-              />
-              <circle
-                cx="50"
-                cy="50"
-                r="15"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                opacity="0.1"
-              />
-              <path
-                d="M25,25 L75,75 M75,25 L25,75"
-                stroke="currentColor"
-                strokeWidth="1"
-                opacity="0.05"
-              />
-            </pattern>
-          </defs>
-          <rect
-            width="100%"
-            height="100%"
-            fill="url(#products-pattern)"
-            className="text-primary"
-          />
-        </svg>
-      </div>
-
+    <section className="py-20 bg-background relative overflow-hidden border-t border-border">
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <div className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-primary/10 to-primary/20 rounded-full text-sm font-medium text-primary border border-primary/20 mb-6">
+          <div className="inline-flex items-center px-4 py-2 bg-primary/10 text-xs font-bold uppercase tracking-wider text-primary rounded-sm border border-primary/20 mb-6">
             <Package className="w-4 h-4 mr-2" />
             Sample Products
           </div>
 
-          <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
-            Quality Products from
-            <span className="relative ml-3">
-              <span className="bg-gradient-to-r from-primary via-primary/90 to-primary/80 bg-clip-text text-transparent">
-                Trusted Suppliers
-              </span>
-              <svg
-                className="absolute -bottom-2 left-0 w-full h-3"
-                viewBox="0 0 300 12"
-              >
-                <path
-                  d="M5,6 Q150,1 295,6"
-                  stroke="url(#products-gradient)"
-                  strokeWidth="3"
-                  fill="none"
-                  strokeLinecap="round"
-                />
-                <defs>
-                  <linearGradient
-                    id="products-gradient"
-                    x1="0%"
-                    y1="0%"
-                    x2="100%"
-                    y2="0%"
-                  >
-                    <stop offset="0%" stopColor="var(--color-primary)" />
-                    <stop offset="50%" stopColor="var(--color-primary)" />
-                    <stop offset="100%" stopColor="var(--color-primary)" />
-                  </linearGradient>
-                </defs>
-              </svg>
-            </span>
+          <h2 className="text-4xl md:text-5xl font-heading font-bold uppercase text-foreground mb-6">
+            Quality Products from{" "}
+            <span className="text-primary">Trusted Suppliers</span>
           </h2>
 
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed font-medium">
             Discover a sample of quality products available from our verified
             suppliers. From electronics to fashion, find everything you need to
             grow your business.
@@ -123,71 +42,27 @@ const SampleProducts: React.FC<SampleProductsProps> = ({
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-          {sampleProducts.map((product, index) => {
+          {sampleProducts.map((product) => {
             const supplier = getSupplier(product.supplierId);
 
             return (
               <div
                 key={product.id}
-                className="group relative bg-gradient-to-br from-card via-primary/5 to-primary/10 rounded-3xl overflow-hidden border border-primary/10 hover:border-primary/30 transition-all duration-500 hover:shadow-2xl cursor-pointer transform hover:-translate-y-2"
-                style={{
-                  animationDelay: `${index * 100}ms`,
-                }}
+                className="group relative bg-card rounded-sm overflow-hidden border border-border hover:border-primary transition-all duration-300 cursor-pointer"
                 onClick={() => onProductClick?.(product)}
               >
-                {/* African-inspired background pattern for each card */}
-                <div className="absolute top-0 right-0 w-32 h-32 opacity-10">
-                  <svg
-                    viewBox="0 0 128 128"
-                    className="w-full h-full text-primary"
-                  >
-                    <pattern
-                      id={`product-pattern-${index}`}
-                      x="0"
-                      y="0"
-                      width="32"
-                      height="32"
-                      patternUnits="userSpaceOnUse"
-                    >
-                      <polygon
-                        points="16,4 28,16 16,28 4,16"
-                        fill="currentColor"
-                        opacity="0.3"
-                      />
-                      <circle
-                        cx="16"
-                        cy="16"
-                        r="6"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="1"
-                        opacity="0.2"
-                      />
-                    </pattern>
-                    <rect
-                      width="128"
-                      height="128"
-                      fill={`url(#product-pattern-${index})`}
-                    />
-                  </svg>
-                </div>
-
-                {/* Floating geometric decoration */}
-                <div className="absolute top-4 right-4 w-6 h-6 bg-gradient-to-br from-primary/60 to-primary/50 rounded-full opacity-20 group-hover:scale-125 transition-transform duration-300"></div>
-                <div className="absolute bottom-4 left-4 w-4 h-4 bg-gradient-to-br from-primary/40 to-primary/30 transform rotate-45 opacity-20 group-hover:rotate-90 transition-transform duration-300"></div>
-
                 {/* Product Image */}
-                <div className="relative h-48 overflow-hidden">
+                <div className="relative h-64 overflow-hidden bg-muted">
                   <img
                     src={product.images[0]}
                     alt={product.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors" />
 
                   {/* Category Badge */}
                   <div className="absolute top-3 left-3">
-                    <span className="px-3 py-1.5 bg-card/90 backdrop-blur-sm text-primary text-xs font-medium rounded-full border border-primary/20">
+                    <span className="px-3 py-1 bg-background/90 text-foreground text-[10px] font-bold uppercase tracking-wider rounded-sm border border-border/50">
                       {product.category}
                     </span>
                   </div>
@@ -204,7 +79,7 @@ const SampleProducts: React.FC<SampleProductsProps> = ({
                             addToWishlist(product, "product");
                           }
                         }}
-                        className="p-2 bg-card/90 backdrop-blur-sm rounded-full hover:bg-card transition-colors group-hover:scale-110"
+                        className="p-2 bg-background/90 rounded-sm hover:bg-background transition-colors border border-transparent hover:border-border"
                       >
                         <Heart
                           className={`w-4 h-4 ${
@@ -214,31 +89,28 @@ const SampleProducts: React.FC<SampleProductsProps> = ({
                           }`}
                         />
                       </button>
-                      <button className="p-2 bg-card/90 backdrop-blur-sm rounded-full hover:bg-card transition-colors group-hover:scale-110">
-                        <Eye className="w-4 h-4 text-muted-foreground" />
-                      </button>
                     </div>
                   </div>
 
                   {/* Availability Badge */}
                   <div className="absolute bottom-3 right-3">
                     <span
-                      className={`px-2 py-1 text-xs font-medium rounded-full ${
+                      className={`px-2 py-1 text-[10px] font-bold uppercase tracking-wider rounded-sm border ${
                         product.availability === "in-stock"
-                          ? "bg-success/20 text-success"
+                          ? "bg-success/10 text-success border-success/20"
                           : product.availability === "pre-order"
-                            ? "bg-warning/20 text-warning"
-                            : "bg-destructive/20 text-destructive"
+                            ? "bg-warning/10 text-warning border-warning/20"
+                            : "bg-destructive/10 text-destructive border-destructive/20"
                       }`}
                     >
-                      {product.availability.replace("-", " ").toUpperCase()}
+                      {product.availability.replace("-", " ")}
                     </span>
                   </div>
                 </div>
 
-                <div className="relative z-10 p-6">
+                <div className="p-6">
                   {/* Product Info */}
-                  <h3 className="text-xl font-bold text-foreground mb-2 group-hover:text-primary transition-colors line-clamp-1">
+                  <h3 className="text-xl font-heading font-bold text-foreground mb-2 group-hover:text-primary transition-colors line-clamp-1 uppercase">
                     {product.name}
                   </h3>
 
@@ -247,57 +119,38 @@ const SampleProducts: React.FC<SampleProductsProps> = ({
                   </p>
 
                   {/* Pricing */}
-                  <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center justify-between mb-6 pb-6 border-b border-border">
                     <div>
-                      <div className="text-lg font-bold bg-gradient-to-r from-primary to-primary/90 bg-clip-text text-transparent">
-                        ${product.priceRange.min} - ${product.priceRange.max}
+                      <div className="text-lg font-heading font-bold text-foreground">
+                        ${product.priceRange.min.toLocaleString()} - $
+                        {product.priceRange.max.toLocaleString()}
                       </div>
-                      <div className="text-xs text-muted-foreground">
-                        Min. order: {product.minimumOrder} units
+                      <div className="text-xs text-muted-foreground font-bold uppercase tracking-wide mt-1">
+                        Min: {product.minimumOrder} units
                       </div>
                     </div>
                   </div>
 
                   {/* Supplier Information */}
                   {supplier && (
-                    <div className="bg-gradient-to-r from-primary/5 to-primary/10 rounded-2xl p-4 border border-primary/20">
-                      <div className="flex items-center space-x-3 mb-3">
-                        <img
-                          src={supplier.avatar}
-                          alt={supplier.name}
-                          className="w-10 h-10 rounded-full border-2 border-white shadow-sm"
-                        />
-                        <div className="flex-1">
-                          <div className="flex items-center space-x-2 mb-1">
-                            <Building className="w-4 h-4 text-primary" />
-                            <span className="font-semibold text-foreground text-sm">
-                              Company
-                            </span>
-                          </div>
-                          <div className="text-sm font-medium text-foreground">
-                            {supplier.name}
-                          </div>
+                    <div className="flex items-center space-x-3">
+                      <img
+                        src={supplier.avatar}
+                        alt={supplier.name}
+                        className="w-10 h-10 rounded-sm border border-border object-cover"
+                      />
+                      <div className="flex-1 min-w-0">
+                        <div className="text-sm font-heading font-bold text-foreground uppercase tracking-wide truncate">
+                          {supplier.name}
                         </div>
-                      </div>
-
-                      <div className="flex items-center space-x-2 mb-2">
-                        <User className="w-4 h-4 text-primary" />
-                        <span className="font-semibold text-foreground text-sm">
-                          Business Representative
-                        </span>
-                      </div>
-                      <div className="text-sm text-muted-foreground mb-3">
-                        Contact Representative
-                      </div>
-
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center text-muted-foreground text-sm">
-                          <MapPin className="w-3 h-3 mr-1" />
-                          <span>{supplier.location}</span>
-                        </div>
-                        <div className="flex items-center">
-                          <Star className="w-3 h-3 text-warning fill-current mr-1" />
-                          <span className="text-sm font-medium text-foreground">
+                        <div className="flex items-center text-muted-foreground text-xs gap-2 mt-0.5">
+                          <span className="flex items-center">
+                            <MapPin className="w-3 h-3 mr-1" />
+                            {supplier.location}
+                          </span>
+                          <span className="w-1 h-1 rounded-full bg-border" />
+                          <span className="flex items-center text-warning font-bold">
+                            <Star className="w-3 h-3 fill-current mr-1" />
                             {supplier.rating}
                           </span>
                         </div>
@@ -314,12 +167,10 @@ const SampleProducts: React.FC<SampleProductsProps> = ({
         <div className="text-center">
           <button
             onClick={onViewProducts}
-            className="group bg-gradient-to-r from-primary via-primary/90 to-primary/80 text-white px-10 py-5 rounded-2xl font-bold text-lg hover:from-primary/90 hover:to-primary transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl"
+            className="group inline-flex items-center justify-center bg-primary text-primary-foreground px-8 py-4 rounded-sm font-heading font-bold uppercase tracking-widest hover:bg-primary/90 transition-all border border-transparent shadow-none"
           >
-            <span className="flex items-center justify-center">
-              View More Products
-              <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
-            </span>
+            View More Products
+            <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
           </button>
         </div>
       </div>

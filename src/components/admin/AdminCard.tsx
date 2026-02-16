@@ -24,7 +24,7 @@ export const AdminCard: React.FC<AdminCardProps> = ({
   return (
     <Card
       className={cn(
-        "border border-border/60 rounded-sm bg-background shadow-none overflow-hidden relative",
+        "border border-border rounded-sm bg-background shadow-none overflow-hidden relative",
         className,
       )}
     >
@@ -32,7 +32,7 @@ export const AdminCard: React.FC<AdminCardProps> = ({
       <div className="absolute top-0 right-0 w-2 h-2 border-t border-r border-primary/20 group-hover:border-primary transition-colors" />
 
       {(title || headerActions) && (
-        <CardHeader className="p-6 border-b border-border bg-muted/30">
+        <CardHeader className="p-6 border-b border-border bg-muted/5">
           <div className="flex items-center justify-between">
             <div>
               {title && (

@@ -1,12 +1,13 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
-import { LogOut, ChevronDown, Heart } from "lucide-react";
+import { useNavigate, Link } from "react-router-dom";
+import { LogOut, Heart, MessageSquare, User, LayoutDashboard } from "lucide-react";
 import { useDispatch } from "react-redux";
 import { logout } from "@/app/features/authSlice";
 import { useSignOutMutation } from "@/app/api/auth";
+import { useGetWishlistQuery } from "@/app/api/wishlist";
 import { Button } from "@/components/ui/Button";
-import { Badge } from "@/components/ui/Badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/Avatar";
+import { Badge } from "@/components/ui/Badge";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,20 +18,24 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/DropdownMenu";
 
+const PROVIDER_ROLES = ["provider", "admin", "agent"];
+
 interface HeaderUserNavProps {
   isAuthenticated: boolean;
   user: any;
-  wishlistCount: number;
 }
 
 export const HeaderUserNav: React.FC<HeaderUserNavProps> = ({
   isAuthenticated,
   user,
-  wishlistCount,
 }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [signOut] = useSignOutMutation();
+  const { data: wishlist = [] } = useGetWishlistQuery(undefined, {
+    skip: !isAuthenticated,
+  });
+  const wishlistCount = Array.isArray(wishlist) ? wishlist.length : 0;
 
   const handleLogout = async () => {
     try {
@@ -70,14 +75,6 @@ export const HeaderUserNav: React.FC<HeaderUserNavProps> = ({
         <Button
           variant="ghost"
           size="sm"
-          onClick={() => navigate("/services")}
-          className="font-heading font-bold uppercase tracking-wide text-muted-foreground hover:text-foreground hover:bg-transparent text-xs"
-        >
-          Services
-        </Button>
-        <Button
-          variant="ghost"
-          size="sm"
           onClick={() => navigate("/about")}
           className="font-heading font-bold uppercase tracking-wide text-muted-foreground hover:text-foreground hover:bg-transparent text-xs"
         >
@@ -85,20 +82,31 @@ export const HeaderUserNav: React.FC<HeaderUserNavProps> = ({
         </Button>
       </div>
 
-      <Button
-        variant="ghost"
-        title="wishlist"
-        size="icon"
-        className="relative text-muted-foreground hover:text-foreground hover:bg-muted/50 h-10 w-10"
-        onClick={() => navigate("/wishlist")}
-      >
-        <Heart className="w-5 h-5" strokeWidth={2} />
-        {wishlistCount > 0 && (
-          <Badge className="absolute top-1 right-1 min-w-[16px] h-[16px] flex items-center justify-center p-0 text-[10px] font-bold bg-primary text-primary-foreground border-2 border-background">
-            {wishlistCount}
-          </Badge>
-        )}
-      </Button>
+      {isAuthenticated && (
+        <>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="relative h-10 w-10 text-muted-foreground hover:text-foreground"
+            onClick={() => navigate("/wishlist")}
+          >
+            <Heart className="w-5 h-5" />
+            {wishlistCount > 0 && (
+              <Badge className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] flex items-center justify-center p-0 text-[10px] font-bold">
+                {wishlistCount > 99 ? "99+" : wishlistCount}
+              </Badge>
+            )}
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-10 w-10 text-muted-foreground hover:text-foreground"
+            onClick={() => navigate("/messages")}
+          >
+            <MessageSquare className="w-5 h-5" />
+          </Button>
+        </>
+      )}
 
       <div className="h-8 w-px bg-border mx-1 hidden sm:block" />
 
@@ -108,90 +116,98 @@ export const HeaderUserNav: React.FC<HeaderUserNavProps> = ({
             render={
               <Button
                 variant="ghost"
-                className="gap-2 pl-2 pr-3 h-10 hover:bg-muted/50 flex items-center"
+                className="relative h-10 w-10 rounded-full border border-border hover:border-primary transition-all duration-200"
               >
-                <Avatar className="h-8 w-8 border border-border">
-                  <AvatarImage src={user.avatar} />
-                  <AvatarFallback className="bg-muted text-foreground font-heading font-bold">
+                <Avatar className="h-9 w-9 border border-border">
+                  <AvatarImage src={user.image} alt={user.name} />
+                  <AvatarFallback className="font-heading font-bold bg-muted/50 text-muted-foreground">
                     {user.name?.charAt(0).toUpperCase()}
                   </AvatarFallback>
                 </Avatar>
-                <span className="text-sm font-heading font-bold uppercase tracking-wide text-foreground hidden sm:inline">
-                  {user.name?.split(" ")[0]}
-                </span>
-                <ChevronDown className="w-4 h-4 text-muted-foreground" />
               </Button>
             }
           />
           <DropdownMenuContent
-            className="w-56 rounded-sm border-2 border-border shadow-lg"
+            className="w-64 align-end border border-border rounded-sm shadow-lg p-0 bg-background/95 backdrop-blur-sm animate-in fade-in slide-in-from-top-2 duration-200"
             align="end"
           >
             <DropdownMenuGroup>
-              <DropdownMenuLabel>
-                <div className="flex flex-col gap-1">
-                  <p className="text-sm font-heading font-bold uppercase text-foreground">
-                    {user.name}
-                  </p>
-                  <p className="text-xs text-muted-foreground font-medium">
-                    {user.email}
-                  </p>
+              <DropdownMenuLabel className="font-normal p-0">
+                <div className="flex items-center justify-start gap-4 p-4 border-b border-border bg-muted/5">
+                  <div className="flex flex-col space-y-1 leading-none">
+                    {user.name && (
+                      <p className="font-heading font-bold uppercase tracking-wide text-sm text-foreground">
+                        {user.name}
+                      </p>
+                    )}
+                    {user.email && (
+                      <p className="text-xs leading-none text-muted-foreground font-medium truncate max-w-[180px]">
+                        {user.email}
+                      </p>
+                    )}
+                  </div>
                 </div>
               </DropdownMenuLabel>
-
               <DropdownMenuSeparator className="bg-border" />
-
-              {user.role === "admin" && (
+              {(user.role === "admin" || user.role === "agent") && (
                 <DropdownMenuItem
                   onClick={() => navigate("/admin")}
-                  className="font-bold uppercase text-xs tracking-wide focus:bg-muted"
+                  className="cursor-pointer rounded-sm focus:bg-muted focus:text-primary font-medium"
                 >
-                  Admin Dashboard
+                  <LayoutDashboard className="w-4 h-4 mr-2" />
+                  <span className="font-bold uppercase text-xs tracking-wide">
+                    Admin Dashboard
+                  </span>
                 </DropdownMenuItem>
               )}
-              {user.role === "supplier" ? (
+              {PROVIDER_ROLES.includes(user.role) && (
                 <DropdownMenuItem
                   onClick={() => navigate("/dashboard")}
-                  className="font-bold uppercase text-xs tracking-wide focus:bg-muted"
+                  className="cursor-pointer rounded-sm focus:bg-muted focus:text-primary font-medium"
                 >
-                  Provider Dashboard
-                </DropdownMenuItem>
-              ) : (
-                <DropdownMenuItem
-                  onClick={() => navigate("/dashboard")}
-                  className="font-bold uppercase text-xs tracking-wide focus:bg-muted"
-                >
-                  Buyer Account
+                  <LayoutDashboard className="w-4 h-4 mr-2" />
+                  <span className="font-bold uppercase text-xs tracking-wide">
+                    Provider Dashboard
+                  </span>
                 </DropdownMenuItem>
               )}
-
+              <DropdownMenuItem
+                onClick={() => navigate("/profile")}
+                className="cursor-pointer rounded-sm focus:bg-muted focus:text-primary font-medium"
+              >
+                <User className="w-4 h-4 mr-2" />
+                <span className="font-bold uppercase text-xs tracking-wide">
+                  Profile
+                </span>
+              </DropdownMenuItem>
               <DropdownMenuSeparator className="bg-border" />
-
               <DropdownMenuItem
                 onClick={handleLogout}
-                className="text-destructive focus:text-destructive focus:bg-destructive/10 font-bold uppercase text-xs tracking-wide"
+                className="cursor-pointer rounded-sm focus:bg-destructive/10 focus:text-destructive font-medium text-destructive"
               >
                 <LogOut className="mr-2 h-4 w-4" />
-                Sign out
+                <span className="font-bold uppercase text-xs tracking-wide">
+                  Sign out
+                </span>
               </DropdownMenuItem>
             </DropdownMenuGroup>
           </DropdownMenuContent>
         </DropdownMenu>
       ) : (
         <div className="flex items-center gap-3">
-          <Button
-            onClick={() => navigate("/auth/signin")}
-            variant="ghost"
-            className="font-heading font-bold uppercase tracking-wide text-muted-foreground hover:text-foreground hover:bg-transparent"
-          >
-            Sign in
-          </Button>
-          <Button
-            onClick={() => navigate("/auth/signup")}
-            className="h-10 px-6 font-heading font-bold uppercase tracking-wide rounded-sm bg-primary text-primary-foreground hover:bg-primary/90 shadow-none border border-primary"
-          >
-            Join
-          </Button>
+          <Link to="/auth/signin">
+            <Button
+              variant="ghost"
+              className="font-heading font-bold uppercase tracking-wider hover:bg-muted/50 text-xs h-9 px-4 rounded-sm border border-transparent hover:border-border"
+            >
+              Sign In
+            </Button>
+          </Link>
+          <Link to="/auth/signup">
+            <Button className="font-heading font-bold uppercase tracking-wider text-xs h-9 px-4 rounded-sm shadow-none border border-border hover:border-primary hover:bg-primary hover:text-primary-foreground transition-all duration-200 bg-transparent text-foreground">
+              Join Network
+            </Button>
+          </Link>
         </div>
       )}
     </div>

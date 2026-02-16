@@ -7,7 +7,7 @@ const CTASection: React.FC = () => {
   const navigate = useNavigate();
 
   return (
-    <section className="relative py-24 overflow-hidden bg-foreground text-background border-t-2 border-border">
+    <section className="relative py-24 overflow-hidden bg-foreground text-background border-t border-border">
       <div className="absolute inset-0 opacity-10 pointer-events-none">
         <div
           className="absolute inset-0"
@@ -33,7 +33,7 @@ const CTASection: React.FC = () => {
               <span className="text-primary">Something Great?</span>
             </h2>
 
-            <p className=" text-muted-foreground mb-8 leading-relaxed max-w-xl uppercase tracking-wider text-xs font-bold">
+            <p className=" text-muted-foreground mb-8 leading-relaxed max-w-xl uppercase tracking-widest text-xs font-bold">
               Join thousands of contractors, suppliers, and project managers
               transforming the construction industry in Rwanda.
             </p>
@@ -51,7 +51,7 @@ const CTASection: React.FC = () => {
                 size="lg"
                 variant="outline"
                 onClick={() => navigate("/about")}
-                className="h-14 px-8 text-base font-bold uppercase tracking-widest rounded-sm border-2 border-background/20 hover:border-background hover:bg-background/10 text-background bg-transparent shadow-none"
+                className="h-14 px-8 text-base font-bold uppercase tracking-widest rounded-sm border border-background/20 hover:border-background hover:bg-background/10 text-background bg-transparent shadow-none"
               >
                 Learn More
               </Button>
@@ -76,7 +76,7 @@ const CTASection: React.FC = () => {
           <div className="relative hidden lg:block">
             <div className="relative z-10 grid grid-cols-2 gap-4">
               <div className="space-y-4 pt-8">
-                <div className="bg-background/5 backdrop-blur-md p-6 rounded-sm border-2 border-background/10 shadow-xl">
+                <div className="bg-background/5 backdrop-blur-md p-6 rounded-sm border border-background/10 shadow-xl">
                   <Building2 className="w-8 h-8 text-primary mb-4" />
                   <div className="text-2xl font-heading font-bold text-background mb-1">
                     500+

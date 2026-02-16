@@ -1,22 +1,19 @@
 import React from "react";
-import { cn } from "@/lib/utils";
 
 interface AdminTableProps {
   headers: string[];
   children: React.ReactNode;
-  className?: string;
 }
 
 export const AdminTable: React.FC<AdminTableProps> = ({
   headers,
   children,
-  className,
 }) => {
   return (
-    <div className={cn("bg-background border-2 border-border rounded-sm overflow-x-auto", className)}>
+    <div className="bg-background border border-border rounded-sm overflow-x-auto">
       <table className="w-full">
         <thead>
-          <tr className="border-b-2 border-border bg-muted">
+          <tr className="border-b border-border bg-muted">
             {headers.map((header, index) => (
               <th
                 key={index}

@@ -112,12 +112,12 @@ const Wishlist: React.FC<WishlistProps> = ({
       </div>
 
       {/* tabs */}
-      <div className="bg-background border-b-2 border-border">
+      <div className="bg-background border-b border-border">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex gap-6">
             <button
               onClick={() => setActiveTab("products")}
-              className={`flex items-center py-4 px-2 border-b-2 font-heading font-bold text-xs uppercase tracking-wider transition-colors ${
+              className={`flex items-center py-4 px-2 border-b font-heading font-bold text-xs uppercase tracking-wider transition-colors ${
                 activeTab === "products"
                   ? "border-primary text-primary"
                   : "border-transparent text-muted-foreground hover:text-foreground"
@@ -128,7 +128,7 @@ const Wishlist: React.FC<WishlistProps> = ({
             </button>
             <button
               onClick={() => setActiveTab("suppliers")}
-              className={`flex items-center py-4 px-2 border-b-2 font-heading font-bold text-xs uppercase tracking-wider transition-colors ${
+              className={`flex items-center py-4 px-2 border-b font-heading font-bold text-xs uppercase tracking-wider transition-colors ${
                 activeTab === "suppliers"
                   ? "border-primary text-primary"
                   : "border-transparent text-muted-foreground hover:text-foreground"
@@ -146,7 +146,7 @@ const Wishlist: React.FC<WishlistProps> = ({
         {activeTab === "products" && (
           <div>
             {wishlistProducts.length === 0 ? (
-              <div className="text-center py-20 bg-card rounded-sm border-2 border-border">
+              <div className="text-center py-20 bg-card rounded-sm border border-border">
                 <div className="w-16 h-16 bg-muted rounded-sm flex items-center justify-center mx-auto mb-6">
                   <Package className="w-8 h-8 text-muted-foreground" />
                 </div>
@@ -174,7 +174,7 @@ const Wishlist: React.FC<WishlistProps> = ({
                 {wishlistProducts.map((product) => (
                   <Card
                     key={product.id}
-                    className="rounded-sm border-2 border-border shadow-none hover:border-primary transition-all duration-300 overflow-hidden group"
+                    className="rounded-sm border border-border shadow-none hover:border-primary transition-all duration-300 overflow-hidden group"
                   >
                     <div className="relative">
                       <img

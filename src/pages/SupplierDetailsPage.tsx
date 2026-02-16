@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useCallback } from "react";
 import SupplierDetails from "@/components/supplier/SupplierDetails";
-import { type Product } from "@/types";
+import type { Listing } from "@/app/api/listings";
 
 const SupplierDetailsPage = () => {
   const navigate = useNavigate();
@@ -12,8 +12,8 @@ const SupplierDetailsPage = () => {
   }, [navigate]);
 
   const handleProductClick = useCallback(
-    (product: Product) => {
-      navigate(`/products/${product.id}`);
+    (listing: Listing) => {
+      navigate(`/products/${listing.id}`);
     },
     [navigate],
   );

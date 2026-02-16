@@ -31,7 +31,7 @@ export const authApi = apiSlice.injectEndpoints({
     signIn: builder.mutation<AuthResponse, SignInRequest>({
       queryFn: async (args, _api, _extraOptions, baseQuery) => {
         const result = await baseQuery({
-          url: "/api/auth/sign-in/email",
+          url: "/auth/sign-in/email",
           method: "POST",
           body: {
             email: args.email,
@@ -43,15 +43,15 @@ export const authApi = apiSlice.injectEndpoints({
           return { error: result.error };
         }
 
-        const token = (
-          result.meta as { response: Response }
-        )?.response?.headers.get("set-auth-token");
+        const res = (result.meta as { response?: Response })?.response;
+        const token =
+          res?.headers.get("set-auth-token") ?? (result.data as any)?.session?.token ?? "";
         const data = result.data as any;
 
         return {
           data: {
-            user: data.user,
-            token: token || "",
+            user: data?.user ?? data,
+            token: token ?? "",
           },
         };
       },
@@ -61,7 +61,7 @@ export const authApi = apiSlice.injectEndpoints({
     signUp: builder.mutation<AuthResponse, SignUpRequest>({
       queryFn: async (args, _api, _extraOptions, baseQuery) => {
         const result = await baseQuery({
-          url: "/api/auth/sign-up/email",
+          url: "/auth/sign-up/email",
           method: "POST",
           body: args,
         });
@@ -70,28 +70,28 @@ export const authApi = apiSlice.injectEndpoints({
           return { error: result.error };
         }
 
-        const token = (
-          result.meta as { response: Response }
-        )?.response?.headers.get("set-auth-token");
+        const res = (result.meta as { response?: Response })?.response;
+        const token =
+          res?.headers.get("set-auth-token") ?? (result.data as any)?.session?.token ?? "";
         const data = result.data as any;
 
         return {
           data: {
-            user: data.user,
-            token: token || "",
+            user: data?.user ?? data,
+            token: token ?? "",
           },
         };
       },
     }),
 
     getSession: builder.query<any, void>({
-      query: () => "/api/auth/get-session",
+      query: () => "/auth/get-session",
       providesTags: ["Session"],
     }),
 
     signOut: builder.mutation<void, void>({
       query: () => ({
-        url: "/api/auth/sign-out",
+        url: "/auth/sign-out",
         method: "POST",
       }),
       invalidatesTags: ["Session"],

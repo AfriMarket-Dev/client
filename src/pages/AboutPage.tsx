@@ -166,7 +166,7 @@ const AboutPage: React.FC = () => {
         </div>
 
         {/* hero section */}
-        <section className="relative py-20 overflow-hidden bg-background border-2 border-border rounded-sm">
+        <section className="relative py-20 overflow-hidden bg-background border border-border rounded-sm">
           <div
             className="absolute inset-0 z-0 opacity-[0.03]"
             style={{
@@ -201,9 +201,9 @@ const AboutPage: React.FC = () => {
               {stats.map((stat, index) => (
                 <div
                   key={index}
-                  className="group relative bg-card p-6 border-2 border-border hover:border-primary transition-colors duration-300 text-left"
+                  className="group relative bg-card p-6 border border-border hover:border-primary transition-colors duration-300 text-left"
                 >
-                  <div className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-primary/20 group-hover:border-primary transition-colors" />
+                  <div className="absolute top-0 right-0 w-3 h-3 border-t border-r border-primary/20 group-hover:border-primary transition-colors" />
                   <div className="mb-4 text-primary">
                     <stat.icon className="w-8 h-8" strokeWidth={1.5} />
                   </div>
@@ -220,13 +220,13 @@ const AboutPage: React.FC = () => {
         </section>
 
         {/* mission & vision */}
-        <section className="py-20 bg-muted/20 border-2 border-border rounded-sm">
+        <section className="py-20 bg-muted/20 border border-border rounded-sm">
           <div className="px-4">
             <div className="grid lg:grid-cols-2 gap-16 items-start">
               {/* mission */}
               <div className="relative p-8 border-l-4 border-primary bg-card/50">
                 <div className="flex items-center mb-6">
-                  <div className="flex items-center justify-center w-12 h-12 border-2 border-primary text-primary mr-4 rounded-sm">
+                  <div className="flex items-center justify-center w-12 h-12 border border-primary text-primary mr-4 rounded-sm">
                     <Target className="w-6 h-6" />
                   </div>
                   <h2 className="text-3xl font-heading font-bold uppercase text-foreground">
@@ -293,7 +293,7 @@ const AboutPage: React.FC = () => {
         </section>
 
         {/* values */}
-        <section className="py-24 bg-background border-2 border-border rounded-sm">
+        <section className="py-24 bg-background border border-border rounded-sm">
           <div className="px-4">
             <div className="text-center mb-16">
               <h2 className="text-4xl font-heading font-bold uppercase text-foreground mb-4">
@@ -306,7 +306,7 @@ const AboutPage: React.FC = () => {
               {values.map((value, index) => (
                 <div
                   key={index}
-                  className="group p-8 border-2 border-border hover:border-primary transition-all duration-300 bg-card hover:bg-card/80 rounded-sm"
+                  className="group p-8 border border-border hover:border-primary transition-all duration-300 bg-card hover:bg-card/80 rounded-sm"
                 >
                   <div className="w-12 h-12 bg-muted text-foreground flex items-center justify-center mb-6 rounded-sm group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
                     <value.icon className="w-6 h-6" />

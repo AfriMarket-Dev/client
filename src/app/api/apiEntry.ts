@@ -8,9 +8,10 @@ import { type RootState } from "@/app/store";
 import { logout } from "@/app/features/authSlice";
 
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:3000";
+const BASE_URL = `${API_BASE.replace(/\/$/, "")}/api`;
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: API_BASE,
+  baseUrl: BASE_URL,
   prepareHeaders: (headers, { getState }) => {
     const state = (getState as () => RootState)();
     const token = state.auth.token;
@@ -18,9 +19,10 @@ const baseQuery = fetchBaseQuery({
     if (token) {
       headers.set("Authorization", `Bearer ${token}`);
     }
-
+    headers.set("Content-Type", "application/json");
     return headers;
   },
+  credentials: "include",
 });
 
 const baseQueryWithReauth: BaseQueryFn<
@@ -50,6 +52,8 @@ export const apiSlice = createApi({
     "Orders",
     "Dashboard",
     "Session",
+    "Wishlist",
+    "Messages",
   ],
   endpoints: () => ({}),
 });

@@ -2,16 +2,13 @@ import { createBrowserRouter, Navigate } from "react-router-dom";
 import HomePage from "@/pages/HomePage";
 import ProductCatalogPage from "@/pages/ProductCatalogPage";
 import SupplierDetailsPage from "@/pages/SupplierDetailsPage";
-import WishlistPage from "@/pages/WishlistPage";
 import SupplierListingPage from "@/pages/SupplierListingPage";
 import CategoriesPage from "@/pages/CategoriesPage";
 import ProductDetailsPage from "@/pages/ProductDetailsPage";
 import SignUpPage from "@/pages/SignUpPage";
 import SignInPage from "@/pages/SignInPage";
-import SupplierDashboardPage from "@/pages/SupplierDashboardPage";
 import AboutPage from "@/pages/AboutPage";
 import HelpCenterPage from "@/pages/HelpCenterPage";
-import BuyerMessagesPage from "@/pages/BuyerMessagesPage";
 import AdminDashboard from "@/pages/AdminDashboard";
 import AdminSuppliersPage from "@/pages/AdminSuppliersPage";
 import AdminAddSupplierPage from "@/pages/AdminAddSupplierPage";
@@ -20,19 +17,22 @@ import AdminSupplierDetailsPage from "@/pages/AdminSupplierDetailsPage";
 import AdminProductDetailsPage from "@/pages/AdminProductDetailsPage";
 import AdminEditProductPage from "@/pages/AdminEditProductPage";
 import AdminCategoriesPage from "@/pages/AdminCategoriesPage";
-import AdminServicesPage from "@/pages/AdminServicesPage";
-import ServiceDetailsPage from "@/pages/ServiceDetailsPage";
 import AdminProductsPage from "@/pages/AdminProductsPage";
-import AdminAssignmentsPage from "@/pages/AdminAssignmentsPage";
-import AdminCustomersPage from "@/pages/AdminCustomersPage";
-import AdminProfileSettingsPage from "@/pages/AdminProfileSettingsPage";
-import { 
-  MainLayout, 
-  AuthLayout, 
-  AdminLayout, 
-  ProtectedRoute, 
-  AdminRoute 
+import {
+  MainLayout,
+  AuthLayout,
+  AdminLayout,
+  AdminRoute,
+  ProtectedRoute,
+  ProviderRoute,
 } from "@/components/layout";
+import WishlistPage from "@/pages/WishlistPage";
+import MessagesPage from "@/pages/MessagesPage";
+import ProfilePage from "@/pages/ProfilePage";
+import ProviderDashboardPage from "@/pages/ProviderDashboardPage";
+import ProviderListingFormPage from "@/pages/ProviderListingFormPage";
+import ProviderListingEditPage from "@/pages/ProviderListingEditPage";
+import { DashboardLayout } from "@/components/layout/DashboardLayout";
 
 export const router = createBrowserRouter([
   {
@@ -72,16 +72,25 @@ export const router = createBrowserRouter([
         element: <HelpCenterPage />,
       },
       {
-        path: "messages",
-        element: <BuyerMessagesPage />,
-      },
-      {
         element: <ProtectedRoute />,
         children: [
-          {
-            path: "wishlist",
-            element: <WishlistPage />,
-          },
+          { path: "wishlist", element: <WishlistPage /> },
+          { path: "messages", element: <MessagesPage /> },
+          { path: "profile", element: <ProfilePage /> },
+        ],
+      },
+    ],
+  },
+  {
+    element: <ProviderRoute />,
+    children: [
+      {
+        path: "/dashboard",
+        element: <DashboardLayout />,
+        children: [
+          { index: true, element: <ProviderDashboardPage /> },
+          { path: "listings/new", element: <ProviderListingFormPage /> },
+          { path: "listings/:listingId/edit", element: <ProviderListingEditPage /> },
         ],
       },
     ],
@@ -97,15 +106,6 @@ export const router = createBrowserRouter([
       {
         path: "signin",
         element: <SignInPage />,
-      },
-    ],
-  },
-  {
-    element: <ProtectedRoute />,
-    children: [
-      {
-        path: "/dashboard",
-        element: <SupplierDashboardPage />,
       },
     ],
   },
@@ -149,28 +149,8 @@ export const router = createBrowserRouter([
             element: <AdminCategoriesPage />,
           },
           {
-            path: "services",
-            element: <AdminServicesPage />,
-          },
-          {
-            path: "services/:serviceId",
-            element: <ServiceDetailsPage />,
-          },
-          {
             path: "products",
             element: <AdminProductsPage />,
-          },
-          {
-            path: "assignments",
-            element: <AdminAssignmentsPage />,
-          },
-          {
-            path: "customers",
-            element: <AdminCustomersPage />,
-          },
-          {
-            path: "settings",
-            element: <AdminProfileSettingsPage />,
           },
         ],
       },

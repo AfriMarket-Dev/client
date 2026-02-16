@@ -1,16 +1,19 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import ProductCatalog from "@/components/ProductCatalog";
-import { type Product } from "@/types";
+import type { Listing } from "@/app/api/listings";
 
 const ProductCatalogPage = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const categoryId = searchParams.get("category") ?? "all";
 
-  const handleProductClick = (product: Product) => {
-    navigate(`/products/${product.id}`);
+  const handleProductClick = (listing: Listing) => {
+    navigate(`/products/${listing.id}`);
   };
 
   return (
     <ProductCatalog
+      initialCategoryId={categoryId}
       onSupplierClick={(supplierId: string) =>
         navigate(`/suppliers/${supplierId}`)
       }

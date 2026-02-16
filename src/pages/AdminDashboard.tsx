@@ -70,7 +70,7 @@ export default function AdminDashboard() {
         subtitle="Monitoring Rwanda's construction ecosystem"
         badge="Administrator"
         actions={
-          <Button className="rounded-sm h-14 px-8 font-heading font-bold uppercase tracking-wider bg-background text-foreground hover:bg-muted border-2 border-transparent hover:border-border transition-all shadow-none">
+          <Button className="rounded-sm h-14 px-8 font-heading font-bold uppercase tracking-wider bg-background text-foreground hover:bg-muted border border-transparent hover:border-border transition-all shadow-none">
             Generate Audit Log
           </Button>
         }

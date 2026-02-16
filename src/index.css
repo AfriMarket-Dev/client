@@ -2,7 +2,7 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 @import "@fontsource-variable/inter";
-@import "@fontsource-variable/oswald";
+@import "@fontsource-variable/dm-sans";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -13,7 +13,7 @@
   --card-foreground: var(--color-slate-800);
   --popover: var(--color-white);
   --popover-foreground: var(--color-slate-800);
-  --primary: var(--color-orange-600);
+  --primary: var(--color-emerald-700);
   --primary-foreground: var(--color-white);
   --secondary: var(--color-slate-100);
   --secondary-foreground: var(--color-slate-800);
@@ -24,8 +24,8 @@
   --destructive: var(--color-red-600);
   --border: var(--color-slate-200);
   --input: var(--color-slate-200);
-  --ring: var(--color-orange-600);
-  --chart-1: var(--color-orange-600);
+  --ring: var(--color-emerald-700);
+  --chart-1: var(--color-emerald-700);
   --chart-2: var(--color-slate-600);
   --chart-3: var(--color-slate-800);
   --chart-4: var(--color-blue-600);
@@ -33,12 +33,12 @@
   --radius: 0.125rem;
   --sidebar: var(--color-slate-50);
   --sidebar-foreground: var(--color-slate-900);
-  --sidebar-primary: var(--color-orange-600);
+  --sidebar-primary: var(--color-emerald-700);
   --sidebar-primary-foreground: var(--color-white);
   --sidebar-accent: var(--color-slate-200);
   --sidebar-accent-foreground: var(--color-slate-900);
   --sidebar-border: var(--color-slate-200);
-  --sidebar-ring: var(--color-orange-600);
+  --sidebar-ring: var(--color-emerald-700);
   --destructive-foreground: var(--color-white);
   --info: var(--color-blue-600);
   --info-foreground: var(--color-white);
@@ -55,8 +55,8 @@
   --card-foreground: var(--color-slate-50);
   --popover: var(--color-slate-900);
   --popover-foreground: var(--color-slate-50);
-  --primary: var(--color-orange-600);
-  --primary-foreground: var(--color-white);
+  --primary: var(--color-emerald-500);
+  --primary-foreground: var(--color-slate-950);
   --secondary: var(--color-slate-800);
   --secondary-foreground: var(--color-slate-50);
   --muted: var(--color-slate-800);
@@ -66,7 +66,7 @@
   --destructive: var(--color-red-900);
   --border: var(--color-slate-800);
   --input: var(--color-slate-800);
-  --ring: var(--color-orange-600);
+  --ring: var(--color-emerald-500);
   --chart-1: var(--color-blue-500);
   --chart-2: var(--color-teal-500);
   --chart-3: var(--color-orange-500);
@@ -74,12 +74,12 @@
   --chart-5: var(--color-pink-500);
   --sidebar: var(--color-slate-900);
   --sidebar-foreground: var(--color-slate-50);
-  --sidebar-primary: var(--color-orange-600);
-  --sidebar-primary-foreground: var(--color-white);
+  --sidebar-primary: var(--color-emerald-500);
+  --sidebar-primary-foreground: var(--color-slate-950);
   --sidebar-accent: var(--color-slate-800);
   --sidebar-accent-foreground: var(--color-slate-50);
   --sidebar-border: var(--color-slate-800);
-  --sidebar-ring: var(--color-orange-600);
+  --sidebar-ring: var(--color-emerald-500);
   --destructive-foreground: var(--color-white);
   --info: var(--color-blue-500);
   --info-foreground: var(--color-white);
@@ -91,7 +91,7 @@
 
 @theme inline {
   --font-sans: "Inter Variable", sans-serif;
-  --font-heading: "Oswald Variable", sans-serif;
+  --font-heading: "DM Sans Variable", sans-serif;
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -166,10 +166,18 @@
       transparent 1px
     );
     background-size: 20px 20px;
-    opacity: 0.03;
+    opacity: 0.02;
   }
 
   .section-divider {
-    @apply py-20 md:py-32;
+    @apply py-16 md:py-20;
+  }
+
+  .section-padding {
+    @apply py-16 md:py-20;
+  }
+
+  .text-label {
+    @apply text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground;
   }
 }

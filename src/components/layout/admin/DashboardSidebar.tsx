@@ -61,7 +61,7 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
     <div className="h-full flex flex-col p-6">
       <div className="flex items-center justify-between mb-10">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-primary rounded-sm flex items-center justify-center shadow-lg shadow-primary/20 border border-primary/20">
+          <div className="w-10 h-10 bg-primary rounded-sm flex items-center justify-center shadow-none border border-primary/20">
             <Package className="w-6 h-6 text-primary-foreground" />
           </div>
           <div>
@@ -90,9 +90,9 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
               onClose();
             }}
             className={cn(
-              "w-full flex items-center px-4 py-3.5 text-xs font-heading font-bold uppercase tracking-widest rounded-sm transition-all border-2",
+              "w-full flex items-center px-4 py-3.5 text-xs font-heading font-bold uppercase tracking-widest rounded-sm transition-all border",
               activeTab === item.id
-                ? "bg-background text-foreground border-background shadow-md"
+                ? "bg-background text-foreground border-background shadow-none"
                 : "text-muted-foreground border-transparent hover:bg-background/10 hover:text-background",
             )}
           >

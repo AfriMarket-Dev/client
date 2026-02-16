@@ -59,11 +59,11 @@ export default function ServiceDetailsPage() {
       </div>
 
       {/* service overview */}
-      <Card className="border-2 border-border rounded-sm shadow-none">
+      <Card className="border border-border rounded-sm shadow-none">
         <CardContent className="p-6">
           <div className="flex items-start justify-between gap-6 mb-6">
             <div className="flex items-start gap-4">
-              <div className="p-4 bg-primary/10 rounded-sm border-2 border-primary/20">
+              <div className="p-4 bg-primary/10 rounded-sm border border-primary/20">
                 <IconComponent size={36} className="text-primary" />
               </div>
               <div>

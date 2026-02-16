@@ -29,14 +29,13 @@ const SignInPage = () => {
 
       const isAdmin =
         result.user.role === "admin" || result.user.role === "agent";
-      const isSupplier =
-        result.user.role === "supplier" || result.user.role === "provider";
+      const isProvider = result.user.role === "provider";
 
       if (from) {
         navigate(from, { replace: true });
       } else if (isAdmin) {
         navigate("/admin", { replace: true });
-      } else if (isSupplier) {
+      } else if (isProvider) {
         navigate("/dashboard", { replace: true });
       } else {
         navigate("/", { replace: true });
