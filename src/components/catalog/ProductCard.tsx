@@ -1,5 +1,5 @@
 import React from "react";
-import { Heart } from "lucide-react";
+import { Heart, ShieldCheck, MessageSquare, Star } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import type { Listing, CompanyRef } from "@/app/api/listings";
 import { ImageWithFallback } from "@/components/common/ImageWithFallback";
@@ -109,88 +109,112 @@ export const ProductCard: React.FC<ProductCardProps> = React.memo(
 
     return (
       <div
-        className="group flex flex-col bg-white dark:bg-slate-900 border border-border/60 hover:border-primary transition-all duration-500 cursor-pointer h-full relative rounded-lg overflow-hidden shadow-sm hover:shadow-md"
+        className="group flex flex-col bg-white dark:bg-slate-900 border border-border/60 hover:border-primary transition-all duration-300 cursor-pointer h-full relative rounded-lg overflow-hidden shadow-sm hover:shadow-xl"
         onClick={onClick}
       >
-        {/* Architectural Image Container */}
-        <div className="relative aspect-[4/5] overflow-hidden transition-all duration-700">
+        {/* Visual Header */}
+        <div className="relative aspect-square overflow-hidden bg-muted/10">
           {img ? (
             <ImageWithFallback
               src={img}
               alt={listing.name}
-              className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center text-muted-foreground bg-muted/20">
-              <span className="text-[10px] font-bold uppercase tracking-[0.2em] opacity-40">No Image Data</span>
+              <span className="text-[9px] font-bold uppercase tracking-widest opacity-40">No Data</span>
             </div>
           )}
           
-          <div className="absolute inset-0 bg-primary/0 group-hover:bg-primary/5 transition-colors duration-500" />
+          {/* Status Overlays */}
+          <div className="absolute top-2 left-2 flex flex-col gap-1">
+             <div className="bg-emerald-600 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-sm uppercase tracking-tighter shadow-sm">
+                Ready to Ship
+             </div>
+             {listing.type === "SERVICE" && (
+                <div className="bg-sky-600 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-sm uppercase tracking-tighter shadow-sm">
+                    Verified Pro
+                </div>
+             )}
+          </div>
 
-          {/* Wishlist Button - Precise Design */}
           {onToggleWishlist && (
             <Button
               variant="secondary"
               size="icon"
-              className="absolute top-4 right-4 h-10 w-10 rounded-md bg-white dark:bg-slate-900 shadow-2xl opacity-0 group-hover:opacity-100 transition-all hover:bg-primary hover:text-white"
+              className="absolute top-2 right-2 h-8 w-8 rounded-full bg-white/90 dark:bg-slate-900/90 shadow-md opacity-0 group-hover:opacity-100 transition-all hover:bg-primary hover:text-white border-none"
               onClick={(e) => {
                   e.stopPropagation();
                   onToggleWishlist(e);
               }}
             >
-              <Heart className={`w-4 h-4 ${isInWishlist ? "fill-current" : ""}`} />
+              <Heart className={`w-3.5 h-3.5 ${isInWishlist ? "fill-current" : ""}`} />
             </Button>
           )}
-
-          {/* Type Badge */}
-          <div className="absolute bottom-0 left-0 bg-foreground text-background px-4 py-1.5 text-[10px] font-bold uppercase tracking-widest translate-y-full group-hover:translate-y-0 transition-transform duration-500">
-             {listing.type || "Asset"}
-          </div>
         </div>
 
-        {/* Structured Metadata */}
-        <div className="p-5 flex flex-col grow gap-3.5 border-t border-border/40">
-          <div className="flex flex-col gap-1.5">
-            <div className="flex items-center gap-2">
-                <div className="w-1.5 h-1.5 rounded-full bg-primary/30 group-hover:bg-primary transition-colors" />
-                <span className="text-[9px] font-semibold text-muted-foreground/60 uppercase tracking-[0.15em]">
-                {listing.category?.name ?? "General Material"}
-                </span>
-            </div>
-            <h3 className="text-lg font-heading font-semibold text-foreground/90 leading-snug group-hover:text-primary transition-colors line-clamp-2 min-h-[2.75rem]">
+        {/* Dense Operational Metadata */}
+        <div className="p-3.5 flex flex-col grow gap-2.5">
+          <div className="space-y-1">
+            <h3 className="text-xs font-sans font-semibold text-foreground/90 leading-normal line-clamp-2 min-h-[2rem] group-hover:text-primary transition-colors">
               {listing.name}
             </h3>
+            
+            <div className="flex items-center gap-1.5">
+                <div className="flex items-center text-[10px] font-bold text-foreground font-sans">
+                    RWF {price.toLocaleString()}
+                </div>
+                <div className="text-[9px] text-muted-foreground font-medium">/ unit</div>
+            </div>
           </div>
 
-          <div className="mt-auto space-y-3.5">
-            <div className="flex items-end justify-between">
-               <div className="flex flex-col">
-                  <span className="text-[9px] text-muted-foreground/40 font-bold uppercase tracking-widest mb-0.5">Valuation</span>
-                  <span className="text-lg font-semibold text-foreground font-sans tracking-tight">
-                    RWF {price.toLocaleString()}
-                  </span>
-               </div>
-               
-               {company && (
-                  <div 
-                    className="flex items-center justify-center w-9 h-9 bg-muted/20 text-[11px] text-muted-foreground/70 font-bold border border-border/40 group-hover:border-primary/30 group-hover:bg-primary/5 transition-all rounded-md"
-                    title={company.name}
-                    onClick={(e) => {
-                        if (onSupplierClick) {
-                            e.stopPropagation();
-                            onSupplierClick(e);
-                        }
-                    }}
-                  >
-                     {company.name?.charAt(0) ?? "?"}
-                  </div>
-               )}
+          <div className="space-y-1.5">
+            <div className="flex items-center justify-between text-[10px] text-muted-foreground">
+                <span>MOQ: <span className="text-foreground font-semibold">10 units</span></span>
+                <span className="text-[9px] bg-primary/5 text-primary px-1 rounded-sm font-bold tracking-tighter">15% OFF</span>
             </div>
             
-            {/* Visual Indicator of detail availability */}
-            <div className="h-[1px] w-full bg-border/40 relative overflow-hidden">
-                <div className="absolute inset-0 bg-primary translate-x-[-100%] group-hover:translate-x-[0%] transition-transform duration-700" />
+            <div className="flex items-center gap-1">
+                <Star size={10} className="text-amber-500 fill-amber-500" />
+                <span className="text-[10px] font-bold text-foreground">4.8</span>
+                <span className="text-[9px] text-muted-foreground">(120+ sold)</span>
+            </div>
+          </div>
+
+          {/* Supplier Block - Busy Style */}
+          <div className="mt-auto pt-2.5 border-t border-border/40 space-y-2">
+            {company && (
+                <div className="flex items-start justify-between gap-2 group/comp cursor-pointer" onClick={(e) => {
+                    if (onSupplierClick) { e.stopPropagation(); onSupplierClick(e); }
+                }}>
+                    <div className="flex items-start gap-2 overflow-hidden">
+                        <div className="w-7 h-7 bg-muted/30 border border-border flex items-center justify-center rounded shrink-0 text-[10px] font-bold text-primary">
+                            {company.name?.charAt(0)}
+                        </div>
+                        <div className="flex flex-col min-w-0">
+                            <div className="flex items-center gap-1">
+                                <span className="text-[10px] font-bold text-foreground truncate group-hover/comp:text-primary transition-colors">
+                                    {company.name}
+                                </span>
+                                <ShieldCheck size={10} className="text-emerald-500 shrink-0" />
+                            </div>
+                            <div className="flex items-center gap-2 text-[8px] text-muted-foreground font-medium uppercase tracking-tighter">
+                                <span>3Yrs Platform</span>
+                                <span className="w-1 h-1 rounded-full bg-border" />
+                                <span>{company.district}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+            
+            <div className="flex gap-1.5">
+                <Button size="sm" className="flex-1 h-7 text-[9px] font-bold uppercase tracking-widest rounded-sm">
+                    Inquiry
+                </Button>
+                <Button variant="outline" size="icon" className="h-7 w-7 shrink-0 rounded-sm border-border/60 hover:bg-muted">
+                    <MessageSquare size={12} />
+                </Button>
             </div>
           </div>
         </div>
