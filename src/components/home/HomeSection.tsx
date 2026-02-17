@@ -34,7 +34,7 @@ export const HomeSection: React.FC<HomeSectionProps> = ({
     <section
       id={id}
       className={cn(
-        "py-24 relative overflow-hidden",
+        "py-8 relative overflow-hidden",
         variants[variant],
         borderTop && "border-t border-border/40",
         borderBottom && "border-b border-border/40",
