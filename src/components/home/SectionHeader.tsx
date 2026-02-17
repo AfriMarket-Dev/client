@@ -23,44 +23,41 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({
   const navigate = useNavigate();
 
   return (
-    <div className="relative mb-12 group">
+    <div className="relative mb-8 group">
       {/* Decorative vertical line */}
       <div className="absolute -left-6 top-0 bottom-0 w-[2px] bg-primary/30 transform origin-top scale-y-0 group-hover:scale-y-100 transition-transform duration-700 hidden lg:block" />
-      
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8">
-        <div className="space-y-3">
+
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
+        <div className="space-y-2">
           {label && (
             <div className="flex items-center gap-3">
               <div className="w-6 h-[1.5px] bg-primary" />
-              <span className="text-[11px] font-bold tracking-[0.25em] text-primary uppercase">
+              <span className="text-[10px] font-bold tracking-[0.25em] text-primary uppercase">
                 {label}
               </span>
             </div>
           )}
-          <h2 className="text-4xl md:text-5xl font-heading font-bold text-foreground tracking-tight leading-none">
+          <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground tracking-tight leading-none">
             {title}
           </h2>
           {subtitle && (
-            <p className="text-muted-foreground/70 text-base max-w-xl font-normal leading-relaxed">
+            <p className="text-muted-foreground/70 text-sm md:text-base max-w-xl font-normal leading-relaxed">
               {subtitle}
             </p>
           )}
         </div>
 
         {viewAllHref && (
-          <div className="flex flex-col items-end gap-2 shrink-0">
+          <div className="flex flex-col items-end gap-1.5 shrink-0">
             <Button
               variant="outline"
-              size="lg"
+              size="sm"
               onClick={() => navigate(viewAllHref)}
-              className="border border-foreground hover:bg-foreground hover:text-background rounded-lg font-bold transition-all px-6 h-11 uppercase text-[10px] tracking-widest group/btn"
+              className="border border-border hover:bg-foreground hover:text-background rounded-lg font-bold transition-all px-5 h-9 uppercase text-[9px] tracking-widest group/btn shadow-none"
             >
               {viewAllLabel}
-              <ArrowRight className="ml-3 w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
+              <ArrowRight className="ml-2 w-3.5 h-3.5 group-hover/btn:translate-x-1 transition-transform" />
             </Button>
-            <div className="text-[9px] font-bold text-muted-foreground/30 uppercase tracking-widest pr-1">
-              Ref / node_0{Math.floor(Math.random() * 9) + 1}
-            </div>
           </div>
         )}
       </div>

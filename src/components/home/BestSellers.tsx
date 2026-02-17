@@ -10,8 +10,8 @@ import { getMockProducts } from "@/data/mockData";
 const BestSellers: React.FC = () => {
   const navigate = useNavigate();
   // Fetch best sellers (using views or just random for now with sort)
-  // const { data } = useGetListingsQuery({ 
-  //   limit: 10, 
+  // const { data } = useGetListingsQuery({
+  //   limit: 10,
   //   type: "PRODUCT",
   //   sortBy: "views", // Assuming backend supports this, or just defaults
   //   sortOrder: "DESC"
@@ -20,51 +20,48 @@ const BestSellers: React.FC = () => {
   const listings = getMockProducts().slice(0, 10);
 
   return (
-    <div className="py-24 bg-white dark:bg-slate-950 relative overflow-hidden">
-      <div className="absolute inset-0 african-pattern opacity-[0.03] pointer-events-none" />
-      <div className="max-w-[1600px] mx-auto px-4 lg:px-6 relative z-10">
-        <SectionHeader 
-          title="Best Sellers"
-          subtitle="Direct access to the most requested industrial assets and materials."
-          label="Market Analytics"
-          icon={<Trophy className="w-5 h-5" />}
-          viewAllHref="/products?sort=popular"
-          viewAllLabel="View Analytics"
-        />
+    <>
+      <SectionHeader
+        title="Best Sellers"
+        subtitle="Direct access to the most requested industrial assets and materials."
+        label="Market Analytics"
+        icon={<Trophy className="w-5 h-5" />}
+        viewAllHref="/products?sort=popular"
+        viewAllLabel="View Analytics"
+      />
 
-        {listings.length === 0 ? (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-            {Array.from({ length: 5 }).map((_, i) => (
-              <div
-                key={i}
-                className="aspect-[4/5] rounded-lg border border-border/40 bg-muted/20"
-              />
-            ))}
-          </div>
-        ) : (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6">
-            {listings.map((listing) => (
-              <ProductCard
-                key={listing.id}
-                listing={listing}
-                onClick={() => navigate(`/products/${listing.id}`)}
-              />
-            ))}
-          </div>
-        )}
-
-        <div className="mt-8 md:hidden">
-          <Button
-            variant="outline"
-            size="lg"
-            className="w-full rounded-lg h-14 font-semibold border-border/60 shadow-none"
-            onClick={() => navigate("/products?sort=popular")}
-          >
-            View all best sellers
-          </Button>
+      {listings.length === 0 ? (
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <div
+              key={i}
+              className="aspect-4/5 rounded-lg border border-border/40 bg-muted/20"
+            />
+          ))}
         </div>
+      ) : (
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6">
+          {listings.map((listing) => (
+            <ProductCard
+              key={listing.id}
+              listing={listing}
+              onClick={() => navigate(`/products/${listing.id}`)}
+            />
+          ))}
+        </div>
+      )}
+
+      <div className="mt-8 md:hidden">
+        <Button
+          variant="outline"
+          size="lg"
+          className="w-full rounded-lg h-14 font-semibold border-border/60 shadow-none"
+          onClick={() => navigate("/products?sort=popular")}
+        >
+          View all best sellers
+        </Button>
       </div>
-    </div>
+    </>
   );
 };
 

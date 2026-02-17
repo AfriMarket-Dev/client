@@ -11,39 +11,38 @@ import ProductShowcase from "@/components/home/ProductShowcase";
 import BestSellers from "@/components/home/BestSellers";
 import TrendingProducts from "@/components/marketplace/TrendingProducts";
 import { FeaturedBrands } from "@/components/home/FeaturedBrands";
-// import { useGetListingCategoriesQuery } from "@/app/api/listing-categories";
 import { LiveDealsTicker } from "@/components/home/LiveDealsTicker";
+import { MarketplaceSubNav } from "@/components/home/MarketplaceSubNav";
 import CTASection from "@/components/home/CTASection";
 import { HomeSection } from "@/components/home/HomeSection";
 import { mockCategories } from "@/data/mockData";
 
 const HomePage: React.FC = () => {
-  // const { data: categoryData } = useGetListingCategoriesQuery({ limit: 5 });
-  // const categories = categoryData?.data ?? [];
-  const categories = mockCategories.slice(0, 5);
+  const categories = mockCategories.slice(0, 2);
 
   return (
     <div className="flex flex-col pb-24 industrial-grain">
+      <MarketplaceSubNav />
       <LiveDealsTicker />
       <Hero />
 
       {/* Hot Deals - High Urgency */}
-      <HomeSection variant="red" borderTop withGrid>
+      <HomeSection id="flash-deals" variant="red" borderTop withGrid>
         <HotDeals />
       </HomeSection>
 
       {/* Trending Products - Market Momentum */}
-      <HomeSection variant="white" withGrid borderBottom>
+      <HomeSection id="trending" variant="white" withGrid borderBottom>
         <TrendingProducts />
       </HomeSection>
 
       {/* Best Sellers - Social Proof */}
-      <HomeSection variant="background" borderBottom>
+      <HomeSection id="best-sellers" variant="background" borderBottom>
         <BestSellers />
       </HomeSection>
 
       {/* Category Navigation - Browsing */}
-      <HomeSection variant="muted" withGrid borderBottom>
+      <HomeSection id="categories" variant="muted" withGrid borderBottom>
         <CategoryGrid />
       </HomeSection>
 
@@ -51,8 +50,8 @@ const HomePage: React.FC = () => {
       <div className="flex flex-col">
         {categories.map((category, index) => (
           <React.Fragment key={category.id}>
-            <HomeSection 
-              variant={index % 2 !== 0 ? "background" : "white"} 
+            <HomeSection
+              variant={index % 2 !== 0 ? "background" : "white"}
               withGrid={index % 2 !== 0}
               borderBottom
             >
@@ -82,7 +81,7 @@ const HomePage: React.FC = () => {
       </div>
 
       {/* New Arrivals - Freshness */}
-      <HomeSection variant="white" borderBottom>
+      <HomeSection id="new-arrivals" variant="white" borderBottom>
         <NewArrivals />
       </HomeSection>
 
@@ -92,7 +91,7 @@ const HomePage: React.FC = () => {
       </HomeSection>
 
       {/* Featured Services */}
-      <HomeSection variant="muted" withGrid borderBottom>
+      <HomeSection id="services" variant="muted" withGrid borderBottom>
         <FeaturedServices />
       </HomeSection>
 
@@ -105,13 +104,13 @@ const HomePage: React.FC = () => {
       />
 
       {/* Featured Products (General) */}
-      <HomeSection variant="background" borderBottom>
+      <HomeSection id="marketplace" variant="background" borderBottom>
         <FeaturedProducts />
       </HomeSection>
 
       <CTASection />
 
-      <HomeSection variant="white" withGrid borderBottom>
+      <HomeSection id="suppliers" variant="white" withGrid borderBottom>
         <FeaturedSuppliers />
       </HomeSection>
     </div>

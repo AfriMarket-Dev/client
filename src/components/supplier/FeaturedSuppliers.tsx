@@ -7,6 +7,8 @@ import { Card, CardContent } from "@/components/ui/Card";
 import { Star, MapPin, CheckCircle } from "lucide-react";
 import { SectionHeader } from "../home/SectionHeader";
 import { mockCompanies } from "@/data/mockData";
+import { ImageWithFallback } from "../common/ImageWithFallback";
+import { RiShieldCheckLine } from "@remixicon/react";
 
 const FeaturedSuppliers: React.FC = () => {
   const navigate = useNavigate();
@@ -16,7 +18,7 @@ const FeaturedSuppliers: React.FC = () => {
 
   return (
     <div className="max-w-[1600px] mx-auto px-4 lg:px-6">
-      <SectionHeader 
+      <SectionHeader
         title="Featured Suppliers"
         subtitle="Verified industry leaders trusted by contractors and developers."
         label="Verified Partners"
@@ -35,48 +37,88 @@ const FeaturedSuppliers: React.FC = () => {
           ))}
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {companies.map((company) => {
             const rating = Number(company.averageRating ?? 0);
             return (
               <Card
                 key={company.id}
-                className="group border border-border/30 shadow-sm hover:shadow-xl hover:border-primary/20 transition-all duration-500 rounded-lg bg-card cursor-pointer relative overflow-hidden"
+                className="group border border-border/60 shadow-sm hover:shadow-xl transition-all duration-300 rounded-lg bg-card cursor-pointer overflow-hidden flex flex-col"
                 onClick={() => navigate(`/suppliers/${company.id}`)}
               >
-                <CardContent className="p-8 flex flex-col items-start text-left h-full">
-                  <div className="w-16 h-16 rounded-lg p-1 bg-primary/5 border border-primary/10 mb-8 group-hover:border-primary/30 transition-all duration-300 flex items-center justify-center text-2xl font-bold text-primary">
-                    {company.name?.charAt(0) ?? "?"}
-                  </div>
-
-                  <div className="mb-6 w-full">
-                    <div className="flex items-center gap-2 mb-2">
-                      <h3 className="text-xl font-heading font-bold text-foreground leading-snug group-hover:text-primary transition-colors">
-                        {company.name}
-                      </h3>
-                    </div>
-                    <p className="text-xs font-semibold text-primary/70 mb-4 tracking-wide uppercase">
-                      {company.type}
-                    </p>
-
-                    {company.district && (
-                      <div className="flex items-center gap-1.5 text-xs text-muted-foreground/70">
-                        <MapPin className="w-3.5 h-3.5" />
-                        {company.district}
+                <CardContent className="p-5 flex flex-col h-full">
+                  <div className="flex items-start justify-between mb-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 rounded-lg bg-primary/5 border border-primary/10 flex items-center justify-center text-xl font-bold text-primary shrink-0 group-hover:bg-primary group-hover:text-white transition-all">
+                        {company.name?.charAt(0) ?? "?"}
                       </div>
-                    )}
-                  </div>
-
-                  <div className="flex items-center gap-4 pt-6 border-t border-border/40 w-full mt-auto">
-                    <div className="flex items-center gap-1.5 text-yellow-500">
-                      <Star className="w-4 h-4 fill-current" />
-                      <span className="font-bold text-foreground text-sm font-sans">
-                        {rating.toFixed(1)}
+                      <div className="flex flex-col min-w-0">
+                        <div className="flex items-center gap-1.5">
+                          <h3 className="font-heading font-bold text-sm text-foreground truncate group-hover:text-primary transition-colors">
+                            {company.name}
+                          </h3>
+                          <RiShieldCheckLine
+                            size={14}
+                            className="text-emerald-500 shrink-0"
+                          />
+                        </div>
+                        <div className="flex items-center gap-2 text-[10px] text-muted-foreground font-medium uppercase tracking-tight">
+                          <MapPin size={10} className="text-primary/60" />
+                          {company.district}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div className="flex items-center gap-1 text-amber-500 justify-end">
+                        <Star size={12} className="fill-current" />
+                        <span className="text-xs font-bold text-foreground font-sans">
+                          {rating.toFixed(1)}
+                        </span>
+                      </div>
+                      <span className="text-[9px] text-muted-foreground font-medium uppercase tracking-tighter">
+                        {company.reviewCount} Reviews
                       </span>
                     </div>
-                    <span className="text-xs text-muted-foreground/70 font-medium font-sans">
-                      ({company.reviewCount ?? 0} reviews)
-                    </span>
+                  </div>
+
+                  <div className="space-y-3 mb-5">
+                    <p className="text-[11px] font-semibold text-primary/80 uppercase tracking-wider">
+                      {company.type}
+                    </p>
+                    <div className="flex flex-wrap gap-1.5">
+                      {[
+                        "Structural Steel",
+                        "Heavy Machinery",
+                        "Consultancy",
+                      ].map((tag, i) => (
+                        <span
+                          key={i}
+                          className="text-[9px] bg-muted/50 text-muted-foreground px-2 py-0.5 rounded-sm font-medium border border-border/40"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Operational Preview - Busy feel */}
+                  <div className="mt-auto border-t border-border/40 pt-4">
+                    <div className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest mb-3">
+                      Hot Asset Catalog
+                    </div>
+                    <div className="grid grid-cols-4 gap-2">
+                      {[1, 2, 3, 4].map((i) => (
+                        <div
+                          key={i}
+                          className="aspect-square rounded bg-muted/30 border border-border/40 overflow-hidden relative group/asset"
+                        >
+                          <ImageWithFallback
+                            src={`https://images.unsplash.com/photo-${1581091226825 + i}?auto=format&fit=crop&q=80&w=100`}
+                            className="w-full h-full object-cover transition-transform group-hover/asset:scale-110"
+                          />
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </CardContent>
               </Card>
