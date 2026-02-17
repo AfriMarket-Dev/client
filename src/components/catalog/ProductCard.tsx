@@ -2,6 +2,7 @@ import React from "react";
 import { Heart } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import type { Listing, CompanyRef } from "@/app/api/listings";
+import { ImageWithFallback } from "@/components/common/ImageWithFallback";
 
 interface ProductCardProps {
   listing: Listing;
@@ -32,19 +33,19 @@ export const ProductCard: React.FC<ProductCardProps> = React.memo(
     if (viewMode === "list") {
        return (
         <div
-            className="group flex gap-4 bg-card border border-border/50 hover:border-primary/50 rounded-sm p-3 transition-all duration-200 hover:shadow-sm cursor-pointer"
+            className="group flex gap-5 bg-card border border-border/40 hover:border-primary/30 rounded-lg p-4 transition-all duration-300 hover:shadow-lg cursor-pointer"
             onClick={onClick}
         >
-             <div className="relative w-48 aspect-4/3 shrink-0 overflow-hidden rounded-sm bg-muted">
+             <div className="relative w-52 aspect-video shrink-0 overflow-hidden rounded-md bg-muted/30">
                  {img ? (
-                    <img
+                    <ImageWithFallback
                       src={img}
                       alt={listing.name}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center text-muted-foreground bg-muted/50">
-                      <span className="text-[10px] font-bold uppercase tracking-wider">No image</span>
+                      <span className="text-xs font-medium opacity-50">No image</span>
                     </div>
                   )}
              </div>
@@ -52,10 +53,10 @@ export const ProductCard: React.FC<ProductCardProps> = React.memo(
              <div className="flex flex-col grow py-1">
                  <div className="flex justify-between items-start">
                      <div>
-                        <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-1">
+                        <div className="text-[10px] font-semibold text-primary/70 mb-1.5 uppercase tracking-wider">
                           {listing.category?.name ?? "General"}
                         </div>
-                        <h3 className="text-base font-heading font-semibold text-foreground group-hover:text-primary transition-colors line-clamp-1">
+                        <h3 className="text-lg font-heading font-semibold text-foreground group-hover:text-primary transition-colors line-clamp-1">
                           {listing.name}
                         </h3>
                      </div>
@@ -63,29 +64,29 @@ export const ProductCard: React.FC<ProductCardProps> = React.memo(
                         <Button
                           variant="ghost"
                           size="icon"
-                          className="h-7 w-7 -mt-1 -mr-1 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-full"
+                          className="h-9 w-9 -mt-1 -mr-1 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-full transition-all"
                           onClick={(e) => {
                               e.stopPropagation();
                               onToggleWishlist(e);
                           }}
                         >
-                          <Heart className={`w-4 h-4 ${isInWishlist ? "fill-destructive text-destructive" : ""}`} />
+                          <Heart className={`w-5 h-5 ${isInWishlist ? "fill-destructive text-destructive" : ""}`} />
                         </Button>
                       )}
                  </div>
                  
-                 <p className="text-xs text-muted-foreground line-clamp-2 mt-2 max-w-2xl">
+                 <p className="text-sm text-muted-foreground/70 line-clamp-2 mt-3 max-w-3xl leading-relaxed">
                     {listing.description}
                  </p>
 
                  <div className="mt-auto flex items-end justify-between">
                      <div>
-                        <div className="text-lg font-bold text-foreground">
+                        <div className="text-lg font-semibold text-foreground font-sans tracking-tight">
                             RWF {price.toLocaleString()}
                         </div>
                         {company && (
                              <div 
-                                className="flex items-center gap-1.5 mt-1 text-xs text-muted-foreground hover:text-foreground transition-colors cursor-pointer w-fit"
+                                className="flex items-center gap-2 mt-2 text-xs text-muted-foreground/60 hover:text-primary transition-colors cursor-pointer w-fit"
                                 onClick={(e) => {
                                     if(onSupplierClick) {
                                         e.stopPropagation();
@@ -93,9 +94,9 @@ export const ProductCard: React.FC<ProductCardProps> = React.memo(
                                     }
                                 }}
                              >
-                                <span className="w-4 h-4 rounded-full bg-muted flex items-center justify-center text-[8px] font-bold">
+                                <div className="w-5 h-5 rounded-full bg-primary/5 flex items-center justify-center text-[10px] font-bold text-primary">
                                     {company.name?.charAt(0) ?? "?"}
-                                </span>
+                                </div>
                                 {company.name}
                              </div>
                         )}
@@ -108,70 +109,72 @@ export const ProductCard: React.FC<ProductCardProps> = React.memo(
 
     return (
       <div
-        className="group flex flex-col bg-card border border-border/50 hover:border-primary/50 transition-all duration-300 hover:shadow-[0_2px_12px_-4px_rgba(0,0,0,0.1)] rounded-sm overflow-hidden cursor-pointer h-full"
+        className="group flex flex-col bg-white dark:bg-slate-900 border border-border/60 hover:border-primary transition-all duration-500 cursor-pointer h-full relative rounded-lg overflow-hidden shadow-sm hover:shadow-md"
         onClick={onClick}
       >
-        {/* Image Container */}
-        <div className="relative aspect-4/3 overflow-hidden bg-muted">
+        {/* Architectural Image Container */}
+        <div className="relative aspect-[4/5] overflow-hidden transition-all duration-700">
           {img ? (
-            <img
+            <ImageWithFallback
               src={img}
               alt={listing.name}
-              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+              className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center text-muted-foreground bg-muted/50">
-              <span className="text-[10px] font-bold uppercase tracking-wider opacity-50">No image</span>
+            <div className="w-full h-full flex items-center justify-center text-muted-foreground bg-muted/20">
+              <span className="text-[10px] font-bold uppercase tracking-[0.2em] opacity-40">No Image Data</span>
             </div>
           )}
           
-          {/* Wishlist Button - Only visible on hover/active */}
+          <div className="absolute inset-0 bg-primary/0 group-hover:bg-primary/5 transition-colors duration-500" />
+
+          {/* Wishlist Button - Precise Design */}
           {onToggleWishlist && (
             <Button
               variant="secondary"
               size="icon"
-              className="absolute top-2 right-2 h-7 w-7 rounded-full bg-white/90 backdrop-blur-sm shadow-sm opacity-0 group-hover:opacity-100 transition-opacity hover:bg-white hover:text-destructive text-muted-foreground"
+              className="absolute top-4 right-4 h-10 w-10 rounded-md bg-white dark:bg-slate-900 shadow-2xl opacity-0 group-hover:opacity-100 transition-all hover:bg-primary hover:text-white"
               onClick={(e) => {
                   e.stopPropagation();
                   onToggleWishlist(e);
               }}
             >
-              <Heart className={`w-3.5 h-3.5 ${isInWishlist ? "fill-destructive text-destructive" : ""}`} />
+              <Heart className={`w-4 h-4 ${isInWishlist ? "fill-current" : ""}`} />
             </Button>
           )}
 
-          {/* Badges */}
-          <div className="absolute top-2 left-2 flex flex-col gap-1">
-             {/* Add badges here if needed based on valid data */}
+          {/* Type Badge */}
+          <div className="absolute bottom-0 left-0 bg-foreground text-background px-4 py-1.5 text-[10px] font-bold uppercase tracking-widest translate-y-full group-hover:translate-y-0 transition-transform duration-500">
+             {listing.type || "Asset"}
           </div>
         </div>
 
-        {/* Content */}
-        <div className="p-3 flex flex-col grow gap-2">
-          <div>
-            <div className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground mb-1 truncate">
-               {listing.category?.name ?? "General"}
+        {/* Structured Metadata */}
+        <div className="p-5 flex flex-col grow gap-3.5 border-t border-border/40">
+          <div className="flex flex-col gap-1.5">
+            <div className="flex items-center gap-2">
+                <div className="w-1.5 h-1.5 rounded-full bg-primary/30 group-hover:bg-primary transition-colors" />
+                <span className="text-[9px] font-semibold text-muted-foreground/60 uppercase tracking-[0.15em]">
+                {listing.category?.name ?? "General Material"}
+                </span>
             </div>
-            <h3 className="text-sm font-medium text-foreground group-hover:text-primary transition-colors line-clamp-2 leading-tight min-h-10">
+            <h3 className="text-lg font-heading font-semibold text-foreground/90 leading-snug group-hover:text-primary transition-colors line-clamp-2 min-h-[2.75rem]">
               {listing.name}
             </h3>
           </div>
 
-          <div className="mt-auto">
-             {/* Divider */}
-             <div className="h-px w-full bg-border/40 mb-2.5" />
-             
-            <div className="flex items-center justify-between">
+          <div className="mt-auto space-y-3.5">
+            <div className="flex items-end justify-between">
                <div className="flex flex-col">
-                  <span className="text-xs text-muted-foreground font-medium">From</span>
-                  <span className="text-sm font-bold text-foreground">
+                  <span className="text-[9px] text-muted-foreground/40 font-bold uppercase tracking-widest mb-0.5">Valuation</span>
+                  <span className="text-lg font-semibold text-foreground font-sans tracking-tight">
                     RWF {price.toLocaleString()}
                   </span>
                </div>
                
                {company && (
                   <div 
-                    className="flex items-center justify-center w-6 h-6 rounded-full bg-muted/50 text-[10px] text-muted-foreground font-bold hover:bg-primary/10 hover:text-primary transition-colors"
+                    className="flex items-center justify-center w-9 h-9 bg-muted/20 text-[11px] text-muted-foreground/70 font-bold border border-border/40 group-hover:border-primary/30 group-hover:bg-primary/5 transition-all rounded-md"
                     title={company.name}
                     onClick={(e) => {
                         if (onSupplierClick) {
@@ -183,6 +186,11 @@ export const ProductCard: React.FC<ProductCardProps> = React.memo(
                      {company.name?.charAt(0) ?? "?"}
                   </div>
                )}
+            </div>
+            
+            {/* Visual Indicator of detail availability */}
+            <div className="h-[1px] w-full bg-border/40 relative overflow-hidden">
+                <div className="absolute inset-0 bg-primary translate-x-[-100%] group-hover:translate-x-[0%] transition-transform duration-700" />
             </div>
           </div>
         </div>

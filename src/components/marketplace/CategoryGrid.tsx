@@ -1,8 +1,8 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/Button";
 import { useGetListingCategoriesQuery } from "@/app/api/listing-categories";
-import { Package } from "lucide-react";
+import { Package, ArrowRight } from "lucide-react";
+import { SectionHeader } from "../home/SectionHeader";
 
 const CategoryGrid: React.FC = () => {
   const navigate = useNavigate();
@@ -10,54 +10,59 @@ const CategoryGrid: React.FC = () => {
   const categories = data?.data ?? [];
 
   return (
-    <div className="container mx-auto max-w-7xl">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-6 border-b border-border pb-6">
-        <div>
-          <h2 className="text-3xl md:text-5xl font-heading font-bold uppercase text-foreground mb-2">
-            Browse by Category
-          </h2>
-          <p className="text-muted-foreground text-lg max-w-md font-medium">
-            Find the specific materials and equipment you need
-          </p>
-        </div>
-
-        <Button
-          variant="ghost"
-          onClick={() => navigate("/categories")}
-          className="text-muted-foreground hover:bg-muted hover:text-foreground rounded-sm font-bold uppercase tracking-wide shadow-none"
-        >
-          View all categories
-        </Button>
-      </div>
+    <div className="max-w-[1600px] mx-auto px-4 lg:px-6">
+      <SectionHeader 
+        title="Browse by Category"
+        subtitle="Find the specific materials and equipment you need for your project."
+        label="Navigation"
+        icon={<Package className="w-5 h-5" />}
+        viewAllHref="/categories"
+        viewAllLabel="View all categories"
+      />
 
       {isLoading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {Array.from({ length: 6 }).map((_, i) => (
             <div
               key={i}
-              className="h-40 rounded-sm border border-border bg-muted/30 animate-pulse"
+              className="h-44 rounded-lg border border-border/40 bg-muted/20"
             />
           ))}
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-0 border-t border-l border-border/40">
           {categories.map((category) => (
             <button
               key={category.id}
               type="button"
               onClick={() => navigate(`/products?category=${category.id}`)}
-              className="group cursor-pointer bg-card rounded-sm border border-border hover:border-primary transition-all duration-300 relative overflow-hidden p-6 text-left"
+              className="group cursor-pointer bg-white dark:bg-slate-900 border-r border-b border-border/40 hover:bg-muted/10 transition-all duration-500 relative overflow-hidden p-12 text-left rounded-lg"
             >
+              {/* Blueprint Grid Overlay on hover */}
+              <div className="absolute inset-0 blueprint-grid opacity-0 group-hover:opacity-10 transition-opacity pointer-events-none" />
+              
               <div className="h-full flex flex-col items-start relative z-10">
-                <div className="w-12 h-12 bg-muted/50 rounded-sm border border-border flex items-center justify-center mb-6 text-muted-foreground group-hover:bg-primary group-hover:text-primary-foreground group-hover:border-primary transition-colors duration-200">
-                  <Package className="w-6 h-6" strokeWidth={1.5} />
+                <div className="flex items-center gap-4 mb-10">
+                    <div className="w-14 h-14 bg-primary/5 text-primary flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-all duration-500">
+                    <Package className="w-7 h-7" strokeWidth={1.5} />
+                    </div>
+                    <div className="h-[1px] w-12 bg-border group-hover:w-20 group-hover:bg-primary transition-all duration-500" />
                 </div>
-                <h3 className="text-xl font-heading font-bold uppercase text-foreground mb-2 group-hover:text-primary transition-colors">
+
+                <h3 className="text-3xl font-heading font-bold text-foreground mb-4 group-hover:text-primary transition-colors tracking-tight">
                   {category.name}
                 </h3>
-                <p className="text-muted-foreground text-sm leading-relaxed">
-                  {category.description || "Browse products in this category."}
+                <p className="text-muted-foreground/70 text-lg leading-relaxed line-clamp-3 font-normal max-w-sm mb-8">
+                  {category.description || "Comprehensive node for high-quality industrial materials and equipment."}
                 </p>
+                
+                <div className="mt-auto flex items-center gap-3 text-xs font-bold text-primary tracking-[0.2em] uppercase opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-500">
+                   Enter Directory <ArrowRight className="w-4 h-4" />
+                </div>
+              </div>
+              
+              <div className="absolute top-0 right-0 p-8 text-foreground/5 font-display text-8xl font-black italic pointer-events-none group-hover:text-primary/5 transition-colors">
+                 0{Math.floor(Math.random() * 9) + 1}
               </div>
             </button>
           ))}

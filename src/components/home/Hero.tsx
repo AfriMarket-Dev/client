@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import { 
   ArrowRight, 
-  Timer,
   Zap,
-  ChevronLeft,
-  ChevronRight,
-  Star
+  Star,
+  Timer
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { HeroWidget, type HeroWidgetItem } from "./HeroWidget";
+import { Badge } from "@/components/ui/Badge";
+import { ImageWithFallback } from "@/components/common/ImageWithFallback";
 
 // Mock data helpers for the visual "4x4" requirement
 const MOCK_WIDGET_ITEMS: Record<string, HeroWidgetItem[]> = {
@@ -39,158 +39,100 @@ const MOCK_WIDGET_ITEMS: Record<string, HeroWidgetItem[]> = {
   ],
 };
 
-const BANNER_SLIDES = [
-    {
-        id: 1,
-        bgImage: "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&q=80&w=2000",
-        label: "Mega Sale Event",
-        titlePrefix: "Up to",
-        titleHighlight: "50% OFF",
-        subtitle: "On Heavy Machinery & Tools",
-        description: "Limited time offer on excavators, power tools, and construction safety equipment from top rated suppliers.",
-        cta: "Shop the Sale",
-        ctaLink: "/products?sort=discount",
-        gradientFrom: "from-red-900",
-        gradientVia: "via-red-800",
-        gradientTo: "to-primary/90",
-        accentColor: "text-yellow-400",
-        badgeIcon: Zap
-    },
-    {
-        id: 2,
-        bgImage: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=2000",
-        label: "New Arrivals",
-        titlePrefix: "Brand New",
-        titleHighlight: "Equipment",
-        subtitle: "Just Landed in Stock",
-        description: "Check out the latest construction technology and heavy machinery just added to our catalog.",
-        cta: "View New Arrivals",
-        ctaLink: "/products?sort=newest",
-        gradientFrom: "from-blue-900",
-        gradientVia: "via-blue-800",
-        gradientTo: "to-blue-600/90",
-        accentColor: "text-blue-300",
-        badgeIcon: Star
-    },
-    {
-        id: 3,
-        bgImage: "https://images.unsplash.com/photo-1535732820275-9ffd998cac22?auto=format&fit=crop&q=80&w=2000",
-        label: "Top Suppliers",
-        titlePrefix: "Verified",
-        titleHighlight: "Partners",
-        subtitle: "Source from the Best",
-        description: "Connect safely with our top-rated, verified suppliers for all your construction needs.",
-        cta: "Find Suppliers",
-        ctaLink: "/suppliers",
-        gradientFrom: "from-emerald-900",
-        gradientVia: "via-emerald-800",
-        gradientTo: "to-emerald-600/90",
-        accentColor: "text-emerald-300",
-        badgeIcon: Timer
-    }
-];
-
 const Hero: React.FC = () => {
   const navigate = useNavigate();
-  const [currentSlide, setCurrentSlide] = useState(0);
-
-  // Auto-play carousel
-  useEffect(() => {
-    const timer = setInterval(() => {
-        setCurrentSlide((prev) => (prev + 1) % BANNER_SLIDES.length);
-    }, 5000);
-    return () => clearInterval(timer);
-  }, []);
-
-  const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % BANNER_SLIDES.length);
-  const prevSlide = () => setCurrentSlide((prev) => (prev === 0 ? BANNER_SLIDES.length - 1 : prev - 1));
-
-  const slide = BANNER_SLIDES[currentSlide];
-  const BadgeIcon = slide.badgeIcon;
 
   return (
-    <section className="py-6 bg-background">
-      <div className="max-w-7xl mx-auto px-4">
+    <section className="relative py-6 bg-background industrial-grain">
+      <div className="max-w-[1600px] mx-auto px-4 lg:px-6">
         
-        {/* CAROUSEL BANNER */}
-        <div className={`relative rounded-sm overflow-hidden bg-gradient-to-r ${slide.gradientFrom} ${slide.gradientVia} ${slide.gradientTo} h-[350px] md:h-[400px] mb-8 border border-white/10 flex items-center group shadow-2xl transition-all duration-700`}>
-             {/* Background with overlay */}
-            <div key={slide.id} className="absolute inset-0 transition-opacity duration-700 opacity-100">
-                <div className={`absolute inset-0 bg-cover bg-center opacity-30 mix-blend-overlay group-hover:scale-105 transition-transform duration-1000`} style={{ backgroundImage: `url('${slide.bgImage}')` }} />
-                <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent" />
+        {/* MARKET HIGHLIGHT BANNER */}
+        <div className="relative rounded-lg overflow-hidden bg-slate-900 h-[400px] md:h-[480px] mb-6 border border-border/40 group shadow-md flex items-center">
+             {/* Architectural Overlay */}
+            <div className="absolute inset-0 blueprint-grid pointer-events-none opacity-5" />
+            
+            <div className="absolute inset-0">
+                <div className="absolute inset-0 opacity-40 group-hover:scale-105 transition-transform duration-[4000ms]">
+                    <ImageWithFallback 
+                        src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=2000" 
+                        alt="Featured Industrial Asset"
+                        className="w-full h-full object-cover"
+                    />
+                </div>
+                <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-900/60 to-transparent" />
             </div>
             
-            {/* Promo Content */}
-            <div className="relative z-10 p-8 md:p-14 max-w-2xl animate-in fade-in slide-in-from-left-4 duration-500">
-                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md text-white font-bold text-xs uppercase tracking-widest mb-6 border border-white/20">
-                    <BadgeIcon className={`w-3.5 h-3.5 fill-current ${slide.accentColor}`} />
-                    <span className={slide.accentColor}>{slide.label}</span>
+            {/* Highlight Content */}
+            <div className="relative z-10 p-8 md:p-20 max-w-3xl">
+                 <div className="flex items-center gap-4 mb-8">
+                    <Badge variant="destructive" className="rounded-lg px-3 py-1 h-auto bg-primary text-white border-none">
+                        <Zap className="w-3.5 h-3.5 mr-1.5 fill-current" />
+                        MARKET HIGHLIGHT
+                    </Badge>
+                    <div className="h-[1px] w-12 bg-white/20" />
+                    <span className="text-[10px] font-bold text-white/40 uppercase tracking-[0.3em]">Node_Ref / 772-X</span>
                  </div>
                  
-                 <h1 className="text-4xl md:text-6xl font-heading font-black uppercase text-white mb-2 leading-none drop-shadow-lg">
-                    {slide.titlePrefix} <span className={`text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-white/70`}>{slide.titleHighlight}</span>
+                 <h1 className="text-display text-5xl md:text-8xl text-white mb-4 leading-[0.95]">
+                    HEAVY DUTY <br />
+                    <span className="text-primary italic">PRECISION.</span>
                  </h1>
-                 <h2 className="text-xl md:text-3xl font-heading font-bold uppercase text-white/90 mb-6 tracking-wide">
-                    {slide.subtitle}
-                 </h2>
                  
-                 <p className="text-white/80 mb-8 max-w-md leading-relaxed hidden sm:block font-medium">
-                    {slide.description}
-                 </p>
+                 <div className="flex items-center gap-6 mb-12">
+                    <div className="flex flex-col">
+                        <span className="text-[10px] text-white/40 font-bold uppercase tracking-widest mb-1">Valuation</span>
+                        <p className="text-2xl md:text-3xl text-white font-sans font-bold tracking-tight">RWF 1,250,000</p>
+                    </div>
+                    <div className="w-[1px] h-10 bg-white/10" />
+                    <div className="flex flex-col">
+                        <span className="text-[10px] text-white/40 font-bold uppercase tracking-widest mb-1">Availability</span>
+                        <div className="flex items-center gap-2 text-emerald-400 text-sm font-bold">
+                            <div className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                            IN STOCK
+                        </div>
+                    </div>
+                 </div>
                  
-                 <div className="flex flex-col sm:flex-row gap-4">
+                 <div className="flex gap-4">
                     <Button 
                         size="lg" 
-                        onClick={() => navigate(slide.ctaLink)}
-                        className="bg-white hover:bg-slate-100 text-slate-900 font-black uppercase tracking-widest h-12 px-8 rounded-sm shadow-xl hover:shadow-2xl transition-all"
+                        onClick={() => navigate("/products")}
+                        className="bg-white hover:bg-slate-100 text-slate-950 rounded-lg h-14 px-10 text-sm font-bold tracking-widest uppercase transition-all shadow-md active:scale-95 group"
                     >
-                        {slide.cta} <ArrowRight className="ml-2 w-4 h-4" />
+                        Acquire Asset <ArrowRight className="ml-3 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                     </Button>
                  </div>
             </div>
 
-            {/* Controls */}
-            <div className="absolute bottom-4 right-4 flex gap-2 z-20">
-                <button onClick={prevSlide} className="p-2 rounded-full bg-black/20 hover:bg-black/40 text-white backdrop-blur-sm transition-colors border border-white/10">
-                    <ChevronLeft className="w-5 h-5" />
-                </button>
-                <button onClick={nextSlide} className="p-2 rounded-full bg-black/20 hover:bg-black/40 text-white backdrop-blur-sm transition-colors border border-white/10">
-                    <ChevronRight className="w-5 h-5" />
-                </button>
-            </div>
-
-            {/* Indicators */}
-            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-20">
-                {BANNER_SLIDES.map((_, idx) => (
-                    <button 
-                        key={idx}
-                        onClick={() => setCurrentSlide(idx)}
-                        className={`w-2 h-2 rounded-full transition-all ${currentSlide === idx ? "bg-white w-6" : "bg-white/40 hover:bg-white/60"}`}
-                    />
-                ))}
+            {/* Side Detail - Decorative */}
+            <div className="absolute right-20 bottom-20 hidden lg:block text-right animate-in fade-in slide-in-from-right-8 duration-1000 delay-500">
+                <div className="text-6xl font-display font-black text-white/5 italic mb-4 tracking-tighter">SPEC_01</div>
+                <p className="text-[10px] text-white/20 font-bold uppercase tracking-[0.4em] leading-relaxed max-w-[200px]">
+                    Verified Industrial <br />Processing Standard <br />Grade-A Certified
+                </p>
             </div>
         </div>
         
         {/* WIDGETS GRID (4x4 Items) */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             <HeroWidget 
-                title="Super Flash Deals" 
+                title="Flash Sales" 
                 items={MOCK_WIDGET_ITEMS.deals} 
                 href="/products?sort=deals"
-                className="hover:border-red-500/50 transition-colors"
+                className="border-t-2 border-t-primary"
             />
             <HeroWidget 
-                title="Top Selling Products" 
+                title="Top Sellers" 
                 items={MOCK_WIDGET_ITEMS.sellers} 
                 href="/products?sort=popular"
             />
             <HeroWidget 
-                title="New Arrivals" 
+                title="New Inventory" 
                 items={MOCK_WIDGET_ITEMS.new} 
                 href="/products?sort=newest"
             />
             <HeroWidget 
-                title="Top Rated Gear" 
+                title="Verified Gear" 
                 items={MOCK_WIDGET_ITEMS.rated} 
                 href="/products?sort=rating"
             />

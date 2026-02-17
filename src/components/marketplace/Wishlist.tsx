@@ -16,6 +16,7 @@ import { type Product } from "@/types";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { Card } from "@/components/ui/Card";
+import { ImageWithFallback } from "@/components/common/ImageWithFallback";
 
 interface WishlistProps {
   onBack: () => void;
@@ -174,10 +175,10 @@ const Wishlist: React.FC<WishlistProps> = ({
                 {wishlistProducts.map((product) => (
                   <Card
                     key={product.id}
-                    className="rounded-sm border border-border shadow-none hover:border-primary transition-all duration-300 overflow-hidden group"
+                    className="rounded-lg border border-border shadow-none hover:border-primary transition-all duration-300 overflow-hidden group"
                   >
                     <div className="relative">
-                      <img
+                      <ImageWithFallback
                         src={product.images[0]}
                         alt={product.name}
                         className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
@@ -189,7 +190,7 @@ const Wishlist: React.FC<WishlistProps> = ({
                           }
                           variant="ghost"
                           size="icon"
-                          className="rounded-sm bg-background/90 h-8 w-8"
+                          className="rounded-md bg-background/90 h-8 w-8"
                         >
                           <Heart className="w-4 h-4 text-destructive fill-current" />
                         </Button>
@@ -197,7 +198,7 @@ const Wishlist: React.FC<WishlistProps> = ({
                           onClick={() => onProductClick(product)}
                           variant="ghost"
                           size="icon"
-                          className="rounded-sm bg-background/90 h-8 w-8"
+                          className="rounded-md bg-background/90 h-8 w-8"
                         >
                           <Eye className="w-4 h-4" />
                         </Button>
@@ -270,11 +271,11 @@ const Wishlist: React.FC<WishlistProps> = ({
                 {wishlistSuppliers.map((supplier) => (
                   <Card
                     key={supplier.id}
-                    className="rounded-sm border border-border shadow-none hover:border-primary transition-all duration-300 overflow-hidden group cursor-pointer"
+                    className="rounded-lg border border-border shadow-none hover:border-primary transition-all duration-300 overflow-hidden group cursor-pointer"
                     onClick={() => onSupplierClick(supplier.id)}
                   >
                     <div className="relative h-32 overflow-hidden">
-                      <img
+                      <ImageWithFallback
                         src={supplier.coverImage}
                         alt={supplier.name}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
@@ -289,17 +290,17 @@ const Wishlist: React.FC<WishlistProps> = ({
                           }}
                           variant="ghost"
                           size="icon"
-                          className="rounded-sm bg-background/90 h-8 w-8"
+                          className="rounded-md bg-background/90 h-8 w-8"
                         >
                           <Heart className="w-4 h-4 text-destructive fill-current" />
                         </Button>
                       </div>
 
                       <div className="absolute -bottom-6 left-4">
-                        <img
+                        <ImageWithFallback
                           src={supplier.avatar}
                           alt={supplier.name}
-                          className="w-12 h-12 rounded-sm border-4 border-background object-cover"
+                          className="w-12 h-12 rounded-lg border-4 border-background object-cover"
                         />
                       </div>
                     </div>

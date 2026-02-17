@@ -87,10 +87,10 @@ export default function AdminSupplierDetailsPage() {
 
   const mockSupplier = suppliers.find((s) => s.id === supplierId);
   const supplierProducts = mockProducts.filter(
-    (p) => p.supplierId === supplierId,
+    (p: any) => p.companyId === supplierId,
   );
   const supplierServices = mockServices.filter(
-    (s) => s.provider.fullName === mockSupplier?.name,
+    (s: any) => s.companyId === supplierId,
   );
 
   const sampleServices: any[] =
@@ -99,41 +99,22 @@ export default function AdminSupplierDetailsPage() {
       : mockSupplier
         ? [
             {
-              id: 101,
+              id: "101",
               name: "Equipment Rental",
               description:
                 "Heavy machinery & construction equipment rental including excavators, concrete mixers, scaffolding, and power tools",
-              price: "From $150/day",
+              price: 150000,
               icon: Truck,
               totalRequests: 85,
               pendingRequests: 7,
               provider: {
-                id: 1,
+                id: "1",
                 fullName: mockSupplier.name,
                 role: "Equipment Manager",
-                phone: mockSupplier.contact.phone,
-                email: mockSupplier.contact.email,
+                phone: "+250 788 000 000",
+                email: "info@supplier.com",
                 experience: "8+ years",
-                rating: mockSupplier.rating,
-              },
-            },
-            {
-              id: 102,
-              name: "On-site Consultation",
-              description:
-                "Expert consultation for construction projects, site assessment, material selection, and project planning",
-              price: "From $200/hour",
-              icon: Settings,
-              totalRequests: 56,
-              pendingRequests: 4,
-              provider: {
-                id: 1,
-                fullName: mockSupplier.name,
-                role: "Consultant",
-                phone: mockSupplier.contact.phone,
-                email: mockSupplier.contact.email,
-                experience: "10+ years",
-                rating: mockSupplier.rating,
+                rating: mockSupplier.averageRating,
               },
             },
           ]
@@ -143,15 +124,15 @@ export default function AdminSupplierDetailsPage() {
     ? {
         id: mockSupplier.id,
         name: mockSupplier.name,
-        email: mockSupplier.contact.email,
-        location: mockSupplier.location,
+        email: "info@supplier.com",
+        location: mockSupplier.district,
         status: "active",
-        verificationStatus: mockSupplier.verified ? "verified" : "unverified",
-        joinDate: mockSupplier.joinedDate,
-        productCount: mockSupplier.totalProducts,
+        verificationStatus: "verified",
+        joinDate: mockSupplier.createdAt,
+        productCount: 10,
         customerCount: mockSupplier.reviewCount,
         ordersCount: 0,
-        averageRating: mockSupplier.rating,
+        averageRating: mockSupplier.averageRating,
       }
     : {
         id: supplierId || "1",
@@ -167,19 +148,14 @@ export default function AdminSupplierDetailsPage() {
         averageRating: 0,
       };
 
-  const products: Product[] = supplierProducts.map((product) => ({
+  const products: Product[] = supplierProducts.map((product: any) => ({
     id: product.id,
     name: product.name,
-    category: product.category,
-    price: product.priceRange.min,
-    stock: product.availability === "in-stock" ? 100 : 0,
-    status:
-      product.availability === "in-stock"
-        ? "active"
-        : product.availability === "pre-order"
-          ? "pending-review"
-          : "inactive",
-    views: Math.floor(Math.random() * 500),
+    category: product.categoryId,
+    price: product.variants?.[0]?.price || 0,
+    stock: product.variants?.[0]?.stock || 0,
+    status: "active",
+    views: product.views || 0,
     inquiries: Math.floor(Math.random() * 50),
   }));
 
@@ -188,7 +164,7 @@ export default function AdminSupplierDetailsPage() {
     name: service.name,
     category: service.description,
     description: service.description,
-    pricing: service.price,
+    pricing: service.price.toString(),
     status: "active",
     inquiries: service.pendingRequests,
   }));

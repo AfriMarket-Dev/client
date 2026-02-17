@@ -1,320 +1,44 @@
-import { type Category, type Supplier, type Product, type Order, type Inquiry, type Service } from "@/types";
+import data from "./data.json";
 
-export const categories: Category[] = [
-  {
-    id: "building-materials",
-    name: "Building Materials",
-    icon: "BrickWall",
-    description: "Essential structural materials like cement, steel, bricks, and timber.",
-    productCount: 1250,
-    subcategories: ["Cement", "Steel Rebar", "Bricks & Blocks", "Timber", "Aggregates"],
-  },
-  {
-    id: "heavy-machinery",
-    name: "Heavy Machinery",
-    icon: "Tractor",
-    description: "Excavators, bulldozers, cranes, and specialized construction vehicles.",
-    productCount: 450,
-    subcategories: ["Excavators", "Bulldozers", "Cranes", "Loaders", "Dump Trucks"],
-  },
-  {
-    id: "electrical-power",
-    name: "Electrical & Power",
-    icon: "Zap",
-    description: "Wiring, panels, generators, and solar energy solutions.",
-    productCount: 890,
-    subcategories: ["Cables & Wires", "Circuit Breakers", "Generators", "Solar Panels", "Lighting"],
-  },
-  {
-    id: "plumbing-water",
-    name: "Plumbing & Water",
-    icon: "Droplet",
-    description: "Pipes, fittings, pumps, and water storage solutions.",
-    productCount: 650,
-    subcategories: ["Pipes & Fittings", "Water Pumps", "Tanks", "Sanitary Ware", "Valves"],
-  },
-  {
-    id: "tools-hardware",
-    name: "Tools & Hardware",
-    icon: "Wrench",
-    description: "Power tools, hand tools, fasteners, and safety equipment.",
-    productCount: 2100,
-    subcategories: ["Power Tools", "Hand Tools", "Fasteners", "Safety Gear", "Ladders"],
-  },
-  {
-    id: "finishing-interiors",
-    name: "Finishing & Interiors",
-    icon: "PaintBucket",
-    description: "Paint, tiles, flooring, and ceiling materials for the final touch.",
-    productCount: 1540,
-    subcategories: ["Paints", "Tiles", "Flooring", "Ceiling", "Doors & Windows"],
-  },
-];
+export enum PriceType {
+  FIXED = 'FIXED',
+  NEGOTIABLE = 'NEGOTIABLE',
+  STARTS_AT = 'STARTS_AT',
+}
 
-export const suppliers: Supplier[] = [
-  {
-    id: "sup-1",
-    name: "Kigali Cement & Steel",
-    description: "Leading manufacturer and distributor of high-quality construction materials in Rwanda.",
-    location: "Nyarugenge, Kigali",
-    country: "Rwanda",
-    avatar: "https://images.pexels.com/photos/5668473/pexels-photo-5668473.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&fit=crop",
-    coverImage: "https://images.pexels.com/photos/1216589/pexels-photo-1216589.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    rating: 4.9,
-    reviewCount: 128,
-    verified: true,
-    specialties: ["Cement", "Steel Rebar", "Concrete Blocks"],
-    contact: {
-      email: "sales@kigalicement.rw",
-      phone: "+250 788 123 456",
-      whatsapp: "+250 788 123 456",
-    },
-    services: {
-      shipping: ["Kigali Delivery", "Upcountry Shipping"],
-      paymentMethods: ["Bank Transfer", "Mobile Money", "Cash"],
-      minimumOrder: "50 Bags / 1 Ton",
-      deliveryTime: "1-3 Business Days",
-    },
-    totalProducts: 45,
-    joinedDate: "2021-05-15",
-  },
-  {
-    id: "sup-2",
-    name: "Musanze Equipment Rental",
-    description: "Specialized in heavy machinery rentals and construction equipment maintenance.",
-    location: "Musanze, Northern Province",
-    country: "Rwanda",
-    avatar: "https://images.pexels.com/photos/5668858/pexels-photo-5668858.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&fit=crop",
-    coverImage: "https://images.pexels.com/photos/10368549/pexels-photo-10368549.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    rating: 4.7,
-    reviewCount: 64,
-    verified: true,
-    specialties: ["Excavators", "Loaders", "Machinery Rental"],
-    contact: {
-      email: "info@musanze-equip.rw",
-      phone: "+250 785 987 654",
-    },
-    services: {
-      shipping: ["Site Delivery", "Operator Included"],
-      paymentMethods: ["Bank Transfer", "Check"],
-      minimumOrder: "Daily Rental",
-      deliveryTime: "Same Day",
-    },
-    totalProducts: 12,
-    joinedDate: "2022-02-10",
-  },
-  {
-    id: "sup-3",
-    name: "Rubavu Finishings Ltd",
-    description: "Premium interior finishing materials, tiles, and high-quality paints.",
-    location: "Rubavu, Western Province",
-    country: "Rwanda",
-    avatar: "https://images.pexels.com/photos/5625120/pexels-photo-5625120.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&fit=crop",
-    coverImage: "https://images.pexels.com/photos/2219024/pexels-photo-2219024.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    rating: 4.5,
-    reviewCount: 42,
-    verified: false,
-    specialties: ["Tiles", "Paints", "Interior Finishing"],
-    contact: {
-      email: "contact@rubavufinish.rw",
-      phone: "+250 783 111 222",
-      whatsapp: "+250 783 111 222",
-    },
-    services: {
-      shipping: ["Nationwide Delivery"],
-      paymentMethods: ["Mobile Money", "Cash on Delivery"],
-      minimumOrder: "RWF 50,000",
-      deliveryTime: "2-5 Business Days",
-    },
-    totalProducts: 85,
-    joinedDate: "2023-01-20",
-  },
-];
+export enum CompanyType {
+  MANUFACTURER = 'MANUFACTURER',
+  WHOLESALER = 'WHOLESALER',
+  RETAILER = 'RETAILER',
+  SERVICE_PROVIDER = 'SERVICE_PROVIDER',
+}
 
-export const products: Product[] = [
-  {
-    id: "prod-1",
-    supplierId: "sup-1",
-    name: "CIMERWA Portland Cement 32.5N",
-    description: "General purpose cement for all construction needs, including foundations and masonry.",
-    images: ["https://images.pexels.com/photos/2219024/pexels-photo-2219024.jpeg?auto=compress&cs=tinysrgb&w=800"],
-    category: "Building Materials",
-    subcategory: "Cement",
-    priceRange: {
-      min: 12500,
-      max: 13500,
-      currency: "RWF",
-    },
-    bulkPricing: [
-      { quantity: 50, price: 13000 },
-      { quantity: 200, price: 12500 },
-    ],
-    minimumOrder: 50,
-    availability: "in-stock",
-    specifications: {
-      "Weight": "50kg",
-      "Strength": "32.5N",
-      "Usage": "General Construction",
-    },
-    tags: ["Cement", "Foundation", "CIMERWA"],
-  },
-  {
-    id: "prod-2",
-    supplierId: "sup-2",
-    name: "CAT 320 GC Hydraulic Excavator",
-    description: "Heavy-duty excavator for excavation, trenching, and site preparation.",
-    images: ["https://images.pexels.com/photos/10368549/pexels-photo-10368549.jpeg?auto=compress&cs=tinysrgb&w=800"],
-    category: "Heavy Machinery",
-    subcategory: "Excavators",
-    priceRange: {
-      min: 350000,
-      max: 400000,
-      currency: "RWF",
-    },
-    bulkPricing: [
-      { quantity: 1, price: 400000 },
-      { quantity: 7, price: 350000 },
-    ],
-    minimumOrder: 1,
-    availability: "in-stock",
-    specifications: {
-      "Engine Power": "146 HP",
-      "Operating Weight": "21,300 kg",
-      "Fuel Type": "Diesel",
-    },
-    tags: ["Excavator", "CAT", "Rental"],
-  },
-  {
-    id: "prod-3",
-    supplierId: "sup-1",
-    name: "Deformed Steel Bar (Y12)",
-    description: "High-yield steel rebar for concrete reinforcement in structural applications.",
-    images: ["https://images.pexels.com/photos/159293/steel-grid-reinforcement-construction-site-159293.jpeg?auto=compress&cs=tinysrgb&w=800"],
-    category: "Building Materials",
-    subcategory: "Steel Rebar",
-    priceRange: {
-      min: 13500,
-      max: 14500,
-      currency: "RWF",
-    },
-    bulkPricing: [
-      { quantity: 20, price: 14000 },
-      { quantity: 100, price: 13500 },
-    ],
-    minimumOrder: 20,
-    availability: "in-stock",
-    specifications: {
-      "Diameter": "12mm",
-      "Length": "12m",
-      "Grade": "B500B",
-    },
-    tags: ["Steel", "Rebar", "Reinforcement"],
-  },
-];
+export const mockCategories = data.categories;
+export const mockCompanies = data.companies;
+export const mockProducts = data.products;
+export const mockServices = data.services;
 
-export const orders: Order[] = [
-  {
-    id: "ord-1",
-    productId: "prod-1",
-    buyerName: "Jean Bosco",
-    buyerEmail: "bosco@example.rw",
-    quantity: 100,
-    totalPrice: 1300000,
-    status: "completed",
-    shippingStatus: "delivered",
-    orderDate: "2023-11-15T10:30:00Z",
-  },
-  {
-    id: "ord-2",
-    productId: "prod-3",
-    buyerName: "Marie Claire",
-    buyerEmail: "claire@example.rw",
-    quantity: 50,
-    totalPrice: 700000,
-    status: "pending",
-    shippingStatus: "processing",
-    orderDate: "2023-12-01T14:20:00Z",
-  },
-];
+// Aliases for compatibility
+export const categories = mockCategories;
+export const suppliers = mockCompanies;
+export const products = mockProducts;
+export const services = mockServices;
+export const orders: any[] = [];
+export const inquiries: any[] = [];
 
-export const inquiries: Inquiry[] = [
-  {
-    id: "inq-1",
-    productId: "prod-1",
-    buyerName: "David Habimana",
-    buyerEmail: "david@construction.rw",
-    status: "pending",
-    message: "I am interested in buying 500 bags of cement. Do you offer additional discounts for this volume?",
-    quantity: 500,
-    createdAt: "2023-12-05T09:15:00Z",
-  },
-  {
-    id: "inq-2",
-    productId: "prod-2",
-    buyerName: "Sarah Uwase",
-    buyerEmail: "sarah@rentals.rw",
-    status: "replied",
-    message: "Is the excavator available for rent next week in Musanze?",
-    quantity: 1,
-    createdAt: "2023-12-03T16:45:00Z",
-  },
-];
+// Helper to get products with joined data
+export const getMockProducts = () => {
+  return mockProducts.map(p => ({
+    ...p,
+    category: mockCategories.find(c => c.id === p.categoryId),
+    company: mockCompanies.find(c => c.id === p.companyId),
+  }));
+};
 
-import { Wrench, Zap, PaintBucket } from "lucide-react";
-
-export const services: Service[] = [
-  {
-    id: 1,
-    name: "Electrical Installation",
-    description: "Full residential and commercial electrical wiring and maintenance.",
-    icon: Zap,
-    image: "https://images.pexels.com/photos/1435183/pexels-photo-1435183.jpeg?auto=compress&cs=tinysrgb&w=800",
-    price: "From RWF 50,000",
-    totalRequests: 45,
-    pendingRequests: 3,
-    provider: {
-      fullName: "Emmanuel Nkurunziza",
-      role: "Certified Electrician",
-      rating: 4.8,
-      experience: "8 years",
-      phone: "+250 788 000 111",
-      email: "emmanuel@electric.rw",
-    },
-  },
-  {
-    id: 2,
-    name: "Plumbing Services",
-    description: "Expert plumbing repairs, installation, and drainage solutions.",
-    icon: Wrench,
-    image: "https://images.pexels.com/photos/10846051/pexels-photo-10846051.jpeg?auto=compress&cs=tinysrgb&w=800",
-    price: "From RWF 30,000",
-    totalRequests: 32,
-    pendingRequests: 5,
-    provider: {
-      fullName: "Alice Umutoni",
-      role: "Master Plumber",
-      rating: 4.9,
-      experience: "10 years",
-      phone: "+250 788 222 333",
-      email: "alice@plumbing.rw",
-    },
-  },
-  {
-    id: 3,
-    name: "Interior Painting",
-    description: "Professional interior and exterior painting for any building type.",
-    icon: PaintBucket,
-    image: "https://images.pexels.com/photos/6444249/pexels-photo-6444249.jpeg?auto=compress&cs=tinysrgb&w=800",
-    price: "From RWF 100,000",
-    totalRequests: 28,
-    pendingRequests: 2,
-    provider: {
-      fullName: "Patrick Murenzi",
-      role: "Professional Painter",
-      rating: 4.7,
-      experience: "5 years",
-      phone: "+250 788 444 555",
-      email: "patrick@painting.rw",
-    },
-  },
-];
+// Helper to get services with joined data
+export const getMockServices = () => {
+  return mockServices.map(s => ({
+    ...s,
+    company: mockCompanies.find(c => c.id === s.companyId),
+  }));
+};

@@ -12,6 +12,7 @@ import { Card, CardContent } from "@/components/ui/Card";
 import { Textarea } from "@/components/ui/Textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/Dialog";
 import type { Listing, CompanyRef, ListingVariantRef } from "@/app/api/listings";
+import { ImageWithFallback } from "@/components/common/ImageWithFallback";
 
 interface ProductDetailsProps {
   productId: string;
@@ -111,16 +112,16 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({
       <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="grid lg:grid-cols-2 gap-8">
           <div className="space-y-4">
-            <Card className="overflow-hidden border border-border shadow-none rounded-sm aspect-square relative bg-muted">
+            <Card className="overflow-hidden border border-border shadow-none rounded-lg aspect-square relative bg-muted/20">
               {images[selectedImageIndex] ? (
-                <img
+                <ImageWithFallback
                   src={images[selectedImageIndex]}
                   alt={listing.name}
                   className="w-full h-full object-cover"
                 />
               ) : (
                 <div className="w-full h-full flex items-center justify-center text-muted-foreground">
-                  No image
+                  No image available
                 </div>
               )}
             </Card>
@@ -131,13 +132,13 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({
                     key={index}
                     type="button"
                     onClick={() => setSelectedImageIndex(index)}
-                    className={`aspect-square rounded-sm overflow-hidden border transition-all ${
+                    className={`aspect-square rounded-lg overflow-hidden border transition-all ${
                       selectedImageIndex === index
-                        ? "border-primary"
-                        : "border-border hover:border-muted-foreground"
+                        ? "border-primary shadow-lg shadow-primary/10 scale-105"
+                        : "border-border hover:border-primary/30"
                     }`}
                   >
-                    <img src={img} alt="" className="w-full h-full object-cover" />
+                    <ImageWithFallback src={img} alt="" className="w-full h-full object-cover" />
                   </button>
                 ))}
               </div>

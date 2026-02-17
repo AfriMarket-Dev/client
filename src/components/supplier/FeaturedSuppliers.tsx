@@ -1,95 +1,81 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+// import { useGetCompaniesQuery } from "@/app/api/companies";
+// import type { Company } from "@/app/api/companies";
 import { Button } from "@/components/ui/Button";
 import { Card, CardContent } from "@/components/ui/Card";
-import { ArrowRight, Star, MapPin, CheckCircle } from "lucide-react";
-import { useGetCompaniesQuery } from "@/app/api/companies";
-import type { Company } from "@/app/api/companies";
+import { Star, MapPin, CheckCircle } from "lucide-react";
+import { SectionHeader } from "../home/SectionHeader";
+import { mockCompanies } from "@/data/mockData";
 
 const FeaturedSuppliers: React.FC = () => {
   const navigate = useNavigate();
-  const { data } = useGetCompaniesQuery({ limit: 6 });
-  const companies = data?.data ?? [];
+  // const { data } = useGetCompaniesQuery({ limit: 6 });
+  // const companies = data?.data ?? [];
+  const companies = mockCompanies.slice(0, 6);
 
   return (
-    <div className="container mx-auto max-w-7xl">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-6 border-b-2 border-border pb-6">
-        <div>
-          <h2 className="text-3xl md:text-5xl font-heading font-bold uppercase text-foreground mb-2">
-            Featured Suppliers
-          </h2>
-          <p className="text-muted-foreground text-lg font-medium">
-            Verified providers trusted by contractors
-          </p>
-        </div>
-
-        <Button
-          variant="ghost"
-          onClick={() => navigate("/suppliers")}
-          className="text-muted-foreground hover:bg-muted hover:text-foreground rounded font-bold uppercase tracking-wide hidden md:flex shadow-none"
-        >
-          View all suppliers
-          <ArrowRight className="ml-2 w-4 h-4" />
-        </Button>
-      </div>
+    <div className="max-w-[1600px] mx-auto px-4 lg:px-6">
+      <SectionHeader 
+        title="Featured Suppliers"
+        subtitle="Verified industry leaders trusted by contractors and developers."
+        label="Verified Partners"
+        icon={<CheckCircle className="w-5 h-5" />}
+        viewAllHref="/suppliers"
+        viewAllLabel="View all suppliers"
+      />
 
       {companies.length === 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {Array.from({ length: 4 }).map((_, i) => (
             <div
               key={i}
-              className="h-48 rounded-sm border border-border bg-muted/30 animate-pulse"
+              className="h-56 rounded-lg border border-border/40 bg-muted/20"
             />
           ))}
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {companies.map((company: Company) => {
-            const categoryName = (company.category as { name?: string })?.name;
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          {companies.map((company) => {
             const rating = Number(company.averageRating ?? 0);
             return (
               <Card
                 key={company.id}
-                className="group border border-border shadow-none hover:border-primary/50 transition-all duration-200 rounded-sm bg-card cursor-pointer relative overflow-hidden"
+                className="group border border-border/30 shadow-sm hover:shadow-xl hover:border-primary/20 transition-all duration-500 rounded-lg bg-card cursor-pointer relative overflow-hidden"
                 onClick={() => navigate(`/suppliers/${company.id}`)}
               >
-                <CardContent className="p-6 flex flex-col items-start text-left h-full">
-                  <div className="w-16 h-16 rounded-sm p-1 bg-muted/50 border border-border mb-6 group-hover:border-primary transition-colors duration-200 flex items-center justify-center text-2xl font-bold text-muted-foreground">
+                <CardContent className="p-8 flex flex-col items-start text-left h-full">
+                  <div className="w-16 h-16 rounded-lg p-1 bg-primary/5 border border-primary/10 mb-8 group-hover:border-primary/30 transition-all duration-300 flex items-center justify-center text-2xl font-bold text-primary">
                     {company.name?.charAt(0) ?? "?"}
                   </div>
 
-                  <div className="mb-4 w-full">
-                    <div className="flex items-center gap-2 mb-1">
-                      <h3 className="text-lg font-heading font-bold uppercase text-foreground leading-tight group-hover:text-primary transition-colors">
+                  <div className="mb-6 w-full">
+                    <div className="flex items-center gap-2 mb-2">
+                      <h3 className="text-xl font-heading font-bold text-foreground leading-snug group-hover:text-primary transition-colors">
                         {company.name}
                       </h3>
-                      {company.isVerified && (
-                        <CheckCircle className="w-4 h-4 text-primary shrink-0" />
-                      )}
                     </div>
-                    {categoryName && (
-                      <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-3">
-                        {categoryName}
-                      </p>
-                    )}
+                    <p className="text-xs font-semibold text-primary/70 mb-4 tracking-wide uppercase">
+                      {company.type}
+                    </p>
 
                     {company.district && (
-                      <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-muted-foreground/80">
-                        <MapPin className="w-3 h-3" />
+                      <div className="flex items-center gap-1.5 text-xs text-muted-foreground/70">
+                        <MapPin className="w-3.5 h-3.5" />
                         {company.district}
                       </div>
                     )}
                   </div>
 
-                  <div className="flex items-center gap-3 pt-4 border-t border-border w-full mt-auto">
-                    <div className="flex items-center gap-1 text-warning">
-                      <Star className="w-4 h-4 fill-warning" />
-                      <span className="font-bold text-foreground text-xs uppercase tracking-tighter">
+                  <div className="flex items-center gap-4 pt-6 border-t border-border/40 w-full mt-auto">
+                    <div className="flex items-center gap-1.5 text-yellow-500">
+                      <Star className="w-4 h-4 fill-current" />
+                      <span className="font-bold text-foreground text-sm font-sans">
                         {rating.toFixed(1)}
                       </span>
                     </div>
-                    <span className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest">
-                      ({company.reviewCount ?? 0})
+                    <span className="text-xs text-muted-foreground/70 font-medium font-sans">
+                      ({company.reviewCount ?? 0} reviews)
                     </span>
                   </div>
                 </CardContent>
@@ -102,7 +88,8 @@ const FeaturedSuppliers: React.FC = () => {
       <div className="mt-12 md:hidden">
         <Button
           variant="outline"
-          className="w-full rounded-sm h-12 uppercase font-bold border border-border shadow-none"
+          size="lg"
+          className="w-full rounded-lg h-14 font-semibold border-border/60 shadow-none"
           onClick={() => navigate("/suppliers")}
         >
           View all suppliers

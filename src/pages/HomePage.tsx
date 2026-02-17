@@ -5,95 +5,115 @@ import FeaturedProducts from "@/components/home/FeaturedProducts";
 import FeaturedServices from "@/components/home/FeaturedServices";
 import FeaturedSuppliers from "@/components/supplier/FeaturedSuppliers";
 import HotDeals from "@/components/home/HotDeals";
-import CTASection from "@/components/home/CTASection";
 import NewArrivals from "@/components/home/NewArrivals";
 import PromoBanner from "@/components/home/PromoBanner";
 import ProductShowcase from "@/components/home/ProductShowcase";
 import BestSellers from "@/components/home/BestSellers";
-import { useGetListingCategoriesQuery } from "@/app/api/listing-categories";
+import TrendingProducts from "@/components/marketplace/TrendingProducts";
+import { FeaturedBrands } from "@/components/home/FeaturedBrands";
+// import { useGetListingCategoriesQuery } from "@/app/api/listing-categories";
+import { LiveDealsTicker } from "@/components/home/LiveDealsTicker";
+import CTASection from "@/components/home/CTASection";
+import { HomeSection } from "@/components/home/HomeSection";
+import { mockCategories } from "@/data/mockData";
 
 const HomePage: React.FC = () => {
-  const { data: categoryData } = useGetListingCategoriesQuery({ limit: 5 });
-  const categories = categoryData?.data ?? [];
+  // const { data: categoryData } = useGetListingCategoriesQuery({ limit: 5 });
+  // const categories = categoryData?.data ?? [];
+  const categories = mockCategories.slice(0, 5);
 
   return (
-    <div className="flex flex-col pb-12">
+    <div className="flex flex-col pb-24 industrial-grain">
+      <LiveDealsTicker />
       <Hero />
 
-      {/* Hot Deals - Urgency & Discounts */}
-      <HotDeals />
+      {/* Hot Deals - High Urgency */}
+      <HomeSection variant="red" borderTop withGrid>
+        <HotDeals />
+      </HomeSection>
+
+      {/* Trending Products - Market Momentum */}
+      <HomeSection variant="white" withGrid borderBottom>
+        <TrendingProducts />
+      </HomeSection>
 
       {/* Best Sellers - Social Proof */}
-      <BestSellers />
+      <HomeSection variant="background" borderBottom>
+        <BestSellers />
+      </HomeSection>
 
       {/* Category Navigation - Browsing */}
-      <section className="py-12 bg-muted/30 border-y border-border">
-         <CategoryGrid />
-      </section>
+      <HomeSection variant="muted" withGrid borderBottom>
+        <CategoryGrid />
+      </HomeSection>
 
       {/* Dynamic Category Sections - Deep Dive */}
       <div className="flex flex-col">
         {categories.map((category, index) => (
           <React.Fragment key={category.id}>
-             {/* Alternate backgrounds for cleanliness */}
-             <section className={`py-2 ${index % 2 === 0 ? "bg-background" : "bg-muted/10"} border-b border-border`}>
+            <HomeSection 
+              variant={index % 2 !== 0 ? "background" : "white"} 
+              withGrid={index % 2 !== 0}
+              borderBottom
+            >
               <ProductShowcase
                 title={category.name}
-                subtitle={category.description || `Browse our best ${category.name} collection`}
+                subtitle={
+                  category.description ||
+                  `Industrial-grade assets and materials within the ${category.name} vertical.`
+                }
                 categoryId={category.id}
                 limit={10}
+                className="py-0"
               />
-            </section>
-            
-            {/* Promo Banner Break */}
+            </HomeSection>
+
             {index === 1 && (
-               <div className="py-8 bg-white">
-                  <PromoBanner
-                    title="Verified Suppliers"
-                    subtitle="Source from the most trusted suppliers in the region."
-                    ctaText="Find Suppliers"
-                    variant="primary"
-                  />
-               </div>
+              <PromoBanner
+                title="Verified Supplier Nodes"
+                subtitle="Connect directly with verified local and international manufacturers."
+                ctaText="Access Node Directory"
+                ctaLink="/suppliers"
+                variant="primary"
+              />
             )}
           </React.Fragment>
         ))}
       </div>
 
       {/* New Arrivals - Freshness */}
-      <div className="py-12 bg-background border-b border-border">
-          <section className="container mx-auto px-4">
-            <NewArrivals />
-          </section>
-      </div>
-      
-      {/* Featured Services */}
-      <div className="py-12 bg-muted/20 border-b border-border">
-        <section className="container mx-auto px-4">
-           <FeaturedServices />
-        </section>
-      </div>
+      <HomeSection variant="white" borderBottom>
+        <NewArrivals />
+      </HomeSection>
 
-      {/* Promo Break */}
+      {/* Featured Brands */}
+      <HomeSection variant="background" borderBottom>
+        <FeaturedBrands />
+      </HomeSection>
+
+      {/* Featured Services */}
+      <HomeSection variant="muted" withGrid borderBottom>
+        <FeaturedServices />
+      </HomeSection>
+
       <PromoBanner
-        title="Need Heavy Equipment?"
-        subtitle="We have the largest inventory of construction machinery for rent or purchase."
-        ctaText="View Equipment"
+        title="Heavy Asset Acquisition"
+        subtitle="Full inventory of construction machinery for strategic project deployment."
+        ctaText="Explore Machinery"
+        ctaLink="/products?category=heavy-equipment"
         variant="dark"
       />
 
-       {/* Featured Products (General) */}
-      <div className="py-12 bg-background border-t border-border">
-        <section className="container mx-auto px-4">
-          <FeaturedProducts />
-        </section>
-      </div>
-
-      <section className="py-12 container mx-auto px-4">
-        <FeaturedSuppliers />
-      </section>
+      {/* Featured Products (General) */}
+      <HomeSection variant="background" borderBottom>
+        <FeaturedProducts />
+      </HomeSection>
 
       <CTASection />
+
+      <HomeSection variant="white" withGrid borderBottom>
+        <FeaturedSuppliers />
+      </HomeSection>
     </div>
   );
 };

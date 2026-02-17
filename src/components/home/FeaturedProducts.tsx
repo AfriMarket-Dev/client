@@ -1,55 +1,41 @@
 import React from "react";
 import { Button } from "@/components/ui/Button";
-import { ArrowRight, Package } from "lucide-react";
+import { Package } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { useGetListingsQuery } from "@/app/api/listings";
+// import { useGetListingsQuery } from "@/app/api/listings";
 import { ProductCard } from "@/components/catalog/ProductCard";
+import { SectionHeader } from "./SectionHeader";
+import { getMockProducts } from "@/data/mockData";
 
 const FeaturedProducts: React.FC = () => {
   const navigate = useNavigate();
   // Fetch only products
-  const { data } = useGetListingsQuery({ limit: 10, type: "PRODUCT" });
-  const listings = data?.data ?? [];
+  // const { data } = useGetListingsQuery({ limit: 10, type: "PRODUCT" });
+  // const listings = data?.data ?? [];
+  const listings = getMockProducts().slice(0, 10);
 
   return (
-    <div className="container mx-auto max-w-7xl">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-6 border-b border-border pb-6">
-        <div>
-          <div className="flex items-center gap-2 mb-2">
-            <Package className="w-5 h-5 text-primary" />
-            <span className="text-sm font-bold uppercase tracking-widest text-primary">
-              Marketplace
-            </span>
-          </div>
-          <h2 className="text-3xl md:text-5xl font-heading font-bold uppercase text-foreground mb-2 text-balance">
-            Featured Products
-          </h2>
-          <p className="text-muted-foreground text-lg font-medium">
-            High-quality construction materials and tools.
-          </p>
-        </div>
-
-        <Button
-          variant="ghost"
-          onClick={() => navigate("/products?type=PRODUCT")}
-          className="text-muted-foreground hover:bg-muted hover:text-foreground rounded-sm font-bold uppercase tracking-wide hidden md:flex shadow-none"
-        >
-          View all products
-          <ArrowRight className="ml-2 w-4 h-4" />
-        </Button>
-      </div>
+    <div className="max-w-[1600px] mx-auto px-4 lg:px-6">
+      <SectionHeader 
+        title="Featured Products"
+        subtitle="High-quality construction materials and specialized tools for your next project."
+        label="Marketplace"
+        icon={<Package className="w-5 h-5" />}
+        viewAllHref="/products?type=PRODUCT"
+        viewAllLabel="View all products"
+      />
 
       {listings.length === 0 ? (
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
           {Array.from({ length: 5 }).map((_, i) => (
             <div
               key={i}
-              className="aspect-4/3 rounded-sm border border-border bg-muted/30 animate-pulse"
+              className="aspect-[4/3] rounded-lg border border-border/40 bg-muted/20"
             />
           ))}
         </div>
       ) : (
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6">
           {listings.map((listing) => (
             <ProductCard
               key={listing.id}
@@ -60,10 +46,11 @@ const FeaturedProducts: React.FC = () => {
         </div>
       )}
 
-      <div className="mt-8 md:hidden">
+      <div className="mt-10 md:hidden">
         <Button
           variant="outline"
-          className="w-full rounded-sm h-12 uppercase font-bold border border-border shadow-none"
+          size="lg"
+          className="w-full rounded-lg h-14 font-semibold border-border/60 shadow-none"
           onClick={() => navigate("/products?type=PRODUCT")}
         >
           View all products

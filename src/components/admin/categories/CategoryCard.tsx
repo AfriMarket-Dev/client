@@ -48,27 +48,27 @@ export const CategoryCard: React.FC<CategoryCardProps> = ({
   const IconComponent = iconMap[category.icon] || FolderOpen;
 
   return (
-    <AdminCard noPadding className="hover:border-primary transition-colors flex flex-col">
-      <div className="p-4 border-b-2 border-border bg-muted/10">
+    <AdminCard noPadding className="hover:border-primary/30 transition-all duration-300 flex flex-col group/card shadow-sm hover:shadow-xl rounded-xl overflow-hidden">
+      <div className="p-5 border-b border-border/40 bg-muted/5">
         <div className="flex items-start justify-between">
-          <div className="flex items-center gap-3">
-            <div className="p-2.5 bg-primary/10 rounded-sm border border-primary/20">
-              <IconComponent size={20} className="text-primary" />
+          <div className="flex items-center gap-4">
+            <div className="p-3 bg-primary/5 rounded-lg border border-primary/10 group-hover/card:bg-primary group-hover/card:text-white transition-all duration-300">
+              <IconComponent size={22} className="text-primary group-hover/card:text-white transition-colors" />
             </div>
             <div>
-              <h3 className="font-heading font-bold text-sm text-foreground uppercase tracking-widest">
+              <h3 className="font-heading font-bold text-base text-foreground tracking-tight">
                 {category.name}
               </h3>
-              <p className="text-[9px] text-muted-foreground mt-1 uppercase font-black tracking-tighter">
+              <p className="text-[11px] text-muted-foreground mt-1 font-medium font-sans">
                 Code: {category.id.substring(0, 8)}
               </p>
             </div>
           </div>
           <Badge
             variant="outline"
-            className={`rounded-sm border font-heading font-bold uppercase text-[9px] tracking-widest px-2 py-0.5 ${
+            className={`rounded-full border font-semibold text-[10px] tracking-wide px-2.5 py-0.5 ${
               category.status === "active"
-                ? "bg-green-50 text-green-700 border-green-100"
+                ? "bg-emerald-50 text-emerald-700 border-emerald-100"
                 : "bg-red-50 text-red-700 border-red-100"
             }`}
           >
@@ -77,53 +77,53 @@ export const CategoryCard: React.FC<CategoryCardProps> = ({
         </div>
       </div>
 
-      <div className="p-4 flex-1">
-        <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider leading-relaxed line-clamp-2">
-          {category.description}
+      <div className="p-5 flex-1">
+        <p className="text-sm text-muted-foreground/80 font-normal leading-relaxed line-clamp-2">
+          {category.description || "No description provided for this category."}
         </p>
       </div>
 
-      <div className="px-4 py-4 bg-muted/30 grid grid-cols-2 gap-4 text-center border-y-2 border-border">
-        <div>
-          <p className="text-xl font-heading font-bold text-foreground">
+      <div className="px-5 py-5 bg-muted/10 grid grid-cols-2 gap-6 text-center border-y border-border/40">
+        <div className="space-y-1">
+          <p className="text-2xl font-heading font-bold text-foreground font-sans">
             {category.productCount}
           </p>
-          <p className="text-[9px] text-muted-foreground uppercase tracking-widest font-black">
+          <p className="text-[11px] text-muted-foreground font-semibold uppercase tracking-wider">
             Products
           </p>
         </div>
-        <div>
-          <p className="text-xl font-heading font-bold text-foreground">
+        <div className="space-y-1">
+          <p className="text-2xl font-heading font-bold text-foreground font-sans">
             {category.subcategories?.length || 0}
           </p>
-          <p className="text-[9px] text-muted-foreground uppercase tracking-widest font-black">
+          <p className="text-[11px] text-muted-foreground font-semibold uppercase tracking-wider">
             Sub-Cats
           </p>
         </div>
       </div>
 
-      <div className="px-4 py-3 flex items-center justify-between mt-auto">
-        <div className="flex items-center gap-1.5">
+      <div className="px-5 py-4 flex items-center justify-between mt-auto bg-white/50">
+        <div className="flex items-center gap-2">
           <button
             onClick={() => onEdit(category)}
-            className="p-2 h-9 w-9 hover:bg-blue-50 rounded-sm transition-all text-blue-600 border border-transparent hover:border-blue-200 flex items-center justify-center"
+            className="p-2 h-10 w-10 hover:bg-blue-50 rounded-lg transition-all text-blue-600 border border-transparent hover:border-blue-100 flex items-center justify-center"
             title="Edit"
           >
-            <Edit size={14} />
+            <Edit size={16} />
           </button>
           <button
             onClick={() => onDelete(category)}
-            className="p-2 h-9 w-9 hover:bg-red-50 rounded-sm transition-all text-red-600 border border-transparent hover:border-red-200 flex items-center justify-center"
+            className="p-2 h-10 w-10 hover:bg-red-50 rounded-lg transition-all text-red-600 border border-transparent hover:border-red-100 flex items-center justify-center"
             title="Delete"
           >
-            <Trash2 size={14} />
+            <Trash2 size={16} />
           </button>
         </div>
         <button
-          className="h-9 px-4 hover:bg-primary/10 rounded-sm transition-all text-primary font-heading font-bold text-[10px] uppercase tracking-widest border border-transparent hover:border-primary"
+          className="h-10 px-5 hover:bg-primary hover:text-white rounded-lg transition-all text-primary font-semibold text-xs border border-primary/20 hover:border-primary flex items-center gap-2"
         >
-          <Eye size={14} className="inline mr-1.5" />
-          View all
+          <Eye size={16} />
+          View All
         </button>
       </div>
     </AdminCard>

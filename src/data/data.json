@@ -1,0 +1,193 @@
+{
+  "categories": [
+    {
+      "id": "cat-1",
+      "name": "Heavy Machinery",
+      "description": "Industrial grade excavators, loaders, and site equipment.",
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-01-01T00:00:00Z"
+    },
+    {
+      "id": "cat-2",
+      "name": "Structural Materials",
+      "description": "Premium steel, concrete, and foundational resources.",
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-01-01T00:00:00Z"
+    },
+    {
+      "id": "cat-3",
+      "name": "Power Tools",
+      "description": "High-performance electrical tools for professional use.",
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-01-01T00:00:00Z"
+    }
+  ],
+  "companies": [
+    {
+      "id": "comp-1",
+      "name": "Kigali Heavy Assets Ltd",
+      "type": "RETAILER",
+      "district": "Nyarugenge",
+      "averageRating": 4.9,
+      "reviewCount": 124,
+      "visits": 5200,
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-01-01T00:00:00Z"
+    },
+    {
+      "id": "comp-2",
+      "name": "SteelForce Rwanda",
+      "type": "MANUFACTURER",
+      "district": "Gasabo",
+      "averageRating": 4.7,
+      "reviewCount": 89,
+      "visits": 3100,
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-01-01T00:00:00Z"
+    },
+    {
+      "id": "comp-3",
+      "name": "ProBuild Solutions",
+      "type": "SERVICE_PROVIDER",
+      "district": "Kicukiro",
+      "averageRating": 4.8,
+      "reviewCount": 56,
+      "visits": 1200,
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-01-01T00:00:00Z"
+    }
+  ],
+  "products": [
+    {
+      "id": "prod-1",
+      "name": "Caterpillar 320 GC Excavator",
+      "description": "High-efficiency 20-ton hydraulic excavator for heavy-duty site work.",
+      "priceType": "FIXED",
+      "isActive": true,
+      "views": 1500,
+      "categoryId": "cat-1",
+      "companyId": "comp-1",
+      "createdAt": "2026-01-10T00:00:00Z",
+      "updatedAt": "2026-01-10T00:00:00Z",
+      "variants": [
+        {
+          "id": "var-1",
+          "name": "Standard Config",
+          "sku": "CAT-320-GC-STD",
+          "price": 85000000,
+          "stock": 3,
+          "unit": "unit",
+          "images": ["https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&q=80&w=800"],
+          "createdAt": "2026-01-10T00:00:00Z",
+          "updatedAt": "2026-01-10T00:00:00Z"
+        }
+      ]
+    },
+    {
+      "id": "prod-2",
+      "name": "Reinforcement Steel Y12",
+      "description": "High-yield deformed steel bars for concrete reinforcement.",
+      "priceType": "STARTS_AT",
+      "isActive": true,
+      "views": 2400,
+      "categoryId": "cat-2",
+      "companyId": "comp-2",
+      "createdAt": "2026-01-12T00:00:00Z",
+      "updatedAt": "2026-01-12T00:00:00Z",
+      "variants": [
+        {
+          "id": "var-2",
+          "name": "12m Length",
+          "sku": "ST-Y12-12M",
+          "price": 14500,
+          "stock": 5000,
+          "unit": "bar",
+          "images": ["https://images.unsplash.com/photo-1518709766631-a6a7f45921c3?auto=format&fit=crop&q=80&w=800"],
+          "createdAt": "2026-01-12T00:00:00Z",
+          "updatedAt": "2026-01-12T00:00:00Z"
+        }
+      ]
+    },
+    {
+      "id": "prod-3",
+      "name": "Bosch Professional Hammer Drill",
+      "description": "GBH 2-28 heavy-duty SDS plus rotary hammer.",
+      "priceType": "FIXED",
+      "isActive": true,
+      "views": 850,
+      "categoryId": "cat-3",
+      "companyId": "comp-1",
+      "createdAt": "2026-01-15T00:00:00Z",
+      "updatedAt": "2026-01-15T00:00:00Z",
+      "variants": [
+        {
+          "id": "var-3",
+          "name": "Standard Kit",
+          "sku": "BOSCH-GBH-228",
+          "price": 245000,
+          "stock": 15,
+          "unit": "set",
+          "images": ["https://images.unsplash.com/photo-1581235720704-06d3acfcb36f?auto=format&fit=crop&q=80&w=800"],
+          "createdAt": "2026-01-15T00:00:00Z",
+          "updatedAt": "2026-01-15T00:00:00Z"
+        }
+      ]
+    },
+    {
+      "id": "prod-4",
+      "name": "Ready-Mix Concrete C25",
+      "description": "Standard strength structural concrete for slabs and beams.",
+      "priceType": "NEGOTIABLE",
+      "isActive": true,
+      "views": 1100,
+      "categoryId": "cat-2",
+      "companyId": "comp-2",
+      "createdAt": "2026-01-18T00:00:00Z",
+      "updatedAt": "2026-01-18T00:00:00Z",
+      "variants": [
+        {
+          "id": "var-4",
+          "name": "Bulk Pumped",
+          "sku": "CONC-C25-MIX",
+          "price": 125000,
+          "stock": 1000,
+          "unit": "m3",
+          "images": ["https://images.unsplash.com/photo-1533062609742-42821701904a?auto=format&fit=crop&q=80&w=800"],
+          "createdAt": "2026-01-18T00:00:00Z",
+          "updatedAt": "2026-01-18T00:00:00Z"
+        }
+      ]
+    }
+  ],
+  "services": [
+    {
+      "id": "serv-1",
+      "name": "Site Survey & Topography",
+      "description": "Professional land surveying using high-precision GNSS equipment.",
+      "price": 450000,
+      "priceType": "STARTS_AT",
+      "duration": "2-3 days",
+      "isActive": true,
+      "views": 450,
+      "categoryId": "cat-site-prep",
+      "companyId": "comp-3",
+      "images": ["https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&q=80&w=800"],
+      "createdAt": "2026-01-20T00:00:00Z",
+      "updatedAt": "2026-01-20T00:00:00Z"
+    },
+    {
+      "id": "serv-2",
+      "name": "MEP Engineering Design",
+      "description": "Mechanical, Electrical, and Plumbing design for industrial structures.",
+      "priceType": "NEGOTIABLE",
+      "duration": "Flexible",
+      "isActive": true,
+      "views": 320,
+      "categoryId": "cat-design",
+      "companyId": "comp-3",
+      "images": ["https://images.unsplash.com/photo-1581094794329-cd56b5095bb4?auto=format&fit=crop&q=80&w=800"],
+      "createdAt": "2026-01-22T00:00:00Z",
+      "updatedAt": "2026-01-22T00:00:00Z"
+    }
+  ]
+}

@@ -15,14 +15,14 @@ export const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   return (
-    <header className="bg-background border-b border-border sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+    <header className="bg-background/80 backdrop-blur-md border-b border-border/40 sticky top-0 z-50">
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-20">
           <HeaderLogo />
 
           <HeaderSearch value={searchQuery} onChange={setSearchQuery} />
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-4">
             <HeaderUserNav
               isAuthenticated={isAuthenticated}
               user={user}
@@ -33,9 +33,9 @@ export const Header: React.FC = () => {
               variant="ghost"
               size="icon"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="md:hidden h-10 w-10 text-foreground"
+              className="md:hidden h-10 w-10 text-foreground rounded-lg hover:bg-muted/50"
             >
-              <Menu className="w-5 h-5" />
+              <Menu className="w-6 h-6" />
             </Button>
           </div>
         </div>
@@ -43,23 +43,23 @@ export const Header: React.FC = () => {
 
       {/* Mobile Menu */}
       {isMenuOpen && (
-        <div className="md:hidden border-t border-border bg-background px-4 py-4 space-y-4">
+        <div className="md:hidden border-t border-border/40 bg-background/95 backdrop-blur-lg px-4 py-6 space-y-6 animate-in slide-in-from-top-4 duration-300">
           <div className="relative">
              <Input
-              placeholder="Search..."
+              placeholder="Search products or services..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="h-10 w-full rounded-sm border-border bg-muted/20"
+              className="h-12 w-full rounded-lg border-border/50 bg-muted/20"
             />
           </div>
-          <nav className="flex flex-col space-y-2">
-            <Button variant="ghost" className="justify-start font-heading uppercase text-sm tracking-wider">
+          <nav className="flex flex-col space-y-1">
+            <Button variant="ghost" className="justify-start font-semibold text-base py-3 rounded-lg">
               Marketplace
             </Button>
-            <Button variant="ghost" className="justify-start font-heading uppercase text-sm tracking-wider">
+            <Button variant="ghost" className="justify-start font-semibold text-base py-3 rounded-lg">
               Suppliers
             </Button>
-             <Button variant="ghost" className="justify-start font-heading uppercase text-sm tracking-wider">
+             <Button variant="ghost" className="justify-start font-semibold text-base py-3 rounded-lg">
               Services
             </Button>
           </nav>

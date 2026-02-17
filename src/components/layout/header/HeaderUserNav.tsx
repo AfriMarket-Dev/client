@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { LogOut, Heart, MessageSquare, User, LayoutDashboard } from "lucide-react";
+import { LogOut, Heart, MessageSquare, User, LayoutDashboard, ChevronDown } from "lucide-react";
 import { useDispatch } from "react-redux";
 import { logout } from "@/app/features/authSlice";
 import { useSignOutMutation } from "@/app/api/auth";
@@ -45,54 +45,41 @@ export const HeaderUserNav: React.FC<HeaderUserNavProps> = ({
     navigate("/");
   };
 
+  const navLinks = [
+    { label: "Marketplace", href: "/Marketplace" },
+    { label: "Categories", href: "/categories" },
+    { label: "Suppliers", href: "/suppliers" },
+    { label: "About", href: "/about" },
+  ];
+
   return (
-    <div className="flex items-center gap-3">
-      <div className="hidden lg:flex items-center gap-1 mr-2">
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => navigate("/Marketplace")}
-          className="font-heading font-bold uppercase tracking-wide text-muted-foreground hover:text-foreground hover:bg-transparent text-xs"
-        >
-          marketplace
-        </Button>
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => navigate("/categories")}
-          className="font-heading font-bold uppercase tracking-wide text-muted-foreground hover:text-foreground hover:bg-transparent text-xs"
-        >
-          Categories
-        </Button>
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => navigate("/suppliers")}
-          className="font-heading font-bold uppercase tracking-wide text-muted-foreground hover:text-foreground hover:bg-transparent text-xs"
-        >
-          Suppliers
-        </Button>
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => navigate("/about")}
-          className="font-heading font-bold uppercase tracking-wide text-muted-foreground hover:text-foreground hover:bg-transparent text-xs"
-        >
-          About
-        </Button>
-      </div>
+    <div className="flex items-center gap-4">
+      <nav className="hidden lg:flex items-center gap-1">
+        {navLinks.map((link) => (
+          <Button
+            key={link.label}
+            variant="ghost"
+            size="sm"
+            onClick={() => navigate(link.href)}
+            className="font-heading font-bold text-[11px] tracking-[0.15em] text-muted-foreground/70 hover:text-primary hover:bg-primary/5 rounded-lg px-4 transition-all duration-300 uppercase relative group"
+          >
+            {link.label}
+            <span className="absolute bottom-1 left-4 right-4 h-[1px] bg-primary scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
+          </Button>
+        ))}
+      </nav>
 
       {isAuthenticated && (
-        <>
+        <div className="flex items-center gap-1.5 px-1.5 border-l border-r border-border/40">
           <Button
             variant="ghost"
             size="icon"
-            className="relative h-10 w-10 text-muted-foreground hover:text-foreground"
+            className="relative h-9 w-9 text-muted-foreground/80 hover:text-primary hover:bg-primary/5 rounded-lg transition-all"
             onClick={() => navigate("/wishlist")}
           >
-            <Heart className="w-5 h-5" />
+            <Heart size={18} strokeWidth={1.5} />
             {wishlistCount > 0 && (
-              <Badge className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] flex items-center justify-center p-0 text-[10px] font-bold">
+              <Badge className="absolute -top-1 -right-1 min-w-[18px] h-[18px] flex items-center justify-center p-0 text-[9px] font-bold bg-primary text-white border-2 border-background rounded-md font-sans">
                 {wishlistCount > 99 ? "99+" : wishlistCount}
               </Badge>
             )}
@@ -100,15 +87,13 @@ export const HeaderUserNav: React.FC<HeaderUserNavProps> = ({
           <Button
             variant="ghost"
             size="icon"
-            className="h-10 w-10 text-muted-foreground hover:text-foreground"
+            className="h-9 w-9 text-muted-foreground/80 hover:text-primary hover:bg-primary/5 rounded-lg transition-all"
             onClick={() => navigate("/messages")}
           >
-            <MessageSquare className="w-5 h-5" />
+            <MessageSquare size={18} strokeWidth={1.5} />
           </Button>
-        </>
+        </div>
       )}
-
-      <div className="h-8 w-px bg-border mx-1 hidden sm:block" />
 
       {isAuthenticated && user ? (
         <DropdownMenu>
@@ -116,78 +101,80 @@ export const HeaderUserNav: React.FC<HeaderUserNavProps> = ({
             render={
               <Button
                 variant="ghost"
-                className="relative h-10 w-10 rounded-full border border-border hover:border-primary transition-all duration-200"
+                className="flex items-center gap-2 pl-1 pr-2 py-1 h-10 rounded-lg border border-border/40 hover:border-primary/30 hover:bg-muted/5 transition-all duration-300"
               >
-                <Avatar className="h-9 w-9 border border-border">
+                <Avatar className="h-8 w-8 rounded-md border border-border/40">
                   <AvatarImage src={user.image} alt={user.name} />
-                  <AvatarFallback className="font-heading font-bold bg-muted/50 text-muted-foreground">
+                  <AvatarFallback className="font-heading font-bold bg-primary/5 text-primary text-[10px] rounded-md">
                     {user.name?.charAt(0).toUpperCase()}
                   </AvatarFallback>
                 </Avatar>
+                <ChevronDown size={14} className="text-muted-foreground group-data-[state=open]:rotate-180 transition-transform duration-300" />
               </Button>
             }
           />
           <DropdownMenuContent
-            className="w-64 align-end border border-border rounded-sm shadow-lg p-0 bg-background/95 backdrop-blur-sm animate-in fade-in slide-in-from-top-2 duration-200"
+            className="w-72 align-end border border-border/40 rounded-lg shadow-[0_20px_50px_rgba(0,0,0,0.1)] p-1.5 bg-background/95 backdrop-blur-md animate-in fade-in slide-in-from-top-2 duration-300"
             align="end"
           >
             <DropdownMenuGroup>
-              <DropdownMenuLabel className="font-normal p-0">
-                <div className="flex items-center justify-start gap-4 p-4 border-b border-border bg-muted/5">
-                  <div className="flex flex-col space-y-1 leading-none">
-                    {user.name && (
-                      <p className="font-heading font-bold uppercase tracking-wide text-sm text-foreground">
-                        {user.name}
-                      </p>
-                    )}
+              <DropdownMenuLabel className="font-normal p-0 overflow-hidden rounded-md mb-1">
+                <div className="relative p-4 bg-muted/10 border-b border-border/40 overflow-hidden">
+                  <div className="absolute inset-0 blueprint-grid opacity-[0.05] pointer-events-none" />
+                  <div className="relative z-10 flex flex-col space-y-1.5 leading-none">
+                    <div className="flex items-center gap-2">
+                        <div className="w-1.5 h-1.5 rounded-full bg-primary" />
+                        <p className="font-heading font-bold text-sm text-foreground uppercase tracking-wider">
+                            {user.name}
+                        </p>
+                    </div>
                     {user.email && (
-                      <p className="text-xs leading-none text-muted-foreground font-medium truncate max-w-[180px]">
+                      <p className="text-[11px] leading-none text-muted-foreground/80 font-medium truncate max-w-[200px] font-sans ml-3.5">
                         {user.email}
                       </p>
                     )}
                   </div>
                 </div>
               </DropdownMenuLabel>
-              <DropdownMenuSeparator className="bg-border" />
               {(user.role === "admin" || user.role === "agent") && (
                 <DropdownMenuItem
                   onClick={() => navigate("/admin")}
-                  className="cursor-pointer rounded-sm focus:bg-muted focus:text-primary font-medium"
+                  className="cursor-pointer rounded-md focus:bg-primary/5 focus:text-primary py-2.5 transition-colors"
                 >
-                  <LayoutDashboard className="w-4 h-4 mr-2" />
-                  <span className="font-bold uppercase text-xs tracking-wide">
-                    Admin Dashboard
+                  <LayoutDashboard size={16} strokeWidth={1.5} className="mr-3 opacity-70" />
+                  <span className="font-bold uppercase text-[10px] tracking-[0.15em]">
+                    System Terminal
                   </span>
                 </DropdownMenuItem>
               )}
               {PROVIDER_ROLES.includes(user.role) && (
                 <DropdownMenuItem
                   onClick={() => navigate("/dashboard")}
-                  className="cursor-pointer rounded-sm focus:bg-muted focus:text-primary font-medium"
+                  className="cursor-pointer rounded-md focus:bg-primary/5 focus:text-primary py-2.5 transition-colors"
                 >
-                  <LayoutDashboard className="w-4 h-4 mr-2" />
-                  <span className="font-bold uppercase text-xs tracking-wide">
-                    Provider Dashboard
+                  <LayoutDashboard size={16} strokeWidth={1.5} className="mr-3 opacity-70" />
+                  <span className="font-bold uppercase text-[10px] tracking-[0.15em]">
+                    Provider Node
                   </span>
                 </DropdownMenuItem>
               )}
               <DropdownMenuItem
                 onClick={() => navigate("/profile")}
-                className="cursor-pointer rounded-sm focus:bg-muted focus:text-primary font-medium"
+                className="cursor-pointer rounded-md focus:bg-primary/5 focus:text-primary py-2.5 transition-colors"
               >
-                <User className="w-4 h-4 mr-2" />
-                <span className="font-bold uppercase text-xs tracking-wide">
-                  Profile
+                <User size={16} strokeWidth={1.5} className="mr-3 opacity-70" />
+                <span className="font-bold uppercase text-[10px] tracking-[0.15em]">
+                  Account Config
                 </span>
               </DropdownMenuItem>
-              <DropdownMenuSeparator className="bg-border" />
+              <DropdownMenuSeparator className="bg-border/40 my-1.5" />
               <DropdownMenuItem
                 onClick={handleLogout}
-                className="cursor-pointer rounded-sm focus:bg-destructive/10 focus:text-destructive font-medium text-destructive"
+                className="cursor-pointer rounded-md focus:bg-destructive/5 focus:text-destructive py-2.5 text-destructive transition-colors"
               >
-                <LogOut className="mr-2 h-4 w-4" />
-                <span className="font-bold uppercase text-xs tracking-wide">
-                  Sign out
+                <LogOut size={16} strokeWidth={1.5} className="mr-3" />
+                <span className="font-bold uppercase text-[10px] tracking-[0.15em]">
+                  Terminate Session
                 </span>
               </DropdownMenuItem>
             </DropdownMenuGroup>
@@ -198,14 +185,14 @@ export const HeaderUserNav: React.FC<HeaderUserNavProps> = ({
           <Link to="/auth/signin">
             <Button
               variant="ghost"
-              className="font-heading font-bold uppercase tracking-wider hover:bg-muted/50 text-xs h-9 px-4 rounded-sm border border-transparent hover:border-border"
+              className="font-heading font-bold uppercase tracking-[0.15em] hover:text-primary hover:bg-primary/5 text-[11px] h-10 px-5 rounded-lg transition-all"
             >
               Sign In
             </Button>
           </Link>
           <Link to="/auth/signup">
-            <Button className="font-heading font-bold uppercase tracking-wider text-xs h-9 px-4 rounded-sm shadow-none border border-border hover:border-primary hover:bg-primary hover:text-primary-foreground transition-all duration-200 bg-transparent text-foreground">
-              Sign up
+            <Button className="font-heading font-bold text-[11px] uppercase tracking-[0.15em] h-10 px-6 rounded-lg bg-primary text-white hover:bg-primary/90 shadow-lg shadow-primary/20 transition-all active:scale-95">
+              Join Free
             </Button>
           </Link>
         </div>

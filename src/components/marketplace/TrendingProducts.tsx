@@ -1,118 +1,47 @@
 import React from "react";
-import { Button } from "@/components/ui/Button";
-import { Card, CardContent } from "@/components/ui/Card";
-import { ArrowRight, MapPin } from "lucide-react";
+import { TrendingUp } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { useGetListingsQuery } from "@/app/api/listings";
-import type { Listing } from "@/app/api/listings";
-
-function firstPrice(listing: Listing): number {
-  const v = listing.variants?.[0];
-  return v ? Number(v.price) : 0;
-}
-
-function firstImage(listing: Listing): string | null {
-  const v = listing.variants?.[0];
-  const imgs = v?.images;
-  return imgs?.length ? imgs[0] : null;
-}
+// import { useGetListingsQuery } from "@/app/api/listings";
+import { ProductCard } from "@/components/catalog/ProductCard";
+import { SectionHeader } from "../home/SectionHeader";
+import { getMockProducts } from "@/data/mockData";
 
 const TrendingProducts: React.FC = () => {
   const navigate = useNavigate();
-  const { data } = useGetListingsQuery({ limit: 8 });
-  const listings = data?.data ?? [];
+  // const { data } = useGetListingsQuery({ limit: 10, sortBy: "views", sortOrder: "DESC" });
+  // const listings = data?.data ?? [];
+  const listings = getMockProducts().slice(0, 10);
 
   return (
-    <div className="container mx-auto max-w-6xl">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-6 border-b border-border pb-6">
-        <div>
-          <h2 className="text-4xl md:text-5xl font-heading font-bold uppercase text-foreground mb-2 text-balance">
-            Trending Products
-          </h2>
-          <p className="text-muted-foreground text-lg font-medium">
-            Most requested materials and equipment
-          </p>
-        </div>
-
-        <Button
-          variant="ghost"
-          onClick={() => navigate("/products")}
-          className="text-muted-foreground hover:bg-muted hover:text-foreground rounded-sm font-bold uppercase tracking-wide hidden md:flex shadow-none"
-        >
-          View all products
-          <ArrowRight className="ml-2 w-4 h-4" />
-        </Button>
-      </div>
+    <div className="max-w-[1600px] mx-auto px-4 lg:px-6">
+      <SectionHeader 
+        title="Trending Now"
+        subtitle="The most sought-after materials and equipment in the market today."
+        label="Popular Picks"
+        icon={<TrendingUp className="w-5 h-5" />}
+        viewAllHref="/products?sort=popular"
+      />
 
       {listings.length === 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {Array.from({ length: 4 }).map((_, i) => (
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+          {Array.from({ length: 5 }).map((_, i) => (
             <div
               key={i}
-              className="aspect-[4/3] rounded-sm border border-border bg-muted/30 animate-pulse"
+              className="aspect-[4/3] rounded-lg border border-border/40 bg-muted/20"
             />
           ))}
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {listings.map((listing) => {
-            const img = firstImage(listing);
-            const price = firstPrice(listing);
-            const company = listing.company as { district?: string } | undefined;
-            return (
-              <Card
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6">
+          {listings.map((listing) => (
+             <ProductCard
                 key={listing.id}
-                className="group border border-border shadow-none hover:border-primary transition-all duration-200 rounded-sm overflow-hidden bg-card cursor-pointer"
+                listing={listing}
                 onClick={() => navigate(`/products/${listing.id}`)}
-              >
-                <div className="relative aspect-[4/3] overflow-hidden bg-muted border-b border-border">
-                  {img ? (
-                    <img
-                      src={img}
-                      alt={listing.name}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center text-muted-foreground text-sm">
-                      No image
-                    </div>
-                  )}
-                  <div className="absolute top-0 right-0 bg-primary text-primary-foreground px-3 py-1 text-[10px] font-bold uppercase tracking-widest rounded-bl-sm">
-                    {listing.category?.name ?? "—"}
-                  </div>
-                </div>
-
-                <CardContent className="p-5">
-                  {company?.district && (
-                    <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-2">
-                      <MapPin className="w-3 h-3" />
-                      {company.district}
-                    </div>
-                  )}
-                  <h3 className="text-lg font-heading font-bold uppercase text-foreground mb-2 line-clamp-2 leading-tight group-hover:text-primary transition-colors">
-                    {listing.name}
-                  </h3>
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-xl font-bold text-foreground">
-                      RWF {price.toLocaleString()}
-                    </span>
-                  </div>
-                </CardContent>
-              </Card>
-            );
-          })}
+             />
+          ))}
         </div>
       )}
-
-      <div className="mt-12 md:hidden">
-        <Button
-          variant="outline"
-          className="w-full rounded-sm h-12 uppercase font-bold border border-border shadow-none"
-          onClick={() => navigate("/products")}
-        >
-          View all products
-        </Button>
-      </div>
     </div>
   );
 };
