@@ -11,7 +11,7 @@ import ProductShowcase from "@/components/home/ProductShowcase";
 import BestSellers from "@/components/home/BestSellers";
 import TrendingProducts from "@/components/marketplace/TrendingProducts";
 import { FeaturedBrands } from "@/components/home/FeaturedBrands";
-import { LiveDealsTicker } from "@/components/home/LiveDealsTicker";
+// import { LiveDealsTicker } from "@/components/home/LiveDealsTicker";
 import { MarketplaceSubNav } from "@/components/home/MarketplaceSubNav";
 import CTASection from "@/components/home/CTASection";
 import { HomeSection } from "@/components/home/HomeSection";
@@ -21,39 +21,33 @@ const HomePage: React.FC = () => {
   const categories = mockCategories.slice(0, 2);
 
   return (
-    <div className="flex flex-col pb-24 industrial-grain">
+    <div className="flex flex-col pb-20 industrial-grain bg-background min-h-screen">
       <MarketplaceSubNav />
-      <LiveDealsTicker />
       <Hero />
 
-      {/* Hot Deals - High Urgency */}
-      <HomeSection id="flash-deals" variant="red" borderTop withGrid>
+      <HomeSection id="flash-deals" variant="background" className="py-6 lg:py-10">
         <HotDeals />
       </HomeSection>
 
-      {/* Trending Products - Market Momentum */}
-      <HomeSection id="trending" variant="white" withGrid borderBottom>
+      <HomeSection id="trending" variant="white" withGrid borderTop borderBottom className="py-8 lg:py-12">
         <TrendingProducts />
       </HomeSection>
 
-      {/* Best Sellers - Social Proof */}
-      <HomeSection id="best-sellers" variant="background" borderBottom>
+      <HomeSection id="best-sellers" variant="background" className="py-8 lg:py-12">
         <BestSellers />
       </HomeSection>
 
-      {/* Category Navigation - Browsing */}
-      <HomeSection id="categories" variant="muted" withGrid borderBottom>
+      <HomeSection id="categories" variant="muted" withGrid borderTop borderBottom className="py-10 lg:py-16">
         <CategoryGrid />
       </HomeSection>
 
-      {/* Dynamic Category Sections - Deep Dive */}
-      <div className="flex flex-col">
+      <div className="flex flex-col space-y-px bg-border/40">
         {categories.map((category, index) => (
           <React.Fragment key={category.id}>
             <HomeSection
               variant={index % 2 !== 0 ? "background" : "white"}
-              withGrid={index % 2 !== 0}
-              borderBottom
+              withGrid={index % 2 === 0}
+              className="py-10 lg:py-14"
             >
               <ProductShowcase
                 title={category.name}
@@ -80,18 +74,15 @@ const HomePage: React.FC = () => {
         ))}
       </div>
 
-      {/* New Arrivals - Freshness */}
-      <HomeSection id="new-arrivals" variant="white" borderBottom>
+      <HomeSection id="new-arrivals" variant="white" borderBottom className="py-10 lg:py-14">
         <NewArrivals />
       </HomeSection>
 
-      {/* Featured Brands */}
-      <HomeSection variant="background" borderBottom>
+      <HomeSection variant="background" borderBottom className="py-8 lg:py-10">
         <FeaturedBrands />
       </HomeSection>
 
-      {/* Featured Services */}
-      <HomeSection id="services" variant="muted" withGrid borderBottom>
+      <HomeSection id="services" variant="muted" withGrid borderBottom className="py-10 lg:py-16">
         <FeaturedServices />
       </HomeSection>
 
@@ -103,14 +94,13 @@ const HomePage: React.FC = () => {
         variant="dark"
       />
 
-      {/* Featured Products (General) */}
-      <HomeSection id="marketplace" variant="background" borderBottom>
+      <HomeSection id="marketplace" variant="background" className="py-10 lg:py-16">
         <FeaturedProducts />
       </HomeSection>
 
       <CTASection />
 
-      <HomeSection id="suppliers" variant="white" withGrid borderBottom>
+      <HomeSection id="suppliers" variant="white" withGrid borderTop className="py-10 lg:py-16">
         <FeaturedSuppliers />
       </HomeSection>
     </div>

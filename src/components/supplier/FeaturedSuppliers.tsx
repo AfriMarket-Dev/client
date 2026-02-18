@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/Button";
 import { Card, CardContent } from "@/components/ui/Card";
 import { Star, MapPin, CheckCircle } from "lucide-react";
 import { SectionHeader } from "../home/SectionHeader";
-import { mockCompanies } from "@/data/mockData";
+import { mockCompanies, mockProducts } from "@/data/mockData";
 import { ImageWithFallback } from "../common/ImageWithFallback";
 import { RiShieldCheckLine } from "@remixicon/react";
 
@@ -40,6 +40,13 @@ const FeaturedSuppliers: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {companies.map((company) => {
             const rating = Number(company.averageRating ?? 0);
+            
+            // Get products for this company
+            // Get products for this company, filling with others for UI demo if needed
+            const specificProducts = mockProducts.filter(p => p.companyId === company.id);
+            const otherProducts = mockProducts.filter(p => p.companyId !== company.id);
+            const companyProducts = [...specificProducts, ...otherProducts].slice(0, 4);
+
             return (
               <Card
                 key={company.id}
@@ -107,17 +114,47 @@ const FeaturedSuppliers: React.FC = () => {
                       Hot Asset Catalog
                     </div>
                     <div className="grid grid-cols-4 gap-2">
-                      {[1, 2, 3, 4].map((i) => (
-                        <div
-                          key={i}
-                          className="aspect-square rounded bg-muted/30 border border-border/40 overflow-hidden relative group/asset"
-                        >
-                          <ImageWithFallback
-                            src={`https://images.unsplash.com/photo-${1581091226825 + i}?auto=format&fit=crop&q=80&w=100`}
-                            className="w-full h-full object-cover transition-transform group-hover/asset:scale-110"
-                          />
-                        </div>
-                      ))}
+                      {companyProducts.length > 0 ? (
+                        companyProducts.map((product) => (
+                          <div
+                            key={product.id}
+                            className="aspect-square rounded bg-muted/30 border border-border/40 overflow-hidden relative group/asset"
+                          >
+                            <ImageWithFallback
+                              src={product.variants[0]?.images[0] || `https://images.unsplash.com/photo-1581091226825?auto=format&fit=crop&q=80&w=100`}
+                              alt={product.name}
+                              className="w-full h-full object-cover transition-transform group-hover/asset:scale-110"
+                            />
+                          </div>
+                        ))
+                      ) : (
+                        // Fallback if no products found for company
+                        [1, 2, 3, 4].map((i) => (
+                          <div
+                            key={i}
+                            className="aspect-square rounded bg-muted/30 border border-border/40 overflow-hidden relative group/asset"
+                          >
+                            <ImageWithFallback
+                              src={`https://images.unsplash.com/photo-${1581091226825 + i}?auto=format&fit=crop&q=80&w=100`}
+                              className="w-full h-full object-cover transition-transform group-hover/asset:scale-110"
+                            />
+                          </div>
+                        ))
+                      )}
+                      
+                      {/* Fill remaining slots if products < 4 */}
+                      {companyProducts.length > 0 && companyProducts.length < 4 && 
+                        Array.from({ length: 4 - companyProducts.length }).map((_, i) => (
+                          <div
+                            key={`fallback-${i}`}
+                            className="aspect-square rounded bg-muted/30 border border-border/40 overflow-hidden relative group/asset"
+                          >
+                             <div className="w-full h-full bg-muted flex items-center justify-center">
+                                <span className="text-[10px] text-muted-foreground/50">...</span>
+                             </div>
+                          </div>
+                        ))
+                      }
                     </div>
                   </div>
                 </CardContent>
@@ -131,7 +168,6 @@ const FeaturedSuppliers: React.FC = () => {
         <Button
           variant="outline"
           size="lg"
-          className="w-full rounded-lg h-14 font-semibold border-border/60 shadow-none"
           onClick={() => navigate("/suppliers")}
         >
           View all suppliers

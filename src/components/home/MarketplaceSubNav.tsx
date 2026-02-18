@@ -8,6 +8,7 @@ import {
   TrendingUp,
   AlertCircle,
 } from "lucide-react";
+import { LiveDealsTicker } from "@/components/home/LiveDealsTicker";
 
 const QUICK_NODES = [
   { icon: <Zap size={16} />, label: "Flash Deals", href: "#flash-deals" },
@@ -34,7 +35,7 @@ export const MarketplaceSubNav: React.FC = () => {
     e.preventDefault();
     const element = document.querySelector(href);
     if (element) {
-      const offset = 120; // Account for sticky header + subnav + ticker
+      const offset = 180;
       const bodyRect = document.body.getBoundingClientRect().top;
       const elementRect = element.getBoundingClientRect().top;
       const elementPosition = elementRect - bodyRect;
@@ -48,8 +49,7 @@ export const MarketplaceSubNav: React.FC = () => {
   };
 
   return (
-    <div className="w-full sticky top-14 md:top-20 z-40">
-      {/* Simple Commercial Banner Strip */}
+    <div className="w-full sticky top-12 z-40 transition-all duration-300">
       <div className="bg-primary text-white py-1.5 px-3 md:px-4 overflow-hidden border-b border-white/10">
         <div className="max-w-[1600px] mx-auto flex items-center justify-center gap-2 md:gap-4 text-[9px] md:text-[10px] font-bold uppercase tracking-[0.15em] md:tracking-[0.2em]">
           <AlertCircle size={12} />
@@ -62,8 +62,7 @@ export const MarketplaceSubNav: React.FC = () => {
         </div>
       </div>
 
-      {/* The SubNav itself */}
-      <div className="bg-white dark:bg-slate-900 border-b border-border/40 py-2 md:py-3 industrial-grain shadow-sm overflow-hidden">
+      <div className="bg-white dark:bg-slate-900 border-b border-border/40 py-2 md:py-3 industrial-grain shadow-sm overflow-hidden relative z-20">
         <div className="max-w-[1600px] mx-auto px-4 lg:px-6">
           <div className="flex items-center gap-4 md:gap-8 overflow-x-auto no-scrollbar py-1">
             <div className="hidden md:flex items-center gap-1.5 shrink-0 border-r border-border/40 pr-6 mr-2">
@@ -98,6 +97,8 @@ export const MarketplaceSubNav: React.FC = () => {
           </div>
         </div>
       </div>
+
+      <LiveDealsTicker />
     </div>
   );
 };

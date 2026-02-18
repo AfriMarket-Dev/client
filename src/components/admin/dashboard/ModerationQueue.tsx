@@ -32,7 +32,6 @@ export const ModerationQueue: React.FC<ModerationQueueProps> = ({ reports }) => 
       </div>
       <Button
         variant="ghost"
-        className="text-primary font-heading font-bold uppercase text-xs tracking-wider hover:bg-primary/5 rounded-sm h-9"
       >
         View All Reports
       </Button>

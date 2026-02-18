@@ -3,6 +3,7 @@ import { Heart, ShieldCheck, MessageSquare, Star } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import type { Listing, CompanyRef } from "@/app/api/listings";
 import { ImageWithFallback } from "@/components/common/ImageWithFallback";
+import { cn } from "@/lib/utils";
 
 interface ProductCardProps {
   listing: Listing;
@@ -71,14 +72,13 @@ export const ProductCard: React.FC<ProductCardProps> = React.memo(
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-9 w-9 -mt-1 -mr-1 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-full transition-all"
                   onClick={(e) => {
                     e.stopPropagation();
                     onToggleWishlist(e);
                   }}
                 >
                   <Heart
-                    className={`w-5 h-5 ${isInWishlist ? "fill-destructive text-destructive" : ""}`}
+                    className={`${isInWishlist ? "fill-destructive text-destructive" : ""}`}
                   />
                 </Button>
               )}
@@ -139,11 +139,11 @@ export const ProductCard: React.FC<ProductCardProps> = React.memo(
 
           {/* Status Overlays */}
           <div className="absolute top-2 left-2 flex flex-col gap-1">
-            <div className="bg-emerald-600 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-sm uppercase tracking-tighter shadow-sm">
+            <div className="bg-emerald-600 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-sm uppercase tracking-tighter shadow-sm">
               Ready to Ship
             </div>
             {listing.type === "SERVICE" && (
-              <div className="bg-sky-600 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-sm uppercase tracking-tighter shadow-sm">
+              <div className="bg-sky-600 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-sm uppercase tracking-tighter shadow-sm">
                 Verified Pro
               </div>
             )}
@@ -151,45 +151,46 @@ export const ProductCard: React.FC<ProductCardProps> = React.memo(
 
           {onToggleWishlist && (
             <Button
-              variant="secondary"
+              variant="outline"
               size="icon"
-              className="absolute top-2 right-2 h-8 w-8 rounded-full bg-white/90 dark:bg-slate-900/90 shadow-md opacity-0 group-hover:opacity-100 transition-all hover:bg-primary hover:text-white border-none"
+              className={cn("absolute top-2 right-2 shadow-md", {
+                "opacity-0 group-hover:opacity-100": !isInWishlist,
+              })}
               onClick={(e) => {
                 e.stopPropagation();
                 onToggleWishlist(e);
               }}
             >
               <Heart
-                className={`w-3.5 h-3.5 ${isInWishlist ? "fill-current" : ""}`}
+                className={` ${isInWishlist ? "fill-current" : ""}`}
               />
             </Button>
           )}
         </div>
 
-        {/* Dense Operational Metadata */}
         <div className="p-2 md:p-3.5 flex flex-col grow gap-1 md:gap-2.5">
           <div className="space-y-0.5 md:space-y-1">
-            <h3 className="text-[10px] md:text-xs font-sans font-semibold text-foreground/90 leading-tight line-clamp-2 min-h-0 md:min-h-[2rem] group-hover:text-primary transition-colors">
+            <h3 className="text-xs md:text-sm font-sans font-semibold text-foreground/90 leading-tight line-clamp-2 min-h-0 md:min-h-[2.5rem] group-hover:text-primary transition-colors">
               {listing.name}
             </h3>
 
             <div className="flex items-center gap-1.5">
-              <div className="flex items-center text-[10px] font-bold text-foreground font-sans">
+              <div className="flex items-center text-xs md:text-sm font-bold text-foreground font-sans">
                 RWF {price.toLocaleString()}
               </div>
-              <div className="text-[9px] text-muted-foreground font-medium">
+              <div className="text-[10px] text-muted-foreground font-medium">
                 / unit
               </div>
             </div>
           </div>
 
           <div className="hidden md:block space-y-1.5">
-            <div className="flex items-center justify-between text-[10px] text-muted-foreground">
+            <div className="flex items-center justify-between text-xs text-muted-foreground">
               <span>
                 MOQ:{" "}
                 <span className="text-foreground font-semibold">10 units</span>
               </span>
-              <span className="text-[9px] bg-primary/5 text-primary px-1 rounded-sm font-bold tracking-tighter">
+              <span className="text-[10px] bg-primary/5 text-primary px-1 rounded-sm font-bold tracking-tighter">
                 15% OFF
               </span>
             </div>
@@ -229,8 +230,9 @@ export const ProductCard: React.FC<ProductCardProps> = React.memo(
                         className="text-emerald-500 shrink-0"
                       />
                     </div>
-                    <div className="hidden md:flex items-center gap-2 text-[8px] text-muted-foreground font-medium uppercase tracking-tighter">
-                      <span>3Yrs Platform</span>
+                    <div className="hidden md:flex items-center gap-2 text-[10px] text-muted-foreground font-medium uppercase tracking-tighter">
+                      {/* <span>3Yrs Platform</span> */}
+                      <span>{company.type}</span>
                       <span className="w-1 h-1 rounded-full bg-border" />
                       <span>{company.district}</span>
                     </div>
@@ -242,7 +244,7 @@ export const ProductCard: React.FC<ProductCardProps> = React.memo(
             <div className="flex gap-1.5">
               <Button
                 size="sm"
-                className="flex-1 h-6 md:h-7 text-[8px] md:text-[9px] font-bold uppercase tracking-widest rounded-sm"
+                className="flex-1 h-6 md:h-8 text-[10px] font-bold uppercase tracking-widest rounded-sm"
               >
                 Inquiry
               </Button>

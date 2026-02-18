@@ -77,7 +77,7 @@
           "price": 85000000,
           "stock": 3,
           "unit": "unit",
-          "images": ["https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&q=80&w=800"],
+          "images": ["https://images.pexels.com/photos/18214889/pexels-photo-18214889/free-photo-of-construction-site-with-excavator.png?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"],
           "createdAt": "2026-01-10T00:00:00Z",
           "updatedAt": "2026-01-10T00:00:00Z"
         }
@@ -102,7 +102,7 @@
           "price": 14500,
           "stock": 5000,
           "unit": "bar",
-          "images": ["https://images.unsplash.com/photo-1518709766631-a6a7f45921c3?auto=format&fit=crop&q=80&w=800"],
+          "images": ["https://images.pexels.com/photos/10059198/pexels-photo-10059198.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"],
           "createdAt": "2026-01-12T00:00:00Z",
           "updatedAt": "2026-01-12T00:00:00Z"
         }
@@ -127,7 +127,7 @@
           "price": 245000,
           "stock": 15,
           "unit": "set",
-          "images": ["https://images.unsplash.com/photo-1581235720704-06d3acfcb36f?auto=format&fit=crop&q=80&w=800"],
+          "images": ["https://images.pexels.com/photos/5974048/pexels-photo-5974048.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"],
           "createdAt": "2026-01-15T00:00:00Z",
           "updatedAt": "2026-01-15T00:00:00Z"
         }
@@ -152,9 +152,209 @@
           "price": 125000,
           "stock": 1000,
           "unit": "m3",
-          "images": ["https://images.unsplash.com/photo-1533062609742-42821701904a?auto=format&fit=crop&q=80&w=800"],
+          "images": ["https://images.pexels.com/photos/10068081/pexels-photo-10068081.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"],
           "createdAt": "2026-01-18T00:00:00Z",
           "updatedAt": "2026-01-18T00:00:00Z"
+        }
+      ]
+    },
+    {
+      "id": "prod-5",
+      "name": "Monocrystalline Solar Panel 450W",
+      "description": "High-efficiency PV module for residential and commercial solar systems.",
+      "priceType": "FIXED",
+      "isActive": true,
+      "views": 3200,
+      "categoryId": "cat-3",
+      "companyId": "comp-3",
+      "createdAt": "2026-01-20T00:00:00Z",
+      "updatedAt": "2026-01-20T00:00:00Z",
+      "variants": [
+        {
+          "id": "var-5",
+          "name": "450W Panel",
+          "sku": "SOLAR-450W-MONO",
+          "price": 185000,
+          "stock": 200,
+          "unit": "panel",
+          "images": ["https://images.pexels.com/photos/9875415/pexels-photo-9875415.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"],
+          "createdAt": "2026-01-20T00:00:00Z",
+          "updatedAt": "2026-01-20T00:00:00Z"
+        }
+      ]
+    },
+    {
+      "id": "prod-6",
+      "name": "Industrial Safety Helmet",
+      "description": "HDPE hard hat with adjustable suspension and ventilation.",
+      "priceType": "FIXED",
+      "isActive": true,
+      "views": 1800,
+      "categoryId": "cat-4",
+      "companyId": "comp-2",
+      "createdAt": "2026-01-22T00:00:00Z",
+      "updatedAt": "2026-01-22T00:00:00Z",
+      "variants": [
+        {
+          "id": "var-6",
+          "name": "Yellow Standard",
+          "sku": "SAFE-HELM-YEL",
+          "price": 8500,
+          "stock": 500,
+          "unit": "piece",
+          "images": ["https://images.pexels.com/photos/8961066/pexels-photo-8961066.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"],
+          "createdAt": "2026-01-22T00:00:00Z",
+          "updatedAt": "2026-01-22T00:00:00Z"
+        }
+      ]
+    },
+    {
+      "id": "prod-7",
+      "name": "Angle Grinder 900W",
+      "description": "Professional 115mm angle grinder for cutting and grinding.",
+      "priceType": "FIXED",
+      "isActive": true,
+      "views": 1200,
+      "categoryId": "cat-3",
+      "companyId": "comp-1",
+      "createdAt": "2026-01-25T00:00:00Z",
+      "updatedAt": "2026-01-25T00:00:00Z",
+      "variants": [
+        {
+          "id": "var-7",
+          "name": "900W 115mm",
+          "sku": "TOOL-GRIND-900",
+          "price": 65000,
+          "stock": 45,
+          "unit": "unit",
+          "images": ["https://images.pexels.com/photos/3680095/pexels-photo-3680095.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"],
+          "createdAt": "2026-01-25T00:00:00Z",
+          "updatedAt": "2026-01-25T00:00:00Z"
+        }
+      ]
+    },
+    {
+      "id": "prod-8",
+      "name": "Portland Cement 42.5N",
+      "description": "General purpose cement for all construction works.",
+      "priceType": "STARTS_AT",
+      "isActive": true,
+      "views": 4500,
+      "categoryId": "cat-2",
+      "companyId": "comp-2",
+      "createdAt": "2026-01-28T00:00:00Z",
+      "updatedAt": "2026-01-28T00:00:00Z",
+      "variants": [
+        {
+          "id": "var-8",
+          "name": "50kg Bag",
+          "sku": "CEM-PORT-50KG",
+          "price": 13500,
+          "stock": 2000,
+          "unit": "bag",
+          "images": ["https://images.pexels.com/photos/2219024/pexels-photo-2219024.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"],
+          "createdAt": "2026-01-28T00:00:00Z",
+          "updatedAt": "2026-01-28T00:00:00Z"
+        }
+      ]
+    },
+    {
+      "id": "prod-9",
+      "name": "Inverter Welding Machine",
+      "description": "Portable 200A MMA stick welder for site use.",
+      "priceType": "FIXED",
+      "isActive": true,
+      "views": 950,
+      "categoryId": "cat-3",
+      "companyId": "comp-3",
+      "createdAt": "2026-02-01T00:00:00Z",
+      "updatedAt": "2026-02-01T00:00:00Z",
+      "variants": [
+        {
+          "id": "var-9",
+          "name": "200A Kit",
+          "sku": "WELD-INV-200",
+          "price": 145000,
+          "stock": 25,
+          "unit": "kit",
+          "images": ["https://images.pexels.com/photos/2311713/pexels-photo-2311713.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"],
+          "createdAt": "2026-02-01T00:00:00Z",
+          "updatedAt": "2026-02-01T00:00:00Z"
+        }
+      ]
+    },
+    {
+      "id": "prod-10",
+      "name": "Heavy Duty Wheelbarrow",
+      "description": "Construction grade wheelbarrow with pneumatic tyre.",
+      "priceType": "FIXED",
+      "isActive": true,
+      "views": 1600,
+      "categoryId": "cat-1",
+      "companyId": "comp-2",
+      "createdAt": "2026-02-03T00:00:00Z",
+      "updatedAt": "2026-02-03T00:00:00Z",
+      "variants": [
+        {
+          "id": "var-10",
+          "name": "85 Litre",
+          "sku": "TOOL-WB-85L",
+          "price": 45000,
+          "stock": 150,
+          "unit": "unit",
+          "images": ["https://images.pexels.com/photos/3975589/pexels-photo-3975589.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"],
+          "createdAt": "2026-02-03T00:00:00Z",
+          "updatedAt": "2026-02-03T00:00:00Z"
+        }
+      ]
+    },
+    {
+      "id": "prod-11",
+      "name": "H-Frame Scaffolding Set",
+      "description": "Steel H-frame scaffold complete with cross braces.",
+      "priceType": "NEGOTIABLE",
+      "isActive": true,
+      "views": 700,
+      "categoryId": "cat-1",
+      "companyId": "comp-3",
+      "createdAt": "2026-02-05T00:00:00Z",
+      "updatedAt": "2026-02-05T00:00:00Z",
+      "variants": [
+        {
+          "id": "var-11",
+          "name": "Standard Set",
+          "sku": "SCAF-H-SET",
+          "price": 85000,
+          "stock": 300,
+          "unit": "set",
+          "images": ["https://images.pexels.com/photos/1216589/pexels-photo-1216589.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"],
+          "createdAt": "2026-02-05T00:00:00Z",
+          "updatedAt": "2026-02-05T00:00:00Z"
+        }
+      ]
+    },
+    {
+      "id": "prod-12",
+      "name": "Reflective Safety Vest",
+      "description": "High visibility vest with reflective strips, EN ISO 20471.",
+      "priceType": "FIXED",
+      "isActive": true,
+      "views": 2100,
+      "categoryId": "cat-4",
+      "companyId": "comp-2",
+      "createdAt": "2026-02-08T00:00:00Z",
+      "updatedAt": "2026-02-08T00:00:00Z",
+      "variants": [
+        {
+          "id": "var-12",
+          "name": "Orange XL",
+          "sku": "SAFE-VEST-ORG",
+          "price": 3500,
+          "stock": 1000,
+          "unit": "piece",
+          "images": ["https://images.pexels.com/photos/3862601/pexels-photo-3862601.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"],
+          "createdAt": "2026-02-08T00:00:00Z",
+          "updatedAt": "2026-02-08T00:00:00Z"
         }
       ]
     }
@@ -171,7 +371,7 @@
       "views": 450,
       "categoryId": "cat-site-prep",
       "companyId": "comp-3",
-      "images": ["https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&q=80&w=800"],
+      "images": ["https://images.pexels.com/photos/34247810/pexels-photo-34247810/free-photo-of-surveying-team-in-shiselweni-eswatini.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"],
       "createdAt": "2026-01-20T00:00:00Z",
       "updatedAt": "2026-01-20T00:00:00Z"
     },
@@ -185,7 +385,7 @@
       "views": 320,
       "categoryId": "cat-design",
       "companyId": "comp-3",
-      "images": ["https://images.unsplash.com/photo-1581094794329-cd56b5095bb4?auto=format&fit=crop&q=80&w=800"],
+      "images": ["https://images.pexels.com/photos/5584052/pexels-photo-5584052.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"],
       "createdAt": "2026-01-22T00:00:00Z",
       "updatedAt": "2026-01-22T00:00:00Z"
     }

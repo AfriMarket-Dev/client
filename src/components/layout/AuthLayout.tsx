@@ -2,6 +2,7 @@ import { Outlet, Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { type RootState } from "@/app/store";
 import { Building, Star } from "lucide-react";
+import { HeaderLogo } from "./header/HeaderLogo";
 
 export const AuthLayout = () => {
   const { isAuthenticated, user } = useSelector(
@@ -27,14 +28,7 @@ export const AuthLayout = () => {
 
         {/* Brand */}
         <div className="relative z-10">
-          <div className="flex items-center space-x-3 text-primary mb-8">
-            <div className="p-2 bg-primary/20 rounded-sm border border-primary/20 backdrop-blur-sm">
-              <Building className="w-6 h-6" />
-            </div>
-            <span className="text-xl font-heading font-bold uppercase tracking-[0.2em] text-background">
-              AfrikaMarket
-            </span>
-          </div>
+         <HeaderLogo/>
         </div>
 
         {/* Content */}

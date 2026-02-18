@@ -5,12 +5,42 @@ import { useNavigate } from "react-router-dom";
 import { Badge } from "@/components/ui/Badge";
 import { ProductCard } from "@/components/marketplace/catalog/ProductCard";
 import { getMockProducts } from "@/data/mockData";
+import { useGetWishlistQuery, useAddToWishlistMutation, useRemoveFromWishlistMutation } from "@/app/api/wishlist";
+import { toast } from "sonner";
+import { useSelector } from "react-redux";
+import { type RootState } from "@/app/store";
 
 const HotDeals: React.FC = () => {
   const navigate = useNavigate();
   // Use mock data
   const listings = getMockProducts().slice(0, 5);
 
+  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
+  const { data: wishlist = [] } = useGetWishlistQuery(undefined, {
+    skip: !isAuthenticated,
+  });
+  const [addToWishlist] = useAddToWishlistMutation();
+  const [removeFromWishlist] = useRemoveFromWishlistMutation();
+
+  const handleToggleWishlist = async (e: React.MouseEvent, productId: string) => {
+    e.stopPropagation();
+    if (!isAuthenticated) {
+      toast.error("Please login to add to wishlist");
+      return;
+    }
+    try {
+      const isInWishlist = wishlist.some((l: { id: string }) => l.id === productId);
+      if (isInWishlist) {
+        await removeFromWishlist(productId).unwrap();
+        toast.success("Removed from wishlist");
+      } else {
+        await addToWishlist(productId).unwrap();
+        toast.success("Added to wishlist");
+      }
+    } catch (error) {
+      toast.error("Failed to update wishlist");
+    }
+  };
   return (
     <>
       <div className="flex flex-col md:flex-row items-start md:items-end justify-between mb-6 md:mb-12 gap-4 md:gap-6">
@@ -49,7 +79,7 @@ const HotDeals: React.FC = () => {
               <span className="self-center text-muted-foreground/20 font-heading">
                 :
               </span>
-              <div className="bg-white border border-border/50 px-3 py-2 rounded-lg min-w-14 text-center text-emerald-600">
+              <div className="bg-white border border-border/50 px-3 py-2 rounded-lg min-w-14 text-center text-primary">
                 18
               </div>
             </div>
@@ -82,6 +112,8 @@ const HotDeals: React.FC = () => {
               key={listing.id}
               listing={listing}
               onClick={() => navigate(`/products/${listing.id}`)}
+              isInWishlist={wishlist.some((l: { id: string }) => l.id === listing.id)}
+              onToggleWishlist={(e) => handleToggleWishlist(e, listing.id)}
             />
           ))}
         </div>
@@ -91,10 +123,9 @@ const HotDeals: React.FC = () => {
         <Button
           variant="outline"
           size="lg"
-          className="w-full text-emerald-600 border-emerald-200 hover:bg-emerald-50 font-semibold rounded-lg h-14 shadow-none"
           onClick={() => navigate("/products?sort=deals")}
         >
-          See All Deals <ArrowRight className="ml-2 w-4 h-4" />
+          See All Deals <ArrowRight />
         </Button>
       </div>
     </>

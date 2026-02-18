@@ -21,9 +21,6 @@ export const CompactCategoryCard: React.FC<CompactCategoryCardProps> = ({ catego
     >
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded bg-primary/5 text-primary flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors">
-                <Package size={16} strokeWidth={1.5} />
-            </div>
             <h3 className="font-bold text-sm text-foreground group-hover:text-primary transition-colors">
                 {category.name}
             </h3>

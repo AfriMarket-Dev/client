@@ -1,102 +1,158 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { type RootState } from "@/app/store";
 import { HeaderLogo } from "./header/HeaderLogo";
-import { HeaderSearch } from "./header/HeaderSearch";
 import { HeaderUserNav } from "./header/HeaderUserNav";
 import { Button } from "@/components/ui/Button";
-import { Menu } from "lucide-react";
-import { Input } from "@/components/ui/Input";
+import { cn } from "@/lib/utils";
+import { useScroll } from "@/hooks/use-scroll";
+import { Portal, PortalBackdrop } from "@/components/ui/portal";
+import { RiCloseLine, RiMenuLine } from "@remixicon/react";
+
+const navLinks = [
+  { label: "Marketplace", href: "/marketplace" },
+  { label: "Suppliers", href: "/suppliers" },
+];
+
+export function MobileNav() {
+  const [open, setOpen] = React.useState(false);
+  const navigate = useNavigate();
+  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
+
+  return (
+    <div className="md:hidden">
+      <Button
+        aria-controls="mobile-menu"
+        aria-expanded={open}
+        aria-label="Toggle menu"
+        className="md:hidden h-10 w-10 p-0"
+        onClick={() => setOpen(!open)}
+        size="icon"
+        variant="ghost"
+      >
+        {open ? (
+          <RiCloseLine className="size-5" />
+        ) : (
+          <RiMenuLine className="size-5" />
+        )}
+      </Button>
+      {open && (
+        <Portal className="top-14" id="mobile-menu">
+          <PortalBackdrop />
+          <div
+            className={cn(
+              "data-[slot=open]:zoom-in-97 ease-out data-[slot=open]:animate-in",
+              "size-full p-4 bg-background border-t border-border/40"
+            )}
+            data-slot={open ? "open" : "closed"}
+          >
+            <div className="grid gap-y-2">
+              {navLinks.map((link) => (
+                <Button 
+                  className="justify-start text-base font-semibold" 
+                  key={link.label} 
+                  variant="ghost" 
+                  onClick={() => {
+                    navigate(link.href);
+                    setOpen(false);
+                  }}
+                >
+                  {link.label}
+                </Button>
+              ))}
+            </div>
+            {!isAuthenticated && (
+              <div className="mt-8 flex flex-col gap-3">
+                <Button 
+                  className="w-full h-11 text-base font-bold" 
+                  variant="outline"
+                  onClick={() => {
+                    navigate("/auth/signin");
+                    setOpen(false);
+                  }}
+                >
+                  Sign In
+                </Button>
+                <Button 
+                  className="w-full h-11 text-base font-bold"
+                  onClick={() => {
+                    navigate("/auth/signup");
+                    setOpen(false);
+                  }}
+                >
+                  Get Started
+                </Button>
+              </div>
+            )}
+          </div>
+        </Portal>
+      )}
+    </div>
+  );
+}
 
 export const Header: React.FC = () => {
-  const navigate = useNavigate();
+  const scrolled = useScroll(10);
   const { isAuthenticated, user } = useSelector(
     (state: RootState) => state.auth,
   );
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
+  const navigate = useNavigate();
+
   return (
-    <header className="bg-background/80 backdrop-blur-md border-b border-border/40 sticky top-0 z-50">
-      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-14 md:h-20 gap-2">
-          <HeaderLogo />
-
-          <HeaderSearch value={searchQuery} onChange={setSearchQuery} />
-
-          <div className="flex items-center gap-2 md:gap-4 shrink-0">
-            <HeaderUserNav isAuthenticated={isAuthenticated} user={user} />
-
-            {/* Mobile Menu Toggle */}
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="md:hidden h-10 w-10 text-foreground rounded-lg hover:bg-muted/50"
+    <header
+      className={cn("sticky top-0 z-50 w-full border-transparent border-b transition-all duration-300", {
+        "border-border/40 bg-background/80 backdrop-blur-md supports-backdrop-filter:bg-background/50":
+          scrolled,
+      })}
+    >
+      <div className="mx-auto flex h-12 w-full max-w-[1600px] items-center justify-between px-4 sm:px-6 lg:px-8">
+        <HeaderLogo />
+        
+        <div className="hidden items-center gap-1 md:flex">
+          {navLinks.map((link) => (
+            <Button 
+              key={link.label} 
+              size="sm" 
+              variant="ghost" 
+              onClick={() => navigate(link.href)}
+              className="font-heading font-bold text-[11px] tracking-[0.15em] text-muted-foreground/70 hover:text-primary hover:bg-primary/5 rounded-lg px-4 uppercase transition-all"
             >
-              <Menu className="w-6 h-6" />
+              {link.label}
             </Button>
+          ))}
+          
+          <div className="ml-2 pl-2 border-l border-border/40 flex items-center gap-2">
+            {!isAuthenticated ? (
+               <>
+                <Button 
+                  size="sm" 
+                  variant="ghost"
+                  onClick={() => navigate("/auth/signin")}
+                  className="font-heading font-bold uppercase tracking-[0.15em] hover:text-primary hover:bg-primary/5 text-[11px] px-4"
+                >
+                  Sign In
+                </Button>
+                <Button 
+                  size="sm"
+                  onClick={() => navigate("/auth/signup")}
+                  className="font-heading font-bold text-[11px] uppercase tracking-[0.15em] px-5 bg-primary hover:bg-primary/90"
+                >
+                  Get Started
+                </Button>
+               </>
+            ) : (
+                <HeaderUserNav isAuthenticated={isAuthenticated} user={user} />
+            )}
           </div>
+        </div>
+        
+        {/* Mobile View - Logo and Menu mapped differently */}
+        <div className="flex md:hidden items-center gap-2">
+           {isAuthenticated && <HeaderUserNav isAuthenticated={isAuthenticated} user={user} />}
+           <MobileNav />
         </div>
       </div>
-
-      {/* Mobile Menu */}
-      {isMenuOpen && (
-        <div className="md:hidden border-t border-border/40 bg-background/95 backdrop-blur-lg px-4 py-6 space-y-6 animate-in slide-in-from-top-4 duration-300">
-          <div className="relative">
-            <Input
-              placeholder="Search products or services..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="h-12 w-full rounded-lg border-border/50 bg-muted/20"
-            />
-          </div>
-          <nav className="flex flex-col space-y-1">
-            <Button
-              variant="ghost"
-              className="justify-start font-semibold text-base py-3 rounded-lg"
-            >
-              Marketplace
-            </Button>
-            <Button
-              variant="ghost"
-              className="justify-start font-semibold text-base py-3 rounded-lg"
-            >
-              Suppliers
-            </Button>
-            <Button
-              variant="ghost"
-              className="justify-start font-semibold text-base py-3 rounded-lg"
-            >
-              Services
-            </Button>
-          </nav>
-
-          {!isAuthenticated && (
-            <div className="pt-4 border-t border-border/40 space-y-3">
-              <Button
-                variant="outline"
-                className="w-full justify-center font-bold text-base h-11"
-                onClick={() => {
-                  navigate("/auth");
-                  setIsMenuOpen(false);
-                }}
-              >
-                Sign In
-              </Button>
-              <Button
-                className="w-full justify-center font-bold text-base h-11 shadow-md"
-                onClick={() => {
-                  navigate("/auth?mode=register");
-                  setIsMenuOpen(false);
-                }}
-              >
-                Join Free
-              </Button>
-            </div>
-          )}
-        </div>
-      )}
     </header>
   );
 };

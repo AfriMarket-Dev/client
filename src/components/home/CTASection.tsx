@@ -13,8 +13,8 @@ const CTASection: React.FC = () => {
 
       <div className="max-w-7xl mx-auto px-4 lg:px-6 relative z-10">
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 text-primary text-xs font-bold tracking-widest uppercase rounded-full mb-6 border border-primary/20">
-            <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+          <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 text-primary text-xs font-bold tracking-widest uppercase rounded-lg mb-6 border border-primary/20">
+            <div className="w-1.5 h-1.5 rounded-lg bg-primary animate-pulse" />
             Unified Procurement
           </div>
 

@@ -6,6 +6,10 @@ import { useNavigate } from "react-router-dom";
 import { ProductCard } from "@/components/marketplace/catalog/ProductCard";
 import { SectionHeader } from "./SectionHeader";
 import { getMockProducts } from "@/data/mockData";
+import { useGetWishlistQuery, useAddToWishlistMutation, useRemoveFromWishlistMutation } from "@/app/api/wishlist";
+import { toast } from "sonner";
+import { useSelector } from "react-redux";
+import { type RootState } from "@/app/store";
 
 const NewArrivals: React.FC = () => {
   const navigate = useNavigate();
@@ -16,6 +20,33 @@ const NewArrivals: React.FC = () => {
   // });
   // const listings = data?.data ?? [];
   const listings = getMockProducts().slice(0, 10);
+  
+  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
+  const { data: wishlist = [] } = useGetWishlistQuery(undefined, {
+    skip: !isAuthenticated,
+  });
+  const [addToWishlist] = useAddToWishlistMutation();
+  const [removeFromWishlist] = useRemoveFromWishlistMutation();
+
+  const handleToggleWishlist = async (e: React.MouseEvent, productId: string) => {
+    e.stopPropagation();
+    if (!isAuthenticated) {
+      toast.error("Please login to add to wishlist");
+      return;
+    }
+    try {
+      const isInWishlist = wishlist.some((l: { id: string }) => l.id === productId);
+      if (isInWishlist) {
+        await removeFromWishlist(productId).unwrap();
+        toast.success("Removed from wishlist");
+      } else {
+        await addToWishlist(productId).unwrap();
+        toast.success("Added to wishlist");
+      }
+    } catch (error) {
+      toast.error("Failed to update wishlist");
+    }
+  };
 
   return (
     <>
@@ -44,6 +75,8 @@ const NewArrivals: React.FC = () => {
               key={listing.id}
               listing={listing}
               onClick={() => navigate(`/products/${listing.id}`)}
+              isInWishlist={wishlist.some((l: { id: string }) => l.id === listing.id)}
+              onToggleWishlist={(e) => handleToggleWishlist(e, listing.id)}
             />
           ))}
         </div>

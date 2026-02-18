@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/Button";
 import { ProductCard } from "@/components/marketplace/catalog/ProductCard";
 import type { Listing } from "@/app/api/listings";
 import { useNavigate } from "react-router-dom";
+import { ButtonGroup } from "../ui/ButtonGroup";
 
 interface ProductCarouselProps {
   listings: Listing[];
@@ -33,26 +34,23 @@ export const ProductCarousel: React.FC<ProductCarouselProps> = ({
 
   return (
     <div className="relative group/carousel">
-      {/* Navigation Buttons */}
-      {/* Navigation Buttons */}
-      <div className="absolute -top-16 right-0 flex gap-1.5 z-10 bg-white dark:bg-slate-900 p-1 rounded-lg border border-border/40 shadow-sm">
-        <Button
-          variant="ghost"
+      <div className="absolute -top-18 right-0 z-10">
+        <ButtonGroup >
+          <Button
+          variant="outline"
           size="icon"
-          className="h-8 w-8 rounded-md hover:bg-muted hover:text-primary transition-colors"
           onClick={scrollPrev}
         >
-          <ChevronLeft className="w-4 h-4" />
+          <ChevronLeft />
         </Button>
-        <div className="w-px h-4 bg-border/40 my-auto" />
         <Button
-          variant="ghost"
+          variant="outline"
           size="icon"
-          className="h-8 w-8 rounded-md hover:bg-muted hover:text-primary transition-colors"
           onClick={scrollNext}
         >
-          <ChevronRight className="w-4 h-4" />
+          <ChevronRight />
         </Button>
+        </ButtonGroup>
       </div>
 
       {/* Carousel Viewport */}

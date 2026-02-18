@@ -76,7 +76,6 @@ const ProductShowcase: React.FC<ProductShowcaseProps> = ({
           <Button
             variant="outline"
             size="lg"
-            className="w-full rounded-lg h-14 font-semibold border-border/60 shadow-none"
             onClick={() => {
               const url = categoryId
                 ? `/products?type=PRODUCT&category=${categoryId}`

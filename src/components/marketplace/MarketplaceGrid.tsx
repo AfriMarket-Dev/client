@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { Package, Search } from "lucide-react";
+import { Package, Search, Filter, X, Check, ChevronDown, PanelLeftClose, PanelLeftOpen } from "lucide-react";
 import { useSelector } from "react-redux";
 import { type RootState } from "@/app/store";
 import { useGetListingsQuery } from "@/app/api/listings";
@@ -13,7 +13,6 @@ import { Button } from "@/components/ui/Button";
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
@@ -29,6 +28,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/Select";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/Collapsible";
+import { Slider } from "@/components/ui/Slider";
+import { Badge } from "@/components/ui/Badge";
+import { Label } from "@/components/ui/Label";
+import { Switch } from "@/components/ui/Switch";
+import { cn } from "@/lib/utils";
+import { ScrollArea } from "@/components/ui/ScrollArea";
+import { Separator } from "@/components/ui/Separator";
 
 export interface CatalogFiltersState {
   searchQuery: string;
@@ -37,6 +48,8 @@ export interface CatalogFiltersState {
   district: string;
   minPrice: string;
   maxPrice: string;
+  onlyInStock: boolean;
+  companyType: string;
   sortBy: string;
   sortOrder: "ASC" | "DESC";
   page: number;
@@ -49,6 +62,8 @@ export const defaultCatalogFiltersState = (): CatalogFiltersState => ({
   district: "",
   minPrice: "",
   maxPrice: "",
+  onlyInStock: false,
+  companyType: "all",
   sortBy: "createdAt",
   sortOrder: "DESC",
   page: 1,
@@ -60,7 +75,204 @@ interface MarketplaceGridProps {
   onProductClick?: (listing: Listing) => void;
 }
 
-const PAGE_SIZE = 12;
+const PAGE_SIZE = 30;
+
+const COMPANY_TYPES = [
+  { value: "MANUFACTURER", label: "Manufacturer" },
+  { value: "WHOLESALER", label: "Wholesaler" },
+  { value: "RETAILER", label: "Retailer" },
+  { value: "SERVICE_PROVIDER", label: "Service Provider" },
+];
+
+interface FilterContentProps {
+  filters: CatalogFiltersState;
+  activeCategories: any[];
+  priceRange: number[];
+  handleFiltersChange: (updates: Partial<CatalogFiltersState>) => void;
+  handleCategoryChange: (id: string) => void;
+  handleTypeChange: (type: "all" | "PRODUCT" | "SERVICE") => void;
+  handlePriceRangeChange: (value: number[]) => void;
+  handlePriceFilterApply: () => void;
+  setPriceRange: (val: number[]) => void;
+}
+
+// Reusable Filter Content Component
+const FilterContent: React.FC<FilterContentProps> = ({
+  filters,
+  activeCategories,
+  priceRange,
+  handleFiltersChange,
+  handleCategoryChange,
+  handleTypeChange,
+  handlePriceRangeChange,
+  handlePriceFilterApply,
+  setPriceRange,
+}) => {
+  return (
+    <div className="space-y-8 p-1">
+      {/* Category */}
+      <div className="space-y-4">
+        <Label className="uppercase text-xs font-bold text-muted-foreground tracking-wider block mb-2">
+          Category
+        </Label>
+        <Select
+          value={filters.categoryId}
+          onValueChange={handleCategoryChange}
+        >
+          <SelectTrigger className="w-full bg-background">
+            <SelectValue placeholder="Select Category" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Categories</SelectItem>
+            {activeCategories.map((c) => (
+              <SelectItem key={c.id} value={c.id}>
+                {c.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
+      <Separator />
+
+      {/* Company Type */}
+      <div className="space-y-4">
+        <Label className="uppercase text-xs font-bold text-muted-foreground tracking-wider block mb-2">
+          Company Type
+        </Label>
+        <Select
+          value={filters.companyType}
+          onValueChange={(val) => handleFiltersChange({ companyType: val })}
+        >
+          <SelectTrigger className="w-full bg-background">
+            <SelectValue placeholder="All Company Types" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Types</SelectItem>
+            {COMPANY_TYPES.map((t) => (
+              <SelectItem key={t.value} value={t.value}>
+                {t.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
+       <Separator />
+
+      {/* Listing Type */}
+      <div className="space-y-4">
+        <Label className="uppercase text-xs font-bold text-muted-foreground tracking-wider block mb-2">
+          Listing Type
+        </Label>
+        <div className="grid grid-cols-2 gap-2">
+          {(["all", "PRODUCT", "SERVICE"] as const).map((t) => (
+            <Button
+              key={t}
+              variant={filters.type === t ? "default" : "outline"}
+              size="sm"
+              onClick={() => handleTypeChange(t)}
+              className={cn(
+                  "w-full text-xs justify-start",
+                  filters.type === t ? "bg-primary text-primary-foreground" : "bg-background"
+              )}
+            >
+              {filters.type === t && <Check className="w-3 h-3 mr-1" />}
+              {t === "all" ? "Any" : t === "PRODUCT" ? "Product" : "Service"}
+            </Button>
+          ))}
+        </div>
+      </div>
+
+       <Separator />
+
+      {/* Price Range */}
+      <div className="space-y-4">
+        <div className="flex justify-between items-center mb-2">
+          <Label className="uppercase text-xs font-bold text-muted-foreground tracking-wider">
+            Price Range
+          </Label>
+        </div>
+        <Slider
+          defaultValue={[0, 1000000]}
+          value={priceRange}
+          max={2000000}
+          step={10000}
+          minStepsBetweenThumbs={1}
+          onValueChange={handlePriceRangeChange}
+          onValueCommit={handlePriceFilterApply}
+          className="py-4"
+        />
+        <div className="flex items-center justify-between text-xs text-muted-foreground mb-4">
+          <span>{priceRange[0].toLocaleString()} RWF</span>
+          <span>{priceRange[1].toLocaleString()}+ RWF</span>
+        </div>
+        <div className="flex gap-2">
+          <Input
+            type="number"
+            placeholder="Min"
+            value={priceRange[0]}
+            onChange={(e) =>
+              setPriceRange([Number(e.target.value), priceRange[1]])
+            }
+            className="h-8 text-xs bg-background"
+          />
+          <Input
+            type="number"
+            placeholder="Max"
+            value={priceRange[1]}
+            onChange={(e) =>
+              setPriceRange([priceRange[0], Number(e.target.value)])
+            }
+            className="h-8 text-xs bg-background"
+          />
+        </div>
+        <Button
+          variant="secondary"
+          size="sm"
+          className="w-full text-xs mt-2"
+          onClick={handlePriceFilterApply}
+        >
+          Apply Price
+        </Button>
+      </div>
+
+       <Separator />
+
+      {/* District */}
+      <div className="space-y-4">
+        <Label className="uppercase text-xs font-bold text-muted-foreground tracking-wider block mb-2">
+          Location
+        </Label>
+        <Input
+          placeholder="e.g. Gasabo, Kicukiro..."
+          value={filters.district}
+          onChange={(e) => handleFiltersChange({ district: e.target.value })}
+          className="h-9 bg-background"
+        />
+      </div>
+
+       <Separator />
+
+      {/* Availability */}
+      <div className="flex items-center justify-between space-x-2 border p-3 rounded-md border-border bg-background">
+        <Label
+          htmlFor="stock-mode"
+          className="text-sm font-medium cursor-pointer"
+        >
+          In Stock Only
+        </Label>
+        <Switch
+          id="stock-mode"
+          checked={filters.onlyInStock}
+          onCheckedChange={(checked) =>
+            handleFiltersChange({ onlyInStock: checked })
+          }
+        />
+      </div>
+    </div>
+  );
+};
 
 const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({
   initialCategoryId = "all",
@@ -73,9 +285,21 @@ const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({
     categoryId: initialCategoryId,
   }));
   const [page, setPage] = useState(1);
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
+  const [showFilters, setShowFilters] = useState(true);
+  const [priceRange, setPriceRange] = useState([0, 1000000]);
 
-  // Dummy Data for Development
+  // Sync slider with filters
+  useEffect(() => {
+    if (filters.minPrice || filters.maxPrice) {
+      setPriceRange([
+        Number(filters.minPrice) || 0,
+        Number(filters.maxPrice) || 1000000,
+      ]);
+    }
+  }, [filters.minPrice, filters.maxPrice]);
+
+  // Dummy Data
   const dummyCategories = [
     {
       id: "1",
@@ -109,6 +333,7 @@ const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({
         slug: "kigali-cement",
         district: "Kicukiro",
         isVerified: true,
+        type: "MANUFACTURER",
       },
       variants: [
         {
@@ -117,7 +342,7 @@ const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({
           price: 12500,
           stock: 1000,
           images: [
-            "https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&q=80&w=500",
+            "https://images.unsplash.com/photo-1575493438282-4e0fb32d1bdd?q=80&w=735&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
           ],
         },
       ],
@@ -139,6 +364,7 @@ const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({
         slug: "rwanda-steel",
         district: "Bugesera",
         isVerified: true,
+        type: "MANUFACTURER",
       },
       variants: [
         {
@@ -147,7 +373,7 @@ const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({
           price: 9500,
           stock: 500,
           images: [
-            "https://images.unsplash.com/photo-1535063406622-4a0b25e792c3?auto=format&fit=crop&q=80&w=500",
+            "https://images.unsplash.com/photo-1589746971827-aa1dad5c9ed9?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
           ],
         },
       ],
@@ -168,6 +394,7 @@ const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({
         slug: "buildtech",
         district: "Gasabo",
         isVerified: true,
+        type: "SERVICE_PROVIDER",
       },
       variants: [
         {
@@ -176,7 +403,7 @@ const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({
           price: 350000,
           stock: 1,
           images: [
-            "https://images.unsplash.com/photo-1567156948011-d055a6d9255a?auto=format&fit=crop&q=80&w=500",
+            "https://images.unsplash.com/photo-1628645419184-26a1f2757340?q=80&w=764&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
           ],
         },
       ],
@@ -198,6 +425,7 @@ const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({
         slug: "urban-design",
         district: "Nyarugenge",
         isVerified: true,
+        type: "SERVICE_PROVIDER",
       },
       variants: [
         {
@@ -206,7 +434,7 @@ const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({
           price: 50000,
           stock: 1,
           images: [
-            "https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&q=80&w=500",
+            "https://images.unsplash.com/photo-1721244654392-9c912a6eb236?q=80&w=1129&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
           ],
         },
       ],
@@ -227,6 +455,7 @@ const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({
         slug: "color-world",
         district: "Gasabo",
         isVerified: false,
+        type: "RETAILER",
       },
       variants: [
         {
@@ -235,7 +464,7 @@ const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({
           price: 45000,
           stock: 200,
           images: [
-            "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&q=80&w=500",
+            "https://images.pexels.com/photos/1902415/pexels-photo-1902415.jpeg?auto=compress&cs=tinysrgb&w=600&loading=lazy",
           ],
         },
       ],
@@ -260,6 +489,9 @@ const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({
     district: filters.district.trim() || undefined,
     minPrice: filters.minPrice ? Number(filters.minPrice) : undefined,
     maxPrice: filters.maxPrice ? Number(filters.maxPrice) : undefined,
+    inStock: filters.onlyInStock ? true : undefined,
+    companyType:
+      filters.companyType === "all" ? undefined : filters.companyType,
     sortBy: filters.sortBy,
     sortOrder: filters.sortOrder,
   });
@@ -274,9 +506,6 @@ const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({
   const [addToWishlist] = useAddToWishlistMutation();
   const [removeFromWishlist] = useRemoveFromWishlistMutation();
 
-  const listings = listData?.data ?? [];
-  const meta = listData?.meta;
-  const categories = categoriesData?.data ?? [];
   const wishlistIds = new Set(
     Array.isArray(wishlist) ? wishlist.map((l: { id: string }) => l.id) : [],
   );
@@ -296,24 +525,22 @@ const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({
 
   const handleClearFilters = () => {
     setFilters(defaultCatalogFiltersState());
+    setPriceRange([0, 1000000]);
     setPage(1);
   };
 
-  // Use dummy data if API returns empty
-  const isDummyMode = !listData?.data || listData.data.length === 0;
+  const handlePriceRangeChange = (value: number[]) => {
+    setPriceRange(value);
+  };
 
-  const activeListings = isDummyMode ? dummyListings : listData.data;
-  const activeCategories =
-    categoriesData?.data && categoriesData.data.length > 0
-      ? categoriesData.data
-      : dummyCategories;
-
-  // Create activeMeta to support pagination in dummy mode
-  const activeMeta = isDummyMode
-    ? { page, limit: PAGE_SIZE, total: 50, totalPages: 5 } // 5 pages of dummy data
-    : listData.meta;
-
-  const showDummyWarning = !listData?.data || listData.data.length === 0;
+  const applyPriceFilter = () => {
+    setFilters((f) => ({
+      ...f,
+      minPrice: priceRange[0].toString(),
+      maxPrice: priceRange[1].toString(),
+      page: 1,
+    }));
+  };
 
   const handleTypeChange = (type: "all" | "PRODUCT" | "SERVICE") => {
     setFilters((f) => ({ ...f, type, page: 1 }));
@@ -322,179 +549,323 @@ const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({
   const handleCategoryChange = (categoryId: string) => {
     setFilters((f) => ({
       ...f,
-      categoryId: f.categoryId === categoryId ? "all" : categoryId,
+      categoryId,
       page: 1,
     }));
   };
 
+  // Client-side filtering for dummy mode
+  const isDummyMode = true;
+
+  const filteredDummyListings = dummyListings.filter((item) => {
+    // Search
+    if (
+      filters.searchQuery &&
+      !item.name.toLowerCase().includes(filters.searchQuery.toLowerCase()) &&
+      !item.description
+        ?.toLowerCase()
+        .includes(filters.searchQuery.toLowerCase())
+    ) {
+      return false;
+    }
+
+    // Category
+    if (
+      filters.categoryId !== "all" &&
+      item.category.id !== filters.categoryId
+    ) {
+      return false;
+    }
+
+    // Type
+    if (filters.type !== "all" && item.type !== filters.type) {
+      return false;
+    }
+
+    // Company Type
+    if (
+      filters.companyType !== "all" &&
+      item.company?.type !== filters.companyType
+    ) {
+      return false;
+    }
+
+    // District
+    if (
+      filters.district &&
+      !item.company.district
+        ?.toLowerCase()
+        .includes(filters.district.toLowerCase())
+    ) {
+      return false;
+    }
+
+    // Price
+    const itemPrice = item.variants?.[0]?.price || 0;
+    if (filters.minPrice && itemPrice < Number(filters.minPrice)) return false;
+    if (filters.maxPrice && itemPrice > Number(filters.maxPrice)) return false;
+
+    // Stock
+    if (filters.onlyInStock) {
+      const hasStock = item.variants?.some((v) => v.stock > 0);
+      if (!hasStock) return false;
+    }
+
+    return true;
+  });
+
+  const activeListings = isDummyMode
+    ? filteredDummyListings
+    : listData?.data ?? [];
+  const activeCategories =
+    categoriesData?.data && categoriesData.data.length > 0
+      ? categoriesData.data
+      : dummyCategories;
+
+  const activeMeta = isDummyMode
+    ? {
+        page,
+        limit: PAGE_SIZE,
+        total: filteredDummyListings.length,
+        totalPages: Math.ceil(filteredDummyListings.length / PAGE_SIZE),
+      }
+    : listData?.meta;
+
+  const commonFilterProps = {
+    filters,
+    activeCategories,
+    priceRange,
+    handleFiltersChange,
+    handleCategoryChange,
+    handleTypeChange,
+    handlePriceRangeChange,
+    handlePriceFilterApply: applyPriceFilter,
+    setPriceRange,
+  };
+
   return (
     <div className="min-h-screen bg-background pb-20">
-      {/* Premium Editorial Header */}
-      <div className="relative bg-muted/20 border-b border-border mb-8">
-        <div className="max-w-7xl mx-auto px-4 md:px-6 py-12 md:py-16">
-          <h1 className="text-4xl md:text-5xl font-heading font-black uppercase tracking-tight text-foreground mb-4">
-            Marketplace
-          </h1>
-          <p className="text-muted-foreground text-lg max-w-2xl font-light leading-relaxed">
-            Source premium materials, equipment, and professional services from
-            verified African suppliers.
-          </p>
-        </div>
-      </div>
-
-      <div className="max-w-7xl mx-auto px-4 md:px-6">
-        {/* Type Toggle & Categories */}
-        <div className="flex flex-col gap-6 mb-8 sticky top-16 z-30 bg-background/95 backdrop-blur-md py-4 -mx-4 px-4 md:mx-0 md:px-0 border-b md:border-none border-border transition-all">
-          <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
-            {/* Search & Type Toggle */}
-            <div className="flex flex-col sm:flex-row w-full md:w-auto gap-3 items-center">
-              <div className="relative flex-1 md:w-80 w-full">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                <Input
-                  placeholder="Search..."
-                  className="pl-9 bg-muted/30 border-border rounded-sm focus:ring-1 focus:ring-primary h-10"
-                  value={filters.searchQuery}
-                  onChange={(e) =>
-                    handleFiltersChange({ searchQuery: e.target.value })
-                  }
-                />
+      <div className="max-w-[1600px] mx-auto px-4 md:px-6 py-8">
+        <div className="flex flex-col lg:flex-row gap-8 items-start">
+      
+          {showFilters && (
+            <aside className="hidden lg:block w-72 shrink-0 sticky top-24 h-[calc(100vh-6rem)] transition-all duration-300">
+              <div className="flex items-center justify-between mb-4 pr-4">
+                <h2 className="text-lg font-heading font-bold uppercase tracking-wide flex items-center gap-2">
+               Filters
+                </h2>
+                <div className="flex items-center gap-2">
+                    <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-6 text-[10px] uppercase font-bold text-muted-foreground hover:text-destructive"
+                    onClick={handleClearFilters}
+                    >
+                    Reset
+                    </Button>
+                    <Button
+                        variant="ghost" 
+                        size="icon"
+                        className="h-8 w-8 text-muted-foreground hover:text-foreground md:hidden" 
+                        onClick={() => setShowFilters(false)}
+                    >
+                         <PanelLeftClose className="w-4 h-4" />
+                    </Button>
+                </div>
               </div>
-
-              <div className="flex p-1 bg-muted/30 rounded-sm border border-border w-full sm:w-auto">
-                {(["all", "PRODUCT", "SERVICE"] as const).map((type) => (
-                  <button
-                    key={type}
-                    onClick={() => handleTypeChange(type)}
-                    className={`flex-1 sm:flex-none px-4 py-1.5 text-xs font-bold uppercase tracking-wider rounded-sm transition-all ${
-                      filters.type === type
-                        ? "bg-background text-primary shadow-sm ring-1 ring-border"
-                        : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
-                    }`}
-                  >
-                    {type === "all"
-                      ? "All"
-                      : type === "PRODUCT"
-                        ? "Products"
-                        : "Services"}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Sort Options */}
-            <div className="flex items-center gap-3 w-full md:w-auto justify-end">
-              <span className="text-muted-foreground text-xs font-bold uppercase tracking-widest hidden md:inline-block">
-                {listData?.meta?.total ?? 5} Items
-              </span>
-              <Select
-                value={`${filters.sortBy}-${filters.sortOrder}`}
-                onValueChange={(val) => {
-                  const [sortBy, sortOrder] = val.split("-");
-                  handleFiltersChange({
-                    sortBy: sortBy as any,
-                    sortOrder: sortOrder as any,
-                  });
-                }}
-              >
-                <SelectTrigger className="w-[160px] h-10 border-border bg-background rounded-sm text-xs font-bold uppercase tracking-wide">
-                  <SelectValue placeholder="Sort By" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="createdAt-desc">
-                    Newest Arrivals
-                  </SelectItem>
-                  <SelectItem value="price-asc">Price: Low to High</SelectItem>
-                  <SelectItem value="price-desc">Price: High to Low</SelectItem>
-                  <SelectItem value="name-asc">Name: A to Z</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-
-          {/* Horizontal Category Scroll */}
-          {/* Using dummyCategories if loaded is empty/loading since we want to show UI */}
-          {activeCategories.length > 0 && (
-            <div className="w-full overflow-x-auto no-scrollbar pb-2 -mb-2">
-              <div className="flex gap-2">
-                <button
-                  onClick={() => handleCategoryChange("all")}
-                  className={`shrink-0 px-3 py-1.5 text-xs font-bold uppercase tracking-wide border rounded-sm transition-colors ${
-                    filters.categoryId === "all" || !filters.categoryId
-                      ? "bg-primary text-primary-foreground border-primary"
-                      : "bg-background text-muted-foreground border-border hover:border-primary/50 hover:text-foreground"
-                  }`}
-                >
-                  All Categories
-                </button>
-                {activeCategories.map((cat) => (
-                  <button
-                    key={cat.id}
-                    onClick={() => handleCategoryChange(cat.id)}
-                    className={`shrink-0 px-3 py-1.5 text-xs font-bold uppercase tracking-wide border rounded-sm transition-colors ${
-                      filters.categoryId === cat.id
-                        ? "bg-primary text-primary-foreground border-primary"
-                        : "bg-background text-muted-foreground border-border hover:border-primary/50 hover:text-foreground"
-                    }`}
-                  >
-                    {cat.name}
-                  </button>
-                ))}
-              </div>
-            </div>
+              
+              <ScrollArea className="h-[calc(100vh-10rem)] pr-4">
+                 <FilterContent {...commonFilterProps} />
+              </ScrollArea>
+            </aside>
           )}
-        </div>
 
-        {false ? ( // Forced false to show data for now, or revert to listLoading if needed. actually listLoading might be true initially.
-          // Let's use listLoading BUT if we have dummy data we show it.
-          // Since we want to show dummy data, we should probably ignore loading state if we are showing dummy data.
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {Array.from({ length: 8 }).map((_, i) => (
-              <div
-                key={i}
-                className="aspect-[4/5] rounded-sm border border-border bg-muted/10 animate-pulse"
-              />
-            ))}
-          </div>
-        ) : (
-          <>
-            <div
-              className={
-                viewMode === "grid"
-                  ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-6 gap-y-10"
-                  : "flex flex-col gap-6"
-              }
-            >
-              {activeListings.map((listing) => (
-                <ProductCard
-                  key={listing.id}
-                  listing={listing}
-                  viewMode={viewMode}
-                  onSupplierClick={(e) =>
-                    listing.company &&
-                    handleSupplierClick(
-                      e,
-                      (listing.company as { id: string }).id,
-                    )
-                  }
-                  onClick={() => onProductClick?.(listing)}
-                  isInWishlist={isAuthenticated && wishlistIds.has(listing.id)}
-                  onToggleWishlist={
-                    isAuthenticated
-                      ? (e) => {
-                          e.stopPropagation();
-                          if (wishlistIds.has(listing.id)) {
-                            removeFromWishlist(listing.id);
-                          } else {
-                            addToWishlist(listing.id);
-                          }
+          {/* Main Content */}
+          <div className="flex-1 min-w-0">
+            {/* Toolbar & Mobile Filters */}
+            <div className="flex flex-col gap-4 mb-6 sticky top-16 lg:top-0 z-30 bg-background/95 backdrop-blur-md py-4 border-b border-border">
+              <div className="flex gap-4 items-center">
+                 {/* Desktop Toggle Button (when hidden) */}
+                 <Button
+                    variant="outline"
+                    size="icon"
+                    className={cn(
+                        "hidden lg:flex shrink-0",
+                        showFilters && "bg-muted/50"
+                    )}
+                    onClick={() => setShowFilters(!showFilters)}
+                    title={showFilters ? "Hide Filters" : "Show Filters"}
+                 >
+                     {showFilters ? <PanelLeftClose className="w-5 h-5 text-muted-foreground" /> : <PanelLeftOpen className="w-5 h-5 text-muted-foreground"/>}
+                 </Button>
+
+                {/* Mobile Filter Toggle */}
+                <div className="lg:hidden w-full sm:w-auto">
+                    <Collapsible
+                    open={isMobileFiltersOpen}
+                    onOpenChange={setIsMobileFiltersOpen}
+                    className="w-full"
+                    >
+                    <CollapsibleTrigger 
+                        className={cn(
+                            "inline-flex items-center justify-between whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 w-full sm:w-auto gap-2 shrink-0 sm:justify-center"
+                        )}
+                    >
+                        <span className="flex items-center gap-2">
+                            <Filter className="w-4 h-4" />
+                            Filters
+                            {(filters.minPrice ||
+                            filters.maxPrice ||
+                            filters.district ||
+                            filters.type !== "all" ||
+                            filters.categoryId !== "all" ||
+                            filters.onlyInStock ||
+                            filters.companyType !== "all") && (
+                            <Badge
+                                variant="secondary"
+                                className="ml-1 h-5 px-1.5 text-[10px]"
+                            >
+                                Active
+                            </Badge>
+                            )}
+                        </span>
+                        <ChevronDown className={`w-4 h-4 transition-transform ${isMobileFiltersOpen ? 'rotate-180' : ''}`} />
+                    </CollapsibleTrigger>
+                    <CollapsibleContent className="mt-4 p-4 border rounded-md bg-background shadow-sm space-y-6">
+                        <div className="flex items-center justify-between mb-2">
+                             <h3 className="font-heading font-bold uppercase text-sm">Refine Search</h3>
+                             <Button variant="ghost" size="sm" onClick={handleClearFilters} className="text-xs h-6">Reset All</Button>
+                        </div>
+                        <FilterContent {...commonFilterProps} />
+                         <Button onClick={() => setIsMobileFiltersOpen(false)} className="w-full mt-4">Close Filters</Button>
+                    </CollapsibleContent>
+                    </Collapsible>
+                </div>
+
+                <div className="relative flex-1 hidden sm:block">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                  <Input
+                    placeholder="Search products, services..."
+                    className="pl-9 bg-muted/30 border-border rounded-sm focus:ring-1 focus:ring-primary h-10 w-full"
+                    value={filters.searchQuery}
+                    onChange={(e) =>
+                      handleFiltersChange({ searchQuery: e.target.value })
+                    }
+                  />
+                </div>
+              </div>
+
+               {/* Mobile Search (visible only on mobile) */}
+               <div className="relative flex-1 sm:hidden">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                  <Input
+                    placeholder="Search..."
+                    className="pl-9 bg-muted/30 border-border rounded-sm focus:ring-1 focus:ring-primary h-10 w-full"
+                    value={filters.searchQuery}
+                    onChange={(e) =>
+                      handleFiltersChange({ searchQuery: e.target.value })
+                    }
+                  />
+                </div>
+
+              {/* Active Filters Badges (Mobile/Desktop) */}
+              {(filters.categoryId !== "all" ||
+                filters.type !== "all" ||
+                filters.companyType !== "all" ||
+                filters.district ||
+                filters.minPrice ||
+                filters.maxPrice ||
+                filters.onlyInStock) && (
+                <div className="flex flex-wrap gap-2 items-center">
+                  {filters.categoryId !== "all" && (
+                    <Badge
+                      variant="secondary"
+                      className="gap-1 rounded-sm text-[10px] pl-2 pr-1 h-6"
+                    >
+                      {activeCategories.find((c) => c.id === filters.categoryId)
+                        ?.name || "Category"}
+                      <X
+                        className="w-3 h-3 hover:text-destructive cursor-pointer"
+                        onChange={() => handleCategoryChange("all")}
+                        onClick={() => handleCategoryChange("all")}
+                      />
+                    </Badge>
+                  )}
+                  {filters.companyType !== "all" && (
+                    <Badge
+                      variant="secondary"
+                      className="gap-1 rounded-sm text-[10px] pl-2 pr-1 h-6"
+                    >
+                      {COMPANY_TYPES.find(
+                        (t) => t.value === filters.companyType,
+                      )?.label || filters.companyType}
+                      <X
+                        className="w-3 h-3 hover:text-destructive cursor-pointer"
+                        onClick={() =>
+                          handleFiltersChange({ companyType: "all" })
                         }
-                      : undefined
-                  }
-                />
-              ))}
+                      />
+                    </Badge>
+                  )}
+                  {filters.type !== "all" && (
+                    <Badge
+                      variant="secondary"
+                      className="gap-1 rounded-sm text-[10px] pl-2 pr-1 h-6"
+                    >
+                      {filters.type}
+                      <X
+                        className="w-3 h-3 hover:text-destructive cursor-pointer"
+                        onClick={() => handleFiltersChange({ type: "all" })}
+                      />
+                    </Badge>
+                  )}
+                  {filters.district && (
+                    <Badge
+                      variant="secondary"
+                      className="gap-1 rounded-sm text-[10px] pl-2 pr-1 h-6"
+                    >
+                      Loc: {filters.district}
+                      <X
+                        className="w-3 h-3 hover:text-destructive cursor-pointer"
+                        onClick={() => handleFiltersChange({ district: "" })}
+                      />
+                    </Badge>
+                  )}
+                  {(filters.minPrice || filters.maxPrice) && (
+                    <Badge
+                      variant="secondary"
+                      className="gap-1 rounded-sm text-[10px] pl-2 pr-1 h-6"
+                    >
+                      {Number(filters.minPrice || 0).toLocaleString()} -{" "}
+                      {Number(filters.maxPrice || 1000000).toLocaleString()} RWF
+                      <X
+                        className="w-3 h-3 hover:text-destructive cursor-pointer"
+                        onClick={() =>
+                          handleFiltersChange({ minPrice: "", maxPrice: "" })
+                        }
+                      />
+                    </Badge>
+                  )}
+                  {filters.onlyInStock && (
+                    <Badge
+                      variant="secondary"
+                      className="gap-1 rounded-sm text-[10px] pl-2 pr-1 h-6"
+                    >
+                      In Stock
+                      <X
+                        className="w-3 h-3 hover:text-destructive cursor-pointer"
+                        onClick={() =>
+                          handleFiltersChange({ onlyInStock: false })
+                        }
+                      />
+                    </Badge>
+                  )}
+                </div>
+              )}
             </div>
 
-            {activeListings.length === 0 && (
+            {/* Results */}
+            {activeListings.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-24 text-center border border-dashed border-border rounded-sm bg-muted/5">
                 <div className="w-20 h-20 bg-muted/20 rounded-full flex items-center justify-center mb-6">
                   <Package className="w-10 h-10 text-muted-foreground/50" />
@@ -514,79 +885,120 @@ const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({
                   Reset All Filters
                 </Button>
               </div>
-            )}
-
-            {activeMeta && activeMeta.totalPages > 1 && (
-              <div className="mt-16 pt-8 border-t border-border">
-                <Pagination>
-                  <PaginationContent>
-                    <PaginationItem>
-                      <PaginationPrevious
-                        href="#"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          if (page > 1) setPage(page - 1);
-                        }}
-                        className={
-                          page <= 1
-                            ? "pointer-events-none opacity-50"
-                            : "cursor-pointer"
-                        }
-                      />
-                    </PaginationItem>
-
-                    {/* Page Numbers - Simple Sliding Window */}
-                    {Array.from({
-                      length: Math.min(5, activeMeta.totalPages),
-                    }).map((_, i) => {
-                      let pNum = i + 1;
-                      if (activeMeta.totalPages > 5) {
-                        if (page > 3) pNum = page - 2 + i;
-                        // Adjust if we are near the end
-                        if (activeMeta.totalPages - page < 2) {
-                          pNum = activeMeta.totalPages - 4 + i;
-                        }
-                        // Safety clamp
-                        if (pNum < 1) pNum = i + 1;
+            ) : (
+              <>
+                <div
+                  className={
+                    viewMode === "grid"
+                        ? cn(
+                            "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6",
+                            showFilters ? "xl:grid-cols-4" : "xl:grid-cols-5"
+                          )
+                        : "flex flex-col gap-6"
+                  }
+                >
+                  {activeListings.map((listing) => (
+                    <ProductCard
+                      key={listing.id}
+                      listing={listing}
+                      viewMode={viewMode}
+                      onSupplierClick={(e) =>
+                        listing.company &&
+                        handleSupplierClick(
+                          e,
+                          (listing.company as { id: string }).id,
+                        )
                       }
+                      onClick={() => onProductClick?.(listing)}
+                      isInWishlist={
+                        isAuthenticated && wishlistIds.has(listing.id)
+                      }
+                      onToggleWishlist={
+                        isAuthenticated
+                          ? (e) => {
+                              e.stopPropagation();
+                              if (wishlistIds.has(listing.id)) {
+                                removeFromWishlist(listing.id);
+                              } else {
+                                addToWishlist(listing.id);
+                              }
+                            }
+                          : undefined
+                      }
+                    />
+                  ))}
+                </div>
 
-                      return (
-                        <PaginationItem key={pNum}>
-                          <PaginationLink
+                {/* Pagination */}
+                {activeMeta && activeMeta.totalPages > 1 && (
+                  <div className="mt-16 pt-8 border-t border-border">
+                    <Pagination>
+                      <PaginationContent>
+                        <PaginationItem>
+                          <PaginationPrevious
                             href="#"
-                            isActive={page === pNum}
                             onClick={(e) => {
                               e.preventDefault();
-                              setPage(pNum);
+                              if (page > 1) setPage(page - 1);
                             }}
-                            className="cursor-pointer"
-                          >
-                            {pNum}
-                          </PaginationLink>
+                            className={
+                              page <= 1
+                                ? "pointer-events-none opacity-50"
+                                : "cursor-pointer"
+                            }
+                          />
                         </PaginationItem>
-                      );
-                    })}
-
-                    <PaginationItem>
-                      <PaginationNext
-                        href="#"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          if (page < activeMeta.totalPages) setPage(page + 1);
-                        }}
-                        className={
-                          page >= activeMeta.totalPages
-                            ? "pointer-events-none opacity-50"
-                            : "cursor-pointer"
-                        }
-                      />
-                    </PaginationItem>
-                  </PaginationContent>
-                </Pagination>
-              </div>
+                        {/* Page Numbers */}
+                        {Array.from({
+                          length: Math.min(5, activeMeta.totalPages),
+                        }).map((_, i) => {
+                          let pNum = i + 1;
+                          if (activeMeta.totalPages > 5) {
+                            if (page > 3) pNum = page - 2 + i;
+                            if (activeMeta.totalPages - page < 2) {
+                              pNum = activeMeta.totalPages - 4 + i;
+                            }
+                            if (pNum < 1) pNum = i + 1;
+                          }
+                          return (
+                            <PaginationItem key={pNum}>
+                              <PaginationLink
+                                href="#"
+                                isActive={page === pNum}
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  setPage(pNum);
+                                }}
+                                className="cursor-pointer"
+                              >
+                                {pNum}
+                              </PaginationLink>
+                            </PaginationItem>
+                          );
+                        })}
+                        <PaginationItem>
+                          <PaginationNext
+                            href="#"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              if (page < activeMeta.totalPages)
+                                setPage(page + 1);
+                            }}
+                            className={
+                              page >= activeMeta.totalPages
+                                ? "pointer-events-none opacity-50"
+                                : "cursor-pointer"
+                            }
+                          />
+                        </PaginationItem>
+                      </PaginationContent>
+                    </Pagination>
+                  </div>
+                )}
+              </>
             )}
-          </>
-        )}
+          </div>
+        </div>
       </div>
     </div>
   );

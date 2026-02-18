@@ -1,0 +1,293 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 300" width="780" height="300">
+<defs>
+
+  <!-- Vertical gradient: golden amber → deep crimson (icon coordinate space) -->
+  <linearGradient id="ig" x1="0" y1="18" x2="0" y2="290" gradientUnits="userSpaceOnUse">
+    <stop offset="0%"   stop-color="#F7A91F"/>
+    <stop offset="48%"  stop-color="#DE4800"/>
+    <stop offset="100%" stop-color="#7A0E0E"/>
+  </linearGradient>
+
+</defs>
+
+
+<!-- ═══════════════════════════════════════════════════
+     AFRICA SILHOUETTE
+     Clockwise from Morocco (NW), Horn on east, southern tip, up west coast
+════════════════════════════════════════════════════ -->
+
+<!-- Ghost fill -->
+<path d="
+  M 76,22
+  C 98,12 122,8  144,12
+  L 172,17
+  C 186,22 194,36 194,52
+  L 194,74
+  C 198,86 208,98 210,110
+  C 213,122 206,134 197,142
+  L 196,167
+  C 193,184 181,204 167,220
+  L 147,242
+  C 137,256 120,266 118,266
+  C 107,264 94,254 80,240
+  L 57,217 L 39,192 L 31,163 L 26,133 L 23,105
+  C 19,85 18,68 28,56
+  C 35,46 32,35 42,27
+  L 63,20 Z
+" fill="url(#ig)" opacity="0.08"/>
+
+<!-- Africa outline -->
+<path d="
+  M 76,22
+  C 98,12 122,8  144,12
+  L 172,17
+  C 186,22 194,36 194,52
+  L 194,74
+  C 198,86 208,98 210,110
+  C 213,122 206,134 197,142
+  L 196,167
+  C 193,184 181,204 167,220
+  L 147,242
+  C 137,256 120,266 118,266
+  C 107,264 94,254 80,240
+  L 57,217 L 39,192 L 31,163 L 26,133 L 23,105
+  C 19,85 18,68 28,56
+  C 35,46 32,35 42,27
+  L 63,20 Z
+" fill="none" stroke="url(#ig)" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+
+<!-- Madagascar island -->
+<path d="
+  M 223,150
+  C 229,138 236,150 236,166
+  C 237,182 229,200 221,205
+  C 214,208 210,198 212,184
+  C 213,170 219,160 223,150 Z
+" fill="url(#ig)" opacity="0.35" stroke="url(#ig)" stroke-width="2"/>
+
+
+<!-- ═══════════════════════════════════════════════════
+     NETWORK LINES  —  tree-branch triangulation mesh
+     Levels T(trunk) → F1 → Z1 → Z2 → Z3 → Z4 → TOP
+════════════════════════════════════════════════════ -->
+
+<g stroke="url(#ig)" stroke-linecap="round" stroke-linejoin="round" fill="none">
+
+  <!-- ── TRUNK (central spine) ── -->
+  <line x1="118" y1="230" x2="118" y2="200" stroke-width="2.6"/>
+  <line x1="118" y1="200" x2="118" y2="175" stroke-width="2.6"/>
+
+  <!-- ── MAIN FORK from (118,175) ── -->
+  <line x1="118" y1="175" x2="90"  y2="158" stroke-width="2.3"/>
+  <line x1="118" y1="175" x2="118" y2="148" stroke-width="2.3"/>
+  <line x1="118" y1="175" x2="150" y2="158" stroke-width="2.3"/>
+
+  <!-- ── F1 → ZONE 1 branches ── -->
+  <line x1="90"  y1="158" x2="65"  y2="132" stroke-width="2.1"/>
+  <line x1="90"  y1="158" x2="104" y2="130" stroke-width="2.1"/>
+  <line x1="118" y1="148" x2="104" y2="130" stroke-width="2"/>
+  <line x1="118" y1="148" x2="118" y2="122" stroke-width="2"/>
+  <line x1="118" y1="148" x2="134" y2="130" stroke-width="2"/>
+  <line x1="150" y1="158" x2="134" y2="130" stroke-width="2.1"/>
+  <line x1="150" y1="158" x2="172" y2="132" stroke-width="2.1"/>
+
+  <!-- ── ZONE 1 cross-connections ── -->
+  <line x1="65"  y1="132" x2="104" y2="130" stroke-width="1.9"/>
+  <line x1="104" y1="130" x2="118" y2="122" stroke-width="1.9"/>
+  <line x1="118" y1="122" x2="134" y2="130" stroke-width="1.9"/>
+  <line x1="134" y1="130" x2="172" y2="132" stroke-width="1.9"/>
+
+  <!-- ── ZONE 1 → ZONE 2 branches ── -->
+  <line x1="65"  y1="132" x2="50"  y2="110" stroke-width="2"/>
+  <line x1="65"  y1="132" x2="80"  y2="106" stroke-width="2"/>
+  <line x1="104" y1="130" x2="80"  y2="106" stroke-width="1.9"/>
+  <line x1="104" y1="130" x2="108" y2="104" stroke-width="1.9"/>
+  <line x1="118" y1="122" x2="108" y2="104" stroke-width="1.8"/>
+  <line x1="118" y1="122" x2="132" y2="104" stroke-width="1.8"/>
+  <line x1="134" y1="130" x2="132" y2="104" stroke-width="1.9"/>
+  <line x1="134" y1="130" x2="158" y2="108" stroke-width="1.9"/>
+  <line x1="172" y1="132" x2="158" y2="108" stroke-width="2"/>
+  <line x1="172" y1="132" x2="180" y2="113" stroke-width="2"/>
+
+  <!-- ── ZONE 2 cross-connections ── -->
+  <line x1="50"  y1="110" x2="80"  y2="106" stroke-width="1.8"/>
+  <line x1="80"  y1="106" x2="108" y2="104" stroke-width="1.8"/>
+  <line x1="108" y1="104" x2="132" y2="104" stroke-width="1.8"/>
+  <line x1="132" y1="104" x2="158" y2="108" stroke-width="1.8"/>
+  <line x1="158" y1="108" x2="180" y2="113" stroke-width="1.8"/>
+
+  <!-- ── ZONE 2 → ZONE 3 branches ── -->
+  <line x1="50"  y1="110" x2="42"  y2="83"  stroke-width="1.9"/>
+  <line x1="50"  y1="110" x2="65"  y2="80"  stroke-width="1.9"/>
+  <line x1="80"  y1="106" x2="65"  y2="80"  stroke-width="1.8"/>
+  <line x1="80"  y1="106" x2="90"  y2="76"  stroke-width="1.8"/>
+  <line x1="108" y1="104" x2="90"  y2="76"  stroke-width="1.7"/>
+  <line x1="108" y1="104" x2="112" y2="72"  stroke-width="1.7"/>
+  <line x1="132" y1="104" x2="112" y2="72"  stroke-width="1.7"/>
+  <line x1="132" y1="104" x2="138" y2="74"  stroke-width="1.7"/>
+  <line x1="158" y1="108" x2="138" y2="74"  stroke-width="1.8"/>
+  <line x1="158" y1="108" x2="163" y2="81"  stroke-width="1.8"/>
+  <line x1="180" y1="113" x2="163" y2="81"  stroke-width="1.9"/>
+  <line x1="180" y1="113" x2="180" y2="88"  stroke-width="1.9"/>
+
+  <!-- ── ZONE 3 cross-connections ── -->
+  <line x1="42"  y1="83"  x2="65"  y2="80"  stroke-width="1.7"/>
+  <line x1="65"  y1="80"  x2="90"  y2="76"  stroke-width="1.7"/>
+  <line x1="90"  y1="76"  x2="112" y2="72"  stroke-width="1.7"/>
+  <line x1="112" y1="72"  x2="138" y2="74"  stroke-width="1.7"/>
+  <line x1="138" y1="74"  x2="163" y2="81"  stroke-width="1.7"/>
+  <line x1="163" y1="81"  x2="180" y2="88"  stroke-width="1.7"/>
+
+  <!-- ── ZONE 3 → ZONE 4 branches ── -->
+  <line x1="42"  y1="83"  x2="68"  y2="61"  stroke-width="1.8"/>
+  <line x1="65"  y1="80"  x2="68"  y2="61"  stroke-width="1.7"/>
+  <line x1="65"  y1="80"  x2="90"  y2="55"  stroke-width="1.7"/>
+  <line x1="90"  y1="76"  x2="90"  y2="55"  stroke-width="1.6"/>
+  <line x1="90"  y1="76"  x2="110" y2="49"  stroke-width="1.6"/>
+  <line x1="112" y1="72"  x2="110" y2="49"  stroke-width="1.6"/>
+  <line x1="112" y1="72"  x2="132" y2="49"  stroke-width="1.6"/>
+  <line x1="138" y1="74"  x2="132" y2="49"  stroke-width="1.6"/>
+  <line x1="138" y1="74"  x2="156" y2="57"  stroke-width="1.7"/>
+  <line x1="163" y1="81"  x2="156" y2="57"  stroke-width="1.7"/>
+  <line x1="163" y1="81"  x2="175" y2="66"  stroke-width="1.7"/>
+  <line x1="180" y1="88"  x2="175" y2="66"  stroke-width="1.8"/>
+
+  <!-- ── ZONE 4 cross-connections ── -->
+  <line x1="68"  y1="61"  x2="90"  y2="55"  stroke-width="1.6"/>
+  <line x1="90"  y1="55"  x2="110" y2="49"  stroke-width="1.5"/>
+  <line x1="110" y1="49"  x2="132" y2="49"  stroke-width="1.5"/>
+  <line x1="132" y1="49"  x2="156" y2="57"  stroke-width="1.5"/>
+  <line x1="156" y1="57"  x2="175" y2="66"  stroke-width="1.6"/>
+
+  <!-- ── ZONE 4 → TOP branches ── -->
+  <line x1="68"  y1="61"  x2="90"  y2="37"  stroke-width="1.6"/>
+  <line x1="90"  y1="55"  x2="90"  y2="37"  stroke-width="1.5"/>
+  <line x1="90"  y1="55"  x2="112" y2="28"  stroke-width="1.5"/>
+  <line x1="110" y1="49"  x2="112" y2="28"  stroke-width="1.4"/>
+  <line x1="132" y1="49"  x2="128" y2="28"  stroke-width="1.4"/>
+  <line x1="156" y1="57"  x2="128" y2="28"  stroke-width="1.5"/>
+  <line x1="156" y1="57"  x2="150" y2="39"  stroke-width="1.5"/>
+  <line x1="175" y1="66"  x2="150" y2="39"  stroke-width="1.6"/>
+
+  <!-- ── TOP cross-connections ── -->
+  <line x1="90"  y1="37"  x2="112" y2="28"  stroke-width="1.4"/>
+  <line x1="112" y1="28"  x2="128" y2="28"  stroke-width="1.4"/>
+  <line x1="128" y1="28"  x2="150" y2="39"  stroke-width="1.4"/>
+
+</g><!-- /network lines -->
+
+
+<!-- ═══════════════════════════════════════════════════
+     SHOPPING CART  —  integrated at bottom of continent
+     Basket top at y=234, centered at x=118
+════════════════════════════════════════════════════ -->
+
+<g stroke="url(#ig)" stroke-linecap="round" stroke-linejoin="round" fill="none">
+  <!-- Handle arm -->
+  <path d="M 70,244 C 70,234 77,231 84,233" stroke-width="2.8"/>
+  <!-- Basket (trapezoid: wider at top) -->
+  <path d="M 84,233 L 156,233 L 146,272 L 92,272 Z" stroke-width="2.8"/>
+  <!-- Vertical dividers (3, creating 4 columns) -->
+  <line x1="103" y1="233" x2="107" y2="272" stroke-width="2.1"/>
+  <line x1="120" y1="233" x2="119" y2="272" stroke-width="2.1"/>
+  <line x1="138" y1="233" x2="132" y2="272" stroke-width="2.1"/>
+  <!-- Horizontal rails (2 rails) -->
+  <line x1="87"  y1="246" x2="153" y2="246" stroke-width="2.1"/>
+  <line x1="90"  y1="259" x2="149" y2="259" stroke-width="2.1"/>
+  <!-- Axle bar -->
+  <line x1="97"  y1="275" x2="141" y2="275" stroke-width="1.4" opacity="0.4"/>
+</g>
+
+<!-- Cart wheels (solid dark crimson) -->
+<circle cx="107" cy="283" r="9"   fill="#7A0E0E"/>
+<circle cx="107" cy="283" r="4"   fill="none" stroke="#B02222" stroke-width="1.8"/>
+<circle cx="135" cy="283" r="9"   fill="#7A0E0E"/>
+<circle cx="135" cy="283" r="4"   fill="none" stroke="#B02222" stroke-width="1.8"/>
+
+
+<!-- ═══════════════════════════════════════════════════
+     NETWORK NODES  —  dots at every branch junction
+════════════════════════════════════════════════════ -->
+
+<g fill="url(#ig)">
+
+  <!-- Trunk -->
+  <circle cx="118" cy="230" r="6.5"/>
+  <circle cx="118" cy="200" r="5"/>
+  <circle cx="118" cy="175" r="6"/>
+
+  <!-- Fork level 1 -->
+  <circle cx="90"  cy="158" r="5.2"/>
+  <circle cx="118" cy="148" r="4.8"/>
+  <circle cx="150" cy="158" r="5.2"/>
+
+  <!-- Zone 1 -->
+  <circle cx="65"  cy="132" r="5"/>
+  <circle cx="104" cy="130" r="4.4"/>
+  <circle cx="118" cy="122" r="4.4"/>
+  <circle cx="134" cy="130" r="4.4"/>
+  <circle cx="172" cy="132" r="5"/>
+
+  <!-- Zone 2 -->
+  <circle cx="50"  cy="110" r="4.8"/>
+  <circle cx="80"  cy="106" r="4.4"/>
+  <circle cx="108" cy="104" r="4.2"/>
+  <circle cx="132" cy="104" r="4.2"/>
+  <circle cx="158" cy="108" r="4.4"/>
+  <circle cx="180" cy="113" r="4.8"/>
+
+  <!-- Zone 3 -->
+  <circle cx="42"  cy="83"  r="4.4"/>
+  <circle cx="65"  cy="80"  r="4.2"/>
+  <circle cx="90"  cy="76"  r="4"/>
+  <circle cx="112" cy="72"  r="3.9"/>
+  <circle cx="138" cy="74"  r="3.9"/>
+  <circle cx="163" cy="81"  r="4.2"/>
+  <circle cx="180" cy="88"  r="4.4"/>
+
+  <!-- Zone 4 -->
+  <circle cx="68"  cy="61"  r="4"/>
+  <circle cx="90"  cy="55"  r="4"/>
+  <circle cx="110" cy="49"  r="3.8"/>
+  <circle cx="132" cy="49"  r="3.8"/>
+  <circle cx="156" cy="57"  r="4"/>
+  <circle cx="175" cy="66"  r="4"/>
+
+  <!-- Top -->
+  <circle cx="90"  cy="37"  r="3.8"/>
+  <circle cx="112" cy="28"  r="4"/>
+  <circle cx="128" cy="28"  r="4"/>
+  <circle cx="150" cy="39"  r="3.8"/>
+
+</g>
+
+
+<!-- ═══════════════════════════════════════════════════
+     BRAND NAME  +  SUBTITLE
+════════════════════════════════════════════════════ -->
+
+<!-- "AfrikaMarket" two-tone bold -->
+<text
+  font-family="'Montserrat','Nunito',Arial,sans-serif"
+  font-weight="800"
+  font-size="69"
+  y="178">
+  <tspan x="270" fill="#C0340A">Afrika</tspan><tspan fill="#F09018">Market</tspan>
+</text>
+
+<!-- Thin rule -->
+<line x1="270" y1="193" x2="760" y2="193" stroke="#D04800" stroke-width="0.9" opacity="0.22"/>
+
+<!-- "Wholesale Hub" subtitle -->
+<text
+  x="274"
+  y="234"
+  font-family="'Montserrat','Nunito',Arial,sans-serif"
+  font-size="27"
+  font-weight="500"
+  fill="#8C8C8C"
+  letter-spacing="6.5">
+  Wholesale Hub
+</text>
+
+</svg>

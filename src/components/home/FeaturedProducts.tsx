@@ -6,6 +6,10 @@ import { useNavigate } from "react-router-dom";
 import { ProductCard } from "@/components/marketplace/catalog/ProductCard";
 import { SectionHeader } from "./SectionHeader";
 import { getMockProducts } from "@/data/mockData";
+import { useGetWishlistQuery, useAddToWishlistMutation, useRemoveFromWishlistMutation } from "@/app/api/wishlist";
+import { toast } from "sonner";
+import { useSelector } from "react-redux";
+import { type RootState } from "@/app/store";
 
 const FeaturedProducts: React.FC = () => {
   const navigate = useNavigate();
@@ -13,6 +17,35 @@ const FeaturedProducts: React.FC = () => {
   // const { data } = useGetListingsQuery({ limit: 10, type: "PRODUCT" });
   // const listings = data?.data ?? [];
   const listings = getMockProducts().slice(0, 10);
+
+  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
+  const { data: wishlist = [] } = useGetWishlistQuery(undefined, {
+    skip: !isAuthenticated,
+  });
+  const [addToWishlist] = useAddToWishlistMutation();
+  const [removeFromWishlist] = useRemoveFromWishlistMutation();
+
+  const handleToggleWishlist = async (e: React.MouseEvent, productId: string) => {
+    e.stopPropagation();
+    if (!isAuthenticated) {
+      toast.error("Please login to add to wishlist");
+      return;
+    }
+    try {
+      const isInWishlist = wishlist.some((l: { id: string }) => l.id === productId);
+      if (isInWishlist) {
+        await removeFromWishlist(productId).unwrap();
+        toast.success("Removed from wishlist");
+      } else {
+        await addToWishlist(productId).unwrap();
+        toast.success("Added to wishlist");
+      }
+    } catch (error) {
+      toast.error("Failed to update wishlist");
+    }
+  };
+
+
 
   return (
     <div className="max-w-[1600px] mx-auto px-4 lg:px-6">
@@ -41,6 +74,8 @@ const FeaturedProducts: React.FC = () => {
               key={listing.id}
               listing={listing}
               onClick={() => navigate(`/products/${listing.id}`)}
+              isInWishlist={wishlist.some((l: { id: string }) => l.id === listing.id)}
+              onToggleWishlist={(e) => handleToggleWishlist(e, listing.id)}
             />
           ))}
         </div>
@@ -50,7 +85,6 @@ const FeaturedProducts: React.FC = () => {
         <Button
           variant="outline"
           size="lg"
-          className="w-full rounded-lg h-14 font-semibold border-border/60 shadow-none"
           onClick={() => navigate("/products?type=PRODUCT")}
         >
           View all products

@@ -18,7 +18,7 @@ const TrendingProducts: React.FC = () => {
         subtitle="The most sought-after materials and equipment in the market today."
         label="Popular Picks"
         icon={<TrendingUp className="w-5 h-5" />}
-        viewAllHref="/products?sort=popular"
+        // viewAllHref="/products?sort=popular"
       />
 
       {listings.length === 0 ? (

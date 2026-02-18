@@ -13,6 +13,7 @@ export interface CompanyRef {
   slug: string;
   district?: string;
   isVerified?: boolean;
+  type?: string; 
 }
 
 export interface ListingVariantRef {
@@ -50,6 +51,7 @@ export interface ListingsQueryParams {
   minPrice?: number;
   maxPrice?: number;
   inStock?: boolean;
+  companyType?: string;
   sortBy?: string;
   sortOrder?: "ASC" | "DESC";
 }
@@ -96,6 +98,7 @@ export const listingsApi = apiSlice.injectEndpoints({
         if (params?.minPrice != null) sp.set("minPrice", String(params.minPrice));
         if (params?.maxPrice != null) sp.set("maxPrice", String(params.maxPrice));
         if (params?.inStock != null) sp.set("inStock", String(params.inStock));
+        if (params?.companyType) sp.set("companyType", params.companyType);
         if (params?.sortBy) sp.set("sortBy", params.sortBy);
         if (params?.sortOrder) sp.set("sortOrder", params.sortOrder);
         return `/listings?${sp.toString()}`;

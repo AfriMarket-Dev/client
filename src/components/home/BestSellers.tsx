@@ -55,7 +55,6 @@ const BestSellers: React.FC = () => {
         <Button
           variant="outline"
           size="lg"
-          className="w-full rounded-lg h-14 font-semibold border-border/60 shadow-none"
           onClick={() => navigate("/products?sort=popular")}
         >
           View all best sellers

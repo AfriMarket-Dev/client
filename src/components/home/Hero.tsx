@@ -1,250 +1,351 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowRight, Zap, Star, Timer } from "lucide-react";
+import { ArrowRight, Zap } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { HeroWidget, type HeroWidgetItem } from "./HeroWidget";
 import { Badge } from "@/components/ui/Badge";
 import { ImageWithFallback } from "@/components/common/ImageWithFallback";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  type CarouselApi,
+} from "@/components/ui/Carousel";
 
-// Mock data helpers for the visual "4x4" requirement
 const MOCK_WIDGET_ITEMS: Record<string, HeroWidgetItem[]> = {
   deals: [
     {
-      id: "1",
-      name: "Bosch Professional Drill",
-      image:
-        "https://images.unsplash.com/photo-1504148455328-c376907d081c?auto=format&fit=crop&q=80&w=300",
-      price: 45000,
-      label: "-50%",
+      id: "stat-1",
+      type: "stat",
+      stat: "50%",
+      statDesc: "Up to off",
     },
     {
-      id: "2",
-      name: "Safety Helmet Yellow",
-      image:
-        "https://images.unsplash.com/photo-1595429035839-c99c298ffdde?auto=format&fit=crop&q=80&w=300",
-      price: 12000,
+      id: "d1",
+      name: "Industrial Drill Set",
+      image: "https://images.unsplash.com/photo-1504148455328-c376907d081c?auto=format&fit=crop&q=80&w=300",
+      price: 45000,
       label: "-30%",
     },
     {
-      id: "3",
-      name: "Industrial Gloves",
-      image:
-        "https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?auto=format&fit=crop&q=80&w=300",
-      price: 8500,
-      label: "-20%",
+      id: "d2",
+      name: "Safety Boots Pro",
+      image: "https://images.unsplash.com/photo-1509453721491-c3af5961df76?q=80&w=735&auto=format&fit=crop",
+      price: 12000,
+      label: "-25%",
     },
     {
-      id: "4",
-      name: "Heavy Duty Wrench",
-      image:
-        "https://images.unsplash.com/photo-1619733188860-3985e5c9a4c0?auto=format&fit=crop&q=80&w=300",
-      price: 95000,
-      label: "-15%",
-    },
-  ],
-  sellers: [
-    {
-      id: "5",
-      name: "Caterpillar Excavator",
-      image:
-        "https://images.unsplash.com/photo-1541625602330-2277a4c46182?auto=format&fit=crop&q=80&w=300",
-      price: 1500000,
-    },
-    {
-      id: "6",
-      name: "Makita Circular Saw",
-      image:
-        "https://images.unsplash.com/photo-1572981779307-38b8cabb2407?auto=format&fit=crop&q=80&w=300",
-      price: 25000,
-    },
-    {
-      id: "7",
-      name: "Welding Equipment",
-      image:
-        "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?auto=format&fit=crop&q=80&w=300",
-      price: 450000,
-    },
-    {
-      id: "8",
-      name: "Concrete Mixer",
-      image:
-        "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&q=80&w=300",
-      price: 18000,
-    },
-  ],
-  new: [
-    {
-      id: "9",
-      name: "Laser Level Tool",
-      image:
-        "https://images.unsplash.com/photo-1563118351-4089903901ab?auto=format&fit=crop&q=80&w=300",
-      price: 5500,
-    },
-    {
-      id: "10",
-      name: "Hydraulic Pump",
-      image:
-        "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=300",
-      price: 125000,
-    },
-    {
-      id: "11",
-      name: "Safety Vest Orange",
-      image:
-        "https://images.unsplash.com/photo-1578326457599-232537c3561a?auto=format&fit=crop&q=80&w=300",
-      price: 8900,
-    },
-    {
-      id: "12",
-      name: "Steel Toe Boots",
-      image:
-        "https://images.unsplash.com/photo-1542280756-74b2f55e73dd?auto=format&fit=crop&q=80&w=300",
-      price: 34000,
-    },
-  ],
-  rated: [
-    {
-      id: "13",
-      name: "Angle Grinder",
-      image:
-        "https://images.unsplash.com/photo-1605634289352-73a76b7db0fe?auto=format&fit=crop&q=80&w=300",
-      price: 42000,
-    },
-    {
-      id: "14",
-      name: "Tool Box Set",
-      image:
-        "https://images.unsplash.com/photo-1530124566582-a618bc2615dc?auto=format&fit=crop&q=80&w=300",
-      price: 8500,
-    },
-    {
-      id: "15",
-      name: "Generator 5kW",
-      image:
-        "https://images.unsplash.com/photo-1596484552834-0a3fe6279f97?auto=format&fit=crop&q=80&w=300",
+      id: "d3",
+      name: "Power Generator",
+      image: "https://images.unsplash.com/photo-1667339242123-3c1f5fd9a3b0?q=80&w=1170&auto=format&fit=crop",
       price: 156000,
+      label: "-40%",
+    },
+  ],
+  products: [
+    {
+      id: "stat-2",
+      type: "stat",
+      stat: "50K+",
+      statDesc: "Available",
     },
     {
-      id: "16",
-      name: "Tape Measure",
-      image:
-        "https://plus.unsplash.com/premium_photo-1663100619890-4c3d82a16d89?auto=format&fit=crop&q=80&w=300",
-      price: 1200,
+      id: "p1",
+      name: "Concrete Mixer 500L",
+      image: "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&q=80&w=300",
+      price: "850k",
+      label: "BESTSELLER",
+      subtext: "Machinery",
+    },
+    {
+      id: "p2",
+      name: "Portland Cement (50kg)",
+      image: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&q=80&w=300",
+      price: "11,500",
+      label: "NEW",
+      subtext: "Materials",
+    },
+    {
+      id: "p3",
+      name: "T12 Steel Rebar",
+      image: "https://images.unsplash.com/photo-1535732759880-bbd5c7265e3f?auto=format&fit=crop&q=80&w=300",
+      price: "9,500",
+      label: "TRENDING",
+      subtext: "Steel",
+    },
+  ],
+  suppliers: [
+    {
+      id: "stat-3",
+      type: "stat",
+      stat: "2.5K+",
+      statDesc: "Verified",
+    },
+    {
+      id: "s1",
+      type: "supplier",
+      name: "Kigali Heavy Machinery",
+      image: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&q=80&w=300",
+      subtext: "Kigali, Rwanda",
+      rating: 4.9,
+      label: "Verified",
+    },
+    {
+      id: "s2",
+      type: "supplier",
+      name: "BuildRight Materials",
+      image: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&q=80&w=300",
+      subtext: "Musanze, Rwanda",
+      rating: 4.7,
+      label: "Verified",
+    },
+    {
+      id: "s3",
+      type: "supplier",
+      name: "Kigali Home Solutions",
+      image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&q=80&w=300",
+      subtext: "Kigali, Rwanda",
+      rating: 4.7,
+      label: "Verified",
+    },
+  ],
+  services: [
+    {
+      id: "stat-4",
+      type: "stat",
+      stat: "24/7",
+      statDesc: "Support",
+    },
+    {
+      id: "sv1",
+      type: "service",
+      name: "Equipment Rental",
+      image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&q=80&w=300",
+      subtext: "Heavy machinery & tools",
+      price: "From $350/day",
+    },
+    {
+      id: "sv2",
+      type: "service",
+      name: "Bulk Shipping",
+      image: "https://images.unsplash.com/photo-1494412574643-ff11b0a5c1c3?auto=format&fit=crop&q=80&w=300",
+      subtext: "Freight & logistics",
+      price: "Custom quotes",
+    },
+    {
+      id: "sv3",
+      type: "service",
+      name: "Trade Support",
+      image: "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&q=80&w=300",
+      subtext: "24/7 customer service",
+      price: "Free included",
     },
   ],
 };
 
+const MOCK_CAROUSEL_ITEMS = [
+  {
+    id: 1,
+    image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=2000",
+    title: "HEAVY DUTY PRECISION",
+    highlight: "PRECISION.",
+    subtitle: "Essential Industrial Tools",
+    price: "RWF 1,250,000",
+    tag: "MARKET HIGHLIGHT",
+    ref: "Node_Ref / 772-X"
+  },
+  {
+    id: 2,
+    image: "https://images.unsplash.com/photo-1504148455328-c376907d081c?auto=format&fit=crop&q=80&w=2000",
+    title: "POWER TOOLS COLLECTION",
+    highlight: "POWER.",
+    subtitle: "Professional Grade Equipment",
+    price: "RWF 450,000",
+    tag: "NEW ARRIVAL",
+    ref: "Tool_Set / 550-Z"
+  },
+  {
+    id: 3,
+    image: "https://images.unsplash.com/photo-1535732759880-bbd5c7265e3f?auto=format&fit=crop&q=80&w=2000",
+    title: "CONSTRUCTION MATERIALS",
+    highlight: "MATERIALS.",
+    subtitle: "High Quality Steel & Cement",
+    price: "Bulk Pricing",
+    tag: "BEST SELLERS",
+    ref: "Mat_Bundle / 990-A"
+  }
+];
+
+
 const Hero: React.FC = () => {
   const navigate = useNavigate();
+  const [api, setApi] = React.useState<CarouselApi>();
+  const [current, setCurrent] = React.useState(0);
+  const [count, setCount] = React.useState(0);
+
+  React.useEffect(() => {
+    if (!api) {
+      return;
+    }
+
+    setCount(api.scrollSnapList().length);
+    setCurrent(api.selectedScrollSnap() + 1);
+
+    api.on("select", () => {
+      setCurrent(api.selectedScrollSnap() + 1);
+    });
+
+    const intervalId = setInterval(() => {
+      if (api.canScrollNext()) {
+        api.scrollNext();
+      } else {
+        api.scrollTo(0);
+      }
+    }, 8000);
+
+    return () => clearInterval(intervalId);
+  }, [api]);
 
   return (
     <section className="relative py-3 md:py-6 bg-background industrial-grain">
       <div className="max-w-[1600px] mx-auto px-3 md:px-4 lg:px-6">
-        {/* MARKET HIGHLIGHT BANNER */}
-        <div className="relative rounded-lg overflow-hidden bg-slate-900 h-[280px] md:h-[400px] lg:h-[480px] mb-4 md:mb-6 border border-border/40 group shadow-md flex items-center">
-          {/* Architectural Overlay */}
-          <div className="absolute inset-0 blueprint-grid pointer-events-none opacity-5" />
+        {/* CAROUSEL BANNER */}
+        <div className="relative rounded-lg overflow-hidden bg-slate-900 border border-border/40 group shadow-md mb-4 md:mb-6">
+          <Carousel className="w-full" opts={{ loop: true }} setApi={setApi}>
+            <CarouselContent>
+              {MOCK_CAROUSEL_ITEMS.map((item) => (
+                <CarouselItem key={item.id}>
+                  <div className="relative h-[220px] md:h-[320px] lg:h-[380px] w-full overflow-hidden flex items-center">
+                    
+                    {/* Background Image & Overlay */}
+                    <div className="absolute inset-0">
+                      <div className="absolute inset-0 opacity-40 hover:scale-105 transition-transform duration-[4000ms]">
+                        <ImageWithFallback
+                          src={item.image}
+                          alt={item.title}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      <div className="absolute inset-0 bg-linear-to-r from-slate-950 via-slate-900/80 to-slate-900/20" />
+                    </div>
 
-          <div className="absolute inset-0">
-            <div className="absolute inset-0 opacity-40 group-hover:scale-105 transition-transform duration-[4000ms]">
-              <ImageWithFallback
-                src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=2000"
-                alt="Featured Industrial Asset"
-                className="w-full h-full object-cover"
-              />
+                    {/* Creative Architectural Grid - Masked & Subtle */}
+                    <div 
+                      className="absolute inset-0 blueprint-grid pointer-events-none opacity-[0.03] z-10 mix-blend-overlay" 
+                      style={{ maskImage: "linear-gradient(to right, transparent, black 40%, transparent)" }}
+                    />
+                    
+                     {/* Second decorative grid layer for depth */}
+                    <div 
+                      className="absolute right-0 top-0 bottom-0 w-1/3 blueprint-grid pointer-events-none opacity-[0.05] z-10"
+                      style={{ maskImage: "linear-gradient(to left, black, transparent)" }}
+                    />
+
+                    {/* Highlight Content */}
+                    <div className="relative z-20 p-5 md:p-8 lg:p-16 max-w-3xl w-full">
+                      <div className="flex items-center gap-3 md:gap-4 mb-3 md:mb-6">
+                        <Badge
+                          variant="destructive"
+                          className="rounded-lg px-2 md:px-3 py-1 h-auto bg-primary text-white border-none text-[10px] md:text-xs shadow-lg shadow-primary/20"
+                        >
+                          <Zap className="w-3 h-3 md:w-3.5 md:h-3.5 mr-1.5 fill-current" />
+                          {item.tag}
+                        </Badge>
+                        <div className="h-px w-8 md:w-12 bg-white/20" />
+                        <span className="text-[9px] md:text-[10px] font-bold text-white/40 uppercase tracking-[0.3em]">
+                          {item.ref}
+                        </span>
+                      </div>
+
+                      <h1 className="text-display text-2xl md:text-4xl lg:text-7xl text-white mb-2 md:mb-4 leading-[0.95] drop-shadow-xl font-bold">
+                        {item.title.split(' ').slice(0, -1).join(' ')} <br />
+                        <span className="text-primary italic inline-block transform -skew-x-6">{item.highlight}</span>
+                      </h1>
+
+                      <div className="flex items-center gap-4 md:gap-6 mb-4 md:mb-8">
+                        <div className="flex flex-col">
+                          <span className="text-[8px] md:text-[9px] text-white/40 font-bold uppercase tracking-widest mb-1">
+                            Price
+                          </span>
+                          <p className="text-base md:text-xl lg:text-2xl text-white font-sans font-bold tracking-tight">
+                            {item.price}
+                          </p>
+                        </div>
+                        <div className="w-px h-8 md:h-10 bg-white/10" />
+                        <div className="flex flex-col">
+                          <span className="text-[8px] md:text-[9px] text-white/40 font-bold uppercase tracking-widest mb-1">
+                            Availability
+                          </span>
+                          <div className="flex items-center gap-1.5 md:gap-2 text-emerald-400 text-xs md:text-sm font-bold">
+                            <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                            IN STOCK
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="flex gap-4">
+                        <Button
+                          size="lg"
+                          onClick={() => navigate("/products")}
+                          className="bg-white hover:bg-slate-100 text-slate-950 rounded-lg h-8 md:h-12 px-5 md:px-8 text-[10px] md:text-xs font-bold tracking-widest uppercase transition-all shadow-lg active:scale-95 group"
+                        >
+                          Shop Now{" "}
+                          <ArrowRight className="ml-2 md:ml-3 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            
+            {/* Custom Indicators (Bottom Right) */}
+            <div className="absolute bottom-4 right-4 md:bottom-8 md:right-8 z-30 flex gap-2">
+              {Array.from({ length: count }).map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => api?.scrollTo(index)}
+                  className={`h-1.5 rounded-sm transition-all duration-300 ${
+                    current === index + 1 
+                      ? "w-8 bg-primary" 
+                      : "w-2 bg-white/20 hover:bg-white/40"
+                  }`}
+                  aria-label={`Go to slide ${index + 1}`}
+                />
+              ))}
             </div>
-            <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-900/60 to-transparent" />
-          </div>
-
-          {/* Highlight Content */}
-          <div className="relative z-10 p-5 md:p-8 lg:p-20 max-w-3xl">
-            <div className="flex items-center gap-3 md:gap-4 mb-4 md:mb-8">
-              <Badge
-                variant="destructive"
-                className="rounded-lg px-3 py-1 h-auto bg-primary text-white border-none"
-              >
-                <Zap className="w-3.5 h-3.5 mr-1.5 fill-current" />
-                MARKET HIGHLIGHT
-              </Badge>
-              <div className="h-[1px] w-12 bg-white/20" />
-              <span className="text-[10px] font-bold text-white/40 uppercase tracking-[0.3em]">
-                Node_Ref / 772-X
-              </span>
-            </div>
-
-            <h1 className="text-display text-3xl md:text-5xl lg:text-8xl text-white mb-3 md:mb-4 leading-[0.95]">
-              HEAVY DUTY <br />
-              <span className="text-primary italic">PRECISION.</span>
-            </h1>
-
-            <div className="flex items-center gap-4 md:gap-6 mb-6 md:mb-12">
-              <div className="flex flex-col">
-                <span className="text-[9px] md:text-[10px] text-white/40 font-bold uppercase tracking-widest mb-1">
-                  Valuation
-                </span>
-                <p className="text-lg md:text-2xl lg:text-3xl text-white font-sans font-bold tracking-tight">
-                  RWF 1,250,000
-                </p>
-              </div>
-              <div className="w-[1px] h-10 bg-white/10" />
-              <div className="flex flex-col">
-                <span className="text-[10px] text-white/40 font-bold uppercase tracking-widest mb-1">
-                  Availability
-                </span>
-                <div className="flex items-center gap-2 text-emerald-400 text-sm font-bold">
-                  <div className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-                  IN STOCK
-                </div>
-              </div>
-            </div>
-
-            <div className="flex gap-4">
-              <Button
-                size="lg"
-                onClick={() => navigate("/products")}
-                className="bg-white hover:bg-slate-100 text-slate-950 rounded-lg h-10 md:h-14 px-6 md:px-10 text-xs md:text-sm font-bold tracking-widest uppercase transition-all shadow-md active:scale-95 group"
-              >
-                Acquire Asset{" "}
-                <ArrowRight className="ml-3 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </Button>
-            </div>
-          </div>
-
-          {/* Side Detail - Decorative */}
-          <div className="absolute right-20 bottom-20 hidden lg:block text-right animate-in fade-in slide-in-from-right-8 duration-1000 delay-500">
-            <div className="text-6xl font-display font-black text-white/5 italic mb-4 tracking-tighter">
-              SPEC_01
-            </div>
-            <p className="text-[10px] text-white/20 font-bold uppercase tracking-[0.4em] leading-relaxed max-w-[200px]">
-              Verified Industrial <br />
-              Processing Standard <br />
-              Grade-A Certified
-            </p>
-          </div>
+          </Carousel>
         </div>
 
         {/* WIDGETS GRID (4x4 Items) */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-1.5 md:gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-5">
           <HeroWidget
-            title="Flash Sales"
+            title="Hot Deals"
+            subtitle="Limited time offers"
             items={MOCK_WIDGET_ITEMS.deals}
             href="/products?sort=deals"
-            className="border-t-2 border-t-primary"
+            variant="default"
           />
           <HeroWidget
-            title="Top Sellers"
-            items={MOCK_WIDGET_ITEMS.sellers}
+            title="Top Products"
+            subtitle="Trending items"
+            items={MOCK_WIDGET_ITEMS.products}
             href="/products?sort=popular"
+            variant="blue"
           />
           <HeroWidget
-            title="New Inventory"
-            items={MOCK_WIDGET_ITEMS.new}
-            href="/products?sort=newest"
+            title="Top Suppliers"
+            subtitle="Verified partners"
+            items={MOCK_WIDGET_ITEMS.suppliers}
+            href="/suppliers"
+            variant="emerald"
           />
           <HeroWidget
-            title="Verified Gear"
-            items={MOCK_WIDGET_ITEMS.rated}
-            href="/products?sort=rating"
+            title="Top Services"
+            subtitle="Professional solutions"
+            items={MOCK_WIDGET_ITEMS.services}
+            href="/services"
+            variant="orange"
           />
         </div>
       </div>

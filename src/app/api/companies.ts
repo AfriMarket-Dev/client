@@ -38,6 +38,8 @@ export interface CompaniesQueryParams {
   type?: string;
   sortBy?: string;
   sortOrder?: "ASC" | "DESC";
+  minRating?: number;
+  verified?: boolean;
 }
 
 export interface CompaniesListResult {
@@ -58,6 +60,8 @@ export const companiesApi = apiSlice.injectEndpoints({
         if (params?.type) sp.set("type", params.type);
         if (params?.sortBy) sp.set("sortBy", params.sortBy);
         if (params?.sortOrder) sp.set("sortOrder", params.sortOrder);
+        if (params?.minRating) sp.set("minRating", String(params.minRating));
+        if (params?.verified) sp.set("verified", String(true));
         return `/companies?${sp.toString()}`;
       },
       transformResponse: (response: ApiResponse<Company[]>) => {
