@@ -10,6 +10,7 @@ import {
 import { useGetCompanyByIdQuery } from "@/app/api/companies";
 import { useGetListingsQuery } from "@/app/api/listings";
 import type { Listing } from "@/app/api/listings";
+import { mockCompanies, getMockProducts } from "@/data/mockData";
 
 interface SupplierDetailsProps {
   supplierId: string;
@@ -33,13 +34,26 @@ const SupplierDetails: React.FC<SupplierDetailsProps> = ({
   onBack,
   onProductClick,
 }) => {
-  const { data: company, isLoading, error } = useGetCompanyByIdQuery(supplierId);
-  const { data: listData } = useGetListingsQuery({
-    companyId: supplierId,
-    limit: 50,
-  });
+  // const {
+  //   data: company,
+  //   isLoading,
+  //   error,
+  // } = useGetCompanyByIdQuery(supplierId);
+  // const { data: listData } = useGetListingsQuery({
+  //   companyId: supplierId,
+  //   limit: 50,
+  // });
 
-  const listings = listData?.data ?? [];
+  const isLoading = false;
+  const error = null;
+
+  // Mock data logic
+  const foundCompany = mockCompanies.find((c) => c.id === supplierId);
+  // Fallback to first company if ID not found, to ensure UI is always visible for demo
+  const company = foundCompany || mockCompanies[0];
+
+  const allProducts = getMockProducts();
+  const listings = allProducts.filter((p) => p.companyId === company.id);
 
   if (isLoading) {
     return (
@@ -69,78 +83,83 @@ const SupplierDetails: React.FC<SupplierDetailsProps> = ({
   }
 
   const rating = Number(company.averageRating ?? 0);
-  const location = [company.district, company.province].filter(Boolean).join(", ");
+  const location = [company.district, company.province]
+    .filter(Boolean)
+    .join(", ");
   const categoryName = (company.category as { name?: string })?.name;
 
   return (
     <div className="min-h-screen bg-muted/30">
-      <div className="bg-background border-b border-border sticky top-0 z-30">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <button
-            type="button"
-            onClick={onBack}
-            className="flex items-center text-muted-foreground hover:text-primary transition-colors"
-          >
-            <ArrowLeft className="w-5 h-5 mr-2" />
-            Back to Suppliers
-          </button>
+      <div className="bg-background border-b border-border sticky top-0 z-30 shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+          <div className="flex items-center justify-between">
+            <button
+              type="button"
+              onClick={onBack}
+              className="flex items-center text-muted-foreground hover:text-primary transition-colors font-medium text-sm"
+            >
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Back
+            </button>
+            <div className="flex items-center gap-3">
+              <button className="px-4 py-2 bg-primary text-white text-sm font-bold uppercase tracking-wider rounded-sm hover:bg-primary/90 transition-colors">
+                Contact Supplier
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div className="relative bg-gradient-to-br from-primary/5 via-primary/10 to-primary/5 overflow-hidden">
+      <div className="relative bg-background border-b border-border overflow-hidden">
+        <div className="absolute inset-0 bg-primary/5 pointer-events-none" />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="flex flex-col md:flex-row md:items-start gap-8">
             <div className="flex-1">
               <div className="flex items-start gap-6">
-                <div className="w-20 h-20 rounded-sm border border-background bg-muted flex items-center justify-center text-2xl font-bold text-muted-foreground shrink-0">
+                <div className="w-24 h-24 rounded-lg border border-border bg-white flex items-center justify-center text-3xl font-bold text-muted-foreground shrink-0 shadow-sm">
                   {company.name?.charAt(0) ?? "?"}
                 </div>
                 <div>
                   <div className="flex items-center gap-3 mb-2">
-                    <h1 className="text-3xl font-heading font-bold text-foreground">
+                    <h1 className="text-3xl md:text-4xl font-heading font-bold text-foreground">
                       {company.name}
                     </h1>
                     {company.isVerified && (
-                      <div className="flex items-center bg-success/20 text-success px-3 py-1 rounded-full text-sm font-medium">
-                        <CheckCircle className="w-4 h-4 mr-1" />
-                        Verified
+                      <div className="flex items-center bg-blue-50 text-blue-600 px-2.5 py-0.5 rounded-full text-xs font-bold border border-blue-100">
+                        <CheckCircle className="w-3.5 h-3.5 mr-1" />
+                        VERIFIED
                       </div>
                     )}
                   </div>
-                  {location && (
-                    <div className="flex items-center text-muted-foreground mb-2">
-                      <MapPin className="w-4 h-4 mr-1" />
-                      <span>{location}</span>
-                    </div>
-                  )}
-                  <div className="flex items-center gap-2 mb-3">
-                    <Star className="w-4 h-4 text-warning fill-current" />
-                    <span className="font-semibold text-foreground">{rating.toFixed(1)}</span>
-                    <span className="text-muted-foreground text-sm">
-                      ({company.reviewCount ?? 0} reviews)
-                    </span>
-                  </div>
-                  <p className="text-muted-foreground leading-relaxed mb-4">
-                    {company.description || "—"}
-                  </p>
-                  {categoryName && (
-                    <span className="inline-block px-3 py-1.5 bg-primary/10 text-primary text-sm font-medium rounded-sm border border-primary/20">
-                      {categoryName}
-                    </span>
-                  )}
-                </div>
-              </div>
-            </div>
 
-            <div className="w-full md:w-72 shrink-0">
-              <div className="bg-card rounded-sm p-6 border border-border shadow-none">
-                <h3 className="font-heading font-bold uppercase text-foreground mb-4 tracking-wide flex items-center gap-2">
-                  <Package className="w-5 h-5 text-primary" />
-                  Products
-                </h3>
-                <p className="text-2xl font-heading font-bold text-foreground">
-                  {listings.length}
-                </p>
+                  <div className="flex flex-wrap items-center gap-4 mb-4 text-sm">
+                    {location && (
+                      <div className="flex items-center text-muted-foreground">
+                        <MapPin className="w-4 h-4 mr-1.5 text-slate-400" />
+                        <span>{location}</span>
+                      </div>
+                    )}
+                    <div className="flex items-center gap-1.5">
+                      <Star className="w-4 h-4 text-orange-400 fill-orange-400" />
+                      <span className="font-bold text-foreground">
+                        {rating.toFixed(1)}
+                      </span>
+                      <span className="text-muted-foreground">
+                        ({company.reviewCount ?? 0} reviews)
+                      </span>
+                    </div>
+                    {categoryName && (
+                      <span className="inline-flex items-center px-2.5 py-0.5 bg-slate-100 text-slate-600 rounded-md text-xs font-medium">
+                        {categoryName}
+                      </span>
+                    )}
+                  </div>
+
+                  <p className="text-muted-foreground leading-relaxed max-w-2xl">
+                    {company.description ||
+                      "No description available for this supplier."}
+                  </p>
+                </div>
               </div>
             </div>
           </div>

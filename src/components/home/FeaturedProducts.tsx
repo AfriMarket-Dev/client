@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/Button";
 import { Package } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 // import { useGetListingsQuery } from "@/app/api/listings";
-import { ProductCard } from "@/components/catalog/ProductCard";
+import { ProductCard } from "@/components/marketplace/catalog/ProductCard";
 import { SectionHeader } from "./SectionHeader";
 import { getMockProducts } from "@/data/mockData";
 
@@ -16,7 +16,7 @@ const FeaturedProducts: React.FC = () => {
 
   return (
     <div className="max-w-[1600px] mx-auto px-4 lg:px-6">
-      <SectionHeader 
+      <SectionHeader
         title="Featured Products"
         subtitle="High-quality construction materials and specialized tools for your next project."
         label="Marketplace"

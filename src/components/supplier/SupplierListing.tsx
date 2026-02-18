@@ -19,6 +19,8 @@ import { Input } from "@/components/ui/Input";
 import { Badge } from "@/components/ui/Badge";
 import type { Company } from "@/app/api/companies";
 
+import { mockCompanies, mockCategories } from "@/data/mockData";
+
 interface SupplierListingProps {
   onSupplierClick?: (supplierId: string) => void;
   initialSearchQuery?: string;
@@ -45,7 +47,9 @@ const SupplierListing: React.FC<SupplierListingProps> = ({
 
   const { data: categoriesData } = useGetCompanyCategoriesQuery({ limit: 50 });
 
-  const companies = listData?.data ?? [];
+  // Use mock data if API fails or returns empty
+  const companies =
+    listData?.data && listData.data.length > 0 ? listData.data : mockCompanies;
   const meta = listData?.meta;
   const categories = categoriesData?.data ?? [];
 
@@ -121,7 +125,9 @@ const SupplierListing: React.FC<SupplierListingProps> = ({
                 </h3>
                 <div className="flex flex-col gap-1">
                   <Button
-                    variant={selectedCategoryId === "all" ? "secondary" : "ghost"}
+                    variant={
+                      selectedCategoryId === "all" ? "secondary" : "ghost"
+                    }
                     className="justify-start rounded-sm font-bold uppercase text-xs tracking-wider"
                     onClick={() => setSelectedCategoryId("all")}
                   >
@@ -130,7 +136,9 @@ const SupplierListing: React.FC<SupplierListingProps> = ({
                   {categories.map((cat) => (
                     <Button
                       key={cat.id}
-                      variant={selectedCategoryId === cat.id ? "secondary" : "ghost"}
+                      variant={
+                        selectedCategoryId === cat.id ? "secondary" : "ghost"
+                      }
                       className="justify-start rounded-sm font-semibold text-xs uppercase tracking-wide hover:text-primary"
                       onClick={() => setSelectedCategoryId(cat.id)}
                     >
@@ -159,7 +167,9 @@ const SupplierListing: React.FC<SupplierListingProps> = ({
           <div className="flex-1">
             <div className="mb-6">
               <p className="text-muted-foreground text-sm font-medium uppercase tracking-wider">
-                <span className="text-foreground font-bold">{meta?.total ?? 0}</span>{" "}
+                <span className="text-foreground font-bold">
+                  {meta?.total ?? 0}
+                </span>{" "}
                 Partners
               </p>
             </div>
@@ -256,7 +266,9 @@ function SupplierCard({
   onViewProfile: () => void;
 }) {
   const rating = Number(company.averageRating ?? 0);
-  const location = [company.district, company.province].filter(Boolean).join(", ");
+  const location = [company.district, company.province]
+    .filter(Boolean)
+    .join(", ");
 
   return (
     <Card className="group border border-border bg-card hover:border-primary transition-all duration-300 rounded-sm overflow-hidden flex flex-col shadow-none">

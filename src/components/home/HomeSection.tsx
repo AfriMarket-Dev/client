@@ -34,17 +34,22 @@ export const HomeSection: React.FC<HomeSectionProps> = ({
     <section
       id={id}
       className={cn(
-        "py-8 relative overflow-hidden",
+        "py-4 lg:py-8 relative overflow-hidden",
         variants[variant],
         borderTop && "border-t border-border/40",
         borderBottom && "border-b border-border/40",
-        className
+        className,
       )}
     >
       {withGrid && (
         <div className="absolute inset-0 blueprint-grid opacity-[0.03] pointer-events-none" />
       )}
-      <div className={cn("max-w-[1600px] mx-auto px-4 lg:px-6 relative z-10", containerClassName)}>
+      <div
+        className={cn(
+          "max-w-[1600px] mx-auto px-2.5 sm:px-4 lg:px-6 h-full relative z-10",
+          containerClassName,
+        )}
+      >
         {children}
       </div>
     </section>

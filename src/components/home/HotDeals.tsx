@@ -3,7 +3,7 @@ import { Timer, Flame, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { useNavigate } from "react-router-dom";
 import { Badge } from "@/components/ui/Badge";
-import { ProductCard } from "@/components/catalog/ProductCard";
+import { ProductCard } from "@/components/marketplace/catalog/ProductCard";
 import { getMockProducts } from "@/data/mockData";
 
 const HotDeals: React.FC = () => {
@@ -13,7 +13,7 @@ const HotDeals: React.FC = () => {
 
   return (
     <>
-      <div className="flex flex-col md:flex-row items-start md:items-end justify-between mb-12 gap-6">
+      <div className="flex flex-col md:flex-row items-start md:items-end justify-between mb-6 md:mb-12 gap-4 md:gap-6">
         <div className="flex-1">
           <div className="flex items-center gap-3 mb-4">
             <Badge className="rounded-lg px-3 py-1 h-auto bg-primary text-primary-foreground">
@@ -26,7 +26,7 @@ const HotDeals: React.FC = () => {
             </span>
           </div>
 
-          <h2 className="text-4xl md:text-6xl font-heading font-bold text-foreground leading-tight tracking-tight">
+          <h2 className="text-xl sm:text-2xl md:text-4xl lg:text-6xl font-heading font-bold text-foreground leading-tight tracking-tight">
             Super <span className="text-red-600">Flash Sale</span>
           </h2>
         </div>
@@ -76,7 +76,7 @@ const HotDeals: React.FC = () => {
           ))}
         </div>
       ) : (
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-1.5 md:gap-4 lg:gap-6">
           {listings.map((listing) => (
             <ProductCard
               key={listing.id}

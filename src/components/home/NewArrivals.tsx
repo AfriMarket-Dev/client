@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/Button";
 import { Sparkles } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 // import { useGetListingsQuery } from "@/app/api/listings";
-import { ProductCard } from "@/components/catalog/ProductCard";
+import { ProductCard } from "@/components/marketplace/catalog/ProductCard";
 import { SectionHeader } from "./SectionHeader";
 import { getMockProducts } from "@/data/mockData";
 
@@ -38,7 +38,7 @@ const NewArrivals: React.FC = () => {
           ))}
         </div>
       ) : (
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-1.5 md:gap-4 lg:gap-6">
           {listings.map((listing) => (
             <ProductCard
               key={listing.id}

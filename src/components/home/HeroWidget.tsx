@@ -29,13 +29,13 @@ export const HeroWidget: React.FC<HeroWidgetProps> = ({
 
   return (
     <div
-      className={`bg-white dark:bg-slate-900 border border-border/60 p-6 flex flex-col h-full hover:shadow-lg transition-all duration-500 relative group/widget rounded-lg ${className}`}
+      className={`bg-white dark:bg-slate-900 border border-border/60 p-1.5 md:p-6 flex flex-col h-full hover:shadow-lg transition-all duration-500 relative group/widget rounded-lg ${className}`}
     >
       {/* Decorative Accent */}
       <div className="absolute top-0 right-0 w-12 h-12 blueprint-grid opacity-10 pointer-events-none" />
 
-      <div className="flex items-center justify-between mb-6">
-        <h3 className="font-heading font-bold text-base text-foreground tracking-tight flex items-center gap-3">
+      <div className="flex items-center justify-between mb-3 md:mb-6">
+        <h3 className="font-heading font-bold text-sm md:text-base text-foreground tracking-tight flex items-center gap-2 md:gap-3">
           <div className="w-1.5 h-1.5 rounded-full bg-primary" />
           {title}
         </h3>
@@ -47,7 +47,7 @@ export const HeroWidget: React.FC<HeroWidgetProps> = ({
         </Link>
       </div>
 
-      <div className="grid grid-cols-2 gap-4 flex-1">
+      <div className="grid grid-cols-2 gap-1.5 md:gap-4 flex-1">
         {displayItems.map((item, idx) => (
           <div key={idx} className="group/item flex flex-col">
             <Link
@@ -55,7 +55,7 @@ export const HeroWidget: React.FC<HeroWidgetProps> = ({
               className="block h-full transition-colors relative"
             >
               {/* Image Container */}
-              <div className="aspect-square bg-muted/20 overflow-hidden border border-border/40 group-hover/item:border-primary/30 transition-all duration-500 relative mb-2">
+              <div className="aspect-square bg-muted/20 overflow-hidden border border-border/40 group-hover/item:border-primary/30 transition-all duration-500 relative mb-1 md:mb-2">
                 <ImageWithFallback
                   src={item.image}
                   alt={item.name || "Product Image"}
@@ -76,11 +76,11 @@ export const HeroWidget: React.FC<HeroWidgetProps> = ({
 
               {/* Text Content */}
               <div className="flex flex-col gap-0.5">
-                <h4 className="text-[10px] font-bold text-foreground/80 line-clamp-1 leading-tight group-hover/item:text-primary transition-colors uppercase tracking-wide">
+                <h4 className="text-[8px] md:text-[10px] font-bold text-foreground/80 line-clamp-1 leading-tight group-hover/item:text-primary transition-colors uppercase tracking-wide">
                   {item.name || "Product Name"}
                 </h4>
                 {item.price !== undefined && (
-                  <div className="text-[13px] font-bold text-foreground font-sans">
+                  <div className="text-[11px] md:text-[13px] font-bold text-foreground font-sans">
                     RWF {item.price.toLocaleString()}
                   </div>
                 )}
@@ -92,7 +92,7 @@ export const HeroWidget: React.FC<HeroWidgetProps> = ({
 
       <Link
         to={href}
-        className="text-[10px] font-bold uppercase tracking-[0.2em] text-primary/60 hover:text-primary mt-6 pt-4 border-t border-border/40 block text-center transition-colors"
+        className="text-[9px] md:text-[10px] font-bold uppercase tracking-[0.2em] text-primary/60 hover:text-primary mt-3 md:mt-6 pt-2 md:pt-4 border-t border-border/40 block text-center transition-colors"
       >
         Enter Node / 0{Math.floor(Math.random() * 9) + 1}
       </Link>

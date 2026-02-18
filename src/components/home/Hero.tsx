@@ -138,10 +138,10 @@ const Hero: React.FC = () => {
   const navigate = useNavigate();
 
   return (
-    <section className="relative py-6 bg-background industrial-grain">
-      <div className="max-w-[1600px] mx-auto px-4 lg:px-6">
+    <section className="relative py-3 md:py-6 bg-background industrial-grain">
+      <div className="max-w-[1600px] mx-auto px-3 md:px-4 lg:px-6">
         {/* MARKET HIGHLIGHT BANNER */}
-        <div className="relative rounded-lg overflow-hidden bg-slate-900 h-[400px] md:h-[480px] mb-6 border border-border/40 group shadow-md flex items-center">
+        <div className="relative rounded-lg overflow-hidden bg-slate-900 h-[280px] md:h-[400px] lg:h-[480px] mb-4 md:mb-6 border border-border/40 group shadow-md flex items-center">
           {/* Architectural Overlay */}
           <div className="absolute inset-0 blueprint-grid pointer-events-none opacity-5" />
 
@@ -157,8 +157,8 @@ const Hero: React.FC = () => {
           </div>
 
           {/* Highlight Content */}
-          <div className="relative z-10 p-8 md:p-20 max-w-3xl">
-            <div className="flex items-center gap-4 mb-8">
+          <div className="relative z-10 p-5 md:p-8 lg:p-20 max-w-3xl">
+            <div className="flex items-center gap-3 md:gap-4 mb-4 md:mb-8">
               <Badge
                 variant="destructive"
                 className="rounded-lg px-3 py-1 h-auto bg-primary text-white border-none"
@@ -172,17 +172,17 @@ const Hero: React.FC = () => {
               </span>
             </div>
 
-            <h1 className="text-display text-5xl md:text-8xl text-white mb-4 leading-[0.95]">
+            <h1 className="text-display text-3xl md:text-5xl lg:text-8xl text-white mb-3 md:mb-4 leading-[0.95]">
               HEAVY DUTY <br />
               <span className="text-primary italic">PRECISION.</span>
             </h1>
 
-            <div className="flex items-center gap-6 mb-12">
+            <div className="flex items-center gap-4 md:gap-6 mb-6 md:mb-12">
               <div className="flex flex-col">
-                <span className="text-[10px] text-white/40 font-bold uppercase tracking-widest mb-1">
+                <span className="text-[9px] md:text-[10px] text-white/40 font-bold uppercase tracking-widest mb-1">
                   Valuation
                 </span>
-                <p className="text-2xl md:text-3xl text-white font-sans font-bold tracking-tight">
+                <p className="text-lg md:text-2xl lg:text-3xl text-white font-sans font-bold tracking-tight">
                   RWF 1,250,000
                 </p>
               </div>
@@ -202,7 +202,7 @@ const Hero: React.FC = () => {
               <Button
                 size="lg"
                 onClick={() => navigate("/products")}
-                className="bg-white hover:bg-slate-100 text-slate-950 rounded-lg h-14 px-10 text-sm font-bold tracking-widest uppercase transition-all shadow-md active:scale-95 group"
+                className="bg-white hover:bg-slate-100 text-slate-950 rounded-lg h-10 md:h-14 px-6 md:px-10 text-xs md:text-sm font-bold tracking-widest uppercase transition-all shadow-md active:scale-95 group"
               >
                 Acquire Asset{" "}
                 <ArrowRight className="ml-3 w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -224,7 +224,7 @@ const Hero: React.FC = () => {
         </div>
 
         {/* WIDGETS GRID (4x4 Items) */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-1.5 md:gap-5">
           <HeroWidget
             title="Flash Sales"
             items={MOCK_WIDGET_ITEMS.deals}

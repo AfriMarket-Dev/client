@@ -1,8 +1,8 @@
 import { useNavigate, useSearchParams } from "react-router-dom";
-import ProductCatalog from "@/components/ProductCatalog";
+import MarketplaceGrid from "@/components/marketplace/MarketplaceGrid";
 import type { Listing } from "@/app/api/listings";
 
-const ProductCatalogPage = () => {
+const MarketplacePage = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const categoryId = searchParams.get("category") ?? "all";
@@ -12,7 +12,7 @@ const ProductCatalogPage = () => {
   };
 
   return (
-    <ProductCatalog
+    <MarketplaceGrid
       initialCategoryId={categoryId}
       onSupplierClick={(supplierId: string) =>
         navigate(`/suppliers/${supplierId}`)
@@ -22,4 +22,4 @@ const ProductCatalogPage = () => {
   );
 };
 
-export default ProductCatalogPage;
+export default MarketplacePage;

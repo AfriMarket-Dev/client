@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/Button";
 import { Package } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 // import { useGetListingsQuery } from "@/app/api/listings";
-import { ProductCard } from "@/components/catalog/ProductCard";
+import { ProductCard } from "@/components/marketplace/catalog/ProductCard";
 import { SectionHeader } from "./SectionHeader";
 import { getMockProducts } from "@/data/mockData";
 
@@ -33,18 +33,22 @@ const ProductShowcase: React.FC<ProductShowcaseProps> = ({
   // });
   // const listings = data?.data ?? [];
   const listings = getMockProducts()
-    .filter(p => !categoryId || p.categoryId === categoryId)
+    .filter((p) => !categoryId || p.categoryId === categoryId)
     .slice(0, limit);
 
   return (
     <div className={`py-12 ${className}`}>
       <div className="max-w-[1600px] mx-auto px-4 lg:px-6">
-        <SectionHeader 
+        <SectionHeader
           title={title}
           subtitle={subtitle}
           label="Curated Selection"
           icon={icon || <Package className="w-5 h-5" />}
-          viewAllHref={categoryId ? `/products?type=PRODUCT&category=${categoryId}` : "/products?type=PRODUCT"}
+          viewAllHref={
+            categoryId
+              ? `/products?type=PRODUCT&category=${categoryId}`
+              : "/products?type=PRODUCT"
+          }
         />
 
         {listings.length === 0 ? (

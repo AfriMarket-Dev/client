@@ -23,11 +23,11 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({
   const navigate = useNavigate();
 
   return (
-    <div className="relative mb-8 group">
+    <div className="relative mb-5 md:mb-8 group">
       {/* Decorative vertical line */}
       <div className="absolute -left-6 top-0 bottom-0 w-[2px] bg-primary/30 transform origin-top scale-y-0 group-hover:scale-y-100 transition-transform duration-700 hidden lg:block" />
 
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-3 md:gap-6">
         <div className="space-y-2">
           {label && (
             <div className="flex items-center gap-3">
@@ -37,11 +37,11 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({
               </span>
             </div>
           )}
-          <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground tracking-tight leading-none">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-heading font-bold text-foreground tracking-tight leading-none">
             {title}
           </h2>
           {subtitle && (
-            <p className="text-muted-foreground/70 text-sm md:text-base max-w-xl font-normal leading-relaxed">
+            <p className="text-muted-foreground/70 text-xs md:text-sm lg:text-base max-w-xl font-normal leading-relaxed">
               {subtitle}
             </p>
           )}

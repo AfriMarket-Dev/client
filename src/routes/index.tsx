@@ -1,10 +1,11 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import HomePage from "@/pages/HomePage";
-import ProductCatalogPage from "@/pages/ProductCatalogPage";
+import MarketplacePage from "@/pages/marketplace/MarketplacePage";
+import ProductPage from "@/pages/marketplace/ProductPage";
+import ServicePage from "@/pages/marketplace/ServicePage";
 import SupplierDetailsPage from "@/pages/SupplierDetailsPage";
 import SupplierListingPage from "@/pages/SupplierListingPage";
 import CategoriesPage from "@/pages/CategoriesPage";
-import ProductDetailsPage from "@/pages/ProductDetailsPage";
 import SignUpPage from "@/pages/SignUpPage";
 import SignInPage from "@/pages/SignInPage";
 import AboutPage from "@/pages/AboutPage";
@@ -45,11 +46,15 @@ export const router = createBrowserRouter([
       },
       {
         path: "marketplace",
-        element: <ProductCatalogPage />,
+        element: <MarketplacePage />,
       },
       {
         path: "products/:productId",
-        element: <ProductDetailsPage />,
+        element: <ProductPage />,
+      },
+      {
+        path: "services/:serviceId",
+        element: <ServicePage />,
       },
       {
         path: "suppliers",
@@ -90,7 +95,10 @@ export const router = createBrowserRouter([
         children: [
           { index: true, element: <ProviderDashboardPage /> },
           { path: "listings/new", element: <ProviderListingFormPage /> },
-          { path: "listings/:listingId/edit", element: <ProviderListingEditPage /> },
+          {
+            path: "listings/:listingId/edit",
+            element: <ProviderListingEditPage />,
+          },
         ],
       },
     ],

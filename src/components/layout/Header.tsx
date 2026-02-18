@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { type RootState } from "@/app/store";
 import { HeaderLogo } from "./header/HeaderLogo";
@@ -9,6 +10,7 @@ import { Menu } from "lucide-react";
 import { Input } from "@/components/ui/Input";
 
 export const Header: React.FC = () => {
+  const navigate = useNavigate();
   const { isAuthenticated, user } = useSelector(
     (state: RootState) => state.auth,
   );
@@ -17,16 +19,13 @@ export const Header: React.FC = () => {
   return (
     <header className="bg-background/80 backdrop-blur-md border-b border-border/40 sticky top-0 z-50">
       <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-20">
+        <div className="flex justify-between items-center h-14 md:h-20 gap-2">
           <HeaderLogo />
 
           <HeaderSearch value={searchQuery} onChange={setSearchQuery} />
 
-          <div className="flex items-center gap-4">
-            <HeaderUserNav
-              isAuthenticated={isAuthenticated}
-              user={user}
-            />
+          <div className="flex items-center gap-2 md:gap-4 shrink-0">
+            <HeaderUserNav isAuthenticated={isAuthenticated} user={user} />
 
             {/* Mobile Menu Toggle */}
             <Button
@@ -45,7 +44,7 @@ export const Header: React.FC = () => {
       {isMenuOpen && (
         <div className="md:hidden border-t border-border/40 bg-background/95 backdrop-blur-lg px-4 py-6 space-y-6 animate-in slide-in-from-top-4 duration-300">
           <div className="relative">
-             <Input
+            <Input
               placeholder="Search products or services..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -53,16 +52,49 @@ export const Header: React.FC = () => {
             />
           </div>
           <nav className="flex flex-col space-y-1">
-            <Button variant="ghost" className="justify-start font-semibold text-base py-3 rounded-lg">
+            <Button
+              variant="ghost"
+              className="justify-start font-semibold text-base py-3 rounded-lg"
+            >
               Marketplace
             </Button>
-            <Button variant="ghost" className="justify-start font-semibold text-base py-3 rounded-lg">
+            <Button
+              variant="ghost"
+              className="justify-start font-semibold text-base py-3 rounded-lg"
+            >
               Suppliers
             </Button>
-             <Button variant="ghost" className="justify-start font-semibold text-base py-3 rounded-lg">
+            <Button
+              variant="ghost"
+              className="justify-start font-semibold text-base py-3 rounded-lg"
+            >
               Services
             </Button>
           </nav>
+
+          {!isAuthenticated && (
+            <div className="pt-4 border-t border-border/40 space-y-3">
+              <Button
+                variant="outline"
+                className="w-full justify-center font-bold text-base h-11"
+                onClick={() => {
+                  navigate("/auth");
+                  setIsMenuOpen(false);
+                }}
+              >
+                Sign In
+              </Button>
+              <Button
+                className="w-full justify-center font-bold text-base h-11 shadow-md"
+                onClick={() => {
+                  navigate("/auth?mode=register");
+                  setIsMenuOpen(false);
+                }}
+              >
+                Join Free
+              </Button>
+            </div>
+          )}
         </div>
       )}
     </header>

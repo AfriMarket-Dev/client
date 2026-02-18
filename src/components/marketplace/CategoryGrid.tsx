@@ -3,14 +3,18 @@ import { useGetListingCategoriesQuery } from "@/app/api/listing-categories";
 import { Package } from "lucide-react";
 import { SectionHeader } from "../home/SectionHeader";
 import { CompactCategoryCard } from "./CompactCategoryCard";
+import { mockCategories } from "@/data/mockData";
 
 const CategoryGrid: React.FC = () => {
   const { data, isLoading } = useGetListingCategoriesQuery({ limit: 8 });
-  const categories = data?.data ?? [];
+
+  // Use mock data if API fails or returns empty, to ensure UI is not empty
+  const categories =
+    data?.data && data.data.length > 0 ? data.data : mockCategories.slice(0, 8);
 
   return (
     <div className="max-w-[1600px] mx-auto px-4 lg:px-6">
-      <SectionHeader 
+      <SectionHeader
         title="Industrial Sectors"
         subtitle="Navigate through our specialized industrial procurement nodes."
         label="Market Segments"

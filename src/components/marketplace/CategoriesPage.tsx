@@ -3,6 +3,7 @@ import { ArrowLeft, Search, Package } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { useGetListingCategoriesQuery } from "@/app/api/listing-categories";
+import { mockCategories } from "@/data/mockData";
 import { useNavigate } from "react-router-dom";
 
 interface CategoriesPageProps {
@@ -14,14 +15,17 @@ const CategoriesPage: React.FC<CategoriesPageProps> = ({ onBack }) => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
 
-  const { data, isLoading } = useGetListingCategoriesQuery({ limit: 50 });
-  const categories = data?.data ?? [];
+  // const { data, isLoading } = useGetListingCategoriesQuery({ limit: 50 });
+  const isLoading = false;
+  const categories = mockCategories;
 
   const filtered = searchQuery.trim()
     ? categories.filter(
         (c) =>
           c.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          (c.description ?? "").toLowerCase().includes(searchQuery.toLowerCase()),
+          (c.description ?? "")
+            .toLowerCase()
+            .includes(searchQuery.toLowerCase()),
       )
     : categories;
 

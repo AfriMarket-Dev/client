@@ -7,95 +7,77 @@ const CTASection: React.FC = () => {
   const navigate = useNavigate();
 
   return (
-    <section className="relative py-24 md:py-32 overflow-hidden bg-slate-950 text-white industrial-grain">
-      {/* Architectural Background */}
-      <div className="absolute inset-0 blueprint-grid opacity-[0.05] pointer-events-none" />
-      <div className="absolute top-0 right-0 w-1/3 h-full bg-primary/10 blur-3xl rounded-full translate-x-1/2 -translate-y-1/4 pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-1/4 h-full bg-sky-500/5 blur-3xl rounded-full -translate-x-1/2 translate-y-1/4 pointer-events-none" />
+    <section className="relative py-24 overflow-hidden bg-slate-950 text-white">
+      {/* Subtle Background */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:50px_50px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none" />
 
-      <div className="max-w-[1600px] mx-auto px-4 lg:px-6 relative z-10">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-24 items-center">
-          
-          <div className="max-w-2xl">
-            <div className="inline-flex items-center gap-3 px-4 py-1.5 bg-primary/10 backdrop-blur-md text-primary text-[10px] font-bold tracking-[0.25em] mb-8 rounded-lg border border-primary/20 uppercase">
-              <div className="w-2 h-2 rounded-full bg-primary" />
-              Unified Procurement
+      <div className="max-w-7xl mx-auto px-4 lg:px-6 relative z-10">
+        <div className="text-center max-w-3xl mx-auto mb-16">
+          <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 text-primary text-xs font-bold tracking-widest uppercase rounded-full mb-6 border border-primary/20">
+            <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+            Unified Procurement
+          </div>
+
+          <h2 className="text-4xl md:text-5xl font-heading font-bold text-white mb-6 tracking-tight">
+            Connect with Rwanda's <br />
+            <span className="text-primary">Industrial Network</span>
+          </h2>
+
+          <p className="text-slate-400 text-lg leading-relaxed">
+            A centralized platform verifying the supply chain from manufacturer
+            to job site.
+          </p>
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+          {/* Product Gateway */}
+          <div
+            onClick={() => navigate("/products?type=PRODUCT")}
+            className="group cursor-pointer bg-white/5 border border-white/10 hover:border-primary/50 p-8 rounded-xl transition-all duration-300 hover:bg-white/[0.07]"
+          >
+            <div className="flex items-start justify-between mb-8">
+              <div className="w-12 h-12 bg-primary/20 text-primary rounded-lg flex items-center justify-center">
+                <Package className="w-6 h-6" />
+              </div>
+              <ArrowRight className="text-white/20 group-hover:text-primary group-hover:translate-x-1 transition-all" />
             </div>
 
-            <h2 className="text-5xl md:text-7xl font-heading font-bold text-white mb-8 leading-[0.95] tracking-tighter">
-              TOTAL PROJECT <br />
-              <span className="text-primary italic">INTEGRATION.</span>
-            </h2>
-
-            <p className="text-white/60 text-lg md:text-xl mb-12 leading-relaxed max-w-xl font-normal">
-              From raw structural materials to heavy asset acquisition and specialized labor—access the complete industrial supply chain in one professional interface.
+            <h3 className="text-2xl font-heading font-bold text-white mb-2 uppercase tracking-wide">
+              Sourcing
+            </h3>
+            <p className="text-slate-400 text-sm mb-6">
+              Browse verified inventory: heavy machinery, raw materials, and
+              tools.
             </p>
 
-            <div className="grid sm:grid-cols-2 gap-6 mb-12">
-              <div className="space-y-4">
-                <div className="flex items-center gap-3 text-sm font-bold tracking-wide text-white/80">
-                  <CheckCircle2 className="w-5 h-5 text-primary" strokeWidth={2.5} />
-                  15k+ Verified Products
-                </div>
-                <div className="flex items-center gap-3 text-sm font-bold tracking-wide text-white/80">
-                  <CheckCircle2 className="w-5 h-5 text-primary" strokeWidth={2.5} />
-                  Nationwide Logistics Node
-                </div>
-              </div>
-              <div className="space-y-4">
-                <div className="flex items-center gap-3 text-sm font-bold tracking-wide text-white/80">
-                  <CheckCircle2 className="w-5 h-5 text-primary" strokeWidth={2.5} />
-                  Certified Service Experts
-                </div>
-                <div className="flex items-center gap-3 text-sm font-bold tracking-wide text-white/80">
-                  <CheckCircle2 className="w-5 h-5 text-primary" strokeWidth={2.5} />
-                  Project Oversight Tools
-                </div>
-              </div>
-            </div>
+            <span className="text-xs font-bold text-primary uppercase tracking-widest group-hover:underline decoration-primary/50 underline-offset-4">
+              View Catalog
+            </span>
           </div>
 
-          {/* DUAL GATEWAY CARDS */}
-          <div className="grid sm:grid-cols-2 gap-6">
-            
-            {/* Product Gateway */}
-            <div className="group bg-white/5 backdrop-blur-xl border border-white/10 p-8 rounded-lg hover:border-primary/40 transition-all duration-500 flex flex-col items-start h-full">
-              <div className="w-14 h-14 bg-primary/10 text-primary flex items-center justify-center rounded-lg mb-8 group-hover:bg-primary group-hover:text-white transition-all">
-                <Package className="w-7 h-7" />
+          {/* Service Gateway */}
+          <div
+            onClick={() => navigate("/products?type=SERVICE")}
+            className="group cursor-pointer bg-white/5 border border-white/10 hover:border-sky-500/50 p-8 rounded-xl transition-all duration-300 hover:bg-white/[0.07]"
+          >
+            <div className="flex items-start justify-between mb-8">
+              <div className="w-12 h-12 bg-sky-500/20 text-sky-500 rounded-lg flex items-center justify-center">
+                <Briefcase className="w-6 h-6" />
               </div>
-              <h3 className="text-2xl font-heading font-bold text-white mb-4 tracking-tight uppercase">Industrial Inventory</h3>
-              <p className="text-white/40 text-sm mb-8 leading-relaxed font-sans">
-                Source premium materials, power tools, and heavy machinery directly from verified manufacturers and global dealers.
-              </p>
-              <Button 
-                variant="ghost" 
-                onClick={() => navigate("/products?type=PRODUCT")}
-                className="mt-auto text-primary hover:text-white hover:bg-primary font-bold text-xs tracking-widest uppercase p-0 h-auto group/link"
-              >
-                Browse Catalog <ArrowRight className="ml-2 w-4 h-4 group-hover/link:translate-x-1 transition-transform" />
-              </Button>
+              <ArrowRight className="text-white/20 group-hover:text-sky-500 group-hover:translate-x-1 transition-all" />
             </div>
 
-            {/* Service Gateway */}
-            <div className="group bg-white/5 backdrop-blur-xl border border-white/10 p-8 rounded-lg hover:border-sky-400/40 transition-all duration-500 flex flex-col items-start h-full mt-0 sm:mt-12">
-              <div className="w-14 h-14 bg-sky-400/10 text-sky-400 flex items-center justify-center rounded-lg mb-8 group-hover:bg-sky-400 group-hover:text-slate-950 transition-all">
-                <Briefcase className="w-7 h-7" />
-              </div>
-              <h3 className="text-2xl font-heading font-bold text-white mb-4 tracking-tight uppercase">Solutions & Labor</h3>
-              <p className="text-white/40 text-sm mb-8 leading-relaxed font-sans">
-                Deploy certified contractors, engineering consultants, and specialized rental services for complex project nodes.
-              </p>
-              <Button 
-                variant="ghost" 
-                onClick={() => navigate("/products?type=SERVICE")}
-                className="mt-auto text-sky-400 hover:text-slate-950 hover:bg-sky-400 font-bold text-xs tracking-widest uppercase p-0 h-auto group/link"
-              >
-                Find Solutions <ArrowRight className="ml-2 w-4 h-4 group-hover/link:translate-x-1 transition-transform" />
-              </Button>
-            </div>
+            <h3 className="text-2xl font-heading font-bold text-white mb-2 uppercase tracking-wide">
+              Services
+            </h3>
+            <p className="text-slate-400 text-sm mb-6">
+              Hire certified contractors, engineers, and specialized labor.
+            </p>
 
+            <span className="text-xs font-bold text-sky-500 uppercase tracking-widest group-hover:underline decoration-sky-500/50 underline-offset-4">
+              Find Professionals
+            </span>
           </div>
-
         </div>
       </div>
     </section>

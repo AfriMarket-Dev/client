@@ -1,6 +1,13 @@
 import React from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { LogOut, Heart, MessageSquare, User, LayoutDashboard, ChevronDown } from "lucide-react";
+import {
+  LogOut,
+  Heart,
+  MessageSquare,
+  User,
+  LayoutDashboard,
+  ChevronDown,
+} from "lucide-react";
 import { useDispatch } from "react-redux";
 import { logout } from "@/app/features/authSlice";
 import { useSignOutMutation } from "@/app/api/auth";
@@ -53,7 +60,7 @@ export const HeaderUserNav: React.FC<HeaderUserNavProps> = ({
   ];
 
   return (
-    <div className="flex items-center gap-4">
+    <div className="flex items-center gap-2 md:gap-4">
       <nav className="hidden lg:flex items-center gap-1">
         {navLinks.map((link) => (
           <Button
@@ -70,7 +77,7 @@ export const HeaderUserNav: React.FC<HeaderUserNavProps> = ({
       </nav>
 
       {isAuthenticated && (
-        <div className="flex items-center gap-1.5 px-1.5 border-l border-r border-border/40">
+        <div className="hidden md:flex items-center gap-1.5 px-1.5 border-l border-r border-border/40">
           <Button
             variant="ghost"
             size="icon"
@@ -109,7 +116,10 @@ export const HeaderUserNav: React.FC<HeaderUserNavProps> = ({
                     {user.name?.charAt(0).toUpperCase()}
                   </AvatarFallback>
                 </Avatar>
-                <ChevronDown size={14} className="text-muted-foreground group-data-[state=open]:rotate-180 transition-transform duration-300" />
+                <ChevronDown
+                  size={14}
+                  className="text-muted-foreground group-data-[state=open]:rotate-180 transition-transform duration-300"
+                />
               </Button>
             }
           />
@@ -123,10 +133,10 @@ export const HeaderUserNav: React.FC<HeaderUserNavProps> = ({
                   <div className="absolute inset-0 blueprint-grid opacity-[0.05] pointer-events-none" />
                   <div className="relative z-10 flex flex-col space-y-1.5 leading-none">
                     <div className="flex items-center gap-2">
-                        <div className="w-1.5 h-1.5 rounded-full bg-primary" />
-                        <p className="font-heading font-bold text-sm text-foreground uppercase tracking-wider">
-                            {user.name}
-                        </p>
+                      <div className="w-1.5 h-1.5 rounded-full bg-primary" />
+                      <p className="font-heading font-bold text-sm text-foreground uppercase tracking-wider">
+                        {user.name}
+                      </p>
                     </div>
                     {user.email && (
                       <p className="text-[11px] leading-none text-muted-foreground/80 font-medium truncate max-w-[200px] font-sans ml-3.5">
@@ -141,7 +151,11 @@ export const HeaderUserNav: React.FC<HeaderUserNavProps> = ({
                   onClick={() => navigate("/admin")}
                   className="cursor-pointer rounded-md focus:bg-primary/5 focus:text-primary py-2.5 transition-colors"
                 >
-                  <LayoutDashboard size={16} strokeWidth={1.5} className="mr-3 opacity-70" />
+                  <LayoutDashboard
+                    size={16}
+                    strokeWidth={1.5}
+                    className="mr-3 opacity-70"
+                  />
                   <span className="font-bold uppercase text-[10px] tracking-[0.15em]">
                     System Terminal
                   </span>
@@ -152,7 +166,11 @@ export const HeaderUserNav: React.FC<HeaderUserNavProps> = ({
                   onClick={() => navigate("/dashboard")}
                   className="cursor-pointer rounded-md focus:bg-primary/5 focus:text-primary py-2.5 transition-colors"
                 >
-                  <LayoutDashboard size={16} strokeWidth={1.5} className="mr-3 opacity-70" />
+                  <LayoutDashboard
+                    size={16}
+                    strokeWidth={1.5}
+                    className="mr-3 opacity-70"
+                  />
                   <span className="font-bold uppercase text-[10px] tracking-[0.15em]">
                     Provider Node
                   </span>
@@ -181,7 +199,7 @@ export const HeaderUserNav: React.FC<HeaderUserNavProps> = ({
           </DropdownMenuContent>
         </DropdownMenu>
       ) : (
-        <div className="flex items-center gap-3">
+        <div className="hidden md:flex items-center gap-3">
           <Link to="/auth/signin">
             <Button
               variant="ghost"
