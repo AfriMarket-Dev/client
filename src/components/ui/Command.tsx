@@ -8,11 +8,11 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/Dialog"
+} from "@/components/ui/dialog"
 import {
   InputGroup,
   InputGroupAddon,
-} from "@/components/ui/InputGroup"
+} from "@/components/ui/input-group"
 import { RiSearchLine, RiCheckLine } from "@remixicon/react"
 
 function Command({

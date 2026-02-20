@@ -11,12 +11,12 @@ import {
   List,
   Star,
 } from "lucide-react";
-import { useWishlist } from "@/hooks/useWishlist";
+import { useWishlist } from "@/hooks/use-wishlist";
 import { type Product } from "@/types";
-import { Button } from "@/components/ui/Button";
-import { Badge } from "@/components/ui/Badge";
-import { Card } from "@/components/ui/Card";
-import { ImageWithFallback } from "@/components/common/ImageWithFallback";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Card } from "@/components/ui/card";
+import { ImageWithFallback } from "@/components/common/image-with-fallback";
 
 interface WishlistProps {
   onBack: () => void;

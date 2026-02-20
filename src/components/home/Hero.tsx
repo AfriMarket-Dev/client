@@ -1,16 +1,16 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowRight, Zap } from "lucide-react";
-import { Button } from "@/components/ui/Button";
-import { HeroWidget, type HeroWidgetItem } from "./HeroWidget";
-import { Badge } from "@/components/ui/Badge";
-import { ImageWithFallback } from "@/components/common/ImageWithFallback";
+import { Button } from "@/components/ui/button";
+import { HeroWidget, type HeroWidgetItem } from "./hero-widget";
+import { Badge } from "@/components/ui/badge";
+import { ImageWithFallback } from "@/components/common/image-with-fallback";
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
   type CarouselApi,
-} from "@/components/ui/Carousel";
+} from "@/components/ui/carousel";
 
 const MOCK_WIDGET_ITEMS: Record<string, HeroWidgetItem[]> = {
   deals: [

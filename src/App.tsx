@@ -1,7 +1,7 @@
 import { RouterProvider } from "react-router-dom";
 import { router } from "@/routes";
 import { ErrorBoundary } from "@/components/layout";
-import { TooltipProvider } from "./components/ui/Tooltip";
+import { TooltipProvider } from "./components/ui/tooltip";
 
 function App() {
   return (

@@ -1,3 +1,3 @@
-export * from "./ActionModal";
-export * from "./ConfirmationModal";
-export * from "./ReviewModal";
+export * from "./action-modal";
+export * from "./confirmation-modal";
+export * from "./review-modal";

@@ -1,4 +1,4 @@
-import { apiSlice } from "@/app/api/apiEntry";
+import { apiSlice } from "@/app/api/api-entry";
 import type { ApiResponse } from "@/app/api/types";
 
 export interface CompanyCategoryRef {

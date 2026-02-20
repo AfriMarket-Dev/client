@@ -10,8 +10,8 @@ import {
   REGISTER,
 } from "redux-persist";
 
-import { apiSlice } from "@/app/api/apiEntry";
-import authReducer from "@/app/features/authSlice";
+import { apiSlice } from "@/app/api/api-entry";
+import authReducer from "@/app/features/auth-slice";
 
 const authPersistConfig = {
   key: "auth",

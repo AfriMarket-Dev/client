@@ -1,24 +1,24 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
-import HomePage from "@/pages/HomePage";
-import MarketplacePage from "@/pages/marketplace/MarketplacePage";
-import ProductPage from "@/pages/marketplace/ProductPage";
-import ServicePage from "@/pages/marketplace/ServicePage";
-import SupplierDetailsPage from "@/pages/SupplierDetailsPage";
-import SupplierListingPage from "@/pages/SupplierListingPage";
-import CategoriesPage from "@/pages/CategoriesPage";
-import SignUpPage from "@/pages/SignUpPage";
-import SignInPage from "@/pages/SignInPage";
-import AboutPage from "@/pages/AboutPage";
-import HelpCenterPage from "@/pages/HelpCenterPage";
-import AdminDashboard from "@/pages/AdminDashboard";
-import AdminSuppliersPage from "@/pages/AdminSuppliersPage";
-import AdminAddSupplierPage from "@/pages/AdminAddSupplierPage";
-import AdminEditSupplierPage from "@/pages/AdminEditSupplierPage";
-import AdminSupplierDetailsPage from "@/pages/AdminSupplierDetailsPage";
-import AdminProductDetailsPage from "@/pages/AdminProductDetailsPage";
-import AdminEditProductPage from "@/pages/AdminEditProductPage";
-import AdminCategoriesPage from "@/pages/AdminCategoriesPage";
-import AdminProductsPage from "@/pages/AdminProductsPage";
+import HomePage from "@/pages/home-page";
+import MarketplacePage from "@/pages/marketplace/marketplace-page";
+import ProductPage from "@/pages/marketplace/product-page";
+import ServicePage from "@/pages/marketplace/service-page";
+import SupplierDetailsPage from "@/pages/supplier-details-page";
+import SupplierListingPage from "@/pages/supplier-listing-page";
+import CategoriesPage from "@/pages/categories-page";
+import SignUpPage from "@/pages/sign-up-page";
+import SignInPage from "@/pages/sign-in-page";
+import AboutPage from "@/pages/about-page";
+import HelpCenterPage from "@/pages/help-center-page";
+import AdminDashboard from "@/pages/admin-dashboard";
+import AdminSuppliersPage from "@/pages/admin-suppliers-page";
+import AdminAddSupplierPage from "@/pages/admin-add-supplier-page";
+import AdminEditSupplierPage from "@/pages/admin-edit-supplier-page";
+import AdminSupplierDetailsPage from "@/pages/admin-supplier-details-page";
+import AdminProductDetailsPage from "@/pages/admin-product-details-page";
+import AdminEditProductPage from "@/pages/admin-edit-product-page";
+import AdminCategoriesPage from "@/pages/admin-categories-page";
+import AdminProductsPage from "@/pages/admin-products-page";
 import {
   MainLayout,
   AuthLayout,
@@ -27,13 +27,13 @@ import {
   ProtectedRoute,
   ProviderRoute,
 } from "@/components/layout";
-import WishlistPage from "@/pages/WishlistPage";
-import MessagesPage from "@/pages/MessagesPage";
-import ProfilePage from "@/pages/ProfilePage";
-import ProviderDashboardPage from "@/pages/ProviderDashboardPage";
-import ProviderListingFormPage from "@/pages/ProviderListingFormPage";
-import ProviderListingEditPage from "@/pages/ProviderListingEditPage";
-import { DashboardLayout } from "@/components/layout/DashboardLayout";
+import WishlistPage from "@/pages/wishlist-page";
+import MessagesPage from "@/pages/messages-page";
+import ProfilePage from "@/pages/profile-page";
+import ProviderDashboardPage from "@/pages/provider-dashboard-page";
+import ProviderListingFormPage from "@/pages/provider-listing-form-page";
+import ProviderListingEditPage from "@/pages/provider-listing-edit-page";
+import { DashboardLayout } from "@/components/layout/dashboard-layout";
 
 export const router = createBrowserRouter([
   {

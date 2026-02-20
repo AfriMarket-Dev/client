@@ -1,4 +1,4 @@
-import { apiSlice } from "@/app/api/apiEntry";
+import { apiSlice } from "@/app/api/api-entry";
 
 export interface SignInRequest {
   email: string;

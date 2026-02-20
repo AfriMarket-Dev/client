@@ -1,19 +1,30 @@
-import { apiSlice } from "@/app/api/apiEntry";
+import { apiSlice } from "@/app/api/api-entry";
 import type { ApiResponse } from "@/app/api/types";
 
 export interface ListingCategoryRef {
   id: string;
   name: string;
+  slug?: string; // Added optional
   description?: string;
 }
 
 export interface CompanyRef {
   id: string;
   name: string;
-  slug: string;
+  slug?: string; // Made optional to match usage
   district?: string;
   isVerified?: boolean;
   type?: string; 
+  email?: string;
+  phone?: string;
+  address?: string;
+  description?: string;
+  logo?: string;
+  rating?: number;
+  joinedAt?: string;
+  ownerId?: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface ListingVariantRef {
