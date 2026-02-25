@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@tanstack/react-router";
 import { useGetMyCompanyQuery } from "@/app/api/companies";
 import { useGetListingCategoriesQuery } from "@/app/api/listing-categories";
 import { useCreateListingMutation } from "@/app/api/listings";
@@ -24,7 +24,7 @@ export default function ProviderListingFormPage() {
   const handleSubmit = async (values: Parameters<typeof createListing>[0]) => {
     try {
       await createListing(values).unwrap();
-      navigate("/dashboard");
+      navigate({ to: "/dashboard" });
     } catch (err) {
       console.error(err);
     }
@@ -39,7 +39,7 @@ export default function ProviderListingFormPage() {
         categories={categories}
         companyId={companyId}
         onSubmit={handleSubmit}
-        onCancel={() => navigate("/dashboard")}
+        onCancel={() => navigate({ to: "/dashboard" })}
         isLoading={isLoading}
       />
     </div>

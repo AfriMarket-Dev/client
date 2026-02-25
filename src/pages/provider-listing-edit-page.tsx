@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "@tanstack/react-router";
 import { useState } from "react";
 import {
   useGetListingByIdQuery,
@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/dialog";
 
 export default function ProviderListingEditPage() {
-  const { listingId } = useParams<{ listingId: string }>();
+  const { listingId } = useParams({ from: "/dashboard/listings/$listingId/edit" });
   const navigate = useNavigate();
   const [addVariantOpen, setAddVariantOpen] = useState(false);
 
@@ -40,7 +40,7 @@ export default function ProviderListingEditPage() {
     return (
       <div className="p-8">
         <p className="text-muted-foreground">Listing not found.</p>
-        <Button variant="outline" onClick={() => navigate("/dashboard")} className="mt-4">
+        <Button variant="outline" onClick={() => navigate({ to: "/dashboard" })} className="mt-4">
           Back to Dashboard
         </Button>
       </div>
@@ -81,7 +81,7 @@ export default function ProviderListingEditPage() {
           companyId,
         }}
         onSubmit={handleUpdate}
-        onCancel={() => navigate("/dashboard")}
+        onCancel={() => navigate({ to: "/dashboard" })}
         isLoading={updateLoading}
       />
 

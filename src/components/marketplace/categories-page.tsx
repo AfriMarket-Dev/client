@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useGetListingCategoriesQuery } from "@/app/api/listing-categories";
 import { mockCategories } from "@/data/mock-data";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@tanstack/react-router";
 
 interface CategoriesPageProps {
   onBack: () => void;
@@ -81,7 +81,7 @@ const CategoriesPage: React.FC<CategoriesPageProps> = ({ onBack }) => {
               <button
                 key={category.id}
                 type="button"
-                onClick={() => navigate(`/products?category=${category.id}`)}
+                onClick={() => navigate({ to: "/marketplace", search: { category: category.id } as any })}
                 className="group text-left p-6 rounded-sm border border-border bg-card hover:border-primary transition-all duration-200"
               >
                 <div className="w-12 h-12 rounded-sm bg-muted/50 border border-border flex items-center justify-center mb-4 text-muted-foreground group-hover:bg-primary group-hover:text-primary-foreground group-hover:border-primary transition-colors">

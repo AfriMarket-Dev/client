@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@tanstack/react-router";
 import {
   ArrowLeft,
   Globe,
@@ -25,7 +25,7 @@ const AboutPage: React.FC = () => {
         <div className="flex items-center justify-between">
           <Button
             variant="ghost"
-            onClick={() => navigate("/")}
+            onClick={() => navigate({ to: "/" })}
             className="group flex items-center gap-2 text-foreground hover:bg-muted py-2 px-3 rounded-sm transition-colors font-heading font-bold uppercase text-xs tracking-wider"
           >
             <ArrowLeft

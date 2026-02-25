@@ -1,9 +1,10 @@
-import { Link, Outlet, useLocation } from "react-router-dom";
+import { Link, Outlet, useRouterState } from "@tanstack/react-router";
 import { Package, Plus, LayoutDashboard } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export const DashboardLayout = () => {
-  const location = useLocation();
+  const routerState = useRouterState();
+  const pathname = routerState.location.pathname;
 
   const nav = [
     { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -25,10 +26,10 @@ export const DashboardLayout = () => {
           {nav.map((item) => (
             <Link
               key={item.to}
-              to={item.to}
+              to={item.to as any}
               className={cn(
                 "flex items-center gap-2 px-3 py-2 rounded-sm text-sm font-medium transition-colors",
-                location.pathname === item.to
+                pathname === item.to
                   ? "bg-primary text-primary-foreground"
                   : "text-muted-foreground hover:bg-muted hover:text-foreground"
               )}

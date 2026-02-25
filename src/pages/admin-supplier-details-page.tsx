@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "@tanstack/react-router";
 import {
   ChevronLeft,
   Mail,
@@ -76,7 +76,7 @@ interface Supplier {
 }
 
 export default function AdminSupplierDetailsPage() {
-  const { supplierId } = useParams();
+  const { supplierId } = useParams({ from: "/admin/suppliers/$supplierId/" });
   const navigate = useNavigate();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showSuspendModal, setShowSuspendModal] = useState(false);
@@ -170,20 +170,20 @@ export default function AdminSupplierDetailsPage() {
   }));
 
   const handleEditSupplier = () => {
-    navigate(`/admin/suppliers/${supplierId}/edit`);
+    navigate({ to: `/admin/suppliers/${supplierId}/edit` as any });
   };
 
   const confirmSuspend = () => {
     alert(`${supplier.name} has been suspended successfully.`);
     setShowSuspendModal(false);
-    navigate("/admin/suppliers");
+    navigate({ to: "/admin/suppliers" });
   };
 
   const confirmDelete = () => {
     alert(`${supplier.name} has been deleted successfully.`);
     setShowDeleteModal(false);
     setDeleteConfirmation("");
-    navigate("/admin/suppliers");
+    navigate({ to: "/admin/suppliers" });
   };
 
   return (
@@ -191,7 +191,7 @@ export default function AdminSupplierDetailsPage() {
       <div className="flex items-center justify-between">
         <Button
           variant="ghost"
-          onClick={() => navigate("/admin/suppliers")}
+          onClick={() => navigate({ to: "/admin/suppliers" })}
           className="group flex items-center gap-2 text-foreground hover:bg-muted py-2 px-3 rounded-sm transition-colors font-heading font-bold uppercase text-xs tracking-wider"
         >
           <ChevronLeft
@@ -410,7 +410,7 @@ export default function AdminSupplierDetailsPage() {
                   <tr
                     key={p.id}
                     onClick={() =>
-                      navigate(`/admin/suppliers/${supplierId}/product/${p.id}`)
+                      navigate({ to: `/admin/suppliers/${supplierId}/product/${p.id}` as any })
                     }
                     className="hover:bg-muted/30 transition-colors cursor-pointer group"
                   >
@@ -454,9 +454,9 @@ export default function AdminSupplierDetailsPage() {
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
-                            navigate(
-                              `/admin/suppliers/${supplierId}/product/${p.id}`,
-                            );
+                            navigate({
+                              to: `/admin/suppliers/${supplierId}/product/${p.id}` as any,
+                            });
                           }}
                           className="p-2 hover:bg-primary/10 rounded-sm transition-colors text-primary border border-transparent hover:border-primary"
                         >
@@ -466,9 +466,9 @@ export default function AdminSupplierDetailsPage() {
                           className="p-2 hover:bg-muted rounded-sm transition-colors text-muted-foreground border border-transparent hover:border-border"
                           onClick={(e) => {
                             e.stopPropagation();
-                            navigate(
-                              `/admin/suppliers/${supplierId}/product/${p.id}/edit`,
-                            );
+                            navigate({
+                              to: `/admin/suppliers/${supplierId}/product/${p.id}/edit` as any,
+                            });
                           }}
                         >
                           <Edit size={14} />

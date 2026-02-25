@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import {
   Package,
   Users,
@@ -38,19 +38,20 @@ interface AdminSidebarProps {
 }
 
 export const AdminSidebar: React.FC<AdminSidebarProps> = ({ user }) => {
-  const location = useLocation();
+  const routerState = useRouterState();
+  const pathname = routerState.location.pathname;
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [signOut] = useSignOutMutation();
 
-  const isActive = (path: string) => location.pathname === path;
+  const isActive = (path: string) => pathname === path;
 
   const handleLogout = async () => {
     try {
       await signOut().unwrap();
     } catch {}
     dispatch(logout());
-    navigate("/");
+    navigate({ to: "/" });
   };
 
   const menuItems = [
@@ -86,7 +87,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ user }) => {
                 <SidebarMenuItem key={item.path}>
                   <SidebarMenuButton
                     isActive={isActive(item.path)}
-                    onClick={() => navigate(item.path)}
+                    onClick={() => navigate({ to: item.path as any })}
                     className={cn(
                       "h-12 rounded-sm transition-all duration-200 font-heading font-bold uppercase text-[10px] tracking-widest border",
                       isActive(item.path)

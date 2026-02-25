@@ -1,7 +1,7 @@
 import React from "react";
 import { Timer, Flame, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@tanstack/react-router";
 import { Badge } from "@/components/ui/badge";
 import { ProductCard } from "@/components/marketplace/catalog/product-card";
 import { getMockProducts } from "@/data/mock-data";
@@ -89,7 +89,7 @@ const HotDeals: React.FC = () => {
             variant="ghost"
             size="lg"
             className="text-red-600 hover:bg-red-50 hover:text-red-700 font-bold rounded-lg px-8 h-16 uppercase text-xs tracking-widest transition-all"
-            onClick={() => navigate("/products?sort=deals")}
+            onClick={() => navigate({ to: "/marketplace", search: { sort: "deals" } as any })}
           >
             View All Deals <ArrowRight className="ml-3 w-5 h-5" />
           </Button>
@@ -111,7 +111,7 @@ const HotDeals: React.FC = () => {
             <ProductCard
               key={listing.id}
               listing={listing}
-              onClick={() => navigate(`/products/${listing.id}`)}
+              onClick={() => navigate({ to: `/products/${listing.id}` as any })}
               isInWishlist={wishlist.some((l: { id: string }) => l.id === listing.id)}
               onToggleWishlist={(e) => handleToggleWishlist(e, listing.id)}
             />
@@ -123,7 +123,7 @@ const HotDeals: React.FC = () => {
         <Button
           variant="outline"
           size="lg"
-          onClick={() => navigate("/products?sort=deals")}
+          onClick={() => navigate({ to: "/marketplace", search: { sort: "deals" } as any })}
         >
           See All Deals <ArrowRight />
         </Button>

@@ -1,7 +1,7 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@tanstack/react-router";
 
 interface SectionHeaderProps {
   title: string;
@@ -52,7 +52,7 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({
             <Button
               variant="outline"
               size="sm"
-              onClick={() => navigate(viewAllHref)}
+              onClick={() => navigate({ to: viewAllHref as any })}
               className="border border-border hover:bg-foreground hover:text-background rounded-lg font-bold transition-all px-5 h-9 uppercase text-[9px] tracking-widest group/btn shadow-none"
             >
               {viewAllLabel}

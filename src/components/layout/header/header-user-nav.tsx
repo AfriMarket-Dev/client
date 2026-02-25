@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link } from "@tanstack/react-router";
 import {
   LogOut,
   Heart,
@@ -49,11 +49,11 @@ export const HeaderUserNav: React.FC<HeaderUserNavProps> = ({
       await signOut().unwrap();
     } catch {}
     dispatch(logout());
-    navigate("/");
+    navigate({ to: "/" });
   };
 
   const navLinks = [
-    { label: "Marketplace", href: "/Marketplace" },
+    { label: "Marketplace", href: "/marketplace" },
     { label: "Categories", href: "/categories" },
     { label: "Suppliers", href: "/suppliers" },
     { label: "About", href: "/about" },
@@ -67,7 +67,7 @@ export const HeaderUserNav: React.FC<HeaderUserNavProps> = ({
             key={link.label}
             variant="ghost"
             size="sm"
-            onClick={() => navigate(link.href)}
+            onClick={() => navigate({ to: link.href as any })}
             className="font-heading font-bold text-[11px] tracking-[0.15em] text-muted-foreground/70 hover:text-primary hover:bg-primary/5 rounded-lg px-4 transition-all duration-300 uppercase relative group"
           >
             {link.label}
@@ -82,7 +82,7 @@ export const HeaderUserNav: React.FC<HeaderUserNavProps> = ({
             variant="ghost"
             size="icon"
             className="relative h-9 w-9 text-muted-foreground/80 hover:text-primary hover:bg-primary/5 rounded-lg transition-all"
-            onClick={() => navigate("/wishlist")}
+            onClick={() => navigate({ to: "/wishlist" })}
           >
             <Heart size={18} strokeWidth={1.5} />
             {wishlistCount > 0 && (
@@ -95,7 +95,7 @@ export const HeaderUserNav: React.FC<HeaderUserNavProps> = ({
             variant="ghost"
             size="icon"
             className="h-9 w-9 text-muted-foreground/80 hover:text-primary hover:bg-primary/5 rounded-lg transition-all"
-            onClick={() => navigate("/messages")}
+            onClick={() => navigate({ to: "/messages" })}
           >
             <MessageSquare size={18} strokeWidth={1.5} />
           </Button>
@@ -148,7 +148,7 @@ export const HeaderUserNav: React.FC<HeaderUserNavProps> = ({
               </DropdownMenuLabel>
               {(user.role === "admin" || user.role === "agent") && (
                 <DropdownMenuItem
-                  onClick={() => navigate("/admin")}
+                  onClick={() => navigate({ to: "/admin" })}
                   className="cursor-pointer rounded-md focus:bg-primary/5 focus:text-primary py-2.5 transition-colors"
                 >
                   <LayoutDashboard
@@ -163,7 +163,7 @@ export const HeaderUserNav: React.FC<HeaderUserNavProps> = ({
               )}
               {PROVIDER_ROLES.includes(user.role) && (
                 <DropdownMenuItem
-                  onClick={() => navigate("/dashboard")}
+                  onClick={() => navigate({ to: "/dashboard" })}
                   className="cursor-pointer rounded-md focus:bg-primary/5 focus:text-primary py-2.5 transition-colors"
                 >
                   <LayoutDashboard
@@ -177,7 +177,7 @@ export const HeaderUserNav: React.FC<HeaderUserNavProps> = ({
                 </DropdownMenuItem>
               )}
               <DropdownMenuItem
-                onClick={() => navigate("/profile")}
+                onClick={() => navigate({ to: "/profile" })}
                 className="cursor-pointer rounded-md focus:bg-primary/5 focus:text-primary py-2.5 transition-colors"
               >
                 <User size={16} strokeWidth={1.5} className="mr-3 opacity-70" />

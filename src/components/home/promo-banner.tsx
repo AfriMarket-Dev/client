@@ -1,7 +1,7 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@tanstack/react-router";
 
 interface PromoBannerProps {
   title: string;
@@ -49,7 +49,7 @@ const PromoBanner: React.FC<PromoBannerProps> = ({
 
             <Button
               size="lg"
-              onClick={() => navigate(ctaLink)}
+              onClick={() => navigate({ to: ctaLink as any })}
               variant={variant === "primary" ? "secondary" : "default"}
               className="font-semibold h-12 md:h-16 px-6 md:px-10 text-sm md:text-lg rounded-lg shadow-lg transition-all hover:scale-105 active:scale-95 group shrink-0 w-full md:w-auto"
             >

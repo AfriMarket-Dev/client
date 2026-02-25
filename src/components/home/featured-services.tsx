@@ -2,7 +2,7 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { MapPin, Briefcase } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@tanstack/react-router";
 // import { useGetListingsQuery } from "@/app/api/listings";
 // import type { Listing } from "@/app/api/listings";
 import { SectionHeader } from "./section-header";
@@ -46,7 +46,7 @@ const FeaturedServices: React.FC = () => {
               <Card
                 key={service.id}
                 className="group border border-border/30 shadow-sm hover:shadow-xl hover:border-primary/20 transition-all duration-500 rounded-lg overflow-hidden bg-card cursor-pointer"
-                onClick={() => navigate(`/products/${service.id}`)}
+                onClick={() => navigate({ to: `/products/${service.id}` as any })}
               >
                 <div className="relative aspect-video overflow-hidden bg-muted/20">
                   {img ? (
@@ -93,7 +93,7 @@ const FeaturedServices: React.FC = () => {
           variant="outline"
           size="lg"
           className="w-full rounded-lg h-14 font-semibold border-border/60 shadow-none"
-          onClick={() => navigate("/products?type=SERVICE")}
+          onClick={() => navigate({ to: "/marketplace", search: { type: "SERVICE" } as any })}
         >
             Find more services
         </Button>

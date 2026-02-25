@@ -1,5 +1,5 @@
 import { useState, useCallback, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@tanstack/react-router";
 import {
   Plus,
   Edit,
@@ -88,14 +88,14 @@ export default function AdminSuppliersPage() {
 
   const handleViewDetails = useCallback(
     (supplierId: string) => {
-      navigate(`/admin/suppliers/${supplierId}`);
+      navigate({ to: `/admin/suppliers/${supplierId}` as any });
     },
     [navigate],
   );
 
   const handleEditSupplier = useCallback(
     (supplierId: string) => {
-      navigate(`/admin/suppliers/${supplierId}/edit`);
+      navigate({ to: `/admin/suppliers/${supplierId}/edit` as any });
     },
     [navigate],
   );
@@ -274,7 +274,7 @@ export default function AdminSuppliersPage() {
         subtitle="Manage all platform suppliers"
         actions={
           <Button
-            onClick={() => navigate("/admin/suppliers/new")}
+            onClick={() => navigate({ to: "/admin/suppliers/new" })}
             className="rounded-sm h-11 px-6 font-heading font-bold uppercase text-sm tracking-wider shadow-none"
           >
             <Plus size={18} className="mr-2" />

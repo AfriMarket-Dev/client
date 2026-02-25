@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useSelector } from "react-redux";
 import { type RootState } from "@/app/store";
 import { HeaderLogo } from "./header/header-logo";
@@ -54,7 +54,7 @@ export function MobileNav() {
                   key={link.label} 
                   variant="ghost" 
                   onClick={() => {
-                    navigate(link.href);
+                    navigate({ to: link.href as any });
                     setOpen(false);
                   }}
                 >
@@ -68,7 +68,7 @@ export function MobileNav() {
                   className="w-full h-11 text-base font-bold" 
                   variant="outline"
                   onClick={() => {
-                    navigate("/auth/signin");
+                    navigate({ to: "/auth/signin" });
                     setOpen(false);
                   }}
                 >
@@ -77,7 +77,7 @@ export function MobileNav() {
                 <Button 
                   className="w-full h-11 text-base font-bold"
                   onClick={() => {
-                    navigate("/auth/signup");
+                    navigate({ to: "/auth/signup" });
                     setOpen(false);
                   }}
                 >
@@ -115,7 +115,7 @@ export const Header: React.FC = () => {
               key={link.label} 
               size="sm" 
               variant="ghost" 
-              onClick={() => navigate(link.href)}
+              onClick={() => navigate({ to: link.href as any })}
               className="font-heading font-bold text-[11px] tracking-[0.15em] text-muted-foreground/70 hover:text-primary hover:bg-primary/5 rounded-lg px-4 uppercase transition-all"
             >
               {link.label}
@@ -128,14 +128,14 @@ export const Header: React.FC = () => {
                 <Button 
                   size="sm" 
                   variant="ghost"
-                  onClick={() => navigate("/auth/signin")}
+                  onClick={() => navigate({ to: "/auth/signin" })}
                   className="font-heading font-bold uppercase tracking-[0.15em] hover:text-primary hover:bg-primary/5 text-[11px] px-4"
                 >
                   Sign In
                 </Button>
                 <Button 
                   size="sm"
-                  onClick={() => navigate("/auth/signup")}
+                  onClick={() => navigate({ to: "/auth/signup" })}
                   className="font-heading font-bold text-[11px] uppercase tracking-[0.15em] px-5 bg-primary hover:bg-primary/90"
                 >
                   Get Started

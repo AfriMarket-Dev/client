@@ -1,6 +1,6 @@
 "use no memo"
 
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate, Outlet } from "@tanstack/react-router";
 import { useSelector } from "react-redux";
 import { type RootState } from "@/app/store";
 

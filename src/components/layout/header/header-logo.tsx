@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link } from "@tanstack/react-router";
 
 export const HeaderLogo: React.FC = () => (
   <Link to="/" className="flex items-center gap-1.5 md:gap-2 group shrink-0">

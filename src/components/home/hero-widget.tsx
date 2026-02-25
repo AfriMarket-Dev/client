@@ -1,6 +1,6 @@
 import React from "react";
 import { ArrowRight, Star } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link } from "@tanstack/react-router";
 import { ImageWithFallback } from "@/components/common/image-with-fallback";
 import { cn } from "@/lib/utils";
 
@@ -96,7 +96,7 @@ export const HeroWidget: React.FC<HeroWidgetProps> = ({
           )}
         </div>
         <Link
-          to={href}
+          to={href as any}
           className="text-muted-foreground hover:text-foreground transition-all p-1 group/link"
         >
           <ArrowRight className="w-4 h-4 group-hover/link:translate-x-0.5 transition-transform" />
@@ -107,7 +107,7 @@ export const HeroWidget: React.FC<HeroWidgetProps> = ({
         {displayItems.map((item, idx) => (
           <div key={idx} className="group/item flex flex-col h-full relative">
             {item.type === "stat" ? (
-              <Link to={href} className="block h-full bg-muted/20 rounded-md p-2 border border-border/40 hover:border-border transition-colors flex flex-col justify-center items-center text-center relative overflow-hidden group-hover/widget:bg-muted/30">
+              <Link to={href as any} className="block h-full bg-muted/20 rounded-md p-2 border border-border/40 hover:border-border transition-colors flex flex-col justify-center items-center text-center relative overflow-hidden group-hover/widget:bg-muted/30">
                 <div className="relative z-10">
                   <div className={cn("text-2xl md:text-3xl font-black font-heading leading-none mb-1 group-hover/item:scale-105 transition-transform duration-500 ease-out", getTextAccentColor())}>
                     {item.stat}
@@ -119,7 +119,7 @@ export const HeroWidget: React.FC<HeroWidgetProps> = ({
               </Link>
             ) : (
               <Link
-                to={`/products/${item.id}`}
+                to={`/products/${item.id}` as any}
                 className="block h-full transition-colors relative"
               >
                 {/* Image Container */}

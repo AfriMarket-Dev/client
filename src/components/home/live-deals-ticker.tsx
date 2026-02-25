@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { ShoppingCart, Activity } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@tanstack/react-router";
 
 const MOCK_LIVE_ACTIVITIES = [
   {

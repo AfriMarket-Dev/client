@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from '@tanstack/react-router';
 import CategoriesPage from '@/components/marketplace/categories-page';
 
 const CategoriesPageWrapper = () => {
@@ -6,8 +6,8 @@ const CategoriesPageWrapper = () => {
 
   return (
     <CategoriesPage
-      onBack={() => navigate('/')}
-      onSupplierClick={(supplierId: string) => navigate(`/suppliers/${supplierId}`)}
+      onBack={() => navigate({ to: '/' })}
+      onSupplierClick={(supplierId: string) => navigate({ to: `/suppliers/${supplierId}` as any })}
     />
   );
 };

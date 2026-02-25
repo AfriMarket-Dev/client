@@ -1,7 +1,7 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Package } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@tanstack/react-router";
 // import { useGetListingsQuery } from "@/app/api/listings";
 import { ProductCard } from "@/components/marketplace/catalog/product-card";
 import { SectionHeader } from "./section-header";
@@ -44,11 +44,7 @@ const ProductShowcase: React.FC<ProductShowcaseProps> = ({
           subtitle={subtitle}
           label="Curated Selection"
           icon={icon || <Package className="w-5 h-5" />}
-          viewAllHref={
-            categoryId
-              ? `/products?type=PRODUCT&category=${categoryId}`
-              : "/products?type=PRODUCT"
-          }
+          viewAllHref="/marketplace"
         />
 
         {listings.length === 0 ? (
@@ -66,7 +62,7 @@ const ProductShowcase: React.FC<ProductShowcaseProps> = ({
               <ProductCard
                 key={listing.id}
                 listing={listing}
-                onClick={() => navigate(`/products/${listing.id}`)}
+                onClick={() => navigate({ to: `/products/${listing.id}` as any })}
               />
             ))}
           </div>
@@ -77,10 +73,13 @@ const ProductShowcase: React.FC<ProductShowcaseProps> = ({
             variant="outline"
             size="lg"
             onClick={() => {
-              const url = categoryId
-                ? `/products?type=PRODUCT&category=${categoryId}`
-                : "/products?type=PRODUCT";
-              navigate(url);
+              navigate({
+                to: "/marketplace",
+                search: {
+                  type: "PRODUCT",
+                  category: categoryId || undefined,
+                } as any,
+              });
             }}
           >
             View all {title}

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useRouter } from "@tanstack/react-router";
 import {
   ChevronLeft,
   Star,
@@ -33,6 +33,7 @@ interface ServiceViewProps {
 
 export default function ServiceView({ service, onBack }: ServiceViewProps) {
   const navigate = useNavigate();
+  const router = useRouter();
   const [showContactModal, setShowContactModal] = useState(false);
   const [message, setMessage] = useState("");
 
@@ -42,7 +43,7 @@ export default function ServiceView({ service, onBack }: ServiceViewProps) {
     if (onBack) {
       onBack();
     } else {
-      navigate(-1);
+      router.history.back();
     }
   };
 

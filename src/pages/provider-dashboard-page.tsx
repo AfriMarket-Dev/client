@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link } from "@tanstack/react-router";
 import { useGetMyCompanyQuery } from "@/app/api/companies";
 import { useGetListingsQuery } from "@/app/api/listings";
 import { Button } from "@/components/ui/button";
@@ -85,7 +85,7 @@ export default function ProviderDashboardPage() {
             {listings.map((listing) => (
               <li key={listing.id}>
                 <Link
-                  to={`/dashboard/listings/${listing.id}/edit`}
+                  to={`/dashboard/listings/${listing.id}/edit` as any}
                   className="flex items-center justify-between p-4 rounded-sm border border-border bg-card hover:border-primary transition-colors"
                 >
                   <div className="flex items-center gap-3">

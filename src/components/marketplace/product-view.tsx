@@ -20,7 +20,7 @@ import {
   Heart,
 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@tanstack/react-router";
 import { useGetListingByIdQuery } from "@/app/api/listings";
 import {
   useGetWishlistQuery,
@@ -592,7 +592,7 @@ const ProductView: React.FC<ProductViewProps> = ({
                   }).unwrap();
                   setMessageOpen(false);
                   setMessageText("");
-                  navigate("/messages");
+                  navigate({ to: "/messages" });
                 } catch (e) {
                   console.error(e);
                 }

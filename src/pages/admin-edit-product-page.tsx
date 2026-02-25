@@ -1,4 +1,4 @@
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "@tanstack/react-router";
 import { ChevronLeft, Save, Package, DollarSign } from "lucide-react";
 import { useState } from "react";
 import { products, suppliers } from "@/data/mock-data";
@@ -6,7 +6,7 @@ import { AdminPageHeader, AdminCard } from "@/components/admin";
 import { Button } from "@/components/ui/button";
 
 export default function AdminEditProductPage() {
-  const { supplierId, productId } = useParams();
+  const { supplierId, productId } = useParams({ from: "/admin/suppliers/$supplierId/product/$productId/edit" });
   const navigate = useNavigate();
 
   // Find product and supplier
@@ -39,7 +39,7 @@ export default function AdminEditProductPage() {
     await new Promise((resolve) => setTimeout(resolve, 1000));
     alert("SKU updated successfully!");
     setLoading(false);
-    navigate(`/admin/suppliers/${supplierId}/product/${productId}`);
+    navigate({ to: `/admin/suppliers/${supplierId}/product/${productId}` as any });
   };
 
   if (!product || !supplier) {
@@ -50,7 +50,7 @@ export default function AdminEditProductPage() {
             SKU Not Found
           </h1>
           <Button
-            onClick={() => navigate(`/admin/suppliers/${supplierId}`)}
+            onClick={() => navigate({ to: `/admin/suppliers/${supplierId}` as any })}
             className="w-full rounded-sm h-11 font-heading font-bold uppercase text-xs tracking-wider"
           >
             Return to Provider
@@ -66,7 +66,7 @@ export default function AdminEditProductPage() {
       <div className="flex items-center justify-between">
         <Button
           variant="ghost"
-          onClick={() => navigate(`/admin/suppliers/${supplierId}/product/${productId}`)}
+          onClick={() => navigate({ to: `/admin/suppliers/${supplierId}/product/${productId}` as any })}
           className="group flex items-center gap-2 text-foreground hover:bg-muted py-2 px-3 rounded-sm transition-colors font-heading font-bold uppercase text-xs tracking-wider"
         >
           <ChevronLeft size={16} className="group-hover:-translate-x-1 transition-transform" />

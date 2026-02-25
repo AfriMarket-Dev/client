@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom";
+import { Outlet } from "@tanstack/react-router";
 import { useSelector } from "react-redux";
 import { type RootState } from "@/app/store";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";

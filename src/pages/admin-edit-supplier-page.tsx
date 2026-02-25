@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "@tanstack/react-router";
 import { ChevronLeft, Building, User } from "lucide-react";
 import { AdminPageHeader, AdminCard } from "@/components/admin";
 import { Button } from "@/components/ui/button";
@@ -7,7 +7,7 @@ import { SupplierProvisionForm } from "@/components/forms/supplier-provision-for
 
 export default function AdminEditSupplierPage() {
   const navigate = useNavigate();
-  const { supplierId } = useParams();
+  const { supplierId } = useParams({ from: "/admin/suppliers/$supplierId/edit" });
   const [currentStep, setCurrentStep] = useState(1);
 
   // Mock: In real app, fetch supplier data by supplierId
@@ -28,7 +28,7 @@ export default function AdminEditSupplierPage() {
   const handleSubmit = (values: any) => {
     console.log("Updating supplier:", values);
     alert("Supplier updated successfully!");
-    navigate(`/admin/suppliers/${supplierId}`);
+    navigate({ to: `/admin/suppliers/${supplierId}` as any });
   };
 
   return (
@@ -36,7 +36,7 @@ export default function AdminEditSupplierPage() {
       <div className="flex items-center justify-between">
         <Button
           variant="ghost"
-          onClick={() => navigate(`/admin/suppliers/${supplierId}`)}
+          onClick={() => navigate({ to: `/admin/suppliers/${supplierId}` as any })}
           className="group flex items-center gap-2 text-foreground hover:bg-muted py-2 px-3 rounded-sm transition-colors font-heading font-bold uppercase text-xs tracking-wider shadow-none"
         >
           <ChevronLeft
@@ -88,7 +88,7 @@ export default function AdminEditSupplierPage() {
           onStepChange={setCurrentStep}
           initialValues={initialValues}
           onSubmit={handleSubmit}
-          onCancel={() => navigate(`/admin/suppliers/${supplierId}`)}
+          onCancel={() => navigate({ to: `/admin/suppliers/${supplierId}` as any })}
         />
       </div>
     </div>

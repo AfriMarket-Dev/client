@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@tanstack/react-router";
 import { useDispatch } from "react-redux";
 import { Briefcase, Store, ArrowLeft } from "lucide-react";
 import { SignUpForm } from "@/components/forms/sign-up-form";
@@ -43,11 +43,11 @@ const SignUpPage = () => {
         result.user.role === "supplier" || result.user.role === "provider";
 
       if (isAdmin) {
-        navigate("/admin", { replace: true });
+        navigate({ to: "/admin", replace: true });
       } else if (isSupplier) {
-        navigate("/dashboard", { replace: true });
+        navigate({ to: "/dashboard", replace: true });
       } else {
-        navigate("/", { replace: true });
+        navigate({ to: "/", replace: true });
       }
     } catch (err) {
       console.error("SignUp failed", err);
@@ -73,7 +73,7 @@ const SignUpPage = () => {
         </button>
       ) : (
         <button
-          onClick={() => navigate("/")}
+          onClick={() => navigate({ to: "/" })}
           className="flex items-center text-muted-foreground hover:text-foreground transition-colors mb-8 group"
         >
           <ArrowLeft className="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" />
@@ -138,7 +138,7 @@ const SignUpPage = () => {
         <span className="text-muted-foreground">Already have an account? </span>
         <button
           type="button"
-          onClick={() => navigate("/auth/signin")}
+          onClick={() => navigate({ to: "/auth/signin" })}
           className="text-primary font-bold hover:underline"
         >
           Sign In

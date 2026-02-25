@@ -1,6 +1,6 @@
 import { useState, useCallback } from "react";
 import { Search, Edit, Trash2, Eye, Star, Mail, Phone } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@tanstack/react-router";
 import { services as mockServices } from "@/data/mock-data";
 import { AdminPageHeader, AdminCard } from "@/components/admin";
 
@@ -10,7 +10,7 @@ export default function AdminServicesPage() {
 
   const handleNavigateToService = useCallback(
     (serviceId: string) => {
-      navigate(`/admin/services/${serviceId}`);
+      navigate({ to: `/admin/services/${serviceId}` as any });
     },
     [navigate],
   );

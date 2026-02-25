@@ -1,6 +1,6 @@
 import React from "react";
 import { Package, ArrowRight, ChevronRight } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@tanstack/react-router";
 
 interface CompactCategoryCardProps {
   category: {
@@ -17,7 +17,7 @@ export const CompactCategoryCard: React.FC<CompactCategoryCardProps> = ({ catego
   return (
     <div 
       className="group bg-white dark:bg-slate-900 border border-border/60 hover:border-primary/40 rounded-lg p-4 transition-all duration-300 hover:shadow-lg flex flex-col h-full"
-      onClick={() => navigate(`/products?category=${category.id}`)}
+      onClick={() => navigate({ to: "/marketplace", search: { category: category.id } as any })}
     >
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">

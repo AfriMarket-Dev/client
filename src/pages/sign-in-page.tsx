@@ -1,4 +1,4 @@
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useSearch } from "@tanstack/react-router";
 import { useDispatch } from "react-redux";
 import { ArrowLeft } from "lucide-react";
 import { SignInForm } from "@/components/forms/sign-in-form";
@@ -7,12 +7,11 @@ import { setUser, setToken } from "@/app/features/auth-slice";
 
 const SignInPage = () => {
   const navigate = useNavigate();
-  const location = useLocation();
+  const search = useSearch({ from: "/auth/signin" });
   const dispatch = useDispatch();
   const [signIn, { isLoading, error }] = useSignInMutation();
 
-  const from = (location.state as { from?: { pathname: string } })?.from
-    ?.pathname;
+  const from = (search as any).from;
 
   const handleSignIn = async (data: { email: string; password?: string }) => {
     try {
@@ -32,13 +31,13 @@ const SignInPage = () => {
       const isProvider = result.user.role === "provider";
 
       if (from) {
-        navigate(from, { replace: true });
+        window.location.href = from;
       } else if (isAdmin) {
-        navigate("/admin", { replace: true });
+        navigate({ to: "/admin", replace: true });
       } else if (isProvider) {
-        navigate("/dashboard", { replace: true });
+        navigate({ to: "/dashboard", replace: true });
       } else {
-        navigate("/", { replace: true });
+        navigate({ to: "/", replace: true });
       }
     } catch (err) {
       console.error("SignIn failed", err);
@@ -55,7 +54,7 @@ const SignInPage = () => {
   return (
     <>
       <button
-        onClick={() => navigate("/")}
+        onClick={() => navigate({ to: "/" })}
         className="flex items-center text-muted-foreground hover:text-foreground transition-colors mb-8 group"
       >
         <ArrowLeft className="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" />
@@ -83,7 +82,7 @@ const SignInPage = () => {
         <p className="text-sm text-muted-foreground font-medium">
           New to the platform?{" "}
           <button
-            onClick={() => navigate("/auth/signup")}
+            onClick={() => navigate({ to: "/auth/signup" })}
             className="text-primary font-bold hover:underline"
           >
             Create Account

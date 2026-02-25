@@ -1,4 +1,4 @@
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "@tanstack/react-router";
 import {
   ChevronLeft,
   Edit,
@@ -27,7 +27,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
 export default function AdminProductDetailsPage() {
-  const { supplierId, productId } = useParams();
+  const { supplierId, productId } = useParams({ from: "/admin/suppliers/$supplierId/product/$productId/" });
   const navigate = useNavigate();
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [deleteConfirmation, setDeleteConfirmation] = useState("");
@@ -46,7 +46,7 @@ export default function AdminProductDetailsPage() {
             Product Not Found
           </h1>
           <Button
-            onClick={() => navigate(`/admin/suppliers/${supplierId}`)}
+            onClick={() => navigate({ to: `/admin/suppliers/${supplierId}` as any })}
             className="w-full rounded-sm h-11 font-heading font-bold uppercase text-xs tracking-wider"
           >
             Back to Supplier
@@ -59,7 +59,7 @@ export default function AdminProductDetailsPage() {
   const handleDeleteProduct = () => {
     if (deleteConfirmation.toLowerCase() === product.name.toLowerCase()) {
       alert(`Product "${product.name}" deleted successfully!`);
-      navigate(`/admin/suppliers/${supplierId}`);
+      navigate({ to: `/admin/suppliers/${supplierId}` as any });
     } else {
       alert("Product name does not match.");
     }
@@ -71,7 +71,7 @@ export default function AdminProductDetailsPage() {
       <div className="flex items-center justify-between">
         <Button
           variant="ghost"
-          onClick={() => navigate(`/admin/suppliers/${supplierId}`)}
+          onClick={() => navigate({ to: `/admin/suppliers/${supplierId}` as any })}
           className="group flex items-center gap-2 text-foreground hover:bg-muted py-2 px-3 rounded-sm transition-colors font-heading font-bold uppercase text-xs tracking-wider"
         >
           <ChevronLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
@@ -258,7 +258,7 @@ export default function AdminProductDetailsPage() {
             </div>
             <Button
               variant="outline"
-              onClick={() => navigate(`/admin/suppliers/${supplierId}`)}
+              onClick={() => navigate({ to: `/admin/suppliers/${supplierId}` as any })}
               className="w-full border border-border rounded-sm h-11 font-heading font-bold uppercase text-[10px] tracking-widest"
             >
               Access Profile
@@ -308,9 +308,9 @@ export default function AdminProductDetailsPage() {
           <div className="space-y-4 pt-4 border-t-2 border-border">
             <Button
               onClick={() =>
-                navigate(
-                  `/admin/suppliers/${supplierId}/product/${productId}/edit`,
-                )
+                navigate({
+                  to: `/admin/suppliers/${supplierId}/product/${productId}/edit` as any,
+                })
               }
               className="w-full h-14 font-heading font-bold uppercase text-xs tracking-widest shadow-xl shadow-primary/20"
             >

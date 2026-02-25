@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Package, Briefcase, CheckCircle2 } from "lucide-react";
 
@@ -32,7 +32,7 @@ const CTASection: React.FC = () => {
         <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
           {/* Product Gateway */}
           <div
-            onClick={() => navigate("/products?type=PRODUCT")}
+            onClick={() => navigate({ to: "/marketplace", search: { type: "PRODUCT" } as any })}
             className="group cursor-pointer bg-white/5 border border-white/10 hover:border-primary/50 p-8 rounded-xl transition-all duration-300 hover:bg-white/[0.07]"
           >
             <div className="flex items-start justify-between mb-8">
@@ -57,7 +57,7 @@ const CTASection: React.FC = () => {
 
           {/* Service Gateway */}
           <div
-            onClick={() => navigate("/products?type=SERVICE")}
+            onClick={() => navigate({ to: "/marketplace", search: { type: "SERVICE" } as any })}
             className="group cursor-pointer bg-white/5 border border-white/10 hover:border-sky-500/50 p-8 rounded-xl transition-all duration-300 hover:bg-white/[0.07]"
           >
             <div className="flex items-start justify-between mb-8">

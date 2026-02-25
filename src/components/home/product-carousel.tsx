@@ -4,7 +4,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ProductCard } from "@/components/marketplace/catalog/product-card";
 import type { Listing } from "@/app/api/listings";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@tanstack/react-router";
 import { ButtonGroup } from "../ui/button-group";
 
 interface ProductCarouselProps {
@@ -63,7 +63,7 @@ export const ProductCarousel: React.FC<ProductCarouselProps> = ({
             >
               <ProductCard
                 listing={listing}
-                onClick={() => navigate(`/products/${listing.id}`)}
+                onClick={() => navigate({ to: `/products/${listing.id}` as any })}
               />
             </div>
           ))}

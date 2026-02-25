@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@tanstack/react-router";
 import { ChevronLeft, Building, User, CheckCircle } from "lucide-react";
 import { AdminPageHeader, AdminCard } from "@/components/admin";
 import { Button } from "@/components/ui/button";
@@ -12,7 +12,7 @@ export default function AdminAddSupplierPage() {
   const handleSubmit = (values: any) => {
     console.log("Adding supplier:", values);
     alert("Supplier added successfully!");
-    navigate("/admin/suppliers");
+    navigate({ to: "/admin/suppliers" });
   };
 
   const steps = [
@@ -26,7 +26,7 @@ export default function AdminAddSupplierPage() {
       <div className="flex items-center justify-between">
         <Button
           variant="ghost"
-          onClick={() => navigate("/admin/suppliers")}
+          onClick={() => navigate({ to: "/admin/suppliers" })}
           className="group flex items-center gap-2 text-foreground hover:bg-muted py-2 px-3 rounded-sm transition-colors font-heading font-bold uppercase text-xs tracking-wider shadow-none"
         >
           <ChevronLeft
@@ -92,7 +92,7 @@ export default function AdminAddSupplierPage() {
           currentStep={currentStep}
           onStepChange={setCurrentStep}
           onSubmit={handleSubmit}
-          onCancel={() => navigate("/admin/suppliers")}
+          onCancel={() => navigate({ to: "/admin/suppliers" })}
         />
       </div>
     </div>

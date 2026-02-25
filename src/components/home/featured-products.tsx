@@ -1,7 +1,7 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Package } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@tanstack/react-router";
 // import { useGetListingsQuery } from "@/app/api/listings";
 import { ProductCard } from "@/components/marketplace/catalog/product-card";
 import { SectionHeader } from "./section-header";
@@ -73,7 +73,7 @@ const FeaturedProducts: React.FC = () => {
             <ProductCard
               key={listing.id}
               listing={listing}
-              onClick={() => navigate(`/products/${listing.id}`)}
+              onClick={() => navigate({ to: `/products/${listing.id}` as any })}
               isInWishlist={wishlist.some((l: { id: string }) => l.id === listing.id)}
               onToggleWishlist={(e) => handleToggleWishlist(e, listing.id)}
             />
@@ -85,7 +85,7 @@ const FeaturedProducts: React.FC = () => {
         <Button
           variant="outline"
           size="lg"
-          onClick={() => navigate("/products?type=PRODUCT")}
+          onClick={() => navigate({ to: "/marketplace", search: { type: "PRODUCT" } as any })}
         >
           View all products
         </Button>

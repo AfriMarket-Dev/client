@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@tanstack/react-router";
 // import { useGetCompaniesQuery } from "@/app/api/companies";
 // import type { Company } from "@/app/api/companies";
 import { Button } from "@/components/ui/button";
@@ -51,7 +51,7 @@ const FeaturedSuppliers: React.FC = () => {
               <Card
                 key={company.id}
                 className="group border border-border/60 shadow-sm hover:shadow-xl transition-all duration-300 rounded-lg bg-card cursor-pointer overflow-hidden flex flex-col"
-                onClick={() => navigate(`/suppliers/${company.id}`)}
+                onClick={() => navigate({ to: `/suppliers/${company.id}` as any })}
               >
                 <CardContent className="p-5 flex flex-col h-full">
                   <div className="flex items-start justify-between mb-4">
@@ -168,7 +168,7 @@ const FeaturedSuppliers: React.FC = () => {
         <Button
           variant="outline"
           size="lg"
-          onClick={() => navigate("/suppliers")}
+          onClick={() => navigate({ to: "/suppliers" })}
         >
           View all suppliers
         </Button>

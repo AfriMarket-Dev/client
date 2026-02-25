@@ -1,4 +1,4 @@
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "@tanstack/react-router";
 import { services as mockServices } from "@/data/mock-data";
 import { Button } from "@/components/ui/button";
 import { Layout } from "lucide-react";
@@ -19,7 +19,7 @@ const getServiceUIExtras = (id: string) => ({
 });
 
 export default function ServicePage() {
-  const { serviceId } = useParams();
+  const { serviceId } = useParams({ from: "/_main/services/$serviceId" });
   const navigate = useNavigate();
 
   const rawService = mockServices.find((s) => s.id === serviceId);
@@ -32,7 +32,7 @@ export default function ServicePage() {
             Service Not Found
           </h1>
           <Button
-            onClick={() => navigate("/")}
+            onClick={() => navigate({ to: "/" })}
             className="rounded-sm font-heading uppercase tracking-wider"
           >
             Back to Home
@@ -47,6 +47,6 @@ export default function ServicePage() {
   const service = { ...rawService, ...uiExtras };
 
   return (
-    <ServiceView service={service} onBack={() => navigate("/marketplace")} />
+    <ServiceView service={service} onBack={() => navigate({ to: "/marketplace" })} />
   );
 }

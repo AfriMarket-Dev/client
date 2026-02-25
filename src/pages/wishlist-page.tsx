@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@tanstack/react-router";
 import { useGetWishlistQuery } from "@/app/api/wishlist";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -64,12 +64,12 @@ export default function WishlistPage() {
                         src={img}
                         alt={listing.name}
                         className="w-full h-full object-cover cursor-pointer"
-                        onClick={() => navigate(`/products/${listing.id}`)}
+                        onClick={() => navigate({ to: `/products/${listing.id}` as any })}
                       />
                     ) : (
                       <div
                         className="w-full h-full flex items-center justify-center cursor-pointer"
-                        onClick={() => navigate(`/products/${listing.id}`)}
+                        onClick={() => navigate({ to: `/products/${listing.id}` as any })}
                       >
                         <Package className="w-10 h-10 text-muted-foreground" />
                       </div>
@@ -95,7 +95,7 @@ export default function WishlistPage() {
                     </p>
                     <h3
                       className="font-heading font-bold text-foreground mb-2 cursor-pointer hover:text-primary"
-                      onClick={() => navigate(`/products/${listing.id}`)}
+                      onClick={() => navigate({ to: `/products/${listing.id}` as any })}
                     >
                       {listing.name}
                     </h3>
@@ -107,7 +107,7 @@ export default function WishlistPage() {
                         size="sm"
                         variant="outline"
                         className="flex-1"
-                        onClick={() => navigate(`/products/${listing.id}`)}
+                        onClick={() => navigate({ to: `/products/${listing.id}` as any })}
                       >
                         View
                       </Button>

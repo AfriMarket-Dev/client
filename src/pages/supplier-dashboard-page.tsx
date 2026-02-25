@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "@tanstack/react-router";
 import { useSelector, useDispatch } from 'react-redux';
 import { type RootState } from '@/app/store';
 import { logout } from '@/app/features/auth-slice';
@@ -11,7 +11,7 @@ const SupplierDashboardPage = () => {
 
   const handleLogout = () => {
     dispatch(logout());
-    navigate('/');
+    navigate({ to: '/' });
   };
 
   return (

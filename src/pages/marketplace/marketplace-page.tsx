@@ -1,21 +1,21 @@
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearch } from "@tanstack/react-router";
 import MarketplaceGrid from "@/components/marketplace/marketplace-grid";
 import type { Listing } from "@/app/api/listings";
 
 const MarketplacePage = () => {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const categoryId = searchParams.get("category") ?? "all";
+  const search = useSearch({ from: "/_main/marketplace" });
+  const categoryId = search.category ?? "all";
 
   const handleProductClick = (listing: Listing) => {
-    navigate(`/products/${listing.id}`);
+    navigate({ to: `/products/${listing.id}` as any });
   };
 
   return (
     <MarketplaceGrid
       initialCategoryId={categoryId}
       onSupplierClick={(supplierId: string) =>
-        navigate(`/suppliers/${supplierId}`)
+        navigate({ to: `/suppliers/${supplierId}` as any })
       }
       onProductClick={handleProductClick}
     />

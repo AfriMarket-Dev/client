@@ -1,4 +1,4 @@
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "@tanstack/react-router";
 import { Header } from "./header";
 import { Footer } from "./footer";
 import { useCallback } from "react";
@@ -7,11 +7,11 @@ export const MainLayout = () => {
   const navigate = useNavigate();
 
   const handleAboutClick = useCallback(() => {
-    navigate("/about");
+    navigate({ to: "/about" });
   }, [navigate]);
 
   const handleHelpClick = useCallback(() => {
-    navigate("/help");
+    navigate({ to: "/help" });
   }, [navigate]);
 
   return (

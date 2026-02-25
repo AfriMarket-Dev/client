@@ -8,7 +8,7 @@ import {
   Package,
   Zap,
 } from "lucide-react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate, useRouterState } from "@tanstack/react-router";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
@@ -29,9 +29,10 @@ const menuItems = [
 ];
 
 export const AdminTopBar: React.FC<AdminTopBarProps> = ({ user }) => {
-  const location = useLocation();
+  const routerState = useRouterState();
+  const pathname = routerState.location.pathname;
   const navigate = useNavigate();
-  const isActive = (path: string) => location.pathname === path;
+  const isActive = (path: string) => pathname === path;
 
   const currentLabel =
     menuItems.find((item) => isActive(item.path))?.label || "Console";
@@ -44,7 +45,7 @@ export const AdminTopBar: React.FC<AdminTopBarProps> = ({ user }) => {
         <div className="hidden md:flex items-center gap-2 text-[10px] font-heading font-bold uppercase tracking-[0.2em] text-muted-foreground">
           <span
             className="hover:text-foreground transition-colors cursor-pointer"
-            onClick={() => navigate("/admin")}
+            onClick={() => navigate({ to: "/admin" })}
           >
             Root
           </span>

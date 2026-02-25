@@ -1,4 +1,4 @@
-import { Outlet, Navigate } from "react-router-dom";
+import { Outlet, Navigate } from "@tanstack/react-router";
 import { useSelector } from "react-redux";
 import { type RootState } from "@/app/store";
 import { Building, Star } from "lucide-react";

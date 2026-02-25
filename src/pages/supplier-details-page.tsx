@@ -1,19 +1,19 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "@tanstack/react-router";
 import { useCallback } from "react";
 import SupplierDetails from "@/components/supplier/supplier-details";
 import type { Listing } from "@/app/api/listings";
 
 const SupplierDetailsPage = () => {
   const navigate = useNavigate();
-  const { supplierId } = useParams<{ supplierId: string }>();
+  const { supplierId } = useParams({ from: "/_main/suppliers/$supplierId" });
 
   const handleBack = useCallback(() => {
-    navigate("/suppliers");
+    navigate({ to: "/suppliers" });
   }, [navigate]);
 
   const handleProductClick = useCallback(
     (listing: Listing) => {
-      navigate(`/products/${listing.id}`);
+      navigate({ to: `/products/${listing.id}` as any });
     },
     [navigate],
   );

@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@tanstack/react-router";
 import { ArrowRight, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { HeroWidget, type HeroWidgetItem } from "./hero-widget";
@@ -286,7 +286,7 @@ const Hero: React.FC = () => {
                       <div className="flex gap-4">
                         <Button
                           size="lg"
-                          onClick={() => navigate("/products")}
+                          onClick={() => navigate({ to: "/marketplace" })}
                           className="bg-white hover:bg-slate-100 text-slate-950 rounded-lg h-8 md:h-12 px-5 md:px-8 text-[10px] md:text-xs font-bold tracking-widest uppercase transition-all shadow-lg active:scale-95 group"
                         >
                           Shop Now{" "}
