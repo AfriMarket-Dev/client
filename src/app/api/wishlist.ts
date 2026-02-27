@@ -1,58 +1,81 @@
 import { apiSlice } from "@/app/api/api-entry";
 import type { Listing } from "@/app/api/listings";
+import type { Service } from "@/app/api/services";
+import type { ApiResponse } from "@/app/api/types";
+
+interface WishlistResponse {
+  products: Listing[];
+  services: Service[];
+}
+
+export type WishlistItem = any;
 
 export const wishlistApi = apiSlice.injectEndpoints({
-	endpoints: (builder) => ({
-		getWishlist: builder.query<Listing[], void>({
-			query: () => "/wishlists",
-			transformResponse: (response: any) => {
-				const data = response?.data || response;
-				const products = (data?.products || []).map((p: any) => ({
-					...p,
-					type: "product",
-				}));
-				const services = (data?.services || []).map((s: any) => ({
-					...s,
-					type: "service",
-				}));
-				// sort by newest if possible, else just merge
-				return [...products, ...services].sort((a, b) => {
-					return (
-						new Date(b.createdAt || 0).getTime() -
-						new Date(a.createdAt || 0).getTime()
-					);
-				});
-			},
-			providesTags: ["Wishlist"],
-		}),
+  endpoints: (builder) => ({
+    getWishlist: builder.query<WishlistItem[], void>({
+      query: () => "/wishlists",
+      transformResponse: (response: ApiResponse<WishlistResponse>): any => {
+        const data = response.data;
+        if (!data) return [];
 
-		addToWishlist: builder.mutation<
-			unknown,
-			{ id: string; type: "product" | "service" }
-		>({
-			query: ({ id, type }) => ({
-				url: `/wishlists/${type}s`,
-				method: "POST",
-				body: type === "product" ? { [type + "Id"]: id } : { serviceId: id },
-			}),
-			invalidatesTags: ["Wishlist"],
-		}),
+        const products = (data.products || []).map((p) => ({
+          ...p,
+          type: "product" as const,
+        })) as WishlistItem[];
+        const services = (data.services || []).map((s) => ({
+          ...s,
+          type: "service" as const,
+        })) as WishlistItem[];
+        // sort by newest if possible, else just merge
+        return ([...products, ...services] as any[]).sort((a, b) => {
+          return (
+            new Date(b.createdAt || 0).getTime() -
+            new Date(a.createdAt || 0).getTime()
+          );
+        });
+      },
+      providesTags: ["Wishlist"],
+    }),
 
-		removeFromWishlist: builder.mutation<
-			void,
-			{ id: string; type: "product" | "service" }
-		>({
-			query: ({ id, type }) => ({
-				url: `/wishlists/${type}s/${id}`,
-				method: "DELETE",
-			}),
-			invalidatesTags: ["Wishlist"],
-		}),
-	}),
+    checkProductWishlist: builder.query<{ inWishlist: boolean }, string>({
+      query: (productId) => `/wishlists/products/${productId}/check`,
+      providesTags: (_r, _e, id) => [{ type: "Wishlist", id }],
+    }),
+
+    checkServiceWishlist: builder.query<{ inWishlist: boolean }, string>({
+      query: (serviceId) => `/wishlists/services/${serviceId}/check`,
+      providesTags: (_r, _e, id) => [{ type: "Wishlist", id }],
+    }),
+
+    addToWishlist: builder.mutation<
+      unknown,
+      { id: string; type: "product" | "service" }
+    >({
+      query: ({ id, type }) => ({
+        url: `/wishlists/${type}s`,
+        method: "POST",
+        body: type === "product" ? { [type + "Id"]: id } : { serviceId: id },
+      }),
+      invalidatesTags: ["Wishlist"],
+    }),
+
+    removeFromWishlist: builder.mutation<
+      void,
+      { id: string; type: "product" | "service" }
+    >({
+      query: ({ id, type }) => ({
+        url: `/wishlists/${type}s/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Wishlist"],
+    }),
+  }),
 });
 
 export const {
-	useGetWishlistQuery,
-	useAddToWishlistMutation,
-	useRemoveFromWishlistMutation,
+  useGetWishlistQuery,
+  useCheckProductWishlistQuery,
+  useCheckServiceWishlistQuery,
+  useAddToWishlistMutation,
+  useRemoveFromWishlistMutation,
 } = wishlistApi;

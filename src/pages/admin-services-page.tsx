@@ -18,7 +18,7 @@ export default function AdminServicesPage() {
 
 	const handleNavigateToService = useCallback(
 		(serviceId: string) => {
-			navigate({ to: `/admin/services/${serviceId}` as any });
+			navigate({ to: `/services/${serviceId}` as any });
 		},
 		[navigate],
 	);

@@ -1,6 +1,8 @@
+import { useNavigate } from "@tanstack/react-router";
 import {
 	RiAlertLine,
-	RiPagesLine,
+	RiApps2Line,
+	RiFolder2Line,
 	RiShieldCheckLine,
 	RiUserLine,
 } from "@remixicon/react";
@@ -10,30 +12,48 @@ import { useGetListingsQuery } from "@/app/api/listings";
 import { useGetProductsQuery } from "@/app/api/products";
 import { useGetServicesQuery } from "@/app/api/services";
 import { useGetMarketplaceStatsQuery } from "@/app/api/stats";
-import { AdminPageHeader, AdminStatCard } from "@/components/admin";
-import { ModerationQueue } from "@/components/admin/dashboard/moderation-queue";
-import { SystemActions } from "@/components/admin/dashboard/system-actions";
+import { AdminCard, AdminPageHeader, AdminStatCard } from "@/components/admin";
+import { Button } from "@/components/ui/button";
 
 function compact(value: number) {
 	if (value >= 1000) return `${(value / 1000).toFixed(1)}k`;
 	return `${value}`;
 }
 
-function ago(dateLike?: string) {
-	if (!dateLike) return "recently";
-	const date = new Date(dateLike);
-	if (Number.isNaN(date.getTime())) return "recently";
-	const hours = Math.max(1, Math.round((Date.now() - date.getTime()) / 3600000));
-	if (hours >= 24) return `${Math.round(hours / 24)}d ago`;
-	return `${hours}h ago`;
+function formatDate(value?: string) {
+	if (!value) return "-";
+	const date = new Date(value);
+	if (Number.isNaN(date.getTime())) return "-";
+	return date.toLocaleDateString("en-US", {
+		year: "numeric",
+		month: "short",
+		day: "numeric",
+	});
 }
 
 export default function AdminDashboard() {
+	const navigate = useNavigate();
 	const { data: stats } = useGetMarketplaceStatsQuery();
-	const { data: companiesResult } = useGetCompaniesQuery({ limit: 200 });
-	const { data: listingsResult } = useGetListingsQuery({ limit: 200 });
-	const { data: productsResult } = useGetProductsQuery({ limit: 200 });
-	const { data: servicesResult } = useGetServicesQuery({ limit: 200 });
+	const { data: companiesResult } = useGetCompaniesQuery({
+		limit: 200,
+		sortBy: "createdAt",
+		sortOrder: "DESC",
+	});
+	const { data: listingsResult } = useGetListingsQuery({
+		limit: 200,
+		sortBy: "createdAt",
+		sortOrder: "DESC",
+	});
+	const { data: productsResult } = useGetProductsQuery({
+		limit: 200,
+		sortBy: "createdAt",
+		sortOrder: "DESC",
+	});
+	const { data: servicesResult } = useGetServicesQuery({
+		limit: 200,
+		sortBy: "createdAt",
+		sortOrder: "DESC",
+	});
 
 	const companies = companiesResult?.data ?? [];
 	const listings = listingsResult?.data ?? [];
@@ -41,51 +61,38 @@ export default function AdminDashboard() {
 	const services = servicesResult?.data ?? [];
 
 	const verifiedSuppliers =
-		stats?.verifiedSuppliers ?? companies.filter((c) => c.isVerified).length;
-	const activeListings = listings.filter((l) => l.isActive).length;
-	const platformUsers = companies.length;
-	const pendingReports =
-		companies.filter((c) => !c.isVerified).length +
-		products.filter((p) => !p.isActive).length +
-		services.filter((s) => !s.isActive).length;
+		stats?.verifiedSuppliers ?? companies.filter((company) => company.isVerified).length;
+	const activeListings = listings.filter((listing) => listing.isActive).length;
+	const catalogItems = products.length + services.length;
+	const pendingReviewCount =
+		companies.filter((company) => !company.isVerified).length +
+		listings.filter((listing) => !listing.isActive).length;
 
-	const reports = useMemo(() => {
-		const supplierAlerts = companies
-			.filter((company) => !company.isVerified)
-			.slice(0, 3)
-			.map((company) => ({
-				id: company.id.slice(0, 8),
-				target: company.name,
-				type: "Supplier",
-				reason: "Verification pending",
-				evidence: "Profile review required",
-				status: "pending",
-				count: 1,
-				time: ago(company.updatedAt ?? company.createdAt),
-			}));
+	const recentActivity = useMemo(() => {
+		const recentCompanies = companies.slice(0, 3).map((company) => ({
+			id: company.id,
+			type: "Supplier",
+			name: company.name,
+			status: company.isVerified ? "Verified" : "Pending verification",
+			date: formatDate(company.createdAt),
+		}));
 
-		const productAlerts = products
-			.filter((product) => !product.isActive)
-			.slice(0, 2)
-			.map((product) => ({
-				id: product.id.slice(0, 8),
-				target: product.name,
-				type: "Listing",
-				reason: "Inactive product listing",
-				evidence: "Needs admin review",
-				status: "reviewing",
-				count: 1,
-				time: ago(product.updatedAt ?? product.createdAt),
-			}));
+		const recentListings = listings.slice(0, 3).map((listing) => ({
+			id: listing.id,
+			type: "Listing",
+			name: listing.name,
+			status: listing.isActive ? "Active" : "Inactive",
+			date: formatDate(listing.createdAt),
+		}));
 
-		return [...supplierAlerts, ...productAlerts].slice(0, 5);
-	}, [companies, products]);
+		return [...recentCompanies, ...recentListings].slice(0, 6);
+	}, [companies, listings]);
 
 	return (
 		<div className="space-y-6 pb-12">
 			<AdminPageHeader
-				title="Platform Control"
-				subtitle="Live marketplace health and moderation"
+				title="Admin Dashboard"
+				subtitle="Live operational metrics and quick admin actions"
 				badge="Administrator"
 			/>
 
@@ -100,20 +107,20 @@ export default function AdminDashboard() {
 				<AdminStatCard
 					label="Active Listings"
 					value={compact(activeListings)}
-					icon={RiPagesLine}
+					icon={RiApps2Line}
 					bgColor="bg-blue-50"
 					color="text-blue-600"
 				/>
 				<AdminStatCard
-					label="Supplier Accounts"
-					value={compact(platformUsers)}
-					icon={RiUserLine}
+					label="Catalog Items"
+					value={compact(catalogItems)}
+					icon={RiFolder2Line}
 					bgColor="bg-violet-50"
 					color="text-violet-600"
 				/>
 				<AdminStatCard
-					label="Pending Alerts"
-					value={compact(pendingReports)}
+					label="Needs Review"
+					value={compact(pendingReviewCount)}
 					icon={RiAlertLine}
 					bgColor="bg-amber-50"
 					color="text-amber-600"
@@ -121,8 +128,74 @@ export default function AdminDashboard() {
 			</div>
 
 			<div className="grid grid-cols-1 gap-6 xl:grid-cols-3">
-				<ModerationQueue reports={reports} />
-				<SystemActions />
+				<AdminCard
+					title="Quick Actions"
+					subtitle="Go directly to key admin sections"
+					className="xl:col-span-1"
+				>
+					<div className="space-y-3">
+						<Button
+							variant="outline"
+							className="w-full justify-start"
+							onClick={() => navigate({ to: "/admin/suppliers" })}
+						>
+							<RiUserLine className="mr-2 h-4 w-4" /> Manage Suppliers
+						</Button>
+						<Button
+							variant="outline"
+							className="w-full justify-start"
+							onClick={() => navigate({ to: "/admin/products" })}
+						>
+							<RiFolder2Line className="mr-2 h-4 w-4" /> Manage Products
+						</Button>
+						<Button
+							variant="outline"
+							className="w-full justify-start"
+							onClick={() => navigate({ to: "/admin/services" })}
+						>
+							<RiApps2Line className="mr-2 h-4 w-4" /> Review Services
+						</Button>
+						<Button
+							variant="outline"
+							className="w-full justify-start"
+							onClick={() => navigate({ to: "/admin/categories" })}
+						>
+							<RiShieldCheckLine className="mr-2 h-4 w-4" /> Manage Categories
+						</Button>
+					</div>
+				</AdminCard>
+
+				<AdminCard
+					title="Recent Activity"
+					subtitle="Latest suppliers and listings"
+					className="xl:col-span-2"
+				>
+					{recentActivity.length === 0 ? (
+						<div className="py-10 text-sm text-muted-foreground">
+							No recent activity yet.
+						</div>
+					) : (
+						<div className="space-y-3">
+							{recentActivity.map((item) => (
+								<div
+									key={`${item.type}-${item.id}`}
+									className="flex items-center justify-between rounded-sm border border-border px-4 py-3"
+								>
+									<div>
+										<p className="text-xs uppercase tracking-wider text-muted-foreground">
+											{item.type}
+										</p>
+										<p className="font-medium text-foreground">{item.name}</p>
+									</div>
+									<div className="text-right">
+										<p className="text-xs text-foreground">{item.status}</p>
+										<p className="text-xs text-muted-foreground">{item.date}</p>
+									</div>
+								</div>
+							))}
+						</div>
+					)}
+				</AdminCard>
 			</div>
 		</div>
 	);

@@ -1,11 +1,17 @@
 import {
-	RiNotification3Line,
+	RiDashboardLine,
 	RiArrowUpDownLine,
-	RiBankCardLine,
+	RiMessage2Line,
+	RiSettings4Line,
+	RiHeartLine,
+	RiStore2Line,
+	RiUserLine,
 	RiLogoutBoxRLine,
-	RiSparklingLine,
+	RiTeamLine,
 } from "@remixicon/react";
-import { User as RiBadgeLine } from "lucide-react";
+import { useNavigate } from "@tanstack/react-router";
+import { useDispatch } from "react-redux";
+import { logout } from "@/app/features/auth-slice";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -31,9 +37,14 @@ export function NavUser({
 		name: string;
 		email: string;
 		avatar: string;
+		role?: string;
 	};
 }) {
 	const { isMobile } = useSidebar();
+	const navigate = useNavigate();
+	const dispatch = useDispatch();
+	const isAdmin = user.role === "admin" || user.role === "agent";
+	const isProvider = isAdmin || user.role === "provider";
 
 	return (
 		<SidebarMenu>
@@ -79,28 +90,59 @@ export function NavUser({
 						</DropdownMenuGroup>
 						<DropdownMenuSeparator />
 						<DropdownMenuGroup>
-							<DropdownMenuItem>
-								<RiSparklingLine />
-								Upgrade to Pro
+							{isAdmin ? (
+								<DropdownMenuItem onClick={() => navigate({ to: "/admin" })}>
+									<RiDashboardLine />
+									Admin Dashboard
+								</DropdownMenuItem>
+							) : null}
+							{isProvider ? (
+								<DropdownMenuItem
+									onClick={() => navigate({ to: "/dashboard" })}
+								>
+									<RiStore2Line />
+									Supplier Dashboard
+								</DropdownMenuItem>
+							) : null}
+							<DropdownMenuItem onClick={() => navigate({ to: "/messages" })}>
+								<RiMessage2Line />
+								Messages
+							</DropdownMenuItem>
+							<DropdownMenuItem onClick={() => navigate({ to: "/wishlist" })}>
+								<RiHeartLine />
+								Wishlist
 							</DropdownMenuItem>
 						</DropdownMenuGroup>
 						<DropdownMenuSeparator />
 						<DropdownMenuGroup>
-							<DropdownMenuItem>
-								<RiBadgeLine />
-								Account
+							<DropdownMenuItem onClick={() => navigate({ to: "/profile" })}>
+								<RiUserLine />
+								My Profile
 							</DropdownMenuItem>
-							<DropdownMenuItem>
-								<RiBankCardLine />
-								Billing
+							<DropdownMenuItem
+								onClick={() =>
+									navigate({ to: isAdmin ? "/admin/profile" : "/profile" })
+								}
+							>
+								<RiSettings4Line />
+								Settings
 							</DropdownMenuItem>
-							<DropdownMenuItem>
-								<RiNotification3Line />
-								Notifications
-							</DropdownMenuItem>
+							{isAdmin ? (
+								<DropdownMenuItem
+									onClick={() => navigate({ to: "/admin/suppliers" })}
+								>
+									<RiTeamLine />
+									Suppliers
+								</DropdownMenuItem>
+							) : null}
 						</DropdownMenuGroup>
 						<DropdownMenuSeparator />
-						<DropdownMenuItem>
+						<DropdownMenuItem
+							onClick={() => {
+								dispatch(logout());
+								navigate({ to: "/" });
+							}}
+						>
 							<RiLogoutBoxRLine />
 							Log out
 						</DropdownMenuItem>

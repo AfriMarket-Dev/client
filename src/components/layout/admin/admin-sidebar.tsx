@@ -1,10 +1,14 @@
 import {
+	RiApps2Line,
 	RiDashboardLine,
 	RiUserLine,
-	RiApps2Line,
+	RiTeamLine,
+	RiFolderLine,
+	RiPriceTag3Line,
+	RiServiceLine,
+	RiGitMergeLine,
 	RiSettings4Line,
 } from "@remixicon/react";
-import { Package } from "lucide-react";
 import type React from "react";
 import {
 	Sidebar,
@@ -37,60 +41,39 @@ const navMain = [
 		isActive: true,
 	},
 	{
-		title: "User Management",
+		title: "Suppliers",
 		url: "/admin/suppliers",
+		icon: RiTeamLine,
+	},
+	{
+		title: "Customers",
+		url: "/admin/customers",
 		icon: RiUserLine,
-		items: [
-			{
-				title: "Suppliers",
-				url: "/admin/suppliers",
-			},
-			{
-				title: "Customers",
-				url: "/admin/customers",
-			},
-		],
 	},
 	{
-		title: "Catalog",
+		title: "Products",
 		url: "/admin/products",
-		icon: Package,
-		items: [
-			{
-				title: "Products",
-				url: "/admin/products",
-			},
-			{
-				title: "Categories",
-				url: "/admin/categories",
-			},
-			{
-				title: "Services",
-				url: "/admin/services",
-			},
-		],
+		icon: RiFolderLine,
 	},
 	{
-		title: "Operations",
+		title: "Categories",
+		url: "/admin/categories",
+		icon: RiPriceTag3Line,
+	},
+	{
+		title: "Services",
+		url: "/admin/services",
+		icon: RiServiceLine,
+	},
+	{
+		title: "Assignments",
 		url: "/admin/assignments",
-		icon: RiApps2Line,
-		items: [
-			{
-				title: "Assignments",
-				url: "/admin/assignments",
-			},
-		],
+		icon: RiGitMergeLine,
 	},
 	{
-		title: "System",
+		title: "Profile Settings",
 		url: "/admin/profile",
 		icon: RiSettings4Line,
-		items: [
-			{
-				title: "Profile Settings",
-				url: "/admin/profile",
-			},
-		],
 	},
 ];
 
@@ -99,6 +82,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ user }) => {
 		name: user?.name || "Admin",
 		email: user?.email || "admin@afrikamarket.com",
 		avatar: user?.avatar || "/avatars/admin.jpg",
+		role: user?.role,
 	};
 
 	return (

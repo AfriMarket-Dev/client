@@ -3,8 +3,9 @@ import {
 	RiApps2Line,
 	RiSettings4Line,
 	RiArrowLeftLine,
+	RiFileList3Line,
+	RiAddCircleLine,
 } from "@remixicon/react";
-import { Package } from "lucide-react";
 import type React from "react";
 import {
 	Sidebar,
@@ -37,19 +38,14 @@ const navMain = [
 		isActive: true,
 	},
 	{
-		title: "Inventory",
+		title: "My Listings",
 		url: "/dashboard/listings",
-		icon: Package,
-		items: [
-			{
-				title: "My Listings",
-				url: "/dashboard/listings",
-			},
-			{
-				title: "Add New Listing",
-				url: "/dashboard/listings/new",
-			},
-		],
+		icon: RiFileList3Line,
+	},
+	{
+		title: "Add New Listing",
+		url: "/dashboard/listings/new",
+		icon: RiAddCircleLine,
 	},
 	{
 		title: "Settings",
@@ -68,6 +64,7 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ user }) => {
 		name: user?.name || "Supplier",
 		email: user?.email || "supplier@afrikamarket.com",
 		avatar: user?.avatar || "/avatars/supplier.jpg",
+		role: user?.role,
 	};
 
 	return (

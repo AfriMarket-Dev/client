@@ -96,7 +96,7 @@ const SupplierListing: React.FC<SupplierListingProps> = ({
     type: filters.type === "all" ? undefined : filters.type,
     minRating:
       Number(filters.minRating) > 0 ? Number(filters.minRating) : undefined,
-    verified: filters.verified ? true : undefined,
+    isVerified: filters.verified ? true : undefined,
   });
 
   const { data: categoriesData } = useGetCompanyCategoriesQuery({ limit: 50 });

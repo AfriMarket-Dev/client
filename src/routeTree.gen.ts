@@ -18,13 +18,18 @@ import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as MainIndexRouteImport } from './routes/_main.index'
 import { Route as AuthSignupRouteImport } from './routes/auth.signup'
 import { Route as AuthSigninRouteImport } from './routes/auth.signin'
+import { Route as AdminServicesRouteImport } from './routes/admin.services'
+import { Route as AdminProfileRouteImport } from './routes/admin.profile'
 import { Route as AdminProductsRouteImport } from './routes/admin.products'
+import { Route as AdminCustomersRouteImport } from './routes/admin.customers'
 import { Route as AdminCategoriesRouteImport } from './routes/admin.categories'
+import { Route as AdminAssignmentsRouteImport } from './routes/admin.assignments'
 import { Route as MainMarketplaceRouteImport } from './routes/_main.marketplace'
 import { Route as MainHelpRouteImport } from './routes/_main.help'
 import { Route as MainCategoriesRouteImport } from './routes/_main.categories'
 import { Route as MainAboutRouteImport } from './routes/_main.about'
 import { Route as MainProtectedRouteImport } from './routes/_main._protected'
+import { Route as DashboardListingsIndexRouteImport } from './routes/dashboard.listings.index'
 import { Route as AdminSuppliersIndexRouteImport } from './routes/admin.suppliers.index'
 import { Route as MainSuppliersIndexRouteImport } from './routes/_main.suppliers.index'
 import { Route as DashboardListingsNewRouteImport } from './routes/dashboard.listings.new'
@@ -85,14 +90,34 @@ const AuthSigninRoute = AuthSigninRouteImport.update({
   path: '/signin',
   getParentRoute: () => AuthRoute,
 } as any)
+const AdminServicesRoute = AdminServicesRouteImport.update({
+  id: '/services',
+  path: '/services',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminProfileRoute = AdminProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminProductsRoute = AdminProductsRouteImport.update({
   id: '/products',
   path: '/products',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminCustomersRoute = AdminCustomersRouteImport.update({
+  id: '/customers',
+  path: '/customers',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminCategoriesRoute = AdminCategoriesRouteImport.update({
   id: '/categories',
   path: '/categories',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminAssignmentsRoute = AdminAssignmentsRouteImport.update({
+  id: '/assignments',
+  path: '/assignments',
   getParentRoute: () => AdminRoute,
 } as any)
 const MainMarketplaceRoute = MainMarketplaceRouteImport.update({
@@ -118,6 +143,11 @@ const MainAboutRoute = MainAboutRouteImport.update({
 const MainProtectedRoute = MainProtectedRouteImport.update({
   id: '/_protected',
   getParentRoute: () => MainRoute,
+} as any)
+const DashboardListingsIndexRoute = DashboardListingsIndexRouteImport.update({
+  id: '/listings/',
+  path: '/listings/',
+  getParentRoute: () => DashboardRoute,
 } as any)
 const AdminSuppliersIndexRoute = AdminSuppliersIndexRouteImport.update({
   id: '/suppliers/',
@@ -209,8 +239,12 @@ export interface FileRoutesByFullPath {
   '/categories': typeof MainCategoriesRoute
   '/help': typeof MainHelpRoute
   '/marketplace': typeof MainMarketplaceRoute
+  '/admin/assignments': typeof AdminAssignmentsRoute
   '/admin/categories': typeof AdminCategoriesRoute
+  '/admin/customers': typeof AdminCustomersRoute
   '/admin/products': typeof AdminProductsRoute
+  '/admin/profile': typeof AdminProfileRoute
+  '/admin/services': typeof AdminServicesRoute
   '/auth/signin': typeof AuthSigninRoute
   '/auth/signup': typeof AuthSignupRoute
   '/admin/': typeof AdminIndexRoute
@@ -225,6 +259,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/listings/new': typeof DashboardListingsNewRoute
   '/suppliers/': typeof MainSuppliersIndexRoute
   '/admin/suppliers/': typeof AdminSuppliersIndexRoute
+  '/dashboard/listings/': typeof DashboardListingsIndexRoute
   '/admin/suppliers/$supplierId/edit': typeof AdminSuppliersSupplierIdEditRoute
   '/dashboard/listings/$listingId/edit': typeof DashboardListingsListingIdEditRoute
   '/admin/suppliers/$supplierId/': typeof AdminSuppliersSupplierIdIndexRoute
@@ -238,8 +273,12 @@ export interface FileRoutesByTo {
   '/categories': typeof MainCategoriesRoute
   '/help': typeof MainHelpRoute
   '/marketplace': typeof MainMarketplaceRoute
+  '/admin/assignments': typeof AdminAssignmentsRoute
   '/admin/categories': typeof AdminCategoriesRoute
+  '/admin/customers': typeof AdminCustomersRoute
   '/admin/products': typeof AdminProductsRoute
+  '/admin/profile': typeof AdminProfileRoute
+  '/admin/services': typeof AdminServicesRoute
   '/auth/signin': typeof AuthSigninRoute
   '/auth/signup': typeof AuthSignupRoute
   '/admin': typeof AdminIndexRoute
@@ -254,6 +293,7 @@ export interface FileRoutesByTo {
   '/dashboard/listings/new': typeof DashboardListingsNewRoute
   '/suppliers': typeof MainSuppliersIndexRoute
   '/admin/suppliers': typeof AdminSuppliersIndexRoute
+  '/dashboard/listings': typeof DashboardListingsIndexRoute
   '/admin/suppliers/$supplierId/edit': typeof AdminSuppliersSupplierIdEditRoute
   '/dashboard/listings/$listingId/edit': typeof DashboardListingsListingIdEditRoute
   '/admin/suppliers/$supplierId': typeof AdminSuppliersSupplierIdIndexRoute
@@ -271,8 +311,12 @@ export interface FileRoutesById {
   '/_main/categories': typeof MainCategoriesRoute
   '/_main/help': typeof MainHelpRoute
   '/_main/marketplace': typeof MainMarketplaceRoute
+  '/admin/assignments': typeof AdminAssignmentsRoute
   '/admin/categories': typeof AdminCategoriesRoute
+  '/admin/customers': typeof AdminCustomersRoute
   '/admin/products': typeof AdminProductsRoute
+  '/admin/profile': typeof AdminProfileRoute
+  '/admin/services': typeof AdminServicesRoute
   '/auth/signin': typeof AuthSigninRoute
   '/auth/signup': typeof AuthSignupRoute
   '/_main/': typeof MainIndexRoute
@@ -288,6 +332,7 @@ export interface FileRoutesById {
   '/dashboard/listings/new': typeof DashboardListingsNewRoute
   '/_main/suppliers/': typeof MainSuppliersIndexRoute
   '/admin/suppliers/': typeof AdminSuppliersIndexRoute
+  '/dashboard/listings/': typeof DashboardListingsIndexRoute
   '/admin/suppliers/$supplierId/edit': typeof AdminSuppliersSupplierIdEditRoute
   '/dashboard/listings/$listingId/edit': typeof DashboardListingsListingIdEditRoute
   '/admin/suppliers/$supplierId/': typeof AdminSuppliersSupplierIdIndexRoute
@@ -305,8 +350,12 @@ export interface FileRouteTypes {
     | '/categories'
     | '/help'
     | '/marketplace'
+    | '/admin/assignments'
     | '/admin/categories'
+    | '/admin/customers'
     | '/admin/products'
+    | '/admin/profile'
+    | '/admin/services'
     | '/auth/signin'
     | '/auth/signup'
     | '/admin/'
@@ -321,6 +370,7 @@ export interface FileRouteTypes {
     | '/dashboard/listings/new'
     | '/suppliers/'
     | '/admin/suppliers/'
+    | '/dashboard/listings/'
     | '/admin/suppliers/$supplierId/edit'
     | '/dashboard/listings/$listingId/edit'
     | '/admin/suppliers/$supplierId/'
@@ -334,8 +384,12 @@ export interface FileRouteTypes {
     | '/categories'
     | '/help'
     | '/marketplace'
+    | '/admin/assignments'
     | '/admin/categories'
+    | '/admin/customers'
     | '/admin/products'
+    | '/admin/profile'
+    | '/admin/services'
     | '/auth/signin'
     | '/auth/signup'
     | '/admin'
@@ -350,6 +404,7 @@ export interface FileRouteTypes {
     | '/dashboard/listings/new'
     | '/suppliers'
     | '/admin/suppliers'
+    | '/dashboard/listings'
     | '/admin/suppliers/$supplierId/edit'
     | '/dashboard/listings/$listingId/edit'
     | '/admin/suppliers/$supplierId'
@@ -366,8 +421,12 @@ export interface FileRouteTypes {
     | '/_main/categories'
     | '/_main/help'
     | '/_main/marketplace'
+    | '/admin/assignments'
     | '/admin/categories'
+    | '/admin/customers'
     | '/admin/products'
+    | '/admin/profile'
+    | '/admin/services'
     | '/auth/signin'
     | '/auth/signup'
     | '/_main/'
@@ -383,6 +442,7 @@ export interface FileRouteTypes {
     | '/dashboard/listings/new'
     | '/_main/suppliers/'
     | '/admin/suppliers/'
+    | '/dashboard/listings/'
     | '/admin/suppliers/$supplierId/edit'
     | '/dashboard/listings/$listingId/edit'
     | '/admin/suppliers/$supplierId/'
@@ -462,6 +522,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthSigninRouteImport
       parentRoute: typeof AuthRoute
     }
+    '/admin/services': {
+      id: '/admin/services'
+      path: '/services'
+      fullPath: '/admin/services'
+      preLoaderRoute: typeof AdminServicesRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/profile': {
+      id: '/admin/profile'
+      path: '/profile'
+      fullPath: '/admin/profile'
+      preLoaderRoute: typeof AdminProfileRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/products': {
       id: '/admin/products'
       path: '/products'
@@ -469,11 +543,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminProductsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/customers': {
+      id: '/admin/customers'
+      path: '/customers'
+      fullPath: '/admin/customers'
+      preLoaderRoute: typeof AdminCustomersRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/categories': {
       id: '/admin/categories'
       path: '/categories'
       fullPath: '/admin/categories'
       preLoaderRoute: typeof AdminCategoriesRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/assignments': {
+      id: '/admin/assignments'
+      path: '/assignments'
+      fullPath: '/admin/assignments'
+      preLoaderRoute: typeof AdminAssignmentsRouteImport
       parentRoute: typeof AdminRoute
     }
     '/_main/marketplace': {
@@ -510,6 +598,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof MainProtectedRouteImport
       parentRoute: typeof MainRoute
+    }
+    '/dashboard/listings/': {
+      id: '/dashboard/listings/'
+      path: '/listings'
+      fullPath: '/dashboard/listings/'
+      preLoaderRoute: typeof DashboardListingsIndexRouteImport
+      parentRoute: typeof DashboardRoute
     }
     '/admin/suppliers/': {
       id: '/admin/suppliers/'
@@ -664,8 +759,12 @@ const MainRouteChildren: MainRouteChildren = {
 const MainRouteWithChildren = MainRoute._addFileChildren(MainRouteChildren)
 
 interface AdminRouteChildren {
+  AdminAssignmentsRoute: typeof AdminAssignmentsRoute
   AdminCategoriesRoute: typeof AdminCategoriesRoute
+  AdminCustomersRoute: typeof AdminCustomersRoute
   AdminProductsRoute: typeof AdminProductsRoute
+  AdminProfileRoute: typeof AdminProfileRoute
+  AdminServicesRoute: typeof AdminServicesRoute
   AdminIndexRoute: typeof AdminIndexRoute
   AdminSuppliersNewRoute: typeof AdminSuppliersNewRoute
   AdminSuppliersIndexRoute: typeof AdminSuppliersIndexRoute
@@ -676,8 +775,12 @@ interface AdminRouteChildren {
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminAssignmentsRoute: AdminAssignmentsRoute,
   AdminCategoriesRoute: AdminCategoriesRoute,
+  AdminCustomersRoute: AdminCustomersRoute,
   AdminProductsRoute: AdminProductsRoute,
+  AdminProfileRoute: AdminProfileRoute,
+  AdminServicesRoute: AdminServicesRoute,
   AdminIndexRoute: AdminIndexRoute,
   AdminSuppliersNewRoute: AdminSuppliersNewRoute,
   AdminSuppliersIndexRoute: AdminSuppliersIndexRoute,
@@ -706,12 +809,14 @@ const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
 interface DashboardRouteChildren {
   DashboardIndexRoute: typeof DashboardIndexRoute
   DashboardListingsNewRoute: typeof DashboardListingsNewRoute
+  DashboardListingsIndexRoute: typeof DashboardListingsIndexRoute
   DashboardListingsListingIdEditRoute: typeof DashboardListingsListingIdEditRoute
 }
 
 const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardIndexRoute: DashboardIndexRoute,
   DashboardListingsNewRoute: DashboardListingsNewRoute,
+  DashboardListingsIndexRoute: DashboardListingsIndexRoute,
   DashboardListingsListingIdEditRoute: DashboardListingsListingIdEditRoute,
 }
 
