@@ -579,7 +579,7 @@ function SupplierCard({
     .join(", ");
 
   return (
-    <Card className="group border border-border bg-card hover:border-primary transition-all duration-300 rounded-sm overflow-hidden flex flex-col shadow-none h-full">
+    <Card className="group border py-0 border-border bg-card hover:border-primary transition-all duration-300 rounded-sm overflow-hidden flex flex-col shadow-none h-full">
       <div className="relative h-48 overflow-hidden bg-muted">
         {company.logoUrl ? (
           <img

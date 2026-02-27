@@ -86,7 +86,16 @@ export const servicesApi = apiSlice.injectEndpoints({
       query: (params = {}) => buildServicesQuery(params as ServicesQueryParams),
       transformResponse: (response: ApiResponse<Service[]>) =>
         unwrapListResponse(response) as ServicesListResult,
-      providesTags: ["Services"],
+      providesTags: (result) =>
+        result
+          ? [
+              ...result.data.map(({ id }) => ({
+                type: "Services" as const,
+                id,
+              })),
+              { type: "Services", id: "LIST" },
+            ]
+          : [{ type: "Services", id: "LIST" }],
     }),
 
     getServiceById: builder.query<Service | null, string>({
@@ -98,7 +107,7 @@ export const servicesApi = apiSlice.injectEndpoints({
 
     createService: builder.mutation<Service, CreateServiceInput>({
       query: (body) => ({ url: "/services", method: "POST", body }),
-      invalidatesTags: ["Services"],
+      invalidatesTags: [{ type: "Services", id: "LIST" }],
     }),
 
     updateService: builder.mutation<
@@ -112,13 +121,13 @@ export const servicesApi = apiSlice.injectEndpoints({
       }),
       invalidatesTags: (_result, _err, { id }) => [
         { type: "Services", id },
-        "Services",
+        { type: "Services", id: "LIST" },
       ],
     }),
 
     deleteService: builder.mutation<void, string>({
       query: (id) => ({ url: `/services/${id}`, method: "DELETE" }),
-      invalidatesTags: ["Services"],
+      invalidatesTags: [{ type: "Services", id: "LIST" }],
     }),
   }),
 });

@@ -42,6 +42,9 @@ const baseQueryWithReauth: BaseQueryFn<
 export const apiSlice = createApi({
   reducerPath: "api",
   baseQuery: baseQueryWithReauth,
+  keepUnusedDataFor: 300,
+  refetchOnMountOrArgChange: 120,
+  refetchOnReconnect: true,
   tagTypes: [
     "Users",
     "Categories",

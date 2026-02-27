@@ -68,10 +68,7 @@ export interface CreateCompanyInput {
 
 export const companiesApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    getCompanies: builder.query<
-      CompaniesListResult,
-      CompaniesQueryParams | void
-    >({
+    getCompanies: builder.query<CompaniesListResult, CompaniesQueryParams>({
       query: (params = {}) => {
         const sp = new URLSearchParams();
         if (params?.page != null) sp.set("page", String(params.page));
@@ -98,7 +95,16 @@ export const companiesApi = apiSlice.injectEndpoints({
           },
         };
       },
-      providesTags: ["Suppliers"],
+      providesTags: (result) =>
+        result
+          ? [
+              ...result.data.map(({ id }) => ({
+                type: "Suppliers" as const,
+                id,
+              })),
+              { type: "Suppliers", id: "LIST" },
+            ]
+          : [{ type: "Suppliers", id: "LIST" }],
     }),
 
     getCompanyById: builder.query<Company | null, string>({
@@ -121,7 +127,7 @@ export const companiesApi = apiSlice.injectEndpoints({
         method: "POST",
         body,
       }),
-      invalidatesTags: ["Suppliers"],
+      invalidatesTags: [{ type: "Suppliers", id: "LIST" }],
     }),
 
     updateCompany: builder.mutation<
@@ -135,7 +141,7 @@ export const companiesApi = apiSlice.injectEndpoints({
       }),
       invalidatesTags: (_result, _err, { id }) => [
         { type: "Suppliers", id },
-        "Suppliers",
+        { type: "Suppliers", id: "LIST" },
       ],
     }),
 
@@ -144,7 +150,7 @@ export const companiesApi = apiSlice.injectEndpoints({
         url: `/companies/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["Suppliers"],
+      invalidatesTags: [{ type: "Suppliers", id: "LIST" }],
     }),
   }),
 });

@@ -1,18 +1,18 @@
 import { defineConfig } from "vite";
 import viteReact from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
-import { tanstackRouter } from '@tanstack/router-plugin/vite'
-import { devtools } from '@tanstack/devtools-vite'
+import { tanstackRouter } from "@tanstack/router-plugin/vite";
+import { devtools } from "@tanstack/devtools-vite";
 import path from "path";
 // https://vitejs.dev/config/
 export default defineConfig({
-    plugins: [
+  plugins: [
     devtools(),
     tailwindcss(),
-    tanstackRouter({ target: 'react', autoCodeSplitting: true }),
+    tanstackRouter({ target: "react", autoCodeSplitting: true }),
     viteReact({
       babel: {
-        plugins: [['babel-plugin-react-compiler']],
+        plugins: [["babel-plugin-react-compiler"]],
       },
     }),
   ],
@@ -23,5 +23,18 @@ export default defineConfig({
   },
   server: {
     port: 4000,
+  },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          "vendor-react": ["react", "react-dom"],
+          "vendor-redux": ["@reduxjs/toolkit", "react-redux", "redux-persist"],
+          "vendor-router": ["@tanstack/react-router"],
+          "vendor-charts": ["recharts"],
+          "vendor-ui": ["lucide-react", "@remixicon/react"],
+        },
+      },
+    },
   },
 });

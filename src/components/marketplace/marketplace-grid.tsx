@@ -9,7 +9,7 @@ import {
   ChevronLeft as RiExpandLeftLine, // Using ChevronLeft as a fallback if RiExpandLeftLine is missing
 } from "lucide-react";
 import type React from "react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { useGetProductCategoriesQuery } from "@/app/api/product-categories";
 import type { Product } from "@/app/api/products";
@@ -419,30 +419,50 @@ const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({
   };
 
   // Merge product and service API streams for unified rendering.
-  const apiProducts: MarketplaceItem[] = (productsData?.data ?? []).map(
-    (p) => ({ ...p, itemType: "PRODUCT" as const }),
-  );
-  const apiServices: MarketplaceItem[] = (servicesData?.data ?? []).map(
-    (s) => ({ ...s, itemType: "SERVICE" as const }),
-  );
-  const apiItems = [...apiProducts, ...apiServices];
+  const { apiItems } = useMemo(() => {
+    const products = (productsData?.data ?? []).map((p) => ({
+      ...p,
+      itemType: "PRODUCT" as const,
+    }));
+    const services = (servicesData?.data ?? []).map((s) => ({
+      ...s,
+      itemType: "SERVICE" as const,
+    }));
+    return {
+      apiProducts: products,
+      apiServices: services,
+      apiItems: [...products, ...services],
+    };
+  }, [productsData?.data, servicesData?.data]);
+
   const activeItems = apiItems;
-  const activeCategories = categoriesData?.data ?? [];
 
-  const combinedTotal =
-    (productsData?.meta?.total ?? 0) + (servicesData?.meta?.total ?? 0);
+  const activeCategories = useMemo(
+    () => categoriesData?.data ?? [],
+    [categoriesData?.data],
+  );
 
-  const activeMeta =
-    filters.type === "PRODUCT"
-      ? productsData?.meta
-      : filters.type === "SERVICE"
-        ? servicesData?.meta
-        : {
-            page,
-            limit: PAGE_SIZE,
-            total: combinedTotal,
-            totalPages: Math.max(1, Math.ceil(combinedTotal / PAGE_SIZE)),
-          };
+  const combinedTotal = useMemo(
+    () => (productsData?.meta?.total ?? 0) + (servicesData?.meta?.total ?? 0),
+    [productsData?.meta?.total, servicesData?.meta?.total],
+  );
+
+  const activeMeta = useMemo(() => {
+    if (filters.type === "PRODUCT") return productsData?.meta;
+    if (filters.type === "SERVICE") return servicesData?.meta;
+    return {
+      page,
+      limit: PAGE_SIZE,
+      total: combinedTotal,
+      totalPages: Math.max(1, Math.ceil(combinedTotal / PAGE_SIZE)),
+    };
+  }, [
+    filters.type,
+    productsData?.meta,
+    servicesData?.meta,
+    page,
+    combinedTotal,
+  ]);
 
   const commonFilterProps = {
     filters,

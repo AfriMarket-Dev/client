@@ -34,7 +34,13 @@ export const wishlistApi = apiSlice.injectEndpoints({
           );
         });
       },
-      providesTags: ["Wishlist"],
+      providesTags: (result) =>
+        result
+          ? [
+              ...result.map(({ id }) => ({ type: "Wishlist" as const, id })),
+              { type: "Wishlist", id: "LIST" },
+            ]
+          : [{ type: "Wishlist", id: "LIST" }],
     }),
 
     checkProductWishlist: builder.query<{ inWishlist: boolean }, string>({
@@ -56,7 +62,10 @@ export const wishlistApi = apiSlice.injectEndpoints({
         method: "POST",
         body: type === "product" ? { [type + "Id"]: id } : { serviceId: id },
       }),
-      invalidatesTags: ["Wishlist"],
+      invalidatesTags: (_result, _err, { id }) => [
+        { type: "Wishlist", id },
+        { type: "Wishlist", id: "LIST" },
+      ],
     }),
 
     removeFromWishlist: builder.mutation<
@@ -67,7 +76,10 @@ export const wishlistApi = apiSlice.injectEndpoints({
         url: `/wishlists/${type}s/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["Wishlist"],
+      invalidatesTags: (_result, _err, { id }) => [
+        { type: "Wishlist", id },
+        { type: "Wishlist", id: "LIST" },
+      ],
     }),
   }),
 });

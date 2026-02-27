@@ -33,7 +33,16 @@ export const messagesApi = apiSlice.injectEndpoints({
         Array.isArray((response as ApiResponse<ConversationPartner[]>)?.data)
           ? ((response as ApiResponse<ConversationPartner[]>).data ?? [])
           : [],
-      providesTags: ["Messages"],
+      providesTags: (result) =>
+        result
+          ? [
+              ...result.map(({ partner }) => ({
+                type: "Messages" as const,
+                id: partner.id,
+              })),
+              { type: "Messages", id: "LIST" },
+            ]
+          : [{ type: "Messages", id: "LIST" }],
     }),
 
     getChatHistory: builder.query<
@@ -79,7 +88,10 @@ export const messagesApi = apiSlice.injectEndpoints({
         method: "POST",
         body,
       }),
-      invalidatesTags: ["Messages"],
+      invalidatesTags: (_result, _err, { receiverId }) => [
+        { type: "Messages", id: receiverId },
+        { type: "Messages", id: "LIST" },
+      ],
     }),
 
     // context-aware: backend resolves the company owner automatically
@@ -92,7 +104,7 @@ export const messagesApi = apiSlice.injectEndpoints({
         method: "POST",
         body: { content },
       }),
-      invalidatesTags: ["Messages"],
+      invalidatesTags: [{ type: "Messages", id: "LIST" }], // The backend resolves the receiver, safest to just invalidate the list
     }),
 
     // context-aware for services
@@ -105,7 +117,7 @@ export const messagesApi = apiSlice.injectEndpoints({
         method: "POST",
         body: { content },
       }),
-      invalidatesTags: ["Messages"],
+      invalidatesTags: [{ type: "Messages", id: "LIST" }], // The backend resolves the receiver, safest to just invalidate the list
     }),
   }),
 });
