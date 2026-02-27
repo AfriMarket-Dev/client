@@ -1,26 +1,35 @@
-import React, { useState, useEffect } from "react";
 import {
-  Search,
+  ArrowRight,
+  Building2,
+  ChevronDown,
   Filter,
   Grid,
-  List,
-  Star,
-  MapPin,
-  ArrowRight,
   Hexagon,
-  ShieldCheck,
-  PanelLeftClose,
+  List,
+  MapPin,
+  PanelLeft as RiExpandLeftLine,
   PanelLeftOpen,
+  Search,
+  ShieldCheck,
+  Star,
   X,
-  ChevronDown,
-  Building2,
 } from "lucide-react";
+import type React from "react";
+import { useState } from "react";
+import type { Company } from "@/app/api/companies";
 import { useGetCompaniesQuery } from "@/app/api/companies";
 import { useGetCompanyCategoriesQuery } from "@/app/api/company-categories";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
+import { Label } from "@/components/ui/label";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Select,
   SelectContent,
@@ -28,19 +37,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
+import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
-import type { Company } from "@/app/api/companies";
-
-import { suppliers } from "@/data/mock-data";
 
 interface SupplierListingProps {
   onSupplierClick?: (supplierId: string) => void;
@@ -95,49 +94,15 @@ const SupplierListing: React.FC<SupplierListingProps> = ({
     categoryId: filters.categoryId === "all" ? undefined : filters.categoryId,
     district: filters.district || undefined,
     type: filters.type === "all" ? undefined : filters.type,
-    minRating: Number(filters.minRating) > 0 ? Number(filters.minRating) : undefined,
+    minRating:
+      Number(filters.minRating) > 0 ? Number(filters.minRating) : undefined,
     verified: filters.verified ? true : undefined,
   });
 
   const { data: categoriesData } = useGetCompanyCategoriesQuery({ limit: 50 });
 
-  // Use mock data if API fails or returns empty (client-side fallback for filtering)
-  const isDummyMode = !listData?.data && suppliers.length > 0;
-  
-  const filteredMockCompanies = isDummyMode
-    ? suppliers.filter((c) => {
-        if (
-          filters.searchQuery &&
-          !c.name.toLowerCase().includes(filters.searchQuery.toLowerCase())
-        )
-          return false;
-        if (
-            filters.categoryId !== "all" &&
-            (c.category as { id: string }).id !== filters.categoryId
-          )
-            return false;
-        if (
-          filters.district &&
-          !c.district?.toLowerCase().includes(filters.district.toLowerCase())
-        )
-          return false;
-        if (filters.type !== "all" && c.type !== filters.type) return false;
-        if (filters.verified && !c.isVerified) return false;
-        if (Number(filters.minRating) > 0 && c.averageRating < Number(filters.minRating))
-          return false;
-        return true;
-      })
-    : [];
-
-  const companies = isDummyMode ? filteredMockCompanies : listData?.data ?? [];
-  const meta = isDummyMode
-    ? {
-        total: filteredMockCompanies.length,
-        page: 1,
-        limit: PAGE_SIZE,
-        totalPages: Math.ceil(filteredMockCompanies.length / PAGE_SIZE),
-      }
-    : listData?.meta;
+  const companies: Company[] = listData?.data || [];
+  const meta = listData?.meta;
 
   const categories = categoriesData?.data ?? [];
 
@@ -158,7 +123,9 @@ const SupplierListing: React.FC<SupplierListingProps> = ({
         </Label>
         <Select
           value={filters.categoryId}
-          onValueChange={(val) => handleFiltersChange({ categoryId: val as string })}
+          onValueChange={(val) =>
+            handleFiltersChange({ categoryId: val as string })
+          }
         >
           <SelectTrigger className="w-full bg-background">
             <SelectValue placeholder="All Categories" />
@@ -223,7 +190,9 @@ const SupplierListing: React.FC<SupplierListingProps> = ({
         </Label>
         <Select
           value={filters.minRating}
-          onValueChange={(val) => handleFiltersChange({ minRating: val as string })}
+          onValueChange={(val) =>
+            handleFiltersChange({ minRating: val as string })
+          }
         >
           <SelectTrigger className="w-full bg-background">
             <SelectValue placeholder="Any Rating" />
@@ -266,7 +235,6 @@ const SupplierListing: React.FC<SupplierListingProps> = ({
         <div className="max-w-[1600px] mx-auto px-4 md:px-6">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
-            
               <h1 className="text-2xl font-heading font-bold uppercase text-foreground tracking-wide">
                 Supplier Directory
               </h1>
@@ -320,7 +288,7 @@ const SupplierListing: React.FC<SupplierListingProps> = ({
                     className="h-8 w-8 text-muted-foreground hover:text-foreground md:hidden"
                     onClick={() => setShowFilters(false)}
                   >
-                    <PanelLeftClose className="w-4 h-4" />
+                    <RiExpandLeftLine className="w-4 h-4" />
                   </Button>
                 </div>
               </div>
@@ -333,61 +301,81 @@ const SupplierListing: React.FC<SupplierListingProps> = ({
 
           {/* Main Content */}
           <div className="flex-1 min-w-0">
-             {/* Toolbar & Filter Toggle */}
+            {/* Toolbar & Filter Toggle */}
             <div className="flex flex-col gap-4 mb-6 sticky top-16 lg:top-0 z-20 bg-background/95 backdrop-blur-md py-2 lg:py-4">
               <div className="flex gap-4 items-center">
-                 <Button
-                    variant="outline"
-                    size="icon"
-                    className={cn(
-                        "hidden lg:flex shrink-0",
-                        showFilters && "bg-muted/50"
-                    )}
-                    onClick={() => setShowFilters(!showFilters)}
-                    title={showFilters ? "Hide Filters" : "Show Filters"}
-                 >
-                     {showFilters ? <PanelLeftClose className="w-5 h-5 text-muted-foreground" /> : <PanelLeftOpen className="w-5 h-5 text-muted-foreground"/>}
-                 </Button>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className={cn(
+                    "hidden lg:flex shrink-0",
+                    showFilters && "bg-muted/50",
+                  )}
+                  onClick={() => setShowFilters(!showFilters)}
+                  title={showFilters ? "Hide Filters" : "Show Filters"}
+                >
+                  {showFilters ? (
+                    <RiExpandLeftLine className="w-5 h-5 text-muted-foreground" />
+                  ) : (
+                    <PanelLeftOpen className="w-5 h-5 text-muted-foreground" />
+                  )}
+                </Button>
 
-                 {/* Mobile Filter */}
-                 <div className="lg:hidden w-full sm:w-auto">
-                    <Collapsible
+                {/* Mobile Filter */}
+                <div className="lg:hidden w-full sm:w-auto">
+                  <Collapsible
                     open={isMobileFiltersOpen}
                     onOpenChange={setIsMobileFiltersOpen}
                     className="w-full"
-                    >
+                  >
                     <CollapsibleTrigger
-                        className={cn(
-                            "inline-flex items-center justify-between whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 w-full sm:w-auto gap-2 shrink-0 sm:justify-center"
-                        )}
+                      className={cn(
+                        "inline-flex items-center justify-between whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 w-full sm:w-auto gap-2 shrink-0 sm:justify-center",
+                      )}
                     >
-                        <span className="flex items-center gap-2">
-                            <Filter className="w-4 h-4" />
-                            Filters
-                            {(filters.district ||
-                            filters.type !== "all" ||
-                            Number(filters.minRating) > 0 ||
-                            filters.categoryId !== "all" ||
-                            filters.verified) && (
-                            <Badge
-                                variant="secondary"
-                                className="ml-1 h-5 px-1.5 text-[10px]"
-                            >
-                                Active
-                            </Badge>
-                            )}
-                        </span>
-                        <ChevronDown className={`w-4 h-4 transition-transform ${isMobileFiltersOpen ? 'rotate-180' : ''}`} />
+                      <span className="flex items-center gap-2">
+                        <Filter className="w-4 h-4" />
+                        Filters
+                        {(filters.district ||
+                          filters.type !== "all" ||
+                          Number(filters.minRating) > 0 ||
+                          filters.categoryId !== "all" ||
+                          filters.verified) && (
+                          <Badge
+                            variant="secondary"
+                            className="ml-1 h-5 px-1.5 text-[10px]"
+                          >
+                            Active
+                          </Badge>
+                        )}
+                      </span>
+                      <ChevronDown
+                        className={`w-4 h-4 transition-transform ${isMobileFiltersOpen ? "rotate-180" : ""}`}
+                      />
                     </CollapsibleTrigger>
                     <CollapsibleContent className="mt-4 p-4 border rounded-md bg-background shadow-sm space-y-6">
-                        <div className="flex items-center justify-between mb-2">
-                             <h3 className="font-heading font-bold uppercase text-sm">Refine Search</h3>
-                             <Button variant="ghost" size="sm" onClick={handleClearFilters} className="text-xs h-6">Reset All</Button>
-                        </div>
-                        <FilterContent />
-                         <Button onClick={() => setIsMobileFiltersOpen(false)} className="w-full mt-4">Close Filters</Button>
+                      <div className="flex items-center justify-between mb-2">
+                        <h3 className="font-heading font-bold uppercase text-sm">
+                          Refine Search
+                        </h3>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={handleClearFilters}
+                          className="text-xs h-6"
+                        >
+                          Reset All
+                        </Button>
+                      </div>
+                      <FilterContent />
+                      <Button
+                        onClick={() => setIsMobileFiltersOpen(false)}
+                        className="w-full mt-4"
+                      >
+                        Close Filters
+                      </Button>
                     </CollapsibleContent>
-                    </Collapsible>
+                  </Collapsible>
                 </div>
 
                 <div className="relative flex-1">
@@ -403,44 +391,85 @@ const SupplierListing: React.FC<SupplierListingProps> = ({
                 </div>
               </div>
 
-               {/* Active Filters Badges */}
-               {(filters.categoryId !== "all" ||
+              {/* Active Filters Badges */}
+              {(filters.categoryId !== "all" ||
                 filters.type !== "all" ||
                 filters.district ||
                 Number(filters.minRating) > 0 ||
                 filters.verified) && (
                 <div className="flex flex-wrap gap-2 items-center mt-2">
                   {filters.categoryId !== "all" && (
-                    <Badge variant="secondary" className="gap-1 rounded-sm text-[10px] pl-2 pr-1 h-6">
-                      {categories.find((c) => c.id === filters.categoryId)?.name || "Category"}
-                      <X className="w-3 h-3 hover:text-destructive cursor-pointer" onClick={() => handleFiltersChange({ categoryId: "all" })} />
+                    <Badge
+                      variant="secondary"
+                      className="gap-1 rounded-sm text-[10px] pl-2 pr-1 h-6"
+                    >
+                      {categories.find((c) => c.id === filters.categoryId)
+                        ?.name || "Category"}
+                      <X
+                        className="w-3 h-3 hover:text-destructive cursor-pointer"
+                        onClick={() =>
+                          handleFiltersChange({ categoryId: "all" })
+                        }
+                      />
                     </Badge>
                   )}
                   {filters.type !== "all" && (
-                    <Badge variant="secondary" className="gap-1 rounded-sm text-[10px] pl-2 pr-1 h-6">
-                      {COMPANY_TYPES.find((t) => t.value === filters.type)?.label || filters.type}
-                      <X className="w-3 h-3 hover:text-destructive cursor-pointer" onClick={() => handleFiltersChange({ type: "all" })} />
+                    <Badge
+                      variant="secondary"
+                      className="gap-1 rounded-sm text-[10px] pl-2 pr-1 h-6"
+                    >
+                      {COMPANY_TYPES.find((t) => t.value === filters.type)
+                        ?.label || filters.type}
+                      <X
+                        className="w-3 h-3 hover:text-destructive cursor-pointer"
+                        onClick={() => handleFiltersChange({ type: "all" })}
+                      />
                     </Badge>
                   )}
                   {filters.district && (
-                    <Badge variant="secondary" className="gap-1 rounded-sm text-[10px] pl-2 pr-1 h-6">
-                       {filters.district}
-                      <X className="w-3 h-3 hover:text-destructive cursor-pointer" onClick={() => handleFiltersChange({ district: "" })} />
+                    <Badge
+                      variant="secondary"
+                      className="gap-1 rounded-sm text-[10px] pl-2 pr-1 h-6"
+                    >
+                      {filters.district}
+                      <X
+                        className="w-3 h-3 hover:text-destructive cursor-pointer"
+                        onClick={() => handleFiltersChange({ district: "" })}
+                      />
                     </Badge>
                   )}
-                   {Number(filters.minRating) > 0 && (
-                    <Badge variant="secondary" className="gap-1 rounded-sm text-[10px] pl-2 pr-1 h-6">
-                       {filters.minRating}+ Stars
-                      <X className="w-3 h-3 hover:text-destructive cursor-pointer" onClick={() => handleFiltersChange({ minRating: "0" })} />
+                  {Number(filters.minRating) > 0 && (
+                    <Badge
+                      variant="secondary"
+                      className="gap-1 rounded-sm text-[10px] pl-2 pr-1 h-6"
+                    >
+                      {filters.minRating}+ Stars
+                      <X
+                        className="w-3 h-3 hover:text-destructive cursor-pointer"
+                        onClick={() => handleFiltersChange({ minRating: "0" })}
+                      />
                     </Badge>
                   )}
                   {filters.verified && (
-                    <Badge variant="secondary" className="gap-1 rounded-sm text-[10px] pl-2 pr-1 h-6">
+                    <Badge
+                      variant="secondary"
+                      className="gap-1 rounded-sm text-[10px] pl-2 pr-1 h-6"
+                    >
                       Verified Only
-                      <X className="w-3 h-3 hover:text-destructive cursor-pointer" onClick={() => handleFiltersChange({ verified: false })} />
+                      <X
+                        className="w-3 h-3 hover:text-destructive cursor-pointer"
+                        onClick={() => handleFiltersChange({ verified: false })}
+                      />
                     </Badge>
                   )}
-                  <Button variant="ghost" size="sm" className="h-6 text-[10px] px-2 text-destructive hover:bg-destructive/10" onClick={handleClearFilters}>Clear All</Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-6 text-[10px] px-2 text-destructive hover:bg-destructive/10"
+                    onClick={handleClearFilters}
+                  >
+                    Clear All
+                  </Button>
                 </div>
               )}
             </div>
@@ -457,54 +486,59 @@ const SupplierListing: React.FC<SupplierListingProps> = ({
               </div>
             ) : (
               <>
-                 {companies.length === 0 ? (
-                    <div className="flex flex-col items-center justify-center py-24 text-center border border-dashed border-border rounded-sm bg-muted/5">
-                        <div className="w-20 h-20 bg-muted/20 rounded-full flex items-center justify-center mb-6">
-                            <Building2 className="w-10 h-10 text-muted-foreground/50" />
-                        </div>
-                        <h3 className="text-2xl font-heading font-bold uppercase text-foreground mb-3 tracking-wide">
-                            No Suppliers Found
-                        </h3>
-                        <p className="text-muted-foreground max-w-md mx-auto mb-8 text-base leading-relaxed">
-                            We couldn't find any suppliers matching your current criteria.
-                            Try adjusting filters or searching for something else.
-                        </p>
-                        <Button
-                            size="lg"
-                            className="rounded-sm font-heading uppercase tracking-wider h-12 px-8"
-                            onClick={handleClearFilters}
-                        >
-                            Reset Filters
-                        </Button>
+                {companies.length === 0 ? (
+                  <div className="flex flex-col items-center justify-center py-24 text-center border border-dashed border-border rounded-sm bg-muted/5">
+                    <div className="w-20 h-20 bg-muted/20 rounded-full flex items-center justify-center mb-6">
+                      <Building2 className="w-10 h-10 text-muted-foreground/50" />
                     </div>
-                 ) : (
-                    <div
-                      className={
-                        viewMode === "grid"
-                          ? cn(
-                              "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6",
-                              showFilters ? "xl:grid-cols-3" : "xl:grid-cols-4 2xl:grid-cols-5"
-                            )
-                          : "flex flex-col gap-4"
-                      }
+                    <h3 className="text-2xl font-heading font-bold uppercase text-foreground mb-3 tracking-wide">
+                      No Suppliers Found
+                    </h3>
+                    <p className="text-muted-foreground max-w-md mx-auto mb-8 text-base leading-relaxed">
+                      We couldn't find any suppliers matching your current
+                      criteria. Try adjusting filters or searching for something
+                      else.
+                    </p>
+                    <Button
+                      size="lg"
+                      className="rounded-sm font-heading uppercase tracking-wider h-12 px-8"
+                      onClick={handleClearFilters}
                     >
-                      {companies.map((company: Company) => (
-                        <SupplierCard
-                          key={company.id}
-                          company={company}
-                          onViewProfile={() => onSupplierClick?.(company.id)}
-                        />
-                      ))}
-                    </div>
-                 )}
+                      Reset Filters
+                    </Button>
+                  </div>
+                ) : (
+                  <div
+                    className={
+                      viewMode === "grid"
+                        ? cn(
+                            "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6",
+                            showFilters
+                              ? "xl:grid-cols-3"
+                              : "xl:grid-cols-4 2xl:grid-cols-5",
+                          )
+                        : "flex flex-col gap-4"
+                    }
+                  >
+                    {companies.map((company: Company) => (
+                      <SupplierCard
+                        key={company.id}
+                        company={company}
+                        onViewProfile={() => onSupplierClick?.(company.id)}
+                      />
+                    ))}
+                  </div>
+                )}
 
-                 {meta && meta.totalPages > 1 && (
+                {meta && meta.totalPages > 1 && (
                   <div className="flex justify-center gap-2 mt-12 pt-8 border-t border-border">
                     <Button
                       variant="outline"
                       size="sm"
                       disabled={filters.page <= 1}
-                      onClick={() => handleFiltersChange({ page: filters.page - 1 })}
+                      onClick={() =>
+                        handleFiltersChange({ page: filters.page - 1 })
+                      }
                     >
                       Previous
                     </Button>
@@ -515,7 +549,9 @@ const SupplierListing: React.FC<SupplierListingProps> = ({
                       variant="outline"
                       size="sm"
                       disabled={filters.page >= meta.totalPages}
-                      onClick={() => handleFiltersChange({ page: filters.page + 1 })}
+                      onClick={() =>
+                        handleFiltersChange({ page: filters.page + 1 })
+                      }
                     >
                       Next
                     </Button>
@@ -545,17 +581,23 @@ function SupplierCard({
   return (
     <Card className="group border border-border bg-card hover:border-primary transition-all duration-300 rounded-sm overflow-hidden flex flex-col shadow-none h-full">
       <div className="relative h-48 overflow-hidden bg-muted">
-         {company.logoUrl ? (
-            <img src={company.logoUrl} alt={company.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-         ) : (
-            <div className="absolute inset-0 flex items-center justify-center bg-muted/50">
-                <Hexagon className="w-16 h-16 text-muted-foreground/20 stroke-1" />
-                <span className="absolute text-4xl font-bold text-muted-foreground/30">{company.name.charAt(0)}</span>
-            </div>
-         )}
-        
+        {company.logoUrl ? (
+          <img
+            src={company.logoUrl}
+            alt={company.name}
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+          />
+        ) : (
+          <div className="absolute inset-0 flex items-center justify-center bg-muted/50">
+            <Hexagon className="w-16 h-16 text-muted-foreground/20 stroke-1" />
+            <span className="absolute text-4xl font-bold text-muted-foreground/30">
+              {company.name.charAt(0)}
+            </span>
+          </div>
+        )}
+
         <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent opacity-60"></div>
-        
+
         {company.isVerified && (
           <div className="absolute top-3 right-3">
             <Badge className="bg-background/90 text-foreground border-none font-heading font-bold text-[9px] px-2 h-5 flex items-center gap-1.5 rounded-sm uppercase tracking-wider backdrop-blur-md">
@@ -566,15 +608,15 @@ function SupplierCard({
         )}
 
         <div className="absolute bottom-4 left-4 right-4 text-white">
-            <h3 className="text-lg font-heading font-bold uppercase leading-tight mb-1 tracking-wide truncate pr-6">
-                {company.name}
-            </h3>
-             {location && (
-                <div className="flex items-center text-white/80 font-medium text-[10px] gap-1 uppercase tracking-wide">
-                  <MapPin className="w-3 h-3 text-white/60" />
-                  {location}
-                </div>
-              )}
+          <h3 className="text-lg font-heading font-bold uppercase leading-tight mb-1 tracking-wide truncate pr-6">
+            {company.name}
+          </h3>
+          {location && (
+            <div className="flex items-center text-white/80 font-medium text-[10px] gap-1 uppercase tracking-wide">
+              <MapPin className="w-3 h-3 text-white/60" />
+              {location}
+            </div>
+          )}
         </div>
       </div>
 
@@ -582,12 +624,12 @@ function SupplierCard({
         <div className="flex-grow">
           <div className="flex justify-between items-start mb-4 gap-2">
             <div className="flex flex-wrap gap-1.5">
-                <Badge
+              <Badge
                 variant="outline"
                 className="bg-muted/50 text-muted-foreground text-[9px] font-bold border-border rounded-sm px-2 h-5 uppercase tracking-tight"
-                >
+              >
                 {company.type?.replace(/_/g, " ") || "Supplier"}
-                </Badge>
+              </Badge>
             </div>
             <div className="flex items-center bg-muted px-1.5 py-0.5 rounded-sm border border-border shrink-0">
               <Star className="w-3 h-3 text-warning fill-warning mr-1" />
@@ -598,7 +640,8 @@ function SupplierCard({
           </div>
 
           <p className="text-muted-foreground text-xs leading-relaxed line-clamp-2 mb-4 h-9">
-            {company.description || "Leading provider of construction materials and heavy equipment solutions."}
+            {company.description ||
+              "Leading provider of construction materials and heavy equipment solutions."}
           </p>
         </div>
 

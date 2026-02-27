@@ -1,92 +1,129 @@
-import { ShieldCheck, Package, Users, AlertTriangle } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import {
+	RiAlertLine,
+	RiPagesLine,
+	RiShieldCheckLine,
+	RiUserLine,
+} from "@remixicon/react";
+import { useMemo } from "react";
+import { useGetCompaniesQuery } from "@/app/api/companies";
+import { useGetListingsQuery } from "@/app/api/listings";
+import { useGetProductsQuery } from "@/app/api/products";
+import { useGetServicesQuery } from "@/app/api/services";
+import { useGetMarketplaceStatsQuery } from "@/app/api/stats";
 import { AdminPageHeader, AdminStatCard } from "@/components/admin";
 import { ModerationQueue } from "@/components/admin/dashboard/moderation-queue";
 import { SystemActions } from "@/components/admin/dashboard/system-actions";
 
+function compact(value: number) {
+	if (value >= 1000) return `${(value / 1000).toFixed(1)}k`;
+	return `${value}`;
+}
+
+function ago(dateLike?: string) {
+	if (!dateLike) return "recently";
+	const date = new Date(dateLike);
+	if (Number.isNaN(date.getTime())) return "recently";
+	const hours = Math.max(1, Math.round((Date.now() - date.getTime()) / 3600000));
+	if (hours >= 24) return `${Math.round(hours / 24)}d ago`;
+	return `${hours}h ago`;
+}
+
 export default function AdminDashboard() {
-  const stats = [
-    {
-      label: "Verified Suppliers",
-      value: "482",
-      icon: ShieldCheck,
-      change: "+12%",
-      color: "text-emerald-600",
-      bgColor: "bg-emerald-50",
-    },
-    {
-      label: "Active Listings",
-      value: "3,240",
-      icon: Package,
-      change: "+5%",
-      color: "text-blue-600",
-      bgColor: "bg-blue-50",
-    },
-    {
-      label: "Platform Users",
-      value: "12.5k",
-      icon: Users,
-      change: "+18%",
-      color: "text-purple-600",
-      bgColor: "bg-purple-50",
-    },
-    {
-      label: "Pending Reports",
-      value: "14",
-      icon: AlertTriangle,
-      change: "-2",
-      color: "text-amber-600",
-      bgColor: "bg-amber-50",
-    },
-  ];
+	const { data: stats } = useGetMarketplaceStatsQuery();
+	const { data: companiesResult } = useGetCompaniesQuery({ limit: 200 });
+	const { data: listingsResult } = useGetListingsQuery({ limit: 200 });
+	const { data: productsResult } = useGetProductsQuery({ limit: 200 });
+	const { data: servicesResult } = useGetServicesQuery({ limit: 200 });
 
-  const reports = [
-    {
-      id: "REP-001",
-      target: "Kigali Steel Ltd",
-      type: "Provider",
-      reason: "Inaccurate price guide",
-      evidence: "Chat logs attached",
-      status: "pending",
-      count: 3,
-      time: "2 hours ago",
-    },
-    {
-      id: "REP-002",
-      target: "River Sand Batch #44",
-      type: "Listing",
-      reason: "Misleading images",
-      evidence: "User photo comparison",
-      status: "reviewing",
-      count: 1,
-      time: "5 hours ago",
-    },
-  ];
+	const companies = companiesResult?.data ?? [];
+	const listings = listingsResult?.data ?? [];
+	const products = productsResult?.data ?? [];
+	const services = servicesResult?.data ?? [];
 
-  return (
-    <div className="space-y-8 pb-20">
-      <AdminPageHeader
-        title="Platform Control"
-        subtitle="Monitoring Rwanda's construction ecosystem"
-        badge="Administrator"
-        actions={
-          <Button className="rounded-sm h-14 px-8 font-heading font-bold uppercase tracking-wider bg-background text-foreground hover:bg-muted border border-transparent hover:border-border transition-all shadow-none">
-            Generate Audit Log
-          </Button>
-        }
-      />
+	const verifiedSuppliers =
+		stats?.verifiedSuppliers ?? companies.filter((c) => c.isVerified).length;
+	const activeListings = listings.filter((l) => l.isActive).length;
+	const platformUsers = companies.length;
+	const pendingReports =
+		companies.filter((c) => !c.isVerified).length +
+		products.filter((p) => !p.isActive).length +
+		services.filter((s) => !s.isActive).length;
 
-      {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {stats.map((stat, index) => (
-          <AdminStatCard key={index} {...stat} />
-        ))}
-      </div>
+	const reports = useMemo(() => {
+		const supplierAlerts = companies
+			.filter((company) => !company.isVerified)
+			.slice(0, 3)
+			.map((company) => ({
+				id: company.id.slice(0, 8),
+				target: company.name,
+				type: "Supplier",
+				reason: "Verification pending",
+				evidence: "Profile review required",
+				status: "pending",
+				count: 1,
+				time: ago(company.updatedAt ?? company.createdAt),
+			}));
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <ModerationQueue reports={reports} />
-        <SystemActions />
-      </div>
-    </div>
-  );
+		const productAlerts = products
+			.filter((product) => !product.isActive)
+			.slice(0, 2)
+			.map((product) => ({
+				id: product.id.slice(0, 8),
+				target: product.name,
+				type: "Listing",
+				reason: "Inactive product listing",
+				evidence: "Needs admin review",
+				status: "reviewing",
+				count: 1,
+				time: ago(product.updatedAt ?? product.createdAt),
+			}));
+
+		return [...supplierAlerts, ...productAlerts].slice(0, 5);
+	}, [companies, products]);
+
+	return (
+		<div className="space-y-6 pb-12">
+			<AdminPageHeader
+				title="Platform Control"
+				subtitle="Live marketplace health and moderation"
+				badge="Administrator"
+			/>
+
+			<div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+				<AdminStatCard
+					label="Verified Suppliers"
+					value={compact(verifiedSuppliers)}
+					icon={RiShieldCheckLine}
+					bgColor="bg-emerald-50"
+					color="text-emerald-600"
+				/>
+				<AdminStatCard
+					label="Active Listings"
+					value={compact(activeListings)}
+					icon={RiPagesLine}
+					bgColor="bg-blue-50"
+					color="text-blue-600"
+				/>
+				<AdminStatCard
+					label="Supplier Accounts"
+					value={compact(platformUsers)}
+					icon={RiUserLine}
+					bgColor="bg-violet-50"
+					color="text-violet-600"
+				/>
+				<AdminStatCard
+					label="Pending Alerts"
+					value={compact(pendingReports)}
+					icon={RiAlertLine}
+					bgColor="bg-amber-50"
+					color="text-amber-600"
+				/>
+			</div>
+
+			<div className="grid grid-cols-1 gap-6 xl:grid-cols-3">
+				<ModerationQueue reports={reports} />
+				<SystemActions />
+			</div>
+		</div>
+	);
 }

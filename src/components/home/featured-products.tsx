@@ -1,22 +1,26 @@
-import React from "react";
-import { Button } from "@/components/ui/button";
-import { Package } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
-// import { useGetListingsQuery } from "@/app/api/listings";
-import { ProductCard } from "@/components/marketplace/catalog/product-card";
-import { SectionHeader } from "./section-header";
-import { getMockProducts } from "@/data/mock-data";
-import { useGetWishlistQuery, useAddToWishlistMutation, useRemoveFromWishlistMutation } from "@/app/api/wishlist";
-import { toast } from "sonner";
+import { RiPagesLine } from "@remixicon/react";
+import type React from "react";
 import { useSelector } from "react-redux";
-import { type RootState } from "@/app/store";
+import { toast } from "sonner";
+import { useGetProductsQuery } from "@/app/api/products";
+import {
+  useAddToWishlistMutation,
+  useGetWishlistQuery,
+  useRemoveFromWishlistMutation,
+} from "@/app/api/wishlist";
+import type { RootState } from "@/app/store";
+import { ProductCard } from "@/components/marketplace/catalog/product-card";
+import { Button } from "@/components/ui/button";
+import { SectionHeader } from "./section-header";
 
 const FeaturedProducts: React.FC = () => {
   const navigate = useNavigate();
-  // Fetch only products
-  // const { data } = useGetListingsQuery({ limit: 10, type: "PRODUCT" });
-  // const listings = data?.data ?? [];
-  const listings = getMockProducts().slice(0, 10);
+  const { data: productsResult } = useGetProductsQuery({
+    isFeatured: true,
+    limit: 10,
+  });
+  const listings = productsResult?.data || [];
 
   const { isAuthenticated } = useSelector((state: RootState) => state.auth);
   const { data: wishlist = [] } = useGetWishlistQuery(undefined, {
@@ -25,19 +29,24 @@ const FeaturedProducts: React.FC = () => {
   const [addToWishlist] = useAddToWishlistMutation();
   const [removeFromWishlist] = useRemoveFromWishlistMutation();
 
-  const handleToggleWishlist = async (e: React.MouseEvent, productId: string) => {
+  const handleToggleWishlist = async (
+    e: React.MouseEvent,
+    productId: string,
+  ) => {
     e.stopPropagation();
     if (!isAuthenticated) {
       toast.error("Please login to add to wishlist");
       return;
     }
     try {
-      const isInWishlist = wishlist.some((l: { id: string }) => l.id === productId);
+      const isInWishlist = wishlist.some(
+        (l: { id: string }) => l.id === productId,
+      );
       if (isInWishlist) {
-        await removeFromWishlist(productId).unwrap();
+        await removeFromWishlist({ id: productId, type: "product" }).unwrap();
         toast.success("Removed from wishlist");
       } else {
-        await addToWishlist(productId).unwrap();
+        await addToWishlist({ id: productId, type: "product" }).unwrap();
         toast.success("Added to wishlist");
       }
     } catch (error) {
@@ -45,15 +54,13 @@ const FeaturedProducts: React.FC = () => {
     }
   };
 
-
-
   return (
     <div className="max-w-[1600px] mx-auto px-4 lg:px-6">
       <SectionHeader
         title="Featured Products"
         subtitle="High-quality construction materials and specialized tools for your next project."
         label="Marketplace"
-        icon={<Package className="w-5 h-5" />}
+        icon={<RiPagesLine className="w-5 h-5" />}
         viewAllHref="/products?type=PRODUCT"
         viewAllLabel="View all products"
       />
@@ -74,7 +81,9 @@ const FeaturedProducts: React.FC = () => {
               key={listing.id}
               listing={listing}
               onClick={() => navigate({ to: `/products/${listing.id}` as any })}
-              isInWishlist={wishlist.some((l: { id: string }) => l.id === listing.id)}
+              isInWishlist={wishlist.some(
+                (l: { id: string }) => l.id === listing.id,
+              )}
               onToggleWishlist={(e) => handleToggleWishlist(e, listing.id)}
             />
           ))}
@@ -85,7 +94,9 @@ const FeaturedProducts: React.FC = () => {
         <Button
           variant="outline"
           size="lg"
-          onClick={() => navigate({ to: "/marketplace", search: { type: "PRODUCT" } as any })}
+          onClick={() =>
+            navigate({ to: "/marketplace", search: { type: "PRODUCT" } as any })
+          }
         >
           View all products
         </Button>

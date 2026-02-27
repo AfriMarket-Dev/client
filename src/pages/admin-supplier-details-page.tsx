@@ -1,550 +1,312 @@
-import { useState } from "react";
-import { useParams, useNavigate } from "@tanstack/react-router";
+import { useNavigate, useParams } from "@tanstack/react-router";
 import {
-  ChevronLeft,
-  Mail,
-  MapPin,
-  Calendar,
-  Package,
-  Shield,
-  Users,
-  ShoppingCart,
-  Star,
-  Eye,
-  Edit,
-  Truck,
-  CheckCircle,
-  AlertCircle,
-  Zap,
-  Settings,
-} from "lucide-react";
+	RiCalendarLine,
+	RiDeleteBinLine,
+	RiEditLine,
+	RiLoader2Line,
+	RiMapPinLine,
+	RiShieldCheckLine,
+	RiStore2Line,
+	RiUserLine,
+} from "@remixicon/react";
+import { ChevronLeft } from "lucide-react";
+import { useMemo, useState } from "react";
 import {
-  suppliers,
-  products as mockProducts,
-  services as mockServices,
-} from "@/data/mock-data";
-import { AdminStatCard, AdminCard } from "@/components/admin";
-import { Button } from "@/components/ui/button";
+	useDeleteCompanyMutation,
+	useGetCompanyByIdQuery,
+	useUpdateCompanyMutation,
+} from "@/app/api/companies";
+import { useGetProductsQuery } from "@/app/api/products";
+import { useGetServicesQuery } from "@/app/api/services";
+import { AdminCard, AdminStatCard } from "@/components/admin";
+import { ConfirmationModal } from "@/components/common/confirmation-modal";
 import { Badge } from "@/components/ui/badge";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogMedia,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-interface Product {
-  id: string;
-  name: string;
-  category: string;
-  price: number;
-  stock: number;
-  status: "active" | "inactive" | "pending-review";
-  views: number;
-  inquiries: number;
-}
-
-interface Service {
-  id: string;
-  name: string;
-  category: string;
-  description: string;
-  pricing: string;
-  status: "active" | "inactive" | "pending-review";
-  inquiries: number;
-}
-
-interface Supplier {
-  id: string;
-  name: string;
-  email: string;
-  location: string;
-  status: "active" | "pending" | "inactive";
-  verificationStatus: "verified" | "unverified";
-  joinDate: string;
-  productCount: number;
-  customerCount: number;
-  ordersCount: number;
-  averageRating: number;
+function formatDate(value?: string) {
+	if (!value) return "-";
+	const d = new Date(value);
+	if (Number.isNaN(d.getTime())) return "-";
+	return d.toLocaleDateString("en-US", {
+		year: "numeric",
+		month: "short",
+		day: "numeric",
+	});
 }
 
 export default function AdminSupplierDetailsPage() {
-  const { supplierId } = useParams({ from: "/admin/suppliers/$supplierId/" });
-  const navigate = useNavigate();
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [showSuspendModal, setShowSuspendModal] = useState(false);
-  const [deleteConfirmation, setDeleteConfirmation] = useState("");
-  const [activeTab, setActiveTab] = useState<"products" | "services">(
-    "products",
-  );
+	const { supplierId } = useParams({ from: "/admin/suppliers/$supplierId/" });
+	const navigate = useNavigate();
+	const [deleteOpen, setDeleteOpen] = useState(false);
+	const [suspendOpen, setSuspendOpen] = useState(false);
+	const { data: company, isLoading: loadingCompany } = useGetCompanyByIdQuery(supplierId);
+	const { data: productsResult, isLoading: loadingProducts } =
+		useGetProductsQuery({ companyId: supplierId, limit: 100 });
+	const { data: servicesResult, isLoading: loadingServices } =
+		useGetServicesQuery({ companyId: supplierId, limit: 100 });
+	const [deleteCompany, { isLoading: deleting }] = useDeleteCompanyMutation();
+	const [updateCompany, { isLoading: suspending }] = useUpdateCompanyMutation();
 
-  const mockSupplier = suppliers.find((s) => s.id === supplierId);
-  const supplierProducts = mockProducts.filter(
-    (p: any) => p.companyId === supplierId,
-  );
-  const supplierServices = mockServices.filter(
-    (s: any) => s.companyId === supplierId,
-  );
+	const products = productsResult?.data ?? [];
+	const services = servicesResult?.data ?? [];
+	const loading = loadingCompany || loadingProducts || loadingServices;
 
-  const sampleServices: any[] =
-    supplierServices.length > 0
-      ? supplierServices
-      : mockSupplier
-        ? [
-            {
-              id: "101",
-              name: "Equipment Rental",
-              description:
-                "Heavy machinery & construction equipment rental including excavators, concrete mixers, scaffolding, and power tools",
-              price: 150000,
-              icon: Truck,
-              totalRequests: 85,
-              pendingRequests: 7,
-              provider: {
-                id: "1",
-                fullName: mockSupplier.name,
-                role: "Equipment Manager",
-                phone: "+250 788 000 000",
-                email: "info@supplier.com",
-                experience: "8+ years",
-                rating: mockSupplier.averageRating,
-              },
-            },
-          ]
-        : [];
+	const supplierStats = useMemo(() => {
+		return {
+			productCount: products.length,
+			serviceCount: services.length,
+			memberSince: formatDate(company?.createdAt),
+			visits: company?.visits ?? 0,
+		};
+	}, [company, products.length, services.length]);
 
-  const supplier: Supplier = mockSupplier
-    ? {
-        id: mockSupplier.id,
-        name: mockSupplier.name,
-        email: "info@supplier.com",
-        location: mockSupplier.district,
-        status: "active",
-        verificationStatus: "verified",
-        joinDate: mockSupplier.createdAt,
-        productCount: 10,
-        customerCount: mockSupplier.reviewCount,
-        ordersCount: 0,
-        averageRating: mockSupplier.averageRating,
-      }
-    : {
-        id: supplierId || "1",
-        name: "Unknown Supplier",
-        email: "info@supplier.com",
-        location: "Location",
-        status: "active",
-        verificationStatus: "unverified",
-        joinDate: "2023-01-01",
-        productCount: 0,
-        customerCount: 0,
-        ordersCount: 0,
-        averageRating: 0,
-      };
+	const handleSuspend = async () => {
+		if (!company) return;
+		try {
+			await updateCompany({
+				id: company.id,
+				data: { isActive: false },
+			}).unwrap();
+			setSuspendOpen(false);
+		} catch (error) {
+			console.error(error);
+		}
+	};
 
-  const products: Product[] = supplierProducts.map((product: any) => ({
-    id: product.id,
-    name: product.name,
-    category: product.categoryId,
-    price: product.variants?.[0]?.price || 0,
-    stock: product.variants?.[0]?.stock || 0,
-    status: "active",
-    views: product.views || 0,
-    inquiries: Math.floor(Math.random() * 50),
-  }));
+	const handleDelete = async () => {
+		if (!company) return;
+		try {
+			await deleteCompany(company.id).unwrap();
+			navigate({ to: "/admin/suppliers" });
+		} catch (error) {
+			console.error(error);
+		}
+	};
 
-  const services: Service[] = sampleServices.map((service) => ({
-    id: service.id.toString(),
-    name: service.name,
-    category: service.description,
-    description: service.description,
-    pricing: service.price.toString(),
-    status: "active",
-    inquiries: service.pendingRequests,
-  }));
+	if (loading) {
+		return (
+			<div className="flex items-center justify-center p-24">
+				<RiLoader2Line className="h-8 w-8 animate-spin text-muted-foreground" />
+			</div>
+		);
+	}
 
-  const handleEditSupplier = () => {
-    navigate({ to: `/admin/suppliers/${supplierId}/edit` as any });
-  };
+	if (!company) {
+		return (
+			<div className="space-y-4 py-20 text-center">
+				<p className="text-sm text-muted-foreground">Supplier not found.</p>
+				<Button onClick={() => navigate({ to: "/admin/suppliers" })}>Back to list</Button>
+			</div>
+		);
+	}
 
-  const confirmSuspend = () => {
-    alert(`${supplier.name} has been suspended successfully.`);
-    setShowSuspendModal(false);
-    navigate({ to: "/admin/suppliers" });
-  };
+	return (
+		<div className="space-y-6 pb-14">
+			<div className="flex items-center justify-between">
+				<Button
+					variant="ghost"
+					onClick={() => navigate({ to: "/admin/suppliers" })}
+					className="group flex items-center gap-2 rounded-sm px-3 py-2 text-xs font-heading font-bold uppercase tracking-wider"
+				>
+					<ChevronLeft size={16} className="transition-transform group-hover:-translate-x-1" />
+					Back to Suppliers
+				</Button>
+			</div>
 
-  const confirmDelete = () => {
-    alert(`${supplier.name} has been deleted successfully.`);
-    setShowDeleteModal(false);
-    setDeleteConfirmation("");
-    navigate({ to: "/admin/suppliers" });
-  };
+			<AdminCard>
+				<div className="flex flex-col gap-5 md:flex-row md:items-start md:justify-between">
+					<div className="flex items-start gap-4">
+						<div className="flex h-14 w-14 items-center justify-center rounded-sm bg-primary text-xl font-heading font-bold text-primary-foreground">
+							{company.name.charAt(0)}
+						</div>
+						<div className="space-y-2">
+							<h1 className="text-2xl font-heading font-bold text-foreground">{company.name}</h1>
+							<div className="flex flex-wrap items-center gap-2">
+								<Badge variant={company.isVerified ? "success" : "warning"} className="uppercase text-[10px] tracking-wider">
+									{company.isVerified ? "Verified" : "Pending verification"}
+								</Badge>
+								<Badge variant={company.isActive ? "default" : "secondary"} className="uppercase text-[10px] tracking-wider">
+									{company.isActive ? "Active" : "Inactive"}
+								</Badge>
+							</div>
+							<p className="text-sm text-muted-foreground">{company.description || "No description provided."}</p>
+							<div className="flex items-center gap-3 text-xs text-muted-foreground">
+								<span className="flex items-center gap-1">
+									<RiMapPinLine size={14} />
+									{[company.district, company.province].filter(Boolean).join(", ") || "-"}
+								</span>
+								<span className="flex items-center gap-1">
+									<RiCalendarLine size={14} />
+									Joined {formatDate(company.createdAt)}
+								</span>
+							</div>
+						</div>
+					</div>
 
-  return (
-    <div className="space-y-6 pb-20">
-      <div className="flex items-center justify-between">
-        <Button
-          variant="ghost"
-          onClick={() => navigate({ to: "/admin/suppliers" })}
-          className="group flex items-center gap-2 text-foreground hover:bg-muted py-2 px-3 rounded-sm transition-colors font-heading font-bold uppercase text-xs tracking-wider"
-        >
-          <ChevronLeft
-            size={16}
-            className="group-hover:-translate-x-1 transition-transform"
-          />
-          Back to Suppliers
-        </Button>
-      </div>
+					<div className="flex flex-wrap gap-2">
+						<Button
+							variant="outline"
+							onClick={() => navigate({ to: `/admin/suppliers/${company.id}/edit` as any })}
+							className="h-10 rounded-sm"
+						>
+							<RiEditLine size={14} className="mr-2" /> Edit
+						</Button>
+						<Button onClick={() => setSuspendOpen(true)} className="h-10 rounded-sm bg-warning text-warning-foreground hover:bg-warning/90">
+							Suspend
+						</Button>
+						<Button onClick={() => setDeleteOpen(true)} className="h-10 rounded-sm bg-destructive text-destructive-foreground hover:bg-destructive/90">
+							<RiDeleteBinLine size={14} className="mr-2" /> Delete
+						</Button>
+					</div>
+				</div>
+			</AdminCard>
 
-      <AdminCard noPadding className="overflow-hidden">
-        <div className="bg-muted h-32 relative">
-          <div className="absolute inset-0 african-pattern opacity-10" />
-          <div className="absolute inset-0 bg-linear-to-t from-muted/80 to-transparent" />
-        </div>
-        <div className="px-6 pb-6">
-          <div className="flex flex-col md:flex-row items-start justify-between -mt-12 relative z-10 gap-6">
-            <div className="flex items-end gap-6">
-              <div className="w-28 h-24 bg-primary text-primary-foreground rounded-sm border-4 border-background flex items-center justify-center text-4xl font-heading font-bold shadow-xl">
-                {supplier.name.charAt(0)}
-              </div>
-              <div className="pb-1">
-                <h1 className="text-3xl font-heading font-bold text-foreground uppercase tracking-tight leading-none mb-3">
-                  {supplier.name}
-                </h1>
-                <div className="flex flex-wrap items-center gap-4">
-                  <Badge
-                    variant="outline"
-                    className={`rounded-sm border font-heading font-bold uppercase text-[10px] tracking-widest px-2.5 py-1 ${
-                      supplier.verificationStatus === "verified"
-                        ? "bg-green-50 text-green-700 border-green-100"
-                        : "bg-yellow-50 text-yellow-700 border-yellow-100"
-                    }`}
-                  >
-                    {supplier.verificationStatus === "verified" ? (
-                      <CheckCircle size={12} className="mr-1.5" />
-                    ) : (
-                      <AlertCircle size={12} className="mr-1.5" />
-                    )}
-                    {supplier.verificationStatus}
-                  </Badge>
+			<div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+				<AdminStatCard
+					label="Products"
+					value={supplierStats.productCount}
+					icon={RiStore2Line}
+					bgColor="bg-blue-50"
+					color="text-blue-600"
+				/>
+				<AdminStatCard
+					label="Services"
+					value={supplierStats.serviceCount}
+					icon={RiUserLine}
+					bgColor="bg-violet-50"
+					color="text-violet-600"
+				/>
+				<AdminStatCard
+					label="Visits"
+					value={supplierStats.visits}
+					icon={RiUserLine}
+					bgColor="bg-amber-50"
+					color="text-amber-600"
+				/>
+				<AdminStatCard
+					label="Member Since"
+					value={supplierStats.memberSince}
+					icon={RiShieldCheckLine}
+					bgColor="bg-emerald-50"
+					color="text-emerald-600"
+				/>
+			</div>
 
-                  <div className="flex items-center gap-1.5 bg-amber-50 border border-amber-100 px-2.5 py-1 rounded-sm">
-                    <Star size={12} className="text-amber-500 fill-amber-500" />
-                    <span className="font-heading font-bold text-foreground text-[10px] uppercase tracking-widest">
-                      {supplier.averageRating} / 5.0
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
+			<AdminCard noPadding>
+				<Tabs defaultValue="products" className="w-full">
+					<div className="border-b border-border px-4 pt-4">
+						<TabsList>
+							<TabsTrigger value="products">Products ({products.length})</TabsTrigger>
+							<TabsTrigger value="services">Services ({services.length})</TabsTrigger>
+						</TabsList>
+					</div>
 
-            <div className="flex gap-3">
-              <Button
-                onClick={handleEditSupplier}
-                variant="outline"
-                className="rounded-sm h-11 px-6 border border-border font-heading font-bold uppercase text-xs tracking-wider"
-              >
-                <Edit size={14} className="mr-2" />
-                Edit
-              </Button>
-              <Button
-                onClick={() => setShowSuspendModal(true)}
-                className="rounded-sm h-11 px-6 bg-warning text-warning-foreground hover:bg-warning/90 font-heading font-bold uppercase text-xs tracking-wider border-none shadow-lg shadow-warning/20"
-              >
-                Suspend
-              </Button>
-              <Button
-                onClick={() => setShowDeleteModal(true)}
-                className="rounded-sm h-11 px-6 bg-destructive text-destructive-foreground hover:bg-destructive/90 font-heading font-bold uppercase text-xs tracking-wider border-none shadow-lg shadow-destructive/20"
-              >
-                Delete
-              </Button>
-            </div>
-          </div>
-        </div>
-      </AdminCard>
+					<TabsContent value="products" className="m-0 p-4">
+						{products.length === 0 ? (
+							<div className="rounded-sm border border-dashed border-border py-12 text-center text-muted-foreground">
+								No products found for this supplier.
+							</div>
+						) : (
+							<div className="overflow-x-auto">
+								<table className="w-full text-sm">
+									<thead>
+										<tr className="border-b border-border text-left text-xs uppercase tracking-wider text-muted-foreground">
+											<th className="py-3">Name</th>
+											<th className="py-3">Category</th>
+											<th className="py-3">Price</th>
+											<th className="py-3">Stock</th>
+											<th className="py-3">Status</th>
+										</tr>
+									</thead>
+									<tbody>
+										{products.map((product) => (
+											<tr
+												key={product.id}
+												onClick={() =>
+													navigate({
+														to: `/admin/suppliers/${supplierId}/product/${product.id}` as any,
+													})
+												}
+												className="cursor-pointer border-b border-border/50 hover:bg-muted/30"
+											>
+												<td className="py-3 font-medium">{product.name}</td>
+												<td className="py-3 text-muted-foreground">{product.category?.name ?? "-"}</td>
+												<td className="py-3">RWF {(product.variants?.[0]?.price ?? 0).toLocaleString()}</td>
+												<td className="py-3">{product.variants?.[0]?.stock ?? 0}</td>
+												<td className="py-3">
+													<Badge variant={product.isActive ? "success" : "secondary"} className="uppercase text-[10px] tracking-wider">
+														{product.isActive ? "active" : "inactive"}
+													</Badge>
+												</td>
+											</tr>
+										))}
+									</tbody>
+								</table>
+							</div>
+						)}
+					</TabsContent>
 
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <AdminStatCard
-          label="Total Customers"
-          value={supplier.customerCount}
-          icon={Users}
-          bgColor="bg-info/10"
-          color="text-info"
-        />
-        <AdminStatCard
-          label="Total Orders"
-          value={supplier.ordersCount}
-          icon={ShoppingCart}
-        />
-        <AdminStatCard
-          label="Products Listed"
-          value={supplier.productCount}
-          icon={Package}
-          bgColor="bg-primary/10"
-          color="text-primary"
-        />
-        <AdminStatCard
-          label="Member Since"
-          value={new Date(supplier.joinDate).getFullYear()}
-          icon={Calendar}
-          bgColor="bg-success/10"
-          color="text-success"
-        />
-      </div>
+					<TabsContent value="services" className="m-0 p-4">
+						{services.length === 0 ? (
+							<div className="rounded-sm border border-dashed border-border py-12 text-center text-muted-foreground">
+								No services found for this supplier.
+							</div>
+						) : (
+							<div className="overflow-x-auto">
+								<table className="w-full text-sm">
+									<thead>
+										<tr className="border-b border-border text-left text-xs uppercase tracking-wider text-muted-foreground">
+											<th className="py-3">Name</th>
+											<th className="py-3">Category</th>
+											<th className="py-3">Price</th>
+											<th className="py-3">Status</th>
+										</tr>
+									</thead>
+									<tbody>
+										{services.map((service) => (
+											<tr key={service.id} className="border-b border-border/50 hover:bg-muted/30">
+												<td className="py-3 font-medium">{service.name}</td>
+												<td className="py-3 text-muted-foreground">{service.category?.name ?? "-"}</td>
+												<td className="py-3">RWF {(service.price ?? 0).toLocaleString()}</td>
+												<td className="py-3">
+													<Badge variant={service.isActive ? "success" : "secondary"} className="uppercase text-[10px] tracking-wider">
+														{service.isActive ? "active" : "inactive"}
+													</Badge>
+												</td>
+											</tr>
+										))}
+									</tbody>
+								</table>
+							</div>
+						)}
+					</TabsContent>
+				</Tabs>
+			</AdminCard>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <AdminCard
-          title="Contact Information"
-          subtitle="Primary business reach"
-          headerActions={<Mail size={16} className="text-primary" />}
-        >
-          <div className="space-y-6">
-            <div className="border-b-2 border-border border-dashed pb-4 last:border-0 last:pb-0">
-              <label className="text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground block mb-2">
-                Email Address
-              </label>
-              <p className="text-foreground text-sm font-mono font-bold uppercase tracking-tight">
-                {supplier.email}
-              </p>
-            </div>
-            <div className="border-b-2 border-border border-dashed pb-4 last:border-0 last:pb-0">
-              <label className="text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground block mb-2">
-                Location
-              </label>
-              <p className="text-foreground text-sm font-bold uppercase tracking-wide flex items-center gap-2">
-                <MapPin size={14} className="text-primary" />
-                {supplier.location}
-              </p>
-            </div>
-          </div>
-        </AdminCard>
-        <AdminCard
-          title="Verification Details"
-          subtitle="Trust and status metrics"
-          headerActions={<Shield size={16} className="text-primary" />}
-        >
-          <div className="space-y-6">
-            <div className="border-b-2 border-border border-dashed pb-4 last:border-0 last:pb-0">
-              <label className="text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground block mb-2">
-                Verification Status
-              </label>
-              <div className="flex items-center gap-2 mt-1">
-                {supplier.verificationStatus === "verified" ? (
-                  <span className="text-success text-xs font-heading font-bold uppercase tracking-widest flex items-center gap-2 bg-success/5 px-3 py-1.5 rounded-sm border border-success/10">
-                    <CheckCircle size={14} /> Verified Supplier
-                  </span>
-                ) : (
-                  <span className="text-warning text-xs font-heading font-bold uppercase tracking-widest flex items-center gap-2 bg-warning/5 px-3 py-1.5 rounded-sm border border-warning/10">
-                    <AlertCircle size={14} /> Pending Review
-                  </span>
-                )}
-              </div>
-            </div>
-            <div className="border-b-2 border-border border-dashed pb-4 last:border-0 last:pb-0">
-              <label className="text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground block mb-2">
-                Account Status
-              </label>
-              <p className="text-foreground text-sm uppercase tracking-widest font-black">
-                {supplier.status === "active"
-                  ? "Active"
-                  : supplier.status === "pending"
-                    ? "Pending Approval"
-                    : "Inactive"}
-              </p>
-            </div>
-          </div>
-        </AdminCard>
-      </div>
+			<ConfirmationModal
+				isOpen={deleteOpen}
+				title="Delete Supplier"
+				message={`Delete \"${company.name}\" and remove all related data?`}
+				confirmText="Delete"
+				cancelText="Cancel"
+				type="delete"
+				onConfirm={handleDelete}
+				onCancel={() => setDeleteOpen(false)}
+				isLoading={deleting}
+			/>
 
-      <AdminCard noPadding className="overflow-hidden">
-        <div className="border-b-2 border-border bg-muted/30">
-          <div className="flex">
-            <button
-              onClick={() => setActiveTab("products")}
-              className={`flex items-center gap-3 px-8 py-5 font-heading font-bold uppercase text-xs tracking-widest transition-all border-r-2 border-border ${activeTab === "products" ? "bg-background text-primary border-b-2 border-b-primary" : "bg-transparent text-muted-foreground hover:bg-background/50"}`}
-            >
-              <Package size={16} /> Products ({products.length})
-            </button>
-            <button
-              onClick={() => setActiveTab("services")}
-              className={`flex items-center gap-3 px-8 py-5 font-heading font-bold uppercase text-xs tracking-widest transition-all border-r-2 border-border ${activeTab === "services" ? "bg-background text-primary border-b-2 border-b-primary" : "bg-transparent text-muted-foreground hover:bg-background/50"}`}
-            >
-              <Zap size={16} /> Services ({services.length})
-            </button>
-          </div>
-        </div>
-        {activeTab === "products" && (
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b-2 border-border bg-muted/10">
-                  <th className="px-6 py-4 text-left text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground">
-                    Product Name
-                  </th>
-                  <th className="px-6 py-4 text-left text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground">
-                    Category
-                  </th>
-                  <th className="px-6 py-4 text-left text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground">
-                    Price
-                  </th>
-                  <th className="px-6 py-4 text-left text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground">
-                    Stock
-                  </th>
-                  <th className="px-6 py-4 text-left text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground">
-                    Status
-                  </th>
-                  <th className="px-6 py-4 text-center text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y-2 divide-border">
-                {products.map((p) => (
-                  <tr
-                    key={p.id}
-                    onClick={() =>
-                      navigate({ to: `/admin/suppliers/${supplierId}/product/${p.id}` as any })
-                    }
-                    className="hover:bg-muted/30 transition-colors cursor-pointer group"
-                  >
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-3">
-                        <div className="p-2 bg-primary/5 rounded-sm border border-primary/10 group-hover:bg-primary/10 transition-colors">
-                          <Package size={14} className="text-primary" />
-                        </div>
-                        <span className="font-heading font-bold text-xs uppercase tracking-widest text-foreground group-hover:text-primary transition-colors">
-                          {p.name}
-                        </span>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
-                      {p.category}
-                    </td>
-                    <td className="px-6 py-4 text-sm font-mono font-black text-foreground">
-                      RWF {p.price.toLocaleString()}
-                    </td>
-                    <td className="px-6 py-4">
-                      <Badge
-                        variant="outline"
-                        className={
-                          p.stock > 0
-                            ? "bg-success/5 text-success border-success/10 font-bold text-[10px] uppercase px-2 py-0.5 rounded-sm"
-                            : "bg-destructive/5 text-destructive border-destructive/10 font-bold text-[10px] uppercase px-2 py-0.5 rounded-sm"
-                        }
-                      >
-                        {p.stock} units
-                      </Badge>
-                    </td>
-                    <td className="px-6 py-4">
-                      <span
-                        className={`text-[10px] font-heading font-bold px-2.5 py-1 rounded-sm uppercase tracking-widest border ${p.status === "active" ? "bg-success/5 text-success border-success/10" : p.status === "pending-review" ? "bg-warning/5 text-warning border-warning/10" : "bg-destructive/5 text-destructive border-destructive/10"}`}
-                      >
-                        {p.status}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="flex items-center justify-center gap-2">
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            navigate({
-                              to: `/admin/suppliers/${supplierId}/product/${p.id}` as any,
-                            });
-                          }}
-                          className="p-2 hover:bg-primary/10 rounded-sm transition-colors text-primary border border-transparent hover:border-primary"
-                        >
-                          <Eye size={14} />
-                        </button>
-                        <button
-                          className="p-2 hover:bg-muted rounded-sm transition-colors text-muted-foreground border border-transparent hover:border-border"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            navigate({
-                              to: `/admin/suppliers/${supplierId}/product/${p.id}/edit` as any,
-                            });
-                          }}
-                        >
-                          <Edit size={14} />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </AdminCard>
-
-      <AlertDialog open={showDeleteModal} onOpenChange={setShowDeleteModal}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogMedia className="bg-destructive/10">
-              <AlertCircle className="text-destructive" />
-            </AlertDialogMedia>
-            <AlertDialogTitle>Delete Supplier</AlertDialogTitle>
-            <AlertDialogDescription>
-              This action will permanently delete the supplier account and all
-              associated data. This action cannot be undone.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <div className="space-y-4 py-4">
-            <div className="space-y-2">
-              <Label>Type "{supplier.name}" to confirm</Label>
-              <Input
-                value={deleteConfirmation}
-                onChange={(e) => setDeleteConfirmation(e.target.value)}
-                placeholder={supplier.name}
-                className="h-11 shadow-none"
-              />
-            </div>
-          </div>
-          <AlertDialogFooter>
-            <AlertDialogCancel onClick={() => setShowDeleteModal(false)}>
-              Cancel
-            </AlertDialogCancel>
-            <AlertDialogAction
-              onClick={confirmDelete}
-              disabled={
-                deleteConfirmation.toLowerCase() !== supplier.name.toLowerCase()
-              }
-              variant="destructive"
-            >
-              Delete Supplier
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-
-      <AlertDialog open={showSuspendModal} onOpenChange={setShowSuspendModal}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogMedia className="bg-warning/10">
-              <AlertCircle className="text-warning" />
-            </AlertDialogMedia>
-            <AlertDialogTitle>Suspend Supplier</AlertDialogTitle>
-            <AlertDialogDescription>
-              The supplier will not be able to log in or access their account.
-              Their products will be hidden from the marketplace.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel onClick={() => setShowSuspendModal(false)}>
-              Cancel
-            </AlertDialogCancel>
-            <AlertDialogAction onClick={confirmSuspend}>
-              Suspend Account
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-    </div>
-  );
+			<ConfirmationModal
+				isOpen={suspendOpen}
+				title="Suspend Supplier"
+				message={`Suspend \"${company.name}\"? The supplier account will be disabled.`}
+				confirmText="Suspend"
+				cancelText="Cancel"
+				type="suspend"
+				onConfirm={handleSuspend}
+				onCancel={() => setSuspendOpen(false)}
+				isLoading={suspending}
+			/>
+		</div>
+	);
 }

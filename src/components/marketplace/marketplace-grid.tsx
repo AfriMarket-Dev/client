@@ -1,14 +1,29 @@
-import React, { useState, useCallback, useEffect } from "react";
-import { Package, Search, Filter, X, Check, ChevronDown, PanelLeftClose, PanelLeftOpen } from "lucide-react";
-import { useSelector } from "react-redux";
-import { type RootState } from "@/app/store";
-import { useGetListingsQuery } from "@/app/api/listings";
-import { useGetListingCategoriesQuery } from "@/app/api/listing-categories";
 import {
-  useGetWishlistQuery,
+  RiCloseLine,
+} from "@remixicon/react";
+import {
+  Check,
+  ChevronDown,
+  Filter,
+  Package,
+  Search,
+  X,
+  ChevronLeft as RiExpandLeftLine, // Using ChevronLeft as a fallback if RiExpandLeftLine is missing
+} from "lucide-react";
+import type React from "react";
+import { useCallback, useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { useGetProductCategoriesQuery } from "@/app/api/product-categories";
+import type { Product } from "@/app/api/products";
+import { useGetProductsQuery } from "@/app/api/products";
+import type { Service } from "@/app/api/services";
+import { useGetServicesQuery } from "@/app/api/services";
+import {
   useAddToWishlistMutation,
+  useGetWishlistQuery,
   useRemoveFromWishlistMutation,
 } from "@/app/api/wishlist";
+import type { RootState } from "@/app/store";
 import { Button } from "@/components/ui/button";
 import {
   Pagination,
@@ -19,8 +34,21 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { ProductCard } from "./catalog/product-card";
-import type { Listing } from "@/app/api/listings";
+
+/** unified UI type for grid items - merges Product and Service shapes */
+export type MarketplaceItem =
+  | (Product & { itemType: "PRODUCT" })
+  | (Service & { itemType: "SERVICE" });
+
+import { Badge } from "@/components/ui/badge";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Select,
   SelectContent,
@@ -28,18 +56,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
+import { Separator } from "@/components/ui/separator";
 import { Slider } from "@/components/ui/slider";
-import { Badge } from "@/components/ui/badge";
-import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Separator } from "@/components/ui/separator";
 
 export interface CatalogFiltersState {
   searchQuery: string;
@@ -72,7 +92,7 @@ export const defaultCatalogFiltersState = (): CatalogFiltersState => ({
 interface MarketplaceGridProps {
   initialCategoryId?: string;
   onSupplierClick?: (supplierId: string) => void;
-  onProductClick?: (listing: Listing) => void;
+  onProductClick?: (item: MarketplaceItem) => void;
 }
 
 const PAGE_SIZE = 30;
@@ -142,7 +162,9 @@ const FilterContent: React.FC<FilterContentProps> = ({
         </Label>
         <Select
           value={filters.companyType}
-          onValueChange={(val) => handleFiltersChange({ companyType: val || "all" })}
+          onValueChange={(val) =>
+            handleFiltersChange({ companyType: val || "all" })
+          }
         >
           <SelectTrigger className="w-full bg-background">
             <SelectValue placeholder="All Company Types" />
@@ -158,7 +180,7 @@ const FilterContent: React.FC<FilterContentProps> = ({
         </Select>
       </div>
 
-       <Separator />
+      <Separator />
 
       {/* Listing Type */}
       <div className="space-y-4">
@@ -173,8 +195,10 @@ const FilterContent: React.FC<FilterContentProps> = ({
               size="sm"
               onClick={() => handleTypeChange(t)}
               className={cn(
-                  "w-full text-xs justify-start",
-                  filters.type === t ? "bg-primary text-primary-foreground" : "bg-background"
+                "w-full text-xs justify-start",
+                filters.type === t
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-background",
               )}
             >
               {filters.type === t && <Check className="w-3 h-3 mr-1" />}
@@ -184,7 +208,7 @@ const FilterContent: React.FC<FilterContentProps> = ({
         </div>
       </div>
 
-       <Separator />
+      <Separator />
 
       {/* Price Range */}
       <div className="space-y-4">
@@ -236,7 +260,7 @@ const FilterContent: React.FC<FilterContentProps> = ({
         </Button>
       </div>
 
-       <Separator />
+      <Separator />
 
       {/* District */}
       <div className="space-y-4">
@@ -251,7 +275,7 @@ const FilterContent: React.FC<FilterContentProps> = ({
         />
       </div>
 
-       <Separator />
+      <Separator />
 
       {/* Availability */}
       <div className="flex items-center justify-between space-x-2 border p-3 rounded-md border-border bg-background">
@@ -264,7 +288,7 @@ const FilterContent: React.FC<FilterContentProps> = ({
         <Switch
           id="stock-mode"
           checked={filters.onlyInStock}
-          onCheckedChange={(checked) =>
+          onCheckedChange={(checked: boolean) =>
             handleFiltersChange({ onlyInStock: checked })
           }
         />
@@ -278,7 +302,7 @@ const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({
   onSupplierClick,
   onProductClick,
 }) => {
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [viewMode] = useState<"grid" | "list">("grid");
   const [filters, setFilters] = useState<CatalogFiltersState>(() => ({
     ...defaultCatalogFiltersState(),
     categoryId: initialCategoryId,
@@ -298,205 +322,38 @@ const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({
     }
   }, [filters.minPrice, filters.maxPrice]);
 
-  // Dummy Data
-  const dummyCategories = [
-    {
-      id: "1",
-      name: "Construction Materials",
-      description: "Cement, Steel, Wood",
-    },
-    { id: "2", name: "Heavy Equipment", description: "Excavators, Cranes" },
-    { id: "3", name: "Electrical & Plumbing", description: "Wires, Pipes" },
-    {
-      id: "4",
-      name: "Professional Services",
-      description: "Architects, Engineers",
-    },
-    { id: "5", name: "Finishing & Decor", description: "Tiles, Paint" },
-  ];
-
-  const dummyListings: Listing[] = [
-    {
-      id: "d1",
-      name: "Premium Portland Cement",
-      description:
-        "High-grade cement suitable for all general construction purposes. 50kg bags.",
-      type: "PRODUCT",
-      priceType: "FIXED",
-      isActive: true,
-      views: 120,
-      category: { id: "1", name: "Construction Materials" },
-      company: {
-        id: "c1",
-        name: "Kigali Cement Co.",
-        slug: "kigali-cement",
-        district: "Kicukiro",
-        isVerified: true,
-        type: "MANUFACTURER",
-      },
-      variants: [
-        {
-          id: "v1",
-          name: "50kg Bag",
-          price: 12500,
-          stock: 1000,
-          images: [
-            "https://images.unsplash.com/photo-1575493438282-4e0fb32d1bdd?q=80&w=735&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-          ],
-        },
-      ],
-      createdAt: new Date().toISOString(),
-    },
-    {
-      id: "d2",
-      name: "Steel Rebar 12mm",
-      description:
-        "High-tensile steel reinforcement bars for structural concrete.",
-      type: "PRODUCT",
-      priceType: "FIXED",
-      isActive: true,
-      views: 85,
-      category: { id: "1", name: "Construction Materials" },
-      company: {
-        id: "c2",
-        name: "Rwanda Steel",
-        slug: "rwanda-steel",
-        district: "Bugesera",
-        isVerified: true,
-        type: "MANUFACTURER",
-      },
-      variants: [
-        {
-          id: "v2",
-          name: "12mm Bar (12m)",
-          price: 9500,
-          stock: 500,
-          images: [
-            "https://images.unsplash.com/photo-1589746971827-aa1dad5c9ed9?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-          ],
-        },
-      ],
-      createdAt: new Date().toISOString(),
-    },
-    {
-      id: "d3",
-      name: "Excavator Rental Service",
-      description: "Daily rental of CAT 320D Excavator with operator.",
-      type: "SERVICE",
-      priceType: "STARTS_AT",
-      isActive: true,
-      views: 200,
-      category: { id: "2", name: "Heavy Equipment" },
-      company: {
-        id: "c3",
-        name: "BuildTech Rentals",
-        slug: "buildtech",
-        district: "Gasabo",
-        isVerified: true,
-        type: "SERVICE_PROVIDER",
-      },
-      variants: [
-        {
-          id: "v3",
-          name: "Daily Rate",
-          price: 350000,
-          stock: 1,
-          images: [
-            "https://images.unsplash.com/photo-1628645419184-26a1f2757340?q=80&w=764&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-          ],
-        },
-      ],
-      createdAt: new Date().toISOString(),
-    },
-    {
-      id: "d4",
-      name: "Architectural Planning",
-      description:
-        "Complete architectural design and permit processing services.",
-      type: "SERVICE",
-      priceType: "NEGOTIABLE",
-      isActive: true,
-      views: 150,
-      category: { id: "4", name: "Professional Services" },
-      company: {
-        id: "c4",
-        name: "Urban Design Studio",
-        slug: "urban-design",
-        district: "Nyarugenge",
-        isVerified: true,
-        type: "SERVICE_PROVIDER",
-      },
-      variants: [
-        {
-          id: "v4",
-          name: "Consultation",
-          price: 50000,
-          stock: 1,
-          images: [
-            "https://images.unsplash.com/photo-1721244654392-9c912a6eb236?q=80&w=1129&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-          ],
-        },
-      ],
-      createdAt: new Date().toISOString(),
-    },
-    {
-      id: "d5",
-      name: "Interior Paint - White",
-      description: "Premium washable interior paint, 20L bucket.",
-      type: "PRODUCT",
-      priceType: "FIXED",
-      isActive: true,
-      views: 95,
-      category: { id: "5", name: "Finishing & Decor" },
-      company: {
-        id: "c5",
-        name: "ColorWorld",
-        slug: "color-world",
-        district: "Gasabo",
-        isVerified: false,
-        type: "RETAILER",
-      },
-      variants: [
-        {
-          id: "v5",
-          name: "20L Bucket",
-          price: 45000,
-          stock: 200,
-          images: [
-            "https://images.pexels.com/photos/1902415/pexels-photo-1902415.jpeg?auto=compress&cs=tinysrgb&w=600&loading=lazy",
-          ],
-        },
-      ],
-      createdAt: new Date().toISOString(),
-    },
-  ];
-
   useEffect(() => {
     setFilters((f) => ({ ...f, categoryId: initialCategoryId }));
     setPage(1);
   }, [initialCategoryId]);
 
-  const { data: listData, isLoading: listLoading } = useGetListingsQuery({
+  const sharedQueryParams = {
     page,
     limit: PAGE_SIZE,
     query: filters.searchQuery.trim() || undefined,
     categoryId: filters.categoryId === "all" ? undefined : filters.categoryId,
-    type:
-      filters.type === "all"
-        ? undefined
-        : (filters.type as "PRODUCT" | "SERVICE"),
     district: filters.district.trim() || undefined,
     minPrice: filters.minPrice ? Number(filters.minPrice) : undefined,
     maxPrice: filters.maxPrice ? Number(filters.maxPrice) : undefined,
-    inStock: filters.onlyInStock ? true : undefined,
     companyType:
       filters.companyType === "all" ? undefined : filters.companyType,
     sortBy: filters.sortBy,
     sortOrder: filters.sortOrder,
+  };
+
+  const skipProducts = filters.type === "SERVICE";
+  const skipServices = filters.type === "PRODUCT";
+
+  const { data: productsData } = useGetProductsQuery(
+    { ...sharedQueryParams, inStock: filters.onlyInStock ? true : undefined },
+    { skip: skipProducts },
+  );
+
+  const { data: servicesData } = useGetServicesQuery(sharedQueryParams, {
+    skip: skipServices,
   });
 
-  const { data: categoriesData, isLoading: categoriesLoading } =
-    useGetListingCategoriesQuery({ limit: 50 });
+  const { data: categoriesData } = useGetProductCategoriesQuery({ limit: 50 });
 
   const isAuthenticated = useSelector((s: RootState) => s.auth.isAuthenticated);
   const { data: wishlist = [] } = useGetWishlistQuery(undefined, {
@@ -553,82 +410,31 @@ const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({
     }));
   };
 
-  // Client-side filtering for dummy mode
-  const isDummyMode = true;
+  // Merge product and service API streams for unified rendering.
+  const apiProducts: MarketplaceItem[] = (productsData?.data ?? []).map(
+    (p) => ({ ...p, itemType: "PRODUCT" as const }),
+  );
+  const apiServices: MarketplaceItem[] = (servicesData?.data ?? []).map(
+    (s) => ({ ...s, itemType: "SERVICE" as const }),
+  );
+  const apiItems = [...apiProducts, ...apiServices];
+  const activeItems = apiItems;
+  const activeCategories = categoriesData?.data ?? [];
 
-  const filteredDummyListings = dummyListings.filter((item) => {
-    // Search
-    if (
-      filters.searchQuery &&
-      !item.name.toLowerCase().includes(filters.searchQuery.toLowerCase()) &&
-      !item.description
-        ?.toLowerCase()
-        .includes(filters.searchQuery.toLowerCase())
-    ) {
-      return false;
-    }
+  const combinedTotal =
+    (productsData?.meta?.total ?? 0) + (servicesData?.meta?.total ?? 0);
 
-    // Category
-    if (
-      filters.categoryId !== "all" &&
-      item.category.id !== filters.categoryId
-    ) {
-      return false;
-    }
-
-    // Type
-    if (filters.type !== "all" && item.type !== filters.type) {
-      return false;
-    }
-
-    // Company Type
-    if (
-      filters.companyType !== "all" &&
-      item.company?.type !== filters.companyType
-    ) {
-      return false;
-    }
-
-    // District
-    if (
-      filters.district &&
-      !item.company.district
-        ?.toLowerCase()
-        .includes(filters.district.toLowerCase())
-    ) {
-      return false;
-    }
-
-    // Price
-    const itemPrice = item.variants?.[0]?.price || 0;
-    if (filters.minPrice && itemPrice < Number(filters.minPrice)) return false;
-    if (filters.maxPrice && itemPrice > Number(filters.maxPrice)) return false;
-
-    // Stock
-    if (filters.onlyInStock) {
-      const hasStock = item.variants?.some((v) => v.stock > 0);
-      if (!hasStock) return false;
-    }
-
-    return true;
-  });
-
-  const activeListings = isDummyMode
-    ? filteredDummyListings
-    : listData?.data ?? [];
-  const activeCategories =
-    categoriesData?.data && categoriesData.data.length > 0
-      ? categoriesData.data
-      : dummyCategories;
-
-  const activeMeta = isDummyMode
-    ? {
-        page,
-        limit: PAGE_SIZE,
-        total: filteredDummyListings.length,
-        totalPages: Math.ceil(filteredDummyListings.length / PAGE_SIZE),
-      }
-    : listData?.meta;
+  const activeMeta =
+    filters.type === "PRODUCT"
+      ? productsData?.meta
+      : filters.type === "SERVICE"
+        ? servicesData?.meta
+        : {
+            page,
+            limit: PAGE_SIZE,
+            total: combinedTotal,
+            totalPages: Math.max(1, Math.ceil(combinedTotal / PAGE_SIZE)),
+          };
 
   const commonFilterProps = {
     filters,
@@ -646,35 +452,34 @@ const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({
     <div className="min-h-screen bg-background pb-20">
       <div className="max-w-[1600px] mx-auto px-4 md:px-6 py-8">
         <div className="flex flex-col lg:flex-row gap-8 items-start">
-      
           {showFilters && (
             <aside className="hidden lg:block w-72 shrink-0 sticky top-24 h-[calc(100vh-6rem)] transition-all duration-300">
               <div className="flex items-center justify-between mb-4 pr-4">
                 <h2 className="text-lg font-heading font-bold uppercase tracking-wide flex items-center gap-2">
-               Filters
+                  Filters
                 </h2>
                 <div className="flex items-center gap-2">
-                    <Button
+                  <Button
                     variant="ghost"
                     size="sm"
                     className="h-6 text-[10px] uppercase font-bold text-muted-foreground hover:text-destructive"
                     onClick={handleClearFilters}
-                    >
+                  >
                     Reset
-                    </Button>
-                    <Button
-                        variant="ghost" 
-                        size="icon"
-                        className="h-8 w-8 text-muted-foreground hover:text-foreground md:hidden" 
-                        onClick={() => setShowFilters(false)}
-                    >
-                         <PanelLeftClose className="w-4 h-4" />
-                    </Button>
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-8 w-8 text-muted-foreground hover:text-foreground md:hidden"
+                    onClick={() => setShowFilters(false)}
+                  >
+                    <RiExpandLeftLine className="w-4 h-4" />
+                  </Button>
                 </div>
               </div>
-              
+
               <ScrollArea className="h-[calc(100vh-10rem)] pr-4">
-                 <FilterContent {...commonFilterProps} />
+                <FilterContent {...commonFilterProps} />
               </ScrollArea>
             </aside>
           )}
@@ -684,61 +489,81 @@ const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({
             {/* Toolbar & Mobile Filters */}
             <div className="flex flex-col gap-4 mb-6 sticky top-16 lg:top-0 z-30 bg-background/95 backdrop-blur-md py-4 border-b border-border">
               <div className="flex gap-4 items-center">
-                 {/* Desktop Toggle Button (when hidden) */}
-                 <Button
-                    variant="outline"
-                    size="icon"
-                    className={cn(
-                        "hidden lg:flex shrink-0",
-                        showFilters && "bg-muted/50"
-                    )}
-                    onClick={() => setShowFilters(!showFilters)}
-                    title={showFilters ? "Hide Filters" : "Show Filters"}
-                 >
-                     {showFilters ? <PanelLeftClose className="w-5 h-5 text-muted-foreground" /> : <PanelLeftOpen className="w-5 h-5 text-muted-foreground"/>}
-                 </Button>
+                {/* Desktop Toggle Button (when hidden) */}
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className={cn(
+                    "hidden lg:flex shrink-0",
+                    showFilters && "bg-muted/50",
+                  )}
+                  onClick={() => setShowFilters(!showFilters)}
+                  title={showFilters ? "Hide Filters" : "Show Filters"}
+                >
+                  {showFilters ? (
+                    <RiExpandLeftLine className="w-5 h-5 text-muted-foreground" />
+                  ) : (
+                    <RiCloseLine className="w-5 h-5 text-muted-foreground" />
+                  )}
+                </Button>
 
                 {/* Mobile Filter Toggle */}
                 <div className="lg:hidden w-full sm:w-auto">
-                    <Collapsible
+                  <Collapsible
                     open={isMobileFiltersOpen}
                     onOpenChange={setIsMobileFiltersOpen}
                     className="w-full"
+                  >
+                    <CollapsibleTrigger
+                      className={cn(
+                        "inline-flex items-center justify-between whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 w-full sm:w-auto gap-2 shrink-0 sm:justify-center",
+                      )}
                     >
-                    <CollapsibleTrigger 
-                        className={cn(
-                            "inline-flex items-center justify-between whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 w-full sm:w-auto gap-2 shrink-0 sm:justify-center"
+                      <span className="flex items-center gap-2">
+                        <Filter className="w-4 h-4" />
+                        Filters
+                        {(filters.minPrice ||
+                          filters.maxPrice ||
+                          filters.district ||
+                          filters.type !== "all" ||
+                          filters.categoryId !== "all" ||
+                          filters.onlyInStock ||
+                          filters.companyType !== "all") && (
+                          <Badge
+                            variant="secondary"
+                            className="ml-1 h-5 px-1.5 text-[10px]"
+                          >
+                            Active
+                          </Badge>
                         )}
-                    >
-                        <span className="flex items-center gap-2">
-                            <Filter className="w-4 h-4" />
-                            Filters
-                            {(filters.minPrice ||
-                            filters.maxPrice ||
-                            filters.district ||
-                            filters.type !== "all" ||
-                            filters.categoryId !== "all" ||
-                            filters.onlyInStock ||
-                            filters.companyType !== "all") && (
-                            <Badge
-                                variant="secondary"
-                                className="ml-1 h-5 px-1.5 text-[10px]"
-                            >
-                                Active
-                            </Badge>
-                            )}
-                        </span>
-                        <ChevronDown className={`w-4 h-4 transition-transform ${isMobileFiltersOpen ? 'rotate-180' : ''}`} />
+                      </span>
+                      <ChevronDown
+                        className={`w-4 h-4 transition-transform ${isMobileFiltersOpen ? "rotate-180" : ""}`}
+                      />
                     </CollapsibleTrigger>
                     <CollapsibleContent className="mt-4 p-4 border rounded-md bg-background shadow-sm space-y-6">
-                        <div className="flex items-center justify-between mb-2">
-                             <h3 className="font-heading font-bold uppercase text-sm">Refine Search</h3>
-                             <Button variant="ghost" size="sm" onClick={handleClearFilters} className="text-xs h-6">Reset All</Button>
-                        </div>
-                        <FilterContent {...commonFilterProps} />
-                         <Button onClick={() => setIsMobileFiltersOpen(false)} className="w-full mt-4">Close Filters</Button>
+                      <div className="flex items-center justify-between mb-2">
+                        <h3 className="font-heading font-bold uppercase text-sm">
+                          Refine Search
+                        </h3>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={handleClearFilters}
+                          className="text-xs h-6"
+                        >
+                          Reset All
+                        </Button>
+                      </div>
+                      <FilterContent {...commonFilterProps} />
+                      <Button
+                        onClick={() => setIsMobileFiltersOpen(false)}
+                        className="w-full mt-4"
+                      >
+                        Close Filters
+                      </Button>
                     </CollapsibleContent>
-                    </Collapsible>
+                  </Collapsible>
                 </div>
 
                 <div className="relative flex-1 hidden sm:block">
@@ -754,18 +579,18 @@ const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({
                 </div>
               </div>
 
-               {/* Mobile Search (visible only on mobile) */}
-               <div className="relative flex-1 sm:hidden">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                  <Input
-                    placeholder="Search..."
-                    className="pl-9 bg-muted/30 border-border rounded-sm focus:ring-1 focus:ring-primary h-10 w-full"
-                    value={filters.searchQuery}
-                    onChange={(e) =>
-                      handleFiltersChange({ searchQuery: e.target.value })
-                    }
-                  />
-                </div>
+              {/* Mobile Search (visible only on mobile) */}
+              <div className="relative flex-1 sm:hidden">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <Input
+                  placeholder="Search..."
+                  className="pl-9 bg-muted/30 border-border rounded-sm focus:ring-1 focus:ring-primary h-10 w-full"
+                  value={filters.searchQuery}
+                  onChange={(e) =>
+                    handleFiltersChange({ searchQuery: e.target.value })
+                  }
+                />
+              </div>
 
               {/* Active Filters Badges (Mobile/Desktop) */}
               {(filters.categoryId !== "all" ||
@@ -864,7 +689,7 @@ const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({
             </div>
 
             {/* Results */}
-            {activeListings.length === 0 ? (
+            {activeItems.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-24 text-center border border-dashed border-border rounded-sm bg-muted/5">
                 <div className="w-20 h-20 bg-muted/20 rounded-full flex items-center justify-center mb-6">
                   <Package className="w-10 h-10 text-muted-foreground/50" />
@@ -873,8 +698,9 @@ const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({
                   No Results Found
                 </h3>
                 <p className="text-muted-foreground max-w-md mx-auto mb-8 text-base leading-relaxed">
-                  We couldn't find any listings matching your current criteria.
-                  Try adjusting your search or clearing filters.
+                  We couldn't find any products or services matching your
+                  current criteria. Try adjusting your search or clearing
+                  filters.
                 </p>
                 <Button
                   size="lg"
@@ -889,37 +715,41 @@ const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({
                 <div
                   className={
                     viewMode === "grid"
-                        ? cn(
-                            "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6",
-                            showFilters ? "xl:grid-cols-4" : "xl:grid-cols-5"
-                          )
-                        : "flex flex-col gap-6"
+                      ? cn(
+                          "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6",
+                          showFilters ? "xl:grid-cols-4" : "xl:grid-cols-5",
+                        )
+                      : "flex flex-col gap-6"
                   }
                 >
-                  {activeListings.map((listing) => (
+                  {activeItems.map((item) => (
                     <ProductCard
-                      key={listing.id}
-                      listing={listing}
+                      key={item.id}
+                      listing={item as any}
                       viewMode={viewMode}
                       onSupplierClick={(e) =>
-                        listing.company &&
+                        item.company &&
                         handleSupplierClick(
                           e,
-                          (listing.company as { id: string }).id,
+                          (item.company as { id: string }).id,
                         )
                       }
-                      onClick={() => onProductClick?.(listing)}
-                      isInWishlist={
-                        isAuthenticated && wishlistIds.has(listing.id)
-                      }
+                      onClick={() => onProductClick?.(item)}
+                      isInWishlist={isAuthenticated && wishlistIds.has(item.id)}
                       onToggleWishlist={
                         isAuthenticated
                           ? (e) => {
                               e.stopPropagation();
-                              if (wishlistIds.has(listing.id)) {
-                                removeFromWishlist(listing.id);
+                              const typeStr = item.itemType?.toLowerCase() as
+                                | "product"
+                                | "service";
+                              if (wishlistIds.has(item.id)) {
+                                removeFromWishlist({
+                                  id: item.id,
+                                  type: typeStr,
+                                });
                               } else {
-                                addToWishlist(listing.id);
+                                addToWishlist({ id: item.id, type: typeStr });
                               }
                             }
                           : undefined

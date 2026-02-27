@@ -1,52 +1,66 @@
-import { useParams, useNavigate } from "@tanstack/react-router";
-import { services as mockServices } from "@/data/mock-data";
-import { Button } from "@/components/ui/button";
-import { Layout } from "lucide-react";
+import { useNavigate, useParams } from "@tanstack/react-router";
+import { useGetServiceByIdQuery } from "@/app/api/services";
 import ServiceView from "@/components/marketplace/service-view";
+import { Button } from "@/components/ui/button";
 
-// Supplemental mock data for UI display since data.json is primitive
-const getServiceUIExtras = (id: string) => ({
-  totalRequests: 156,
-  pendingRequests: 12,
-  provider: {
-    fullName: "James Nkurunziza",
-    role: "Senior Consultant",
-    experience: "8+ Years",
-    phone: "+250 788 000 000",
-    rating: 4.9,
-  },
-  icon: Layout, // Fallback icon
-});
+function serviceAgeYears(dateLike?: string) {
+	if (!dateLike) return "N/A";
+	const created = new Date(dateLike);
+	if (Number.isNaN(created.getTime())) return "N/A";
+	const years = Math.max(1, Math.floor((Date.now() - created.getTime()) / 31536000000));
+	return `${years}+ Years`;
+}
 
 export default function ServicePage() {
-  const { serviceId } = useParams({ from: "/_main/services/$serviceId" });
-  const navigate = useNavigate();
+	const { serviceId } = useParams({ from: "/_main/services/$serviceId" });
+	const navigate = useNavigate();
 
-  const rawService = mockServices.find((s) => s.id === serviceId);
+	const { data: rawService, isLoading, error } = useGetServiceByIdQuery(serviceId);
 
-  if (!rawService) {
-    return (
-      <div className="flex items-center justify-center h-screen bg-background p-4">
-        <div className="text-center">
-          <h1 className="text-2xl font-heading font-bold uppercase text-foreground mb-4 tracking-wide">
-            Service Not Found
-          </h1>
-          <Button
-            onClick={() => navigate({ to: "/" })}
-            className="rounded-sm font-heading uppercase tracking-wider"
-          >
-            Back to Home
-          </Button>
-        </div>
-      </div>
-    );
-  }
+	if (isLoading) {
+		return (
+			<div className="flex h-screen items-center justify-center bg-background p-4 text-muted-foreground">
+				Loading service...
+			</div>
+		);
+	}
 
-  // Merge raw service with UI extras
-  const uiExtras = getServiceUIExtras(rawService.id);
-  const service = { ...rawService, ...uiExtras };
+	if (error || !rawService) {
+		return (
+			<div className="flex h-screen items-center justify-center bg-background p-4">
+				<div className="text-center">
+					<h1 className="mb-4 text-2xl font-heading font-bold uppercase tracking-wide text-foreground">
+						Service Not Found
+					</h1>
+					<Button
+						onClick={() => navigate({ to: "/marketplace" })}
+						className="rounded-sm font-heading uppercase tracking-wider"
+					>
+						Back to Marketplace
+					</Button>
+				</div>
+			</div>
+		);
+	}
 
-  return (
-    <ServiceView service={service} onBack={() => navigate({ to: "/marketplace" })} />
-  );
+	const service = {
+		...rawService,
+		totalRequests: rawService.views ?? 0,
+		pendingRequests: 0,
+		provider: {
+			fullName: rawService.company?.name ?? "Unknown Provider",
+			role: rawService.company?.type ?? "Service Provider",
+			experience: serviceAgeYears(rawService.createdAt),
+			phone: rawService.company?.phone ?? "",
+			email: rawService.company?.email ?? "",
+			rating: rawService.company?.rating ?? 0,
+		},
+	};
+
+	return (
+		<ServiceView
+			service={service}
+			onBack={() => navigate({ to: "/marketplace" })}
+		/>
+	);
 }

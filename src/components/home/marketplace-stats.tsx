@@ -1,34 +1,50 @@
-import React from "react";
-import { Building2, Users, Package, Globe2 } from "lucide-react";
+import {
+  RiBuilding2Line,
+  RiGlobeLine,
+  RiPagesLine,
+  RiUserLine,
+} from "@remixicon/react";
+import type React from "react";
 
-const STATS = [
-  {
-    icon: <Building2 className="w-8 h-8" />,
-    value: "250+",
-    label: "Verified Suppliers",
-    description: "Industry leaders and manufacturers",
-  },
-  {
-    icon: <Package className="w-8 h-8" />,
-    value: "15k+",
-    label: "Products Listed",
-    description: "Materials, tools, and heavy machinery",
-  },
-  {
-    icon: <Users className="w-8 h-8" />,
-    value: "5k+",
-    label: "Active Contractors",
-    description: "Professional builders using the platform",
-  },
-  {
-    icon: <Globe2 className="w-8 h-8" />,
-    value: "30",
-    label: "Districts Covered",
-    description: "Full national logistics network",
-  },
-];
+import { useGetMarketplaceStatsQuery } from "@/app/api/stats";
 
 export const MarketplaceStats: React.FC = () => {
+  const { data: stats } = useGetMarketplaceStatsQuery();
+
+  function formatNumber(num: number | undefined, appendPlus = true): string {
+    if (num === undefined) return "...";
+    if (num >= 1000) {
+      return `${(num / 1000).toFixed(1).replace(/\.0$/, "")}k${appendPlus ? "+" : ""}`;
+    }
+    return `${num}${appendPlus ? "+" : ""}`;
+  }
+
+  const STATS = [
+    {
+      icon: <RiBuilding2Line className="w-8 h-8" />,
+      value: formatNumber(stats?.verifiedSuppliers),
+      label: "Verified Suppliers",
+      description: "Industry leaders and manufacturers",
+    },
+    {
+      icon: <RiPagesLine className="w-8 h-8" />,
+      value: formatNumber(stats?.productsListed),
+      label: "Products Listed",
+      description: "Materials, tools, and heavy machinery",
+    },
+    {
+      icon: <RiUserLine className="w-8 h-8" />,
+      value: formatNumber(stats?.activeContractors),
+      label: "Active Contractors",
+      description: "Professional builders using the platform",
+    },
+    {
+      icon: <RiGlobeLine className="w-8 h-8" />,
+      value: stats?.districtsCovered ? String(stats.districtsCovered) : "...",
+      label: "Districts Covered",
+      description: "Full national logistics network",
+    },
+  ];
   return (
     <section className="py-24 bg-slate-950 text-white relative overflow-hidden">
       {/* Decorative Background */}
@@ -40,16 +56,21 @@ export const MarketplaceStats: React.FC = () => {
       <div className="max-w-[1600px] mx-auto px-4 lg:px-6 relative z-10">
         <div className="text-center max-w-3xl mx-auto mb-20">
           <h2 className="text-4xl md:text-6xl font-heading font-bold mb-6 tracking-tight">
-            The Digital Backbone of <span className="text-primary">Rwanda's Construction</span>
+            The Digital Backbone of{" "}
+            <span className="text-primary">Rwanda's Construction</span>
           </h2>
           <p className="text-lg text-white/60 leading-relaxed font-normal">
-            AfrikaMarket connects the entire construction ecosystem, from local manufacturers to large-scale infrastructure projects.
+            AfrikaMarket connects the entire construction ecosystem, from local
+            manufacturers to large-scale infrastructure projects.
           </p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {STATS.map((stat, index) => (
-            <div key={index} className="p-10 rounded-2xl bg-white/5 border border-white/10 hover:border-white/20 transition-all duration-500 group text-center">
+            <div
+              key={index}
+              className="p-10 rounded-2xl bg-white/5 border border-white/10 hover:border-white/20 transition-all duration-500 group text-center"
+            >
               <div className="w-16 h-16 rounded-xl bg-primary/10 text-primary flex items-center justify-center mx-auto mb-8 group-hover:scale-110 transition-transform duration-500 shadow-lg shadow-primary/5">
                 {stat.icon}
               </div>

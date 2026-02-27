@@ -1,100 +1,105 @@
-import { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
-import { ChevronLeft, Building, User, CheckCircle } from "lucide-react";
-import { AdminPageHeader, AdminCard } from "@/components/admin";
-import { Button } from "@/components/ui/button";
+import { RiArrowLeftSLine, RiBuildingLine, RiCheckboxCircleLine, RiUserLine } from "@remixicon/react";
+import { useState } from "react";
+import { useCreateCompanyMutation } from "@/app/api/companies";
+import { AdminCard, AdminPageHeader } from "@/components/admin";
 import { SupplierProvisionForm } from "@/components/forms/supplier-provision-form";
+import { Button } from "@/components/ui/button";
 
 export default function AdminAddSupplierPage() {
-  const navigate = useNavigate();
-  const [currentStep, setCurrentStep] = useState(1);
+	const navigate = useNavigate();
+	const [currentStep, setCurrentStep] = useState(1);
+	const [createCompany, { isLoading }] = useCreateCompanyMutation();
 
-  const handleSubmit = (values: any) => {
-    console.log("Adding supplier:", values);
-    alert("Supplier added successfully!");
-    navigate({ to: "/admin/suppliers" });
-  };
+	const handleSubmit = async (values: any) => {
+		try {
+			const created = await createCompany({
+				name: values.companyName,
+				type: values.industry || undefined,
+				description: values.position || undefined,
+				province: values.location || undefined,
+				district: values.district || undefined,
+				sector: values.sectorAddress || undefined,
+				isActive: true,
+				isVerified: false,
+			}).unwrap();
+			navigate({ to: `/admin/suppliers/${created.id}` as any });
+		} catch (error) {
+			console.error(error);
+		}
+	};
 
-  const steps = [
-    { step: 1, label: "Identity", icon: Building },
-    { step: 2, label: "Authorized", icon: User },
-    { step: 3, label: "Confirm", icon: CheckCircle },
-  ];
+	const steps = [
+		{ step: 1, label: "Identity", icon: RiBuildingLine },
+		{ step: 2, label: "Authorized", icon: RiUserLine },
+		{ step: 3, label: "Confirm", icon: RiCheckboxCircleLine },
+	];
 
-  return (
-    <div className="space-y-6 pb-20">
-      <div className="flex items-center justify-between">
-        <Button
-          variant="ghost"
-          onClick={() => navigate({ to: "/admin/suppliers" })}
-          className="group flex items-center gap-2 text-foreground hover:bg-muted py-2 px-3 rounded-sm transition-colors font-heading font-bold uppercase text-xs tracking-wider shadow-none"
-        >
-          <ChevronLeft
-            size={16}
-            className="group-hover:-translate-x-1 transition-transform"
-          />
-          Back to Suppliers
-        </Button>
-      </div>
+	return (
+		<div className="space-y-5 pb-10">
+			<div className="flex items-center justify-between">
+				<Button
+					variant="ghost"
+					onClick={() => navigate({ to: "/admin/suppliers" })}
+					className="group flex items-center gap-2 rounded-sm px-3 py-2 text-xs font-heading font-bold uppercase tracking-wider text-foreground hover:bg-muted"
+				>
+					<RiArrowLeftSLine size={16} className="transition-transform group-hover:-translate-x-1" />
+					Back to Suppliers
+				</Button>
+			</div>
 
-      <AdminPageHeader
-        title="New Provision"
-        subtitle="Onboard a new authorized partner entity"
-        badge="Entity Management"
-      />
+			<AdminPageHeader
+				title="New Supplier"
+				subtitle="Onboard a supplier account"
+				badge="Supplier Management"
+			/>
 
-      {/* Progress Steps moved to Page */}
-      <AdminCard noPadding>
-        <div className="flex justify-between items-center max-w-3xl mx-auto px-8 py-6">
-          {steps.map((item, index) => (
-            <div
-              key={item.step}
-              className="flex flex-col items-center relative z-10 w-1/3"
-            >
-              <div className="relative flex items-center justify-center">
-                <div
-                  className={`w-12 h-12 rounded-sm flex items-center justify-center border transition-all duration-500 z-10 shadow-lg ${
-                    currentStep >= item.step
-                      ? "bg-primary border-primary text-primary-foreground scale-110 shadow-primary/20"
-                      : "bg-background border-border text-muted-foreground shadow-none"
-                  }`}
-                >
-                  <item.icon size={20} />
-                </div>
-                {index < 2 && (
-                  <div
-                    className={`absolute left-1/2 top-1/2 w-full h-[2px] -z-10 -translate-y-1/2 translate-x-6 border-t-2 border-dashed ${
-                      currentStep > item.step
-                        ? "border-primary"
-                        : "border-border"
-                    }`}
-                    style={{ width: "calc(300% - 3rem)" }}
-                  />
-                )}
-              </div>
+			<AdminCard noPadding>
+				<div className="mx-auto flex max-w-3xl items-center justify-between px-8 py-6">
+					{steps.map((item, index) => (
+						<div key={item.step} className="relative z-10 flex w-1/3 flex-col items-center">
+							<div className="relative flex items-center justify-center">
+								<div
+									className={`z-10 flex h-12 w-12 items-center justify-center rounded-sm border shadow-lg transition-all duration-500 ${
+										currentStep >= item.step
+											? "scale-110 border-primary bg-primary text-primary-foreground shadow-primary/20"
+											: "border-border bg-background text-muted-foreground shadow-none"
+									}`}
+								>
+									<item.icon size={20} />
+								</div>
+								{index < 2 && (
+									<div
+										className={`absolute top-1/2 left-1/2 -z-10 h-[2px] w-full -translate-y-1/2 translate-x-6 border-t-2 border-dashed ${
+											currentStep > item.step ? "border-primary" : "border-border"
+										}`}
+										style={{ width: "calc(300% - 3rem)" }}
+									/>
+								)}
+							</div>
 
-              <span
-                className={`text-[10px] font-heading font-bold uppercase tracking-widest mt-4 transition-colors duration-500 ${
-                  currentStep >= item.step
-                    ? "text-primary"
-                    : "text-muted-foreground"
-                }`}
-              >
-                {item.label}
-              </span>
-            </div>
-          ))}
-        </div>
-      </AdminCard>
+							<span
+								className={`mt-4 text-[10px] font-heading font-bold uppercase tracking-widest transition-colors duration-500 ${
+									currentStep >= item.step ? "text-primary" : "text-muted-foreground"
+								}`}
+							>
+								{item.label}
+							</span>
+						</div>
+					))}
+				</div>
+			</AdminCard>
 
-      <div className="max-w-3xl mx-auto w-full">
-        <SupplierProvisionForm
-          currentStep={currentStep}
-          onStepChange={setCurrentStep}
-          onSubmit={handleSubmit}
-          onCancel={() => navigate({ to: "/admin/suppliers" })}
-        />
-      </div>
-    </div>
-  );
+			<div className="mx-auto w-full max-w-3xl">
+				<SupplierProvisionForm
+					currentStep={currentStep}
+					onStepChange={setCurrentStep}
+					onSubmit={handleSubmit}
+					onCancel={() => navigate({ to: "/admin/suppliers" })}
+				/>
+			</div>
+
+			{isLoading && <p className="text-sm text-muted-foreground">Creating supplier...</p>}
+		</div>
+	);
 }

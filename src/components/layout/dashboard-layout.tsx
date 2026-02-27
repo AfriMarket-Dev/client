@@ -1,57 +1,42 @@
-import { Link, Outlet, useRouterState } from "@tanstack/react-router";
-import { Package, Plus, LayoutDashboard } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Outlet } from "@tanstack/react-router";
+import { useSelector } from "react-redux";
+import type { RootState } from "@/app/store";
+import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { DashboardSidebar } from "./dashboard/dashboard-sidebar";
+import { Separator } from "@/components/ui/separator";
 
 export const DashboardLayout = () => {
-  const routerState = useRouterState();
-  const pathname = routerState.location.pathname;
+	const { user } = useSelector((state: RootState) => state.auth);
 
-  const nav = [
-    { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-    { to: "/dashboard/listings/new", label: "Add Listing", icon: Plus },
-  ];
-
-  return (
-    <div className="min-h-screen bg-background flex">
-      <aside className="w-56 border-r border-border bg-card flex flex-col">
-        <div className="p-4 border-b border-border">
-          <Link
-            to="/dashboard"
-            className="font-heading font-bold uppercase tracking-wide text-foreground"
-          >
-            Provider Dashboard
-          </Link>
-        </div>
-        <nav className="p-2 flex-1">
-          {nav.map((item) => (
-            <Link
-              key={item.to}
-              to={item.to as any}
-              className={cn(
-                "flex items-center gap-2 px-3 py-2 rounded-sm text-sm font-medium transition-colors",
-                pathname === item.to
-                  ? "bg-primary text-primary-foreground"
-                  : "text-muted-foreground hover:bg-muted hover:text-foreground"
-              )}
-            >
-              <item.icon className="w-4 h-4" />
-              {item.label}
-            </Link>
-          ))}
-        </nav>
-        <div className="p-2 border-t border-border">
-          <Link
-            to="/"
-            className="flex items-center gap-2 px-3 py-2 rounded-sm text-sm text-muted-foreground hover:bg-muted hover:text-foreground"
-          >
-            <Package className="w-4 h-4" />
-            Back to Marketplace
-          </Link>
-        </div>
-      </aside>
-      <main className="flex-1 overflow-auto">
-        <Outlet />
-      </main>
-    </div>
-  );
+	return (
+		<SidebarProvider>
+			<DashboardSidebar user={user} />
+			<SidebarInset className="flex flex-col bg-background">
+				<header className="flex h-16 shrink-0 items-center gap-2 border-b border-border px-6 sticky top-0 bg-background z-20">
+					<SidebarTrigger className="-ml-1" />
+					<Separator orientation="vertical" className="mr-2 h-4" />
+					<div className="flex-1 flex items-center justify-between">
+						<h2 className="text-sm font-heading font-bold uppercase tracking-widest text-muted-foreground">
+							AfrikaMarket <span className="text-primary mx-2">/</span> Supplier Dashboard
+						</h2>
+						<div className="flex items-center gap-4">
+							<div className="text-right hidden sm:block">
+								<p className="text-[10px] font-bold uppercase text-foreground leading-none">
+									{user?.name}
+								</p>
+								<p className="text-[9px] font-mono text-muted-foreground mt-1">
+									{user?.role?.toUpperCase()}
+								</p>
+							</div>
+						</div>
+					</div>
+				</header>
+				<main className="flex-1 overflow-auto">
+					<div className="px-8 md:px-12 lg:px-16 py-10 max-w-[1800px] mx-auto">
+						<Outlet />
+					</div>
+				</main>
+			</SidebarInset>
+		</SidebarProvider>
+	);
 };

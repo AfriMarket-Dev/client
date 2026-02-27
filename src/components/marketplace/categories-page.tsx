@@ -1,10 +1,10 @@
-import React, { useState } from "react";
-import { ArrowLeft, Search, Package } from "lucide-react";
+import { useNavigate } from "@tanstack/react-router";
+import { RiArrowLeftLine, RiPagesLine, RiSearchLine } from "@remixicon/react";
+import type React from "react";
+import { useState } from "react";
+import { useGetProductCategoriesQuery } from "@/app/api/product-categories";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useGetListingCategoriesQuery } from "@/app/api/listing-categories";
-import { mockCategories } from "@/data/mock-data";
-import { useNavigate } from "@tanstack/react-router";
 
 interface CategoriesPageProps {
   onBack: () => void;
@@ -15,9 +15,10 @@ const CategoriesPage: React.FC<CategoriesPageProps> = ({ onBack }) => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
 
-  // const { data, isLoading } = useGetListingCategoriesQuery({ limit: 50 });
-  const isLoading = false;
-  const categories = mockCategories;
+  const { data: categoriesResult, isLoading } = useGetProductCategoriesQuery({
+    limit: 50,
+  });
+  const categories = categoriesResult?.data || [];
 
   const filtered = searchQuery.trim()
     ? categories.filter(
@@ -38,11 +39,11 @@ const CategoriesPage: React.FC<CategoriesPageProps> = ({ onBack }) => {
             onClick={onBack}
             className="gap-2 font-heading uppercase text-xs tracking-wider rounded-sm"
           >
-            <ArrowLeft className="w-4 h-4" />
+            <RiArrowLeftLine className="w-4 h-4" />
             Back
           </Button>
           <div className="relative flex-1 max-w-md">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <RiSearchLine className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <Input
               placeholder="Search categories..."
               value={searchQuery}
@@ -72,7 +73,7 @@ const CategoriesPage: React.FC<CategoriesPageProps> = ({ onBack }) => {
           </div>
         ) : filtered.length === 0 ? (
           <div className="text-center py-16 bg-card rounded-sm border border-border">
-            <Package className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+            <RiPagesLine className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
             <p className="text-muted-foreground">No categories found.</p>
           </div>
         ) : (
@@ -81,11 +82,16 @@ const CategoriesPage: React.FC<CategoriesPageProps> = ({ onBack }) => {
               <button
                 key={category.id}
                 type="button"
-                onClick={() => navigate({ to: "/marketplace", search: { category: category.id } as any })}
+                onClick={() =>
+                  navigate({
+                    to: "/marketplace",
+                    search: { category: category.id } as any,
+                  })
+                }
                 className="group text-left p-6 rounded-sm border border-border bg-card hover:border-primary transition-all duration-200"
               >
                 <div className="w-12 h-12 rounded-sm bg-muted/50 border border-border flex items-center justify-center mb-4 text-muted-foreground group-hover:bg-primary group-hover:text-primary-foreground group-hover:border-primary transition-colors">
-                  <Package className="w-6 h-6" />
+                  <RiPagesLine className="w-6 h-6" />
                 </div>
                 <h2 className="text-xl font-heading font-bold uppercase text-foreground mb-2 group-hover:text-primary transition-colors">
                   {category.name}

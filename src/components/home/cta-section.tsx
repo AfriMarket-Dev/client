@@ -1,7 +1,10 @@
-import React from "react";
 import { useNavigate } from "@tanstack/react-router";
-import { Button } from "@/components/ui/button";
-import { ArrowRight, Package, Briefcase, CheckCircle2 } from "lucide-react";
+import {
+  RiArrowRightLine,
+  RiBriefcaseLine,
+  RiPagesLine,
+} from "@remixicon/react";
+import type React from "react";
 
 const CTASection: React.FC = () => {
   const navigate = useNavigate();
@@ -32,14 +35,19 @@ const CTASection: React.FC = () => {
         <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
           {/* Product Gateway */}
           <div
-            onClick={() => navigate({ to: "/marketplace", search: { type: "PRODUCT" } as any })}
+            onClick={() =>
+              navigate({
+                to: "/marketplace",
+                search: { type: "PRODUCT" } as any,
+              })
+            }
             className="group cursor-pointer bg-white/5 border border-white/10 hover:border-primary/50 p-8 rounded-xl transition-all duration-300 hover:bg-white/[0.07]"
           >
             <div className="flex items-start justify-between mb-8">
               <div className="w-12 h-12 bg-primary/20 text-primary rounded-lg flex items-center justify-center">
-                <Package className="w-6 h-6" />
+                <RiPagesLine className="w-6 h-6" />
               </div>
-              <ArrowRight className="text-white/20 group-hover:text-primary group-hover:translate-x-1 transition-all" />
+              <RiArrowRightLine className="text-white/20 group-hover:text-primary group-hover:translate-x-1 transition-all" />
             </div>
 
             <h3 className="text-2xl font-heading font-bold text-white mb-2 uppercase tracking-wide">
@@ -57,14 +65,19 @@ const CTASection: React.FC = () => {
 
           {/* Service Gateway */}
           <div
-            onClick={() => navigate({ to: "/marketplace", search: { type: "SERVICE" } as any })}
+            onClick={() =>
+              navigate({
+                to: "/marketplace",
+                search: { type: "SERVICE" } as any,
+              })
+            }
             className="group cursor-pointer bg-white/5 border border-white/10 hover:border-sky-500/50 p-8 rounded-xl transition-all duration-300 hover:bg-white/[0.07]"
           >
             <div className="flex items-start justify-between mb-8">
               <div className="w-12 h-12 bg-sky-500/20 text-sky-500 rounded-lg flex items-center justify-center">
-                <Briefcase className="w-6 h-6" />
+                <RiBriefcaseLine className="w-6 h-6" />
               </div>
-              <ArrowRight className="text-white/20 group-hover:text-sky-500 group-hover:translate-x-1 transition-all" />
+              <RiArrowRightLine className="text-white/20 group-hover:text-sky-500 group-hover:translate-x-1 transition-all" />
             </div>
 
             <h3 className="text-2xl font-heading font-bold text-white mb-2 uppercase tracking-wide">
