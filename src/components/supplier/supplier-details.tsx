@@ -27,7 +27,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-/** local alias - mock data from getMockProducts maps closely to Product shape */
+/** local alias for supplier listing items */
 type SupplierItem = Product;
 
 interface SupplierDetailsProps {
