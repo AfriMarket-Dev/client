@@ -86,6 +86,14 @@ export const listingsApi = apiSlice.injectEndpoints({
       ],
     }),
 
+    deleteListing: builder.mutation<void, string>({
+      query: (id) => ({
+        url: `/listings/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Listings"],
+    }),
+
     addVariant: builder.mutation<
       unknown,
       { listingId: string; data: CreateVariantInput }
@@ -116,6 +124,7 @@ export const {
   useGetListingByIdQuery,
   useCreateListingMutation,
   useUpdateListingMutation,
+  useDeleteListingMutation,
   useAddVariantMutation,
   useRemoveVariantMutation,
 } = listingsApi;

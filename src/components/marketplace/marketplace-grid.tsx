@@ -1,6 +1,4 @@
-import {
-  RiCloseLine,
-} from "@remixicon/react";
+import { RiCloseLine } from "@remixicon/react";
 import {
   Check,
   ChevronDown,
@@ -307,10 +305,19 @@ const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({
     ...defaultCatalogFiltersState(),
     categoryId: initialCategoryId,
   }));
+  const [searchInput, setSearchInput] = useState(filters.searchQuery);
   const [page, setPage] = useState(1);
   const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
   const [showFilters, setShowFilters] = useState(true);
   const [priceRange, setPriceRange] = useState([0, 1000000]);
+
+  // Debounce search input
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      handleFiltersChange({ searchQuery: searchInput });
+    }, 500);
+    return () => clearTimeout(timeout);
+  }, [searchInput]);
 
   // Sync slider with filters
   useEffect(() => {
@@ -381,6 +388,7 @@ const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({
 
   const handleClearFilters = () => {
     setFilters(defaultCatalogFiltersState());
+    setSearchInput("");
     setPriceRange([0, 1000000]);
     setPage(1);
   };
@@ -571,10 +579,8 @@ const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({
                   <Input
                     placeholder="Search products, services..."
                     className="pl-9 bg-muted/30 border-border rounded-sm focus:ring-1 focus:ring-primary h-10 w-full"
-                    value={filters.searchQuery}
-                    onChange={(e) =>
-                      handleFiltersChange({ searchQuery: e.target.value })
-                    }
+                    value={searchInput}
+                    onChange={(e) => setSearchInput(e.target.value)}
                   />
                 </div>
               </div>
@@ -585,10 +591,8 @@ const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({
                 <Input
                   placeholder="Search..."
                   className="pl-9 bg-muted/30 border-border rounded-sm focus:ring-1 focus:ring-primary h-10 w-full"
-                  value={filters.searchQuery}
-                  onChange={(e) =>
-                    handleFiltersChange({ searchQuery: e.target.value })
-                  }
+                  value={searchInput}
+                  onChange={(e) => setSearchInput(e.target.value)}
                 />
               </div>
 
