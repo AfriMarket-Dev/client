@@ -1,6 +1,6 @@
-import { createFileRoute } from '@tanstack/react-router'
-import AdminCategoriesPage from '@/pages/admin-categories-page'
+import { createFileRoute } from "@tanstack/react-router";
+import AdminCategoriesPage from "@/pages/admin-categories-page";
 
-export const Route = createFileRoute('/admin/categories')({
-  component: AdminCategoriesPage,
-})
+export const Route = createFileRoute("/admin/categories")({
+	component: AdminCategoriesPage,
+});
