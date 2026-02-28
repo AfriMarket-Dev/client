@@ -1,15 +1,18 @@
 import {
 	RiArrowLeftLine,
+	RiDeleteBinLine,
 	RiEyeLine,
-	RiLayoutGridLine,
-	RiHeartLine,
 	RiHeartFill,
+	RiHeartLine,
+	RiLayoutGridLine,
 	RiMapPinLine,
 	RiStarFill,
-	RiDeleteBinLine,
 	RiUserLine,
 } from "@remixicon/react";
-import { LayoutList as RiListCheckLine, Package as RiPackageLine } from "lucide-react";
+import {
+	LayoutList as RiListCheckLine,
+	Package as RiPackageLine,
+} from "lucide-react";
 import type React from "react";
 import { useState } from "react";
 import { ImageWithFallback } from "@/components/common/image-with-fallback";

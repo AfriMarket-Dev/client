@@ -1,11 +1,12 @@
 import { Package } from "lucide-react";
-import React from "react";
+import React, { useId } from "react";
 import { useGetProductCategoriesQuery } from "@/app/api/product-categories";
+import { HomeSection } from "../home/home-section";
 import { SectionHeader } from "../home/section-header";
 import { CompactCategoryCard } from "./compact-category-card";
-import { HomeSection } from "../home/home-section";
 
 const CategoryGrid: React.FC = () => {
+	const sectionId = useId();
 	const { data: categoriesResult, isLoading } = useGetProductCategoriesQuery({
 		limit: 8,
 	});
@@ -15,7 +16,7 @@ const CategoryGrid: React.FC = () => {
 
 	return (
 		<HomeSection
-			id="categories"
+			id={sectionId}
 			variant="muted"
 			withGrid
 			borderTop

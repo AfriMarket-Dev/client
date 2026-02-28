@@ -1,5 +1,8 @@
 import { RiLayoutGridLine } from "@remixicon/react";
-import { LayoutList as RiListCheckLine, Package as RiPackageLine } from "lucide-react";
+import {
+	LayoutList as RiListCheckLine,
+	Package as RiPackageLine,
+} from "lucide-react";
 import type React from "react";
 import { Button } from "@/components/ui/button";
 

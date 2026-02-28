@@ -26,7 +26,6 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({
 
   return (
     <div className="relative mb-8 md:mb-12 group">
-      {/* Editorial architecture */}
       <div className="absolute -left-4 top-0 bottom-0 w-[1px] bg-primary/20 hidden lg:block" />
 
       <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 md:gap-12">

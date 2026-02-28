@@ -1,18 +1,18 @@
 import {
-  ArrowRight,
-  Building2,
-  ChevronDown,
-  Filter,
-  Grid,
-  Hexagon,
-  List,
-  MapPin,
-  PanelLeft as RiExpandLeftLine,
-  PanelLeftOpen,
-  Search,
-  ShieldCheck,
-  Star,
-  X,
+	ArrowRight,
+	Building2,
+	ChevronDown,
+	Filter,
+	Grid,
+	Hexagon,
+	List,
+	MapPin,
+	PanelLeftOpen,
+	PanelLeft as RiExpandLeftLine,
+	Search,
+	ShieldCheck,
+	Star,
+	X,
 } from "lucide-react";
 import type React from "react";
 import { useState } from "react";
@@ -21,668 +21,409 @@ import { useGetCompaniesQuery } from "@/app/api/companies";
 import { useGetCompanyCategoriesQuery } from "@/app/api/company-categories";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
+	Collapsible,
+	CollapsibleContent,
+	CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Separator } from "@/components/ui/separator";
-import { Switch } from "@/components/ui/switch";
+import { useSupplierFilters } from "@/hooks/use-supplier-filters";
 import { cn } from "@/lib/utils";
+import { SupplierCard } from "./listing/supplier-card";
+import { SupplierFilterPanel } from "./listing/supplier-filter-panel";
 
 interface SupplierListingProps {
-  onSupplierClick?: (supplierId: string) => void;
-  initialSearchQuery?: string;
+	onSupplierClick?: (supplierId: string) => void;
+	initialSearchQuery?: string;
 }
 
 const PAGE_SIZE = 12;
 
 const COMPANY_TYPES = [
-  { value: "MANUFACTURER", label: "Manufacturer" },
-  { value: "WHOLESALER", label: "Wholesaler" },
-  { value: "RETAILER", label: "Retailer" },
-  { value: "SERVICE_PROVIDER", label: "Service Provider" },
+	{ value: "MANUFACTURER", label: "Manufacturer" },
+	{ value: "WHOLESALER", label: "Wholesaler" },
+	{ value: "RETAILER", label: "Retailer" },
+	{ value: "SERVICE_PROVIDER", label: "Service Provider" },
 ];
 
-interface SupplierFiltersState {
-  searchQuery: string;
-  categoryId: string;
-  district: string;
-  type: string;
-  minRating: string;
-  verified: boolean;
-  page: number;
-}
-
-const defaultFilters: SupplierFiltersState = {
-  searchQuery: "",
-  categoryId: "all",
-  district: "",
-  type: "all",
-  minRating: "0",
-  verified: false,
-  page: 1,
-};
-
 const SupplierListing: React.FC<SupplierListingProps> = ({
-  onSupplierClick,
-  initialSearchQuery = "",
+	onSupplierClick,
+	initialSearchQuery = "",
 }) => {
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
-  const [showFilters, setShowFilters] = useState(true);
-  const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
-  const [filters, setFilters] = useState<SupplierFiltersState>({
-    ...defaultFilters,
-    searchQuery: initialSearchQuery,
-  });
+	const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+	const [showFilters, setShowFilters] = useState(true);
+	const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
 
-  const { data: listData, isLoading } = useGetCompaniesQuery({
-    page: filters.page,
-    limit: PAGE_SIZE,
-    query: filters.searchQuery || undefined,
-    categoryId: filters.categoryId === "all" ? undefined : filters.categoryId,
-    district: filters.district || undefined,
-    type: filters.type === "all" ? undefined : filters.type,
-    minRating:
-      Number(filters.minRating) > 0 ? Number(filters.minRating) : undefined,
-    isVerified: filters.verified ? true : undefined,
-  });
+	const { filters, handleFiltersChange, handleClearFilters } =
+		useSupplierFilters(initialSearchQuery);
 
-  const { data: categoriesData } = useGetCompanyCategoriesQuery({ limit: 50 });
+	const { data: listData, isLoading } = useGetCompaniesQuery({
+		page: filters.page,
+		limit: PAGE_SIZE,
+		query: filters.searchQuery || undefined,
+		categoryId: filters.categoryId === "all" ? undefined : filters.categoryId,
+		district: filters.district || undefined,
+		type: filters.type === "all" ? undefined : filters.type,
+		minRating:
+			Number(filters.minRating) > 0 ? Number(filters.minRating) : undefined,
+		isVerified: filters.verified ? true : undefined,
+	});
 
-  const companies: Company[] = listData?.data || [];
-  const meta = listData?.meta;
+	const { data: categoriesData } = useGetCompanyCategoriesQuery({ limit: 50 });
 
-  const categories = categoriesData?.data ?? [];
+	const companies: Company[] = listData?.data || [];
+	const meta = listData?.meta;
+	const categories = categoriesData?.data ?? [];
 
-  const handleFiltersChange = (updates: Partial<SupplierFiltersState>) => {
-    setFilters((prev) => ({ ...prev, ...updates, page: 1 }));
-  };
+	const hasActiveFilters =
+		filters.district ||
+		filters.type !== "all" ||
+		Number(filters.minRating) > 0 ||
+		filters.categoryId !== "all" ||
+		filters.verified;
 
-  const handleClearFilters = () => {
-    setFilters(defaultFilters);
-  };
+	return (
+		<div className="min-h-screen bg-background pb-20">
+			{/* Header */}
+			<div className="bg-background border-b border-border sticky top-0 z-30 py-4">
+				<div className="max-w-[1600px] mx-auto px-4 md:px-6">
+					<div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+						<div>
+							<h1 className="text-3xl md:text-4xl font-display font-black uppercase text-foreground tracking-tighter leading-none mb-2">
+								Supplier Directory
+							</h1>
+							<p className="text-[10px] font-bold text-muted-foreground/40 uppercase tracking-[0.3em]">
+								Registry protocol / Verified nodes
+							</p>
+						</div>
 
-  const FilterContent = () => (
-    <div className="space-y-6 p-1">
-      {/* Category */}
-      <div className="space-y-4">
-        <Label className="uppercase text-xs font-bold text-muted-foreground tracking-wider block mb-2">
-          Category
-        </Label>
-        <Select
-          value={filters.categoryId}
-          onValueChange={(val) =>
-            handleFiltersChange({ categoryId: val as string })
-          }
-        >
-          <SelectTrigger className="w-full bg-background rounded-none border-border/20 font-display font-medium uppercase tracking-widest text-[10px] h-10">
-            <SelectValue placeholder="All Categories" />
-          </SelectTrigger>
-          <SelectContent className="rounded-none border-border/20">
-            <SelectItem value="all" className="rounded-none">
-              All Categories
-            </SelectItem>
-            {categories.map((cat) => (
-              <SelectItem key={cat.id} value={cat.id} className="rounded-none">
-                {cat.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
+						<div className="flex items-center gap-4">
+							<div className="flex items-center bg-muted/30 border border-border/10 p-1 rounded-none">
+								<Button
+									variant={viewMode === "grid" ? "secondary" : "ghost"}
+									size="icon"
+									className="rounded-none h-8 w-8"
+									onClick={() => setViewMode("grid")}
+								>
+									<Grid className="w-4 h-4" />
+								</Button>
+								<Button
+									variant={viewMode === "list" ? "secondary" : "ghost"}
+									size="icon"
+									className="rounded-none h-8 w-8"
+									onClick={() => setViewMode("list")}
+								>
+									<List className="w-4 h-4" />
+								</Button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 
-      <Separator />
+			<div className="max-w-[1600px] mx-auto px-4 md:px-6 py-8">
+				<div className="flex flex-col lg:flex-row gap-8 items-start">
+					{/* Desktop Sidebar */}
+					{showFilters && (
+						<aside className="hidden lg:block w-72 shrink-0 sticky top-24 h-[calc(100vh-6rem)] transition-all duration-300">
+							<div className="flex items-center justify-between mb-8 pr-4">
+								<h2 className="text-xs font-display font-black uppercase tracking-[0.2em] flex items-center gap-2">
+									Filters
+								</h2>
+								<div className="flex items-center gap-2">
+									<Button
+										variant="ghost"
+										size="sm"
+										className="h-6 text-[9px] uppercase font-black tracking-widest text-muted-foreground/40 hover:text-destructive hover:bg-transparent"
+										onClick={handleClearFilters}
+									>
+										Reset Registry
+									</Button>
+									<Button
+										variant="ghost"
+										size="icon"
+										className="h-8 w-8 text-muted-foreground hover:text-foreground md:hidden"
+										onClick={() => setShowFilters(false)}
+									>
+										<RiExpandLeftLine className="w-4 h-4" />
+									</Button>
+								</div>
+							</div>
 
-      {/* Company Type */}
-      <div className="space-y-4">
-        <Label className="uppercase text-xs font-bold text-muted-foreground tracking-wider block mb-2">
-          Business Type
-        </Label>
-        <Select
-          value={filters.type}
-          onValueChange={(val) => handleFiltersChange({ type: val as string })}
-        >
-          <SelectTrigger className="w-full bg-background rounded-none border-border/20 font-display font-medium uppercase tracking-widest text-[10px] h-10">
-            <SelectValue placeholder="All Types" />
-          </SelectTrigger>
-          <SelectContent className="rounded-none border-border/20">
-            <SelectItem value="all" className="rounded-none">
-              All Types
-            </SelectItem>
-            {COMPANY_TYPES.map((t) => (
-              <SelectItem
-                key={t.value}
-                value={t.value}
-                className="rounded-none"
-              >
-                {t.label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
+							<ScrollArea className="h-[calc(100vh-10rem)] pr-4">
+								<SupplierFilterPanel
+									filters={filters}
+									categories={categories}
+									onFilterChange={handleFiltersChange}
+								/>
+							</ScrollArea>
+						</aside>
+					)}
 
-      <Separator />
+					{/* Main Content */}
+					<div className="flex-1 min-w-0">
+						{/* Toolbar & Filter Toggle */}
+						<div className="flex flex-col gap-4 mb-6 sticky top-16 lg:top-0 z-20 bg-background/95 backdrop-blur-md py-2 lg:py-4">
+							<div className="flex gap-4 items-center">
+								<Button
+									variant="outline"
+									size="icon"
+									className={cn(
+										"hidden lg:flex shrink-0 rounded-none border-border/20",
+										showFilters && "bg-muted/30 border-primary/20",
+									)}
+									onClick={() => setShowFilters(!showFilters)}
+									title={showFilters ? "Hide Filters" : "Show Filters"}
+								>
+									{showFilters ? (
+										<RiExpandLeftLine className="w-4 h-4 text-primary" />
+									) : (
+										<PanelLeftOpen className="w-4 h-4 text-muted-foreground" />
+									)}
+								</Button>
 
-      {/* Location */}
-      <div className="space-y-4">
-        <Label className="uppercase text-xs font-bold text-muted-foreground tracking-wider block mb-2">
-          Location (District)
-        </Label>
-        <Input
-          placeholder="e.g. Gasabo, Kicukiro"
-          value={filters.district}
-          onChange={(e) => handleFiltersChange({ district: e.target.value })}
-          className="bg-background rounded-none border-border/20 font-display font-medium uppercase tracking-widest text-[10px] h-10 placeholder:text-muted-foreground/30"
-        />
-      </div>
+								{/* Mobile Filter */}
+								<div className="lg:hidden w-full sm:w-auto">
+									<Collapsible
+										open={isMobileFiltersOpen}
+										onOpenChange={setIsMobileFiltersOpen}
+										className="w-full"
+									>
+										<CollapsibleTrigger
+											className={cn(
+												"inline-flex items-center justify-between whitespace-nowrap rounded-none text-[10px] font-display font-bold uppercase tracking-widest ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-border/20 bg-background hover:bg-muted h-10 px-4 w-full sm:w-auto gap-4 shrink-0 sm:justify-center transition-all",
+											)}
+										>
+											<span className="flex items-center gap-2">
+												<Filter className="w-4 h-4" />
+												Filters
+												{hasActiveFilters && (
+													<Badge
+														variant="secondary"
+														className="ml-2 h-5 px-2 text-[9px] font-black uppercase tracking-widest rounded-none bg-primary text-primary-foreground"
+													>
+														Active
+													</Badge>
+												)}
+											</span>
+											<ChevronDown
+												className={`w-4 h-4 transition-transform ${isMobileFiltersOpen ? "rotate-180" : ""}`}
+											/>
+										</CollapsibleTrigger>
+										<CollapsibleContent className="mt-4 p-4 border rounded-md bg-background shadow-sm space-y-6">
+											<div className="flex items-center justify-between mb-2">
+												<h3 className="font-display font-black uppercase text-xs tracking-widest">
+													Refine Registry
+												</h3>
+												<Button
+													variant="ghost"
+													size="sm"
+													onClick={handleClearFilters}
+													className="text-xs h-6"
+												>
+													Reset All
+												</Button>
+											</div>
+											<SupplierFilterPanel
+												filters={filters}
+												categories={categories}
+												onFilterChange={handleFiltersChange}
+											/>
+											<Button
+												onClick={() => setIsMobileFiltersOpen(false)}
+												className="w-full mt-6 rounded-none font-display font-black uppercase tracking-widest h-12"
+											>
+												Apply Filters
+											</Button>
+										</CollapsibleContent>
+									</Collapsible>
+								</div>
 
-      <Separator />
+								<div className="relative flex-1 group">
+									<Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/30 group-focus-within:text-primary transition-colors" />
+									<Input
+										placeholder="SEARCH DIRECTORY NODES..."
+										className="pl-12 bg-muted/10 border-border/20 rounded-none focus:ring-0 focus:border-primary/40 h-11 w-full font-display font-bold uppercase tracking-widest text-[10px] transition-all"
+										value={filters.searchQuery}
+										onChange={(e) =>
+											handleFiltersChange({ searchQuery: e.target.value })
+										}
+									/>
+								</div>
+							</div>
 
-      {/* Rating */}
-      <div className="space-y-4">
-        <Label className="uppercase text-xs font-bold text-muted-foreground tracking-wider block mb-2">
-          Min Rating
-        </Label>
-        <Select
-          value={filters.minRating}
-          onValueChange={(val) =>
-            handleFiltersChange({ minRating: val as string })
-          }
-        >
-          <SelectTrigger className="w-full bg-background rounded-none border-border/20 font-display font-medium uppercase tracking-widest text-[10px] h-10">
-            <SelectValue placeholder="Any Rating" />
-          </SelectTrigger>
-          <SelectContent className="rounded-none border-border/20">
-            <SelectItem value="0" className="rounded-none">
-              Any Rating
-            </SelectItem>
-            <SelectItem value="4" className="rounded-none">
-              4+ Stars
-            </SelectItem>
-            <SelectItem value="4.5" className="rounded-none">
-              4.5+ Stars
-            </SelectItem>
-            <SelectItem value="5" className="rounded-none">
-              5 Stars
-            </SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
+							{/* Active Filters Badges */}
+							{hasActiveFilters && (
+								<div className="flex flex-wrap gap-2 items-center mt-2">
+									{filters.categoryId !== "all" && (
+										<Badge
+											variant="secondary"
+											className="gap-2 rounded-none text-[9px] font-bold uppercase tracking-widest pl-3 pr-1.5 h-7 bg-muted/50 border-border/10"
+										>
+											{categories.find((c) => c.id === filters.categoryId)
+												?.name || "Category"}
+											<X
+												className="w-3.5 h-3.5 hover:text-destructive cursor-pointer transition-colors"
+												onClick={() =>
+													handleFiltersChange({ categoryId: "all" })
+												}
+											/>
+										</Badge>
+									)}
+									{filters.type !== "all" && (
+										<Badge
+											variant="secondary"
+											className="gap-1 rounded-sm text-[10px] pl-2 pr-1 h-6"
+										>
+											{COMPANY_TYPES.find((t) => t.value === filters.type)
+												?.label || filters.type}
+											<X
+												className="w-3 h-3 hover:text-destructive cursor-pointer"
+												onClick={() => handleFiltersChange({ type: "all" })}
+											/>
+										</Badge>
+									)}
+									{filters.district && (
+										<Badge
+											variant="secondary"
+											className="gap-1 rounded-sm text-[10px] pl-2 pr-1 h-6"
+										>
+											{filters.district}
+											<X
+												className="w-3 h-3 hover:text-destructive cursor-pointer"
+												onClick={() => handleFiltersChange({ district: "" })}
+											/>
+										</Badge>
+									)}
+									{Number(filters.minRating) > 0 && (
+										<Badge
+											variant="secondary"
+											className="gap-1 rounded-sm text-[10px] pl-2 pr-1 h-6"
+										>
+											{filters.minRating}+ Stars
+											<X
+												className="w-3 h-3 hover:text-destructive cursor-pointer"
+												onClick={() => handleFiltersChange({ minRating: "0" })}
+											/>
+										</Badge>
+									)}
+									{filters.verified && (
+										<Badge
+											variant="secondary"
+											className="gap-1 rounded-sm text-[10px] pl-2 pr-1 h-6"
+										>
+											Verified Only
+											<X
+												className="w-3 h-3 hover:text-destructive cursor-pointer"
+												onClick={() => handleFiltersChange({ verified: false })}
+											/>
+										</Badge>
+									)}
+									<Button
+										variant="ghost"
+										size="sm"
+										className="h-7 text-[9px] px-3 font-black uppercase tracking-widest text-destructive hover:bg-destructive/10 rounded-none ml-2"
+										onClick={handleClearFilters}
+									>
+										Clear Registry
+									</Button>
+								</div>
+							)}
+						</div>
 
-      <Separator />
+						{isLoading ? (
+							<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+								{Array.from({ length: 9 }).map((_, i) => (
+									<div
+										key={`supplier-skeleton-${i}`}
+										className="h-72 rounded-none border border-border/5 bg-muted/5 animate-pulse"
+									/>
+								))}
+							</div>
+						) : (
+							<>
+								{companies.length === 0 ? (
+									<div className="flex flex-col items-center justify-center py-32 text-center border border-border/20 rounded-none bg-muted/5 relative overflow-hidden">
+										{/* Blueprint grid depth */}
+										<div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none" />
 
-      {/* Verified Only */}
-      <div className="flex items-center justify-between space-x-2 border p-4 rounded-none border-border/20 bg-muted/5">
-        <Label
-          htmlFor="verified-mode"
-          className="text-[10px] font-bold uppercase tracking-widest cursor-pointer flex items-center gap-2 text-foreground/70"
-        >
-          <ShieldCheck className="w-3.5 h-3.5 text-primary" />
-          Verified Only
-        </Label>
-        <Switch
-          id="verified-mode"
-          className="rounded-none scale-90"
-          checked={filters.verified}
-          onCheckedChange={(checked) =>
-            handleFiltersChange({ verified: checked })
-          }
-        />
-      </div>
-    </div>
-  );
+										<div className="w-24 h-24 bg-primary/5 rounded-none border border-primary/20 flex items-center justify-center mb-10 relative z-10 transition-transform duration-500 hover:scale-110">
+											<Building2 className="w-10 h-10 text-primary/40" />
+										</div>
+										<h3 className="text-3xl font-display font-black uppercase text-foreground mb-4 tracking-tighter relative z-10">
+											No Suppliers Registry
+										</h3>
+										<p className="text-xs font-bold text-muted-foreground/30 uppercase tracking-[0.3em] max-w-md mx-auto mb-12 leading-relaxed relative z-10">
+											Criteria mismatch / Resource not found
+										</p>
+										<Button
+											size="lg"
+											className="rounded-none font-display font-black uppercase tracking-[0.2em] h-14 px-10 relative z-10"
+											onClick={handleClearFilters}
+										>
+											Reset Protocol
+										</Button>
+									</div>
+								) : (
+									<div
+										className={
+											viewMode === "grid"
+												? cn(
+														"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8",
+														showFilters
+															? "xl:grid-cols-3"
+															: "xl:grid-cols-4 2xl:grid-cols-5",
+													)
+												: "flex flex-col gap-6"
+										}
+									>
+										{companies.map((company: Company) => (
+											<SupplierCard
+												key={company.id}
+												company={company}
+												onViewProfile={() => onSupplierClick?.(company.id)}
+											/>
+										))}
+									</div>
+								)}
 
-  return (
-    <div className="min-h-screen bg-background pb-20">
-      {/* Header */}
-      <div className="bg-background border-b border-border sticky top-0 z-30 py-4">
-        <div className="max-w-[1600px] mx-auto px-4 md:px-6">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-            <div>
-              <h1 className="text-3xl md:text-4xl font-display font-black uppercase text-foreground tracking-tighter leading-none mb-2">
-                Supplier Directory
-              </h1>
-              <p className="text-[10px] font-bold text-muted-foreground/40 uppercase tracking-[0.3em]">
-                Registry protocol / Verified nodes
-              </p>
-            </div>
-
-            <div className="flex items-center gap-4">
-              <div className="flex items-center bg-muted/30 border border-border/10 p-1 rounded-none">
-                <Button
-                  variant={viewMode === "grid" ? "secondary" : "ghost"}
-                  size="icon"
-                  className="rounded-none h-8 w-8"
-                  onClick={() => setViewMode("grid")}
-                >
-                  <Grid className="w-4 h-4" />
-                </Button>
-                <Button
-                  variant={viewMode === "list" ? "secondary" : "ghost"}
-                  size="icon"
-                  className="rounded-none h-8 w-8"
-                  onClick={() => setViewMode("list")}
-                >
-                  <List className="w-4 h-4" />
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="max-w-[1600px] mx-auto px-4 md:px-6 py-8">
-        <div className="flex flex-col lg:flex-row gap-8 items-start">
-          {/* Desktop Sidebar */}
-          {showFilters && (
-            <aside className="hidden lg:block w-72 shrink-0 sticky top-24 h-[calc(100vh-6rem)] transition-all duration-300">
-              <div className="flex items-center justify-between mb-8 pr-4">
-                <h2 className="text-xs font-display font-black uppercase tracking-[0.2em] flex items-center gap-2">
-                  Filters
-                </h2>
-                <div className="flex items-center gap-2">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="h-6 text-[9px] uppercase font-black tracking-widest text-muted-foreground/40 hover:text-destructive hover:bg-transparent"
-                    onClick={handleClearFilters}
-                  >
-                    Reset Registry
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-8 w-8 text-muted-foreground hover:text-foreground md:hidden"
-                    onClick={() => setShowFilters(false)}
-                  >
-                    <RiExpandLeftLine className="w-4 h-4" />
-                  </Button>
-                </div>
-              </div>
-
-              <ScrollArea className="h-[calc(100vh-10rem)] pr-4">
-                <FilterContent />
-              </ScrollArea>
-            </aside>
-          )}
-
-          {/* Main Content */}
-          <div className="flex-1 min-w-0">
-            {/* Toolbar & Filter Toggle */}
-            <div className="flex flex-col gap-4 mb-6 sticky top-16 lg:top-0 z-20 bg-background/95 backdrop-blur-md py-2 lg:py-4">
-              <div className="flex gap-4 items-center">
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className={cn(
-                    "hidden lg:flex shrink-0 rounded-none border-border/20",
-                    showFilters && "bg-muted/30 border-primary/20",
-                  )}
-                  onClick={() => setShowFilters(!showFilters)}
-                  title={showFilters ? "Hide Filters" : "Show Filters"}
-                >
-                  {showFilters ? (
-                    <RiExpandLeftLine className="w-4 h-4 text-primary" />
-                  ) : (
-                    <PanelLeftOpen className="w-4 h-4 text-muted-foreground" />
-                  )}
-                </Button>
-
-                {/* Mobile Filter */}
-                <div className="lg:hidden w-full sm:w-auto">
-                  <Collapsible
-                    open={isMobileFiltersOpen}
-                    onOpenChange={setIsMobileFiltersOpen}
-                    className="w-full"
-                  >
-                    <CollapsibleTrigger
-                      className={cn(
-                        "inline-flex items-center justify-between whitespace-nowrap rounded-none text-[10px] font-display font-bold uppercase tracking-widest ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-border/20 bg-background hover:bg-muted h-10 px-4 w-full sm:w-auto gap-4 shrink-0 sm:justify-center transition-all",
-                      )}
-                    >
-                      <span className="flex items-center gap-2">
-                        <Filter className="w-4 h-4" />
-                        Filters
-                        {(filters.district ||
-                          filters.type !== "all" ||
-                          Number(filters.minRating) > 0 ||
-                          filters.categoryId !== "all" ||
-                          filters.verified) && (
-                          <Badge
-                            variant="secondary"
-                            className="ml-2 h-5 px-2 text-[9px] font-black uppercase tracking-widest rounded-none bg-primary text-primary-foreground"
-                          >
-                            Active
-                          </Badge>
-                        )}
-                      </span>
-                      <ChevronDown
-                        className={`w-4 h-4 transition-transform ${isMobileFiltersOpen ? "rotate-180" : ""}`}
-                      />
-                    </CollapsibleTrigger>
-                    <CollapsibleContent className="mt-4 p-4 border rounded-md bg-background shadow-sm space-y-6">
-                      <div className="flex items-center justify-between mb-2">
-                        <h3 className="font-display font-black uppercase text-xs tracking-widest">
-                          Refine Registry
-                        </h3>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={handleClearFilters}
-                          className="text-xs h-6"
-                        >
-                          Reset All
-                        </Button>
-                      </div>
-                      <FilterContent />
-                      <Button
-                        onClick={() => setIsMobileFiltersOpen(false)}
-                        className="w-full mt-6 rounded-none font-display font-black uppercase tracking-widest h-12"
-                      >
-                        Apply Filters
-                      </Button>
-                    </CollapsibleContent>
-                  </Collapsible>
-                </div>
-
-                <div className="relative flex-1 group">
-                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/30 group-focus-within:text-primary transition-colors" />
-                  <Input
-                    placeholder="SEARCH DIRECTORY NODES..."
-                    className="pl-12 bg-muted/10 border-border/20 rounded-none focus:ring-0 focus:border-primary/40 h-11 w-full font-display font-bold uppercase tracking-widest text-[10px] transition-all"
-                    value={filters.searchQuery}
-                    onChange={(e) =>
-                      handleFiltersChange({ searchQuery: e.target.value })
-                    }
-                  />
-                </div>
-              </div>
-
-              {/* Active Filters Badges */}
-              {(filters.categoryId !== "all" ||
-                filters.type !== "all" ||
-                filters.district ||
-                Number(filters.minRating) > 0 ||
-                filters.verified) && (
-                <div className="flex flex-wrap gap-2 items-center mt-2">
-                  {filters.categoryId !== "all" && (
-                    <Badge
-                      variant="secondary"
-                      className="gap-2 rounded-none text-[9px] font-bold uppercase tracking-widest pl-3 pr-1.5 h-7 bg-muted/50 border-border/10"
-                    >
-                      {categories.find((c) => c.id === filters.categoryId)
-                        ?.name || "Category"}
-                      <X
-                        className="w-3.5 h-3.5 hover:text-destructive cursor-pointer transition-colors"
-                        onClick={() =>
-                          handleFiltersChange({ categoryId: "all" })
-                        }
-                      />
-                    </Badge>
-                  )}
-                  {filters.type !== "all" && (
-                    <Badge
-                      variant="secondary"
-                      className="gap-1 rounded-sm text-[10px] pl-2 pr-1 h-6"
-                    >
-                      {COMPANY_TYPES.find((t) => t.value === filters.type)
-                        ?.label || filters.type}
-                      <X
-                        className="w-3 h-3 hover:text-destructive cursor-pointer"
-                        onClick={() => handleFiltersChange({ type: "all" })}
-                      />
-                    </Badge>
-                  )}
-                  {filters.district && (
-                    <Badge
-                      variant="secondary"
-                      className="gap-1 rounded-sm text-[10px] pl-2 pr-1 h-6"
-                    >
-                      {filters.district}
-                      <X
-                        className="w-3 h-3 hover:text-destructive cursor-pointer"
-                        onClick={() => handleFiltersChange({ district: "" })}
-                      />
-                    </Badge>
-                  )}
-                  {Number(filters.minRating) > 0 && (
-                    <Badge
-                      variant="secondary"
-                      className="gap-1 rounded-sm text-[10px] pl-2 pr-1 h-6"
-                    >
-                      {filters.minRating}+ Stars
-                      <X
-                        className="w-3 h-3 hover:text-destructive cursor-pointer"
-                        onClick={() => handleFiltersChange({ minRating: "0" })}
-                      />
-                    </Badge>
-                  )}
-                  {filters.verified && (
-                    <Badge
-                      variant="secondary"
-                      className="gap-1 rounded-sm text-[10px] pl-2 pr-1 h-6"
-                    >
-                      Verified Only
-                      <X
-                        className="w-3 h-3 hover:text-destructive cursor-pointer"
-                        onClick={() => handleFiltersChange({ verified: false })}
-                      />
-                    </Badge>
-                  )}
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="h-7 text-[9px] px-3 font-black uppercase tracking-widest text-destructive hover:bg-destructive/10 rounded-none ml-2"
-                    onClick={handleClearFilters}
-                  >
-                    Clear Registry
-                  </Button>
-                </div>
-              )}
-            </div>
-
-            {isLoading ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {Array.from({ length: 9 }).map((_, i) => (
-                  <div
-                    key={`supplier-skeleton-${i}`}
-                    className="h-72 rounded-none border border-border/5 bg-muted/5 animate-pulse"
-                  />
-                ))}
-              </div>
-            ) : (
-              <>
-                {companies.length === 0 ? (
-                  <div className="flex flex-col items-center justify-center py-32 text-center border border-border/20 rounded-none bg-muted/5 relative overflow-hidden">
-                    {/* Blueprint grid depth */}
-                    <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none" />
-
-                    <div className="w-24 h-24 bg-primary/5 rounded-none border border-primary/20 flex items-center justify-center mb-10 relative z-10 transition-transform duration-500 hover:scale-110">
-                      <Building2 className="w-10 h-10 text-primary/40" />
-                    </div>
-                    <h3 className="text-3xl font-display font-black uppercase text-foreground mb-4 tracking-tighter relative z-10">
-                      No Suppliers Registry
-                    </h3>
-                    <p className="text-xs font-bold text-muted-foreground/30 uppercase tracking-[0.3em] max-w-md mx-auto mb-12 leading-relaxed relative z-10">
-                      Criteria mismatch / Resource not found
-                    </p>
-                    <Button
-                      size="lg"
-                      className="rounded-none font-display font-black uppercase tracking-[0.2em] h-14 px-10 relative z-10"
-                      onClick={handleClearFilters}
-                    >
-                      Reset Protocol
-                    </Button>
-                  </div>
-                ) : (
-                  <div
-                    className={
-                      viewMode === "grid"
-                        ? cn(
-                            "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8",
-                            showFilters
-                              ? "xl:grid-cols-3"
-                              : "xl:grid-cols-4 2xl:grid-cols-5",
-                          )
-                        : "flex flex-col gap-6"
-                    }
-                  >
-                    {companies.map((company: Company) => (
-                      <SupplierCard
-                        key={company.id}
-                        company={company}
-                        onViewProfile={() => onSupplierClick?.(company.id)}
-                      />
-                    ))}
-                  </div>
-                )}
-
-                {meta && meta.totalPages > 1 && (
-                  <div className="flex justify-center gap-4 mt-16 pt-10 border-t border-border/20">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="rounded-none font-display font-bold uppercase tracking-widest text-[9px] h-10 px-6 border-border/40"
-                      disabled={filters.page <= 1}
-                      onClick={() =>
-                        handleFiltersChange({ page: filters.page - 1 })
-                      }
-                    >
-                      Previous
-                    </Button>
-                    <span className="flex items-center px-6 text-[10px] font-display font-black uppercase tracking-widest text-muted-foreground/30">
-                      Registry Node {meta.page} of {meta.totalPages}
-                    </span>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="rounded-none font-display font-bold uppercase tracking-widest text-[9px] h-10 px-6 border-border/40"
-                      disabled={filters.page >= meta.totalPages}
-                      onClick={() =>
-                        handleFiltersChange({ page: filters.page + 1 })
-                      }
-                    >
-                      Next
-                    </Button>
-                  </div>
-                )}
-              </>
-            )}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+								{meta && meta.totalPages > 1 && (
+									<div className="flex justify-center gap-4 mt-16 pt-10 border-t border-border/20">
+										<Button
+											variant="outline"
+											size="sm"
+											className="rounded-none font-display font-bold uppercase tracking-widest text-[9px] h-10 px-6 border-border/40"
+											disabled={filters.page <= 1}
+											onClick={() =>
+												handleFiltersChange({ page: filters.page - 1 })
+											}
+										>
+											Previous
+										</Button>
+										<span className="flex items-center px-6 text-[10px] font-display font-black uppercase tracking-widest text-muted-foreground/30">
+											Registry Node {meta.page} of {meta.totalPages}
+										</span>
+										<Button
+											variant="outline"
+											size="sm"
+											className="rounded-none font-display font-bold uppercase tracking-widest text-[9px] h-10 px-6 border-border/40"
+											disabled={filters.page >= meta.totalPages}
+											onClick={() =>
+												handleFiltersChange({ page: filters.page + 1 })
+											}
+										>
+											Next
+										</Button>
+									</div>
+								)}
+							</>
+						)}
+					</div>
+				</div>
+			</div>
+		</div>
+	);
 };
-
-function SupplierCard({
-  company,
-  onViewProfile,
-}: {
-  company: Company;
-  onViewProfile: () => void;
-}) {
-  const rating = Number(company.averageRating ?? 0);
-  const location = [company.district, company.province]
-    .filter(Boolean)
-    .join(", ");
-
-  return (
-    <Card className="group border py-0 border-border/10 bg-card hover:border-primary/40 transition-all duration-500 rounded-none overflow-hidden flex flex-col shadow-none h-full relative">
-      {/* Editorial accent line */}
-      <div className="absolute top-0 left-0 w-[1px] h-full bg-primary/0 group-hover:bg-primary/40 transition-all duration-500 z-20" />
-
-      <div className="relative h-56 overflow-hidden bg-muted/20">
-        {company.logoUrl ? (
-          <img
-            src={company.logoUrl}
-            alt={company.name}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-          />
-        ) : (
-          <div className="absolute inset-0 flex items-center justify-center bg-muted/50">
-            <Hexagon className="w-16 h-16 text-muted-foreground/20 stroke-1" />
-            <span className="absolute text-4xl font-bold text-muted-foreground/30">
-              {company.name.charAt(0)}
-            </span>
-          </div>
-        )}
-
-        <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent opacity-60"></div>
-
-        {company.isVerified && (
-          <div className="absolute top-4 right-4 z-10">
-            <Badge className="bg-white/90 dark:bg-slate-950/90 text-foreground border border-border/10 font-display font-black text-[9px] px-3 h-6 flex items-center gap-2 rounded-none uppercase tracking-[0.2em] backdrop-blur-md shadow-2xl">
-              <ShieldCheck className="w-3 h-3 text-primary" />
-              Verified
-            </Badge>
-          </div>
-        )}
-
-        <div className="absolute inset-0 bg-slate-950/80 group-hover:bg-slate-950/40 transition-colors duration-500" />
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-transparent to-transparent opacity-80 group-hover:opacity-100 transition-opacity duration-500" />
-
-        <div className="absolute bottom-6 left-6 right-6 text-white z-10">
-          <h3 className="text-xl font-display font-black uppercase leading-[0.9] mb-2 tracking-tighter group-hover:text-primary transition-colors duration-500">
-            {company.name}
-          </h3>
-          {location && (
-            <div className="flex items-center text-white/50 font-bold text-[9px] gap-2 uppercase tracking-[0.2em]">
-              <MapPin className="w-3 h-3 text-primary/60" />
-              {location}
-            </div>
-          )}
-        </div>
-      </div>
-
-      <CardContent className="pt-8 px-8 pb-8 flex-grow flex flex-col bg-card relative">
-        <div className="flex-grow">
-          <div className="flex justify-between items-start mb-6 gap-2">
-            <div className="flex flex-wrap gap-2">
-              <Badge
-                variant="outline"
-                className="bg-muted/10 text-muted-foreground/60 text-[9px] font-black border-border/20 rounded-none px-3 h-6 uppercase tracking-[0.1em]"
-              >
-                {company.type?.replace(/_/g, " ") || "Supplier"}
-              </Badge>
-            </div>
-            <div className="flex items-center bg-muted/50 px-2 py-1 rounded-none border border-border/10 shrink-0">
-              <Star className="w-3 h-3 text-primary fill-primary mr-1.5" />
-              <span className="font-display font-black text-foreground text-[10px] tracking-widest">
-                {rating.toFixed(1)}
-              </span>
-            </div>
-          </div>
-
-          <p className="text-muted-foreground/60 text-[11px] leading-relaxed line-clamp-2 mb-8 h-10 font-medium uppercase tracking-widest">
-            {company.description ||
-              "Leading provider of construction materials and heavy equipment solutions."}
-          </p>
-        </div>
-
-        <Button
-          onClick={onViewProfile}
-          className="w-full rounded-none h-14 font-display font-black uppercase tracking-[0.2em] text-[10px] group/btn bg-primary hover:bg-primary/90 text-primary-foreground shadow-none border border-primary/20"
-        >
-          View Profile
-          <ArrowRight className="w-3.5 h-3.5 ml-3 transition-transform duration-500 group-hover/btn:translate-x-1" />
-        </Button>
-      </CardContent>
-    </Card>
-  );
-}
 
 export default SupplierListing;

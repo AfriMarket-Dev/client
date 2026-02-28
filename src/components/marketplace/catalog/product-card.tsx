@@ -1,11 +1,11 @@
 import {
-  RiShieldCheckLine,
   RiHeartFill,
   RiHeartLine,
+  RiShieldCheckLine,
   RiStarLine,
 } from "@remixicon/react";
-import React, { useMemo } from "react";
 import { useRouter } from "@tanstack/react-router";
+import React, { useMemo } from "react";
 import { ImageWithFallback } from "@/components/common/image-with-fallback";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -76,7 +76,6 @@ export const ProductCard: React.FC<ProductCardProps> = React.memo(
           onClick={onClick}
           onMouseEnter={handleMouseEnter}
         >
-          {/* Editorial accent */}
           <div className="absolute top-0 left-0 w-1 h-full bg-primary/0 group-hover:bg-primary/40 transition-all duration-500" />
 
           <div className="relative w-52 aspect-video shrink-0 overflow-hidden rounded-none bg-muted/30 border border-border/10">
@@ -164,16 +163,21 @@ export const ProductCard: React.FC<ProductCardProps> = React.memo(
       <div
         className={cn(
           "group flex flex-col bg-card border transition-all duration-500 cursor-pointer h-full relative rounded-none overflow-hidden hover:shadow-2xl hover:shadow-primary/5",
-          isFlashSale ? "border-primary/40" : "border-border/20 hover:border-primary/40"
+          isFlashSale
+            ? "border-primary/40"
+            : "border-border/20 hover:border-primary/40",
         )}
         onClick={onClick}
         onMouseEnter={handleMouseEnter}
       >
-        {/* Editorial accent */}
-        <div className={cn(
-          "absolute top-0 left-0 w-full h-[1px] transition-all duration-500 z-20",
-          isFlashSale ? "bg-primary" : "bg-primary/0 group-hover:bg-primary/40"
-        )} />
+        <div
+          className={cn(
+            "absolute top-0 left-0 w-full h-[1px] transition-all duration-500 z-20",
+            isFlashSale
+              ? "bg-primary"
+              : "bg-primary/0 group-hover:bg-primary/40",
+          )}
+        />
         <div className="relative aspect-[4/3] md:aspect-square overflow-hidden bg-muted/10">
           {img ? (
             <ImageWithFallback
@@ -313,7 +317,6 @@ export const ProductCard: React.FC<ProductCardProps> = React.memo(
                       />
                     </div>
                     <div className="hidden md:flex items-center gap-2 text-[8px] text-muted-foreground/40 font-bold uppercase tracking-widest mt-0.5">
-                      {/* <span>3Yrs Platform</span> */}
                       <span>{company.type}</span>
                       <span className="w-0.5 h-0.5 rounded-full bg-border" />
                       <span>{company.district}</span>

@@ -1,5 +1,5 @@
-import { useNavigate } from "@tanstack/react-router";
 import { RiArrowLeftLine, RiPagesLine, RiSearchLine } from "@remixicon/react";
+import { useNavigate } from "@tanstack/react-router";
 import type React from "react";
 import { useState } from "react";
 import { useGetProductCategoriesQuery } from "@/app/api/product-categories";
@@ -92,7 +92,6 @@ const CategoriesPage: React.FC<CategoriesPageProps> = ({ onBack }) => {
                 }
                 className="group text-left p-8 rounded-none border border-border/10 bg-card hover:border-primary/40 transition-all duration-500 relative overflow-hidden hover:shadow-2xl hover:shadow-primary/5"
               >
-                {/* Editorial accent */}
                 <div className="absolute top-0 left-0 w-[1px] h-full bg-primary/0 group-hover:bg-primary/40 transition-all duration-500" />
 
                 <div className="w-12 h-12 rounded-none bg-muted/20 border border-border/10 flex items-center justify-center mb-6 text-muted-foreground/60 group-hover:bg-primary group-hover:text-primary-foreground group-hover:border-primary transition-all duration-500">

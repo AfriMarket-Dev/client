@@ -2,9 +2,9 @@ import {
 	RiArrowRightLine,
 	RiAwardLine,
 	RiBuildingLine,
+	RiChat1Line,
 	RiCheckboxCircleLine,
 	RiMapPinLine,
-	RiChat1Line,
 	RiSettings4Line,
 	RiStarFill,
 } from "@remixicon/react";
@@ -163,7 +163,8 @@ const ConstructionSuppliers: React.FC<ConstructionSuppliersProps> = ({
 								<div className="absolute inset-0 bg-linear-to-t from-foreground/60 to-transparent"></div>
 								{supplier.verified && (
 									<div className="absolute top-3 right-3 bg-success text-success-foreground px-2 py-1 rounded-sm text-[9px] font-black uppercase tracking-widest border border-success/20">
-										<RiCheckboxCircleLine className="w-3 h-3 mr-1 inline" /> Verified
+										<RiCheckboxCircleLine className="w-3 h-3 mr-1 inline" />{" "}
+										Verified
 									</div>
 								)}
 								<div className="absolute -bottom-6 left-4">
@@ -182,7 +183,8 @@ const ConstructionSuppliers: React.FC<ConstructionSuppliersProps> = ({
 											{supplier.name}
 										</h3>
 										<div className="flex items-center text-muted-foreground text-[10px] uppercase font-bold tracking-tighter mt-1">
-											<RiMapPinLine className="w-3 h-3 mr-1" /> {supplier.location}
+											<RiMapPinLine className="w-3 h-3 mr-1" />{" "}
+											{supplier.location}
 										</div>
 									</div>
 									<div className="flex items-center bg-muted/50 px-1.5 py-0.5 rounded-sm border border-border shrink-0">
@@ -255,7 +257,8 @@ const ConstructionSuppliers: React.FC<ConstructionSuppliersProps> = ({
 							onClick={onViewAllSuppliers}
 							className="px-8 h-12 font-heading font-bold uppercase text-xs tracking-widest shadow-none"
 						>
-							Browse Node Directory <RiArrowRightLine className="ml-2 w-4 h-4" />
+							Browse Node Directory{" "}
+							<RiArrowRightLine className="ml-2 w-4 h-4" />
 						</Button>
 						<Button
 							variant="outline"

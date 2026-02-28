@@ -1,5 +1,4 @@
 import {
-  Check,
   ChevronDown,
   ChevronLeft,
   Filter,
@@ -8,26 +7,17 @@ import {
   Package,
   Search,
   SlidersHorizontal,
-  X,
 } from "lucide-react";
-import React, {
-  memo,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import type React from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 
 import { useGetProductCategoriesQuery } from "@/app/api/product-categories";
-import type { Product } from "@/app/api/products";
 import {
   selectProductsData,
   selectProductsMeta,
   useGetProductsQuery,
 } from "@/app/api/products";
-import type { Service } from "@/app/api/services";
 import {
   selectServicesData,
   selectServicesMeta,
@@ -47,83 +37,15 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Separator } from "@/components/ui/separator";
-import { Slider } from "@/components/ui/slider";
-import { Switch } from "@/components/ui/switch";
+import { useMarketplaceFilters } from "@/hooks/use-marketplace-filters";
 import { cn } from "@/lib/utils";
+import { ActiveFilters } from "./active-filters";
 import { ProductCard } from "./catalog/product-card";
-
-// ---------------------------------------------------------------------------
-// Types
-// ---------------------------------------------------------------------------
-
-export type ListingType = "all" | "PRODUCT" | "SERVICE";
-
-export type MarketplaceItem =
-  | (Product & { itemType: "PRODUCT" })
-  | (Service & { itemType: "SERVICE" });
-
-export interface CatalogFilters {
-  searchQuery: string;
-  categoryId: string;
-  type: ListingType;
-  district: string;
-  minPrice: string;
-  maxPrice: string;
-  onlyInStock: boolean;
-  companyType: string;
-  sortBy: string;
-  sortOrder: "ASC" | "DESC";
-  page: number;
-}
-
-// ---------------------------------------------------------------------------
-// Constants
-// ---------------------------------------------------------------------------
+import { FilterPanel } from "./filter-panel";
+import type { ListingType, MarketplaceItem } from "./types";
 
 const PAGE_SIZE = 30;
-
-const COMPANY_TYPES = [
-  { value: "MANUFACTURER", label: "Manufacturer" },
-  { value: "WHOLESALER", label: "Wholesaler" },
-  { value: "RETAILER", label: "Retailer" },
-  { value: "SERVICE_PROVIDER", label: "Service Provider" },
-] as const;
-
-const DEFAULT_PRICE_MAX = 1_000_000;
-
-function defaultFilters(
-  overrides: Partial<CatalogFilters> = {},
-): CatalogFilters {
-  return {
-    searchQuery: "",
-    categoryId: "all",
-    type: "all",
-    district: "",
-    minPrice: "",
-    maxPrice: "",
-    onlyInStock: false,
-    companyType: "all",
-    sortBy: "createdAt",
-    sortOrder: "DESC",
-    page: 1,
-    ...overrides,
-  };
-}
-
-// ---------------------------------------------------------------------------
-// Props
-// ---------------------------------------------------------------------------
-
 interface MarketplaceGridProps {
   initialCategoryId?: string;
   initialType?: ListingType;
@@ -132,360 +54,6 @@ interface MarketplaceGridProps {
   onProductClick?: (item: MarketplaceItem) => void;
 }
 
-// ---------------------------------------------------------------------------
-// Filter panel
-// ---------------------------------------------------------------------------
-
-interface FilterPanelProps {
-  filters: CatalogFilters;
-  categories: Array<{ id: string; name: string }>;
-  priceRange: [number, number];
-  onPriceRangeChange: (value: [number, number]) => void;
-  onPriceCommit: () => void;
-  onFilterChange: (patch: Partial<CatalogFilters>) => void;
-}
-
-const FilterPanel = memo<FilterPanelProps>(
-  ({
-    filters,
-    categories,
-    priceRange,
-    onPriceRangeChange,
-    onPriceCommit,
-    onFilterChange,
-  }) => {
-    return (
-      <div className="space-y-8 p-1">
-        {/* Category */}
-        <div className="space-y-4">
-          <Label className="uppercase text-[10px] font-black text-muted-foreground tracking-[0.2em] block">
-            Category Verticals
-          </Label>
-          <Select
-            value={filters.categoryId}
-            onValueChange={(val) =>
-              onFilterChange({ categoryId: val, page: 1 })
-            }
-          >
-            <SelectTrigger className="w-full bg-background rounded-none border-border/20 font-display font-medium uppercase tracking-widest text-[10px] h-10">
-              <SelectValue placeholder="All Categories" />
-            </SelectTrigger>
-            <SelectContent className="rounded-none border-border/20">
-              <SelectItem value="all" className="rounded-none">
-                All Categories
-              </SelectItem>
-              {categories.map((c) => (
-                <SelectItem key={c.id} value={c.id} className="rounded-none">
-                  {c.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-
-        <Separator className="opacity-10" />
-
-        {/* Company Type */}
-        <div className="space-y-4">
-          <Label className="uppercase text-[10px] font-black text-muted-foreground tracking-[0.2em] block">
-            Supplier Class
-          </Label>
-          <Select
-            value={filters.companyType}
-            onValueChange={(val) =>
-              onFilterChange({ companyType: val, page: 1 })
-            }
-          >
-            <SelectTrigger className="w-full bg-background rounded-none border-border/20 font-display font-medium uppercase tracking-widest text-[10px] h-10">
-              <SelectValue placeholder="All Types" />
-            </SelectTrigger>
-            <SelectContent className="rounded-none border-border/20">
-              <SelectItem value="all" className="rounded-none">
-                All Classes
-              </SelectItem>
-              {COMPANY_TYPES.map((t) => (
-                <SelectItem
-                  key={t.value}
-                  value={t.value}
-                  className="rounded-none"
-                >
-                  {t.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-
-        <Separator className="opacity-10" />
-
-        {/* Listing Type */}
-        <div className="space-y-4">
-          <Label className="uppercase text-[10px] font-black text-muted-foreground tracking-[0.2em] block">
-            Protocol Type
-          </Label>
-          <div className="grid grid-cols-3 gap-2">
-            {(["all", "PRODUCT", "SERVICE"] as const).map((t) => (
-              <Button
-                key={t}
-                variant={filters.type === t ? "default" : "outline"}
-                size="sm"
-                onClick={() => onFilterChange({ type: t, page: 1 })}
-                className={cn(
-                  "w-full text-[9px] font-black uppercase tracking-widest h-9 rounded-none transition-all",
-                  filters.type === t
-                    ? "bg-primary text-primary-foreground border-primary"
-                    : "bg-background border-border/20",
-                )}
-              >
-                {t === "all" ? "Any" : t === "PRODUCT" ? "Product" : "Service"}
-              </Button>
-            ))}
-          </div>
-        </div>
-
-        <Separator className="opacity-10" />
-
-        {/* Sort */}
-        <div className="space-y-4">
-          <Label className="uppercase text-[10px] font-black text-muted-foreground tracking-[0.2em] block">
-            Operational Order
-          </Label>
-          <div className="flex gap-2">
-            <Select
-              value={filters.sortBy}
-              onValueChange={(val) => onFilterChange({ sortBy: val, page: 1 })}
-            >
-              <SelectTrigger className="flex-1 bg-background rounded-none border-border/20 font-display font-medium uppercase tracking-widest text-[10px] h-10">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent className="rounded-none border-border/20">
-                <SelectItem
-                  value="createdAt"
-                  className="rounded-none text-[10px] font-bold uppercase tracking-widest"
-                >
-                  Newest
-                </SelectItem>
-                <SelectItem
-                  value="price"
-                  className="rounded-none text-[10px] font-bold uppercase tracking-widest"
-                >
-                  Price
-                </SelectItem>
-                <SelectItem
-                  value="name"
-                  className="rounded-none text-[10px] font-bold uppercase tracking-widest"
-                >
-                  Name
-                </SelectItem>
-              </SelectContent>
-            </Select>
-            <Button
-              variant="outline"
-              size="sm"
-              className="shrink-0 px-3 rounded-none border-border/20 h-10"
-              onClick={() =>
-                onFilterChange({
-                  sortOrder: filters.sortOrder === "ASC" ? "DESC" : "ASC",
-                  page: 1,
-                })
-              }
-            >
-              {filters.sortOrder === "ASC" ? "↑" : "↓"}
-            </Button>
-          </div>
-        </div>
-
-        <Separator className="opacity-10" />
-
-        {/* Price Range */}
-        <div className="space-y-4">
-          <Label className="uppercase text-[10px] font-black text-muted-foreground tracking-[0.2em] block">
-            Capital Range
-          </Label>
-          <Slider
-            value={priceRange}
-            max={2_000_000}
-            step={10_000}
-            onValueChange={(val) => onPriceRangeChange(val as [number, number])}
-            onValueCommit={onPriceCommit}
-            className="py-4"
-          />
-          <div className="flex items-center justify-between text-[9px] font-black text-primary uppercase tracking-widest">
-            <span>{priceRange[0].toLocaleString()} RWF</span>
-            <span>{priceRange[1].toLocaleString()}+ RWF</span>
-          </div>
-          <div className="flex gap-2">
-            <Input
-              type="number"
-              placeholder="Min"
-              value={priceRange[0] || ""}
-              onChange={(e) =>
-                onPriceRangeChange([Number(e.target.value), priceRange[1]])
-              }
-              className="h-10 bg-background rounded-none border-border/20 text-[10px] font-bold uppercase tracking-widest"
-            />
-            <Input
-              type="number"
-              placeholder="Max"
-              value={priceRange[1] || ""}
-              onChange={(e) =>
-                onPriceRangeChange([priceRange[0], Number(e.target.value)])
-              }
-              className="h-10 bg-background rounded-none border-border/20 text-[10px] font-bold uppercase tracking-widest"
-            />
-          </div>
-          <Button
-            variant="secondary"
-            size="sm"
-            className="w-full text-[10px] font-black uppercase tracking-[0.2em] h-10 rounded-none bg-muted/50 border border-border/10 hover:bg-primary hover:text-white transition-all"
-            onClick={onPriceCommit}
-          >
-            Update Range
-          </Button>
-        </div>
-
-        <Separator className="opacity-10" />
-
-        {/* District */}
-        <div className="space-y-4">
-          <Label className="uppercase text-[10px] font-black text-muted-foreground tracking-[0.2em] block">
-            Location Node
-          </Label>
-          <Input
-            placeholder="e.g. Gasabo, Kicukiro..."
-            value={filters.district}
-            onChange={(e) =>
-              onFilterChange({ district: e.target.value, page: 1 })
-            }
-            className="h-10 bg-background rounded-none border-border/20 text-[10px] font-bold uppercase tracking-widest placeholder:text-muted-foreground/30"
-          />
-        </div>
-
-        <Separator className="opacity-10" />
-
-        {/* In Stock */}
-        <div className="flex items-center justify-between border p-4 rounded-none border-border/20 bg-muted/5">
-          <Label
-            htmlFor="stock-toggle"
-            className="text-[10px] font-black uppercase tracking-widest cursor-pointer"
-          >
-            Available Now
-          </Label>
-          <Switch
-            id="stock-toggle"
-            className="rounded-none scale-90"
-            checked={filters.onlyInStock}
-            onCheckedChange={(checked) =>
-              onFilterChange({ onlyInStock: checked, page: 1 })
-            }
-          />
-        </div>
-      </div>
-    );
-  },
-);
-FilterPanel.displayName = "FilterPanel";
-
-// ---------------------------------------------------------------------------
-// Active filter badges
-// ---------------------------------------------------------------------------
-
-interface ActiveFiltersProps {
-  filters: CatalogFilters;
-  categories: Array<{ id: string; name: string }>;
-  onFilterChange: (patch: Partial<CatalogFilters>) => void;
-}
-
-const ActiveFilters = memo<ActiveFiltersProps>(
-  ({ filters, categories, onFilterChange }) => {
-    const active =
-      filters.categoryId !== "all" ||
-      filters.type !== "all" ||
-      filters.companyType !== "all" ||
-      filters.district ||
-      filters.minPrice ||
-      filters.maxPrice ||
-      filters.onlyInStock;
-
-    if (!active) return null;
-
-    return (
-      <div className="flex flex-wrap gap-2 items-center mt-2">
-        {filters.categoryId !== "all" && (
-          <FilterBadge
-            label={
-              categories.find((c) => c.id === filters.categoryId)?.name ??
-              "Category"
-            }
-            onRemove={() => onFilterChange({ categoryId: "all", page: 1 })}
-          />
-        )}
-        {filters.companyType !== "all" && (
-          <FilterBadge
-            label={
-              COMPANY_TYPES.find((t) => t.value === filters.companyType)
-                ?.label ?? filters.companyType
-            }
-            onRemove={() => onFilterChange({ companyType: "all", page: 1 })}
-          />
-        )}
-        {filters.type !== "all" && (
-          <FilterBadge
-            label={filters.type}
-            onRemove={() => onFilterChange({ type: "all", page: 1 })}
-          />
-        )}
-        {filters.district && (
-          <FilterBadge
-            label={`Loc: ${filters.district}`}
-            onRemove={() => onFilterChange({ district: "", page: 1 })}
-          />
-        )}
-        {(filters.minPrice || filters.maxPrice) && (
-          <FilterBadge
-            label={`${Number(filters.minPrice || 0).toLocaleString()} – ${Number(
-              filters.maxPrice || DEFAULT_PRICE_MAX,
-            ).toLocaleString()} RWF`}
-            onRemove={() =>
-              onFilterChange({ minPrice: "", maxPrice: "", page: 1 })
-            }
-          />
-        )}
-        {filters.onlyInStock && (
-          <FilterBadge
-            label="In Stock"
-            onRemove={() => onFilterChange({ onlyInStock: false, page: 1 })}
-          />
-        )}
-      </div>
-    );
-  },
-);
-ActiveFilters.displayName = "ActiveFilters";
-
-const FilterBadge: React.FC<{ label: string; onRemove: () => void }> = ({
-  label,
-  onRemove,
-}) => (
-  <Badge
-    variant="secondary"
-    className="gap-2 rounded-none text-[9px] font-bold uppercase tracking-widest pl-3 pr-1.5 h-7 bg-muted/50 border-border/10"
-  >
-    {label}
-    <button
-      type="button"
-      onClick={onRemove}
-      aria-label={`Remove ${label} filter`}
-    >
-      <X className="w-3.5 h-3.5 hover:text-destructive cursor-pointer transition-colors" />
-    </button>
-  </Badge>
-);
-
-// ---------------------------------------------------------------------------
-// Main component
-// ---------------------------------------------------------------------------
-
 const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({
   initialCategoryId = "all",
   initialType = "all",
@@ -493,61 +61,21 @@ const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({
   onSupplierClick,
   onProductClick,
 }) => {
-  const [filters, setFilters] = useState<CatalogFilters>(() =>
-    defaultFilters({ categoryId: initialCategoryId, type: initialType }),
-  );
+  const {
+    filters,
+    patchFilters,
+    resetFilters,
+    searchInput,
+    setSearchInput,
+    priceRange,
+    setPriceRange,
+    commitPrice,
+    hasActiveFilters,
+  } = useMarketplaceFilters(initialCategoryId, initialType, onTypeChange);
 
-  const [searchInput, setSearchInput] = useState("");
-  const [priceRange, setPriceRange] = useState<[number, number]>([
-    0,
-    DEFAULT_PRICE_MAX,
-  ]);
   const [showFilters, setShowFilters] = useState(true);
   const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
-
-  const patchFilters = useCallback(
-    (patch: Partial<CatalogFilters>) => {
-      setFilters((prev) => {
-        const next = { ...prev, ...patch };
-        if (patch.type != null && patch.type !== prev.type) {
-          onTypeChange?.(patch.type);
-        }
-        return next;
-      });
-    },
-    [onTypeChange],
-  );
-
-  const resetFilters = useCallback(() => {
-    setFilters(defaultFilters());
-    setSearchInput("");
-    setPriceRange([0, DEFAULT_PRICE_MAX]);
-    onTypeChange?.("all");
-  }, [onTypeChange]);
-
-  const searchDebounce = useRef<ReturnType<typeof setTimeout>>();
-  useEffect(() => {
-    clearTimeout(searchDebounce.current);
-    searchDebounce.current = setTimeout(() => {
-      patchFilters({ searchQuery: searchInput, page: 1 });
-    }, 400);
-    return () => clearTimeout(searchDebounce.current);
-  }, [searchInput, patchFilters]);
-
-  const commitPrice = useCallback(() => {
-    patchFilters({
-      minPrice: priceRange[0].toString(),
-      maxPrice: priceRange[1].toString(),
-      page: 1,
-    });
-  }, [priceRange, patchFilters]);
-
-  useEffect(() => {
-    if (!filters.minPrice && !filters.maxPrice) {
-      setPriceRange([0, DEFAULT_PRICE_MAX]);
-    }
-  }, [filters.minPrice, filters.maxPrice]);
 
   const sharedParams = useMemo(
     () => ({
@@ -602,6 +130,10 @@ const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({
   const isFetching = productsFetching || servicesFetching;
 
   const { data: categoriesData } = useGetProductCategoriesQuery({ limit: 50 });
+  const categories = useMemo(
+    () => categoriesData?.data ?? [],
+    [categoriesData],
+  );
 
   const isAuthenticated = useSelector((s: RootState) => s.auth.isAuthenticated);
   const { data: wishlistRaw = [] } = useGetWishlistQuery(undefined, {
@@ -629,11 +161,6 @@ const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({
     );
     return [...products, ...services];
   }, [productsData?.data, servicesData?.data]);
-
-  const categories = useMemo(
-    () => categoriesData?.data ?? [],
-    [categoriesData?.data],
-  );
 
   const paginationMeta = useMemo(() => {
     if (filters.type === "PRODUCT") {
@@ -669,27 +196,6 @@ const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({
     },
     [wishlistIds, addToWishlist, removeFromWishlist],
   );
-
-  const filterPanelProps: FilterPanelProps = useMemo(
-    () => ({
-      filters,
-      categories,
-      priceRange,
-      onPriceRangeChange: setPriceRange,
-      onPriceCommit: commitPrice,
-      onFilterChange: patchFilters,
-    }),
-    [filters, categories, priceRange, commitPrice, patchFilters],
-  );
-
-  const hasActiveFilters =
-    filters.categoryId !== "all" ||
-    filters.type !== "all" ||
-    filters.companyType !== "all" ||
-    !!filters.district ||
-    !!filters.minPrice ||
-    !!filters.maxPrice ||
-    filters.onlyInStock;
 
   return (
     <div className="min-h-screen bg-background pb-20">
@@ -762,7 +268,14 @@ const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({
                 </div>
               </div>
               <ScrollArea className="h-[calc(100vh-10rem)] pr-4">
-                <FilterPanel {...filterPanelProps} />
+                <FilterPanel
+                  filters={filters}
+                  categories={categories}
+                  priceRange={priceRange}
+                  onPriceRangeChange={setPriceRange}
+                  onPriceCommit={commitPrice}
+                  onFilterChange={patchFilters}
+                />
               </ScrollArea>
             </aside>
           )}
@@ -837,7 +350,14 @@ const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({
                           </Button>
                         )}
                       </div>
-                      <FilterPanel {...filterPanelProps} />
+                      <FilterPanel
+                        filters={filters}
+                        categories={categories}
+                        priceRange={priceRange}
+                        onPriceRangeChange={setPriceRange}
+                        onPriceCommit={commitPrice}
+                        onFilterChange={patchFilters}
+                      />
                       <Button
                         onClick={() => setIsMobileFiltersOpen(false)}
                         className="w-full mt-6 rounded-none font-display font-black uppercase tracking-widest h-12"
@@ -981,15 +501,3 @@ const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({
 };
 
 export default MarketplaceGrid;
-
-// ---------------------------------------------------------------------------
-// Helpers
-// ---------------------------------------------------------------------------
-
-function buildPageNumbers(currentPage: number, totalPages: number): number[] {
-  const windowSize = Math.min(5, totalPages);
-  let start = Math.max(1, currentPage - Math.floor(windowSize / 2));
-  const end = Math.min(totalPages, start + windowSize - 1);
-  start = Math.max(1, end - windowSize + 1);
-  return Array.from({ length: end - start + 1 }, (_, i) => start + i);
-}

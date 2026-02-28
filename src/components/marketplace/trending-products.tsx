@@ -1,9 +1,9 @@
 import { TrendingUp } from "lucide-react";
-import React from "react";
+import type React from "react";
 import { useGetProductsQuery } from "@/app/api/products";
 import { ProductCarousel } from "@/components/home/product-carousel";
-import { SectionHeader } from "../home/section-header";
 import { HomeSection } from "../home/home-section";
+import { SectionHeader } from "../home/section-header";
 
 const TrendingProducts: React.FC = () => {
 	const { data, isLoading } = useGetProductsQuery({

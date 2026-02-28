@@ -1,4 +1,8 @@
-import { RiCalendarLine, RiCheckboxCircleLine, RiFlashlightLine } from "@remixicon/react";
+import {
+	RiCalendarLine,
+	RiCheckboxCircleLine,
+	RiFlashlightLine,
+} from "@remixicon/react";
 import { Package } from "lucide-react";
 
 interface SupplierAssignedService {

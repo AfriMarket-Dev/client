@@ -12,7 +12,6 @@ const CTASection: React.FC = () => {
 
   return (
     <section className="relative py-32 md:py-48 overflow-hidden bg-background border-y border-border/20">
-      {/* Editorial Background Elements */}
       <div className="absolute inset-0 blueprint-grid opacity-[0.03] pointer-events-none" />
       <div className="absolute top-0 right-0 w-1/2 h-full bg-primary/2 -skew-x-12 translate-x-1/4 pointer-events-none" />
 
@@ -52,7 +51,6 @@ const CTASection: React.FC = () => {
           <div className="lg:col-span-1" />
 
           <div className="lg:col-span-6 grid sm:grid-cols-2 gap-4">
-            {/* Source Protocol */}
             <div
               onClick={() =>
                 navigate({
@@ -85,7 +83,6 @@ const CTASection: React.FC = () => {
               </div>
             </div>
 
-            {/* Service Protocol */}
             <div
               onClick={() =>
                 navigate({
