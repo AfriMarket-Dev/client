@@ -1,6 +1,5 @@
 import { useRouter } from "@tanstack/react-router";
 import {
-  RiBriefcaseLine,
   RiBuildingLine,
   RiCalendarLine,
   RiCheckboxCircleLine,
@@ -8,7 +7,6 @@ import {
   RiTimeLine,
   RiHeartLine,
   RiHeartFill,
-  RiLayoutLine,
   RiMailLine,
   RiMapPinLine,
   RiChat1Line,
@@ -46,8 +44,6 @@ export default function ServiceView({ service, onBack }: ServiceViewProps) {
   const formId = useId();
   const [showContactModal, setShowContactModal] = useState(false);
   const [message, setMessage] = useState("");
-
-  const IconComponent = service.icon || RiLayoutLine;
 
   const handleBack = () => {
     if (onBack) {
@@ -104,7 +100,6 @@ export default function ServiceView({ service, onBack }: ServiceViewProps) {
 
   return (
     <div className="min-h-screen bg-background space-y-6 overflow-x-hidden pb-24 md:pb-12 industrial-grain">
-      {/* Mobile Sticky Action Bar */}
       <div className="md:hidden fixed bottom-0 left-0 right-0 bg-background border-t border-border px-3 py-2 z-50 flex items-center gap-1.5 safe-area-bottom shadow-[0_-4px_12px_rgba(0,0,0,0.05)]">
         {phone && (
           <button
@@ -144,7 +139,7 @@ export default function ServiceView({ service, onBack }: ServiceViewProps) {
         <Button
           variant="outline"
           size="lg"
-          className="flex-1 font-heading font-bold uppercase tracking-widest text-[10px] h-11 rounded-none border-primary text-primary"
+          className="flex-1 font-heading font-bold uppercase tracking-widest text-[10px] h-11 rounded-none border-primary text-primary hover:bg-primary hover:text-white transition-all duration-300"
           onClick={() => setShowContactModal(true)}
         >
           <RiChat3Line className="w-3.5 h-3.5 mr-1.5" />
@@ -152,7 +147,7 @@ export default function ServiceView({ service, onBack }: ServiceViewProps) {
         </Button>
         <Button
           size="lg"
-          className="flex-[1.5] font-heading font-bold uppercase tracking-widest text-[10px] h-11 rounded-none"
+          className="flex-[1.5] font-heading font-bold uppercase tracking-widest text-[10px] h-11 rounded-none bg-primary text-white hover:bg-primary/90 shadow-md shadow-primary/20 transition-all duration-300"
           onClick={() => setShowContactModal(true)}
         >
           Inquire
@@ -186,15 +181,15 @@ export default function ServiceView({ service, onBack }: ServiceViewProps) {
       </div>
 
       {/* Mobile Edge-to-Edge Header */}
-      <div className="md:hidden -mt-4 mb-6 relative aspect-video bg-muted/20 flex items-center justify-center overflow-hidden border-b border-border">
-        <div className="absolute inset-0 blueprint-grid opacity-10 pointer-events-none" />
-        <IconComponent size={64} className="text-primary/20" />
-        <div className="absolute inset-0 bg-linear-to-t from-background/90 via-background/20 to-transparent" />
-        <div className="absolute bottom-4 left-4 right-4">
-          <Badge className="bg-primary text-white border-none uppercase text-[10px] font-bold tracking-wider mb-2 rounded-none">
-            Service
+      <div className="md:hidden -mt-4 mb-8 relative h-[40vh] bg-background flex flex-col justify-end p-6 overflow-hidden">
+        <div className="absolute inset-0 blueprint-grid opacity-5 pointer-events-none" />
+        <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -mr-32 -mt-32" />
+
+        <div className="relative z-10 space-y-4">
+          <Badge className="bg-primary text-white border-none uppercase text-[10px] font-bold tracking-[0.2em] px-3 py-1 rounded-none shadow-lg">
+            Service Listing
           </Badge>
-          <h1 className="text-2xl font-heading font-bold uppercase text-foreground tracking-wide leading-tight">
+          <h1 className="text-4xl font-display font-black uppercase text-foreground tracking-tighter leading-[0.85]">
             {service.name}
           </h1>
         </div>
@@ -202,34 +197,57 @@ export default function ServiceView({ service, onBack }: ServiceViewProps) {
         {/* Back Button Overlay */}
         <button
           onClick={handleBack}
-          className="absolute top-4 left-4 w-10 h-10 bg-black/20 backdrop-blur-md rounded-full flex items-center justify-center text-white hover:bg-black/40 transition-colors"
+          className="absolute top-6 left-6 w-10 h-10 border border-border bg-background/80 backdrop-blur-sm rounded-none flex items-center justify-center text-foreground hover:bg-background transition-colors shadow-sm"
           type="button"
         >
-          <RiArrowLeftSLine className="w-6 h-6" />
+          <RiArrowLeftSLine className="w-5 h-5" />
         </button>
       </div>
 
       <div className="max-w-[1600px] mx-auto px-4 md:px-6 grid lg:grid-cols-12 gap-10 lg:gap-16 items-start">
-        {/* MAIN CONTENT COLUMN (8/12) */}
-        <div className="lg:col-span-8 space-y-12">
-          {/* Title Section */}
-          <div className="hidden md:block border-b border-border/40 pb-8">
-            <div className="flex items-center gap-3 text-primary mb-4">
-              <div className="p-2 bg-primary/10 rounded-none border border-primary/20">
-                <IconComponent size={24} />
+        <div className="lg:col-span-8 space-y-16">
+          <div className="hidden md:block pb-12">
+            <div className="space-y-8">
+              <div className="flex items-center gap-4 text-primary">
+                <div className="w-12 h-px bg-primary/30" />
+                <span className="font-heading font-bold uppercase tracking-[0.3em] text-[10px] text-muted-foreground whitespace-nowrap">
+                  Service
+                </span>
+                <div className="flex-1 h-px bg-border/20" />
               </div>
-              <span className="font-heading font-bold uppercase tracking-widest text-xs text-muted-foreground">
-                Professional Service
-              </span>
+
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-black uppercase text-foreground tracking-tighter leading-[0.8] max-w-4xl">
+                {service.name}
+              </h1>
+
+              <div className="grid md:grid-cols-12 gap-8 items-start">
+                <div className="md:col-span-7">
+                  <p className="text-xl text-muted-foreground font-light leading-relaxed">
+                    {service.description}
+                  </p>
+                </div>
+                <div className="md:col-span-1 hidden md:flex justify-center pt-2">
+                  <div className="w-px h-24 bg-border/30" />
+                </div>
+                <div className="md:col-span-4 flex flex-col justify-end">
+                  <div className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest mb-2 opacity-60">
+                    Starting Professional Tier
+                  </div>
+                  <div className="text-3xl font-heading font-black text-foreground">
+                    RWF {Number(service.price).toLocaleString()}
+                  </div>
+
+                  <Button
+                    onClick={() => setShowContactModal(true)}
+                    size="lg"
+                    className="mt-6 rounded-none h-14 bg-primary text-primary-foreground hover:bg-primary/90 transition-all duration-300 font-heading font-bold uppercase tracking-[0.2em] text-[10px] shadow-lg shadow-primary/20"
+                  >
+                    <RiChat3Line size={16} className="mr-2" />
+                    Place Inquiry
+                  </Button>
+                </div>
+              </div>
             </div>
-
-            <h1 className="text-4xl md:text-5xl lg:text-7xl font-display font-bold uppercase text-foreground tracking-tight leading-[0.9] mb-4">
-              {service.name}
-            </h1>
-
-            <p className="text-lg md:text-xl text-muted-foreground font-light leading-relaxed max-w-3xl">
-              {service.description}
-            </p>
           </div>
 
           <div className="md:hidden space-y-4">
@@ -254,40 +272,50 @@ export default function ServiceView({ service, onBack }: ServiceViewProps) {
               <TabsTrigger value="contact">Contact</TabsTrigger>
             </TabsList>
 
-            <TabsContent value="overview" className="space-y-12 mt-8">
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-border/40 border border-border/40">
+            <TabsContent value="overview" className="space-y-16 mt-12">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-border/20 border border-border/20 overflow-hidden">
                 {[
-                  { label: "Response", value: "~2 Hrs", icon: RiTimeLine },
                   {
-                    label: "Delivered",
-                    value: "203+",
+                    label: "Execution Time",
+                    value: "~2 Hrs",
+                    icon: RiTimeLine,
+                  },
+                  {
+                    label: "Track Record",
+                    value: "203+ Jobs",
                     icon: RiCheckboxCircleLine,
                   },
-                  { label: "Rating", value: "4.9/5.0", icon: RiStarLine },
-                  { label: "Since", value: "2021", icon: RiCalendarLine },
+                  { label: "Performance", value: "4.9/5.0", icon: RiStarLine },
+                  {
+                    label: "Industry Since",
+                    value: "2021",
+                    icon: RiCalendarLine,
+                  },
                 ].map((stat, i) => (
                   <div
                     key={i}
-                    className="bg-background p-4 group hover:bg-muted/5 transition-colors"
+                    className="bg-background/40 backdrop-blur-xs p-8 group hover:bg-background transition-all duration-500 relative overflow-hidden"
                   >
-                    <stat.icon className="w-4 h-4 text-primary mb-2 opacity-50 group-hover:opacity-100 transition-opacity" />
-                    <div className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider mb-0.5">
-                      {stat.label}
-                    </div>
-                    <div className="text-lg font-bold font-heading text-foreground">
-                      {stat.value}
+                    <div className="absolute top-0 left-0 w-full h-0.5 bg-primary opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <stat.icon className="w-5 h-5 text-primary mb-6 opacity-30 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500" />
+                    <div className="space-y-1">
+                      <div className="text-[9px] text-muted-foreground uppercase font-black tracking-[0.2em]">
+                        {stat.label}
+                      </div>
+                      <div className="text-2xl font-bold font-heading text-foreground tracking-tight">
+                        {stat.value}
+                      </div>
                     </div>
                   </div>
                 ))}
               </div>
 
-              <div className="grid md:grid-cols-2 gap-12">
-                <div className="space-y-6">
-                  <h3 className="font-heading font-bold uppercase text-sm tracking-widest text-foreground border-b border-primary/20 pb-3 flex items-center gap-2">
-                    <RiCheckboxCircleLine className="w-5 h-5 text-primary" />
-                    Service Inclusions
+              <div className="grid md:grid-cols-2 gap-16">
+                <div className="space-y-8">
+                  <h3 className="font-heading font-black uppercase text-xs tracking-[0.4em] text-foreground/40 pb-4 border-b border-border/40">
+                    Service Deliverables
                   </h3>
-                  <ul className="space-y-0 divide-y divide-border/40">
+                  <ul className="space-y-4">
                     {[
                       "Precision data collection",
                       "High-accuracy reporting",
@@ -295,90 +323,38 @@ export default function ServiceView({ service, onBack }: ServiceViewProps) {
                       "Certified professional survey",
                       "Site-wide accessibility",
                     ].map((item, i) => (
-                      <li
-                        key={i}
-                        className="flex items-center gap-4 py-3 text-sm text-foreground/80 group hover:bg-muted/30 transition-colors px-2"
-                      >
-                        <div className="w-1.5 h-1.5 bg-primary/40 group-hover:bg-primary transition-colors rotate-45" />
-                        {item}
+                      <li key={i} className="flex items-start gap-5 group">
+                        <div className="mt-1.5 w-1 h-1 bg-primary shrink-0 transition-transform group-hover:rotate-45" />
+                        <span className="text-sm font-medium text-foreground/80 leading-snug group-hover:text-foreground transition-colors">
+                          {item}
+                        </span>
                       </li>
                     ))}
                   </ul>
                 </div>
 
-                <div className="space-y-6">
-                  <h3 className="font-heading font-bold uppercase text-sm tracking-widest text-foreground border-b border-primary/20 pb-3 flex items-center gap-2">
-                    <RiTimeLine className="w-5 h-5 text-primary" />
-                    Workflow Protocol
+                <div className="space-y-8">
+                  <h3 className="font-heading font-black uppercase text-xs tracking-[0.4em] text-foreground/40 pb-4 border-b border-border/40">
+                    Operational Workflow
                   </h3>
-                  <div className="space-y-4 pt-2">
+                  <div className="space-y-8 pt-2">
                     {[
-                      { step: "01", label: "Initial Consultation" },
-                      { step: "02", label: "On-Site Observation" },
-                      { step: "03", label: "Data Analysis" },
-                      { step: "04", label: "Report Delivery" },
+                      { step: "I", label: "Consultation" },
+                      { step: "II", label: "Assessment" },
+                      { step: "III", label: "Execution" },
+                      { step: "IV", label: "Final Phase" },
                     ].map((item, i) => (
-                      <div key={i} className="flex items-center gap-4 group">
-                        <span className="text-xs font-black font-heading text-background bg-foreground w-8 h-8 flex items-center justify-center shrink-0 group-hover:bg-primary transition-colors">
+                      <div key={i} className="flex items-center gap-6 group">
+                        <span className="text-[10px] font-black font-heading text-primary/40 group-hover:text-primary transition-colors">
                           {item.step}
                         </span>
-                        <span className="text-sm font-bold uppercase tracking-wide text-foreground/70 group-hover:text-foreground transition-colors">
+                        <span className="text-xs font-bold uppercase tracking-[0.2em] text-foreground/60 group-hover:text-foreground transition-colors mr-auto">
                           {item.label}
                         </span>
-                        <div className="flex-1 h-px bg-border/40 group-hover:bg-primary/20" />
+                        <div className="w-12 h-px bg-border group-hover:w-24 group-hover:bg-primary transition-all duration-500" />
                       </div>
                     ))}
                   </div>
-                </div>
-              </div>
-
-              <div className="border border-border/60 bg-muted/5 p-6 md:p-8">
-                <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-lg font-heading font-bold uppercase text-foreground tracking-widest flex items-center gap-2">
-                    <RiBriefcaseLine className="w-5 h-5 text-primary" /> Recent
-                    Deployments
-                  </h2>
-                  <Badge
-                    variant="outline"
-                    className="rounded-none border-primary/20 text-primary uppercase text-[10px] font-bold tracking-widest"
-                  >
-                    {service.totalRequests} Verified Jobs
-                  </Badge>
-                </div>
-
-                <div className="grid md:grid-cols-2 gap-4">
-                  {[
-                    {
-                      id: 1,
-                      customer: "ABC Trading Co.",
-                      date: "FEB 2026",
-                      status: "completed",
-                    },
-                    {
-                      id: 2,
-                      customer: "Global Assets Ltd",
-                      date: "JAN 2026",
-                      status: "completed",
-                    },
-                  ].map((request) => (
-                    <div
-                      key={request.id}
-                      className="bg-background border border-border p-4 hover:border-primary/40 transition-colors group"
-                    >
-                      <div className="flex justify-between items-start mb-2">
-                        <span className="font-heading font-bold uppercase text-sm">
-                          {request.customer}
-                        </span>
-                        <div className="w-2 h-2 rounded-full bg-emerald-500" />
-                      </div>
-                      <div className="flex items-center justify-between text-[10px] text-muted-foreground uppercase font-bold tracking-wider">
-                        <span>{request.date}</span>
-                        <span className="group-hover:text-primary transition-colors">
-                          View Report
-                        </span>
-                      </div>
-                    </div>
-                  ))}
                 </div>
               </div>
             </TabsContent>
@@ -608,113 +584,84 @@ export default function ServiceView({ service, onBack }: ServiceViewProps) {
         {/* SIDEBAR (4/12) */}
         <div className="lg:col-span-4 space-y-8 sticky top-24">
           {/* Price Card */}
-          <div className="hidden md:block bg-muted/10 border-l-4 border-primary p-6">
-            <div className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest mb-1">
-              Starting From
-            </div>
-            <div className="text-4xl lg:text-5xl font-heading font-black text-foreground mb-1">
-              RWF {Number(service.price).toLocaleString()}
-            </div>
-            <div className="text-xs text-muted-foreground">
-              *Final quote varies by project scope
-            </div>
-
-            <div className="grid gap-3 mt-6">
-              <Button
-                onClick={() => setShowContactModal(true)}
-                size="lg"
-                className="w-full rounded-none h-12 font-heading font-bold uppercase tracking-widest text-xs"
-              >
-                <RiChat3Line size={16} className="mr-2" />
-                Inquire Now
-              </Button>
-              <Button
-                variant="outline"
-                className="w-full rounded-none border-border h-12 font-heading font-bold uppercase tracking-widest text-xs hover:bg-background hover:text-primary hover:border-primary"
-                onClick={handleBack}
-              >
-                Back to Listings
-              </Button>
-            </div>
-          </div>
 
           {/* Provider ID Card */}
-          <div className="border border-border bg-card relative overflow-hidden group">
-            <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-primary via-primary/50 to-transparent" />
-            <div className="p-6">
-              <h3 className="text-[10px] font-heading font-bold uppercase text-muted-foreground mb-6 tracking-[0.2em] flex justify-between">
-                <span>Service Provider ID</span>
-                <span className="text-primary">VERIFIED</span>
+          <div className="border border-border bg-background rounded-none relative overflow-hidden group">
+            <div className="p-8">
+              <h3 className="text-[9px] font-heading font-black uppercase text-muted-foreground mb-8 tracking-[0.4em] flex justify-between items-center">
+                <span>Verification Profile</span>
+                <span className="text-primary flex items-center gap-1.5">
+                  <div className="w-1 h-1 bg-primary rounded-full animate-pulse" />
+                  LIVE
+                </span>
               </h3>
 
-              <div className="flex items-center gap-4 mb-6">
-                <div className="w-16 h-16 bg-muted border border-border flex items-center justify-center text-2xl font-heading font-bold text-muted-foreground">
+              <div className="flex items-center gap-6 mb-10">
+                <div className="w-20 h-20 bg-muted border border-border rounded-none flex items-center justify-center text-3xl font-display font-black text-foreground relative group-hover:scale-105 transition-transform duration-500">
+                  <div className="absolute inset-0 border border-primary opacity-0 group-hover:opacity-100 transition-opacity translate-x-1 translate-y-1" />
                   {service.provider.fullName.charAt(0)}
                 </div>
-                <div>
-                  <h4 className="font-heading font-bold text-lg uppercase tracking-wide text-foreground">
+                <div className="space-y-1">
+                  <h4 className="font-display font-black text-2xl uppercase tracking-tighter text-foreground leading-[0.85]">
                     {service.provider.fullName}
                   </h4>
-                  <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider">
+                  <p className="text-[10px] text-primary font-black uppercase tracking-[0.2em]">
                     {service.provider.role}
                   </p>
-                  <div className="flex items-center gap-1 mt-1">
-                    {[1, 2, 3, 4, 5].map((s) => (
-                      <RiStarFill
-                        key={s}
-                        className="w-3 h-3 fill-primary text-primary"
-                      />
-                    ))}
-                    <span className="text-[10px] font-bold ml-1">
+                  <div className="flex items-center gap-1 mt-3">
+                    <RiStarFill className="w-3 h-3 text-primary" />
+                    <span className="text-xs font-bold font-heading">
                       {service.provider.rating}
+                    </span>
+                    <span className="text-[10px] text-muted-foreground font-medium uppercase tracking-widest ml-1">
+                      (203 Jobs)
                     </span>
                   </div>
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-px bg-border/40 border border-border/40 mb-6">
-                <div className="bg-background p-3">
-                  <span className="block text-[9px] uppercase font-bold text-muted-foreground tracking-wider mb-1">
-                    Experience
+              <div className="grid grid-cols-2 gap-px bg-border mb-8">
+                <div className="bg-background p-4">
+                  <span className="block text-[8px] uppercase font-black text-muted-foreground tracking-[0.3em] mb-2">
+                    Tenure
                   </span>
                   <span className="block text-sm font-bold font-heading">
                     {service.provider.experience}
                   </span>
                 </div>
-                <div className="bg-background p-3">
-                  <span className="block text-[9px] uppercase font-bold text-muted-foreground tracking-wider mb-1">
+                <div className="bg-background p-4">
+                  <span className="block text-[8px] uppercase font-black text-muted-foreground tracking-[0.3em] mb-2">
                     Response
                   </span>
                   <span className="block text-sm font-bold font-heading text-emerald-600">
-                    ~2 Hrs
+                    2H FAST
                   </span>
                 </div>
               </div>
 
-              <div className="flex items-center justify-between text-xs border-t border-border pt-4">
-                <span className="text-muted-foreground">Member since 2023</span>
-                <Button
-                  variant="link"
-                  className="h-auto p-0 text-primary text-[10px] uppercase font-bold tracking-widest hover:text-foreground"
-                >
-                  View Full Profile
-                </Button>
-              </div>
+              <Button
+                variant="outline"
+                className="w-full rounded-none border-border h-12 font-heading font-black uppercase tracking-[0.3em] text-[9px] hover:bg-foreground hover:text-background transition-colors"
+                onClick={() =>
+                  router.navigate({ to: `/suppliers/${service.company?.id}` })
+                }
+              >
+                View Professional Bio
+              </Button>
             </div>
           </div>
 
           {/* Security Badge */}
-          <div className="bg-muted/30 p-4 border border-border/40 flex items-start gap-3">
-            <RiShieldCheckLine className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
-            <div>
-              <h4 className="font-bold text-xs uppercase tracking-wide text-foreground mb-1">
-                Secure Service Guarantee
-              </h4>
-              <p className="text-[10px] text-muted-foreground leading-relaxed">
-                All services are vetted for quality and compliance. Payments are
-                held in escrow until completion.
-              </p>
-            </div>
+          <div className="bg-foreground text-background p-8 rounded-none relative overflow-hidden group">
+            <div className="absolute top-0 right-0 w-16 h-16 bg-primary/20 -mr-8 -mt-8 rotate-45" />
+            <RiShieldCheckLine className="w-8 h-8 opacity-20 mb-6" />
+            <h4 className="font-display font-black text-lg uppercase tracking-tight mb-3">
+              Elite Standard Guarantee
+            </h4>
+            <p className="text-xs text-background/60 leading-relaxed font-medium">
+              Enterprise-grade vetting. Quality assurance protocols strictly
+              enforced for every engagement.
+            </p>
           </div>
         </div>
       </div>
@@ -810,7 +757,7 @@ export default function ServiceView({ service, onBack }: ServiceViewProps) {
                 <Button
                   type="submit"
                   disabled={!message.trim() || sendingInquiry}
-                  className="w-full rounded-none h-11 font-heading uppercase tracking-wider text-[10px]"
+                  className="w-full rounded-none h-11 font-heading uppercase tracking-wider text-[10px] bg-primary text-white hover:bg-primary/90"
                 >
                   {sendingInquiry ? "Sending..." : "Submit Inquiry"}
                 </Button>

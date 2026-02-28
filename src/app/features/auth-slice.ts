@@ -5,6 +5,7 @@ export interface AuthUser {
 	email: string;
 	name: string;
 	role: string;
+	needsOnboarding?: boolean;
 }
 
 export interface AuthState {

@@ -1,10 +1,11 @@
 import { useNavigate } from "@tanstack/react-router";
 import { RiTrophyLine } from "@remixicon/react";
-import type React from "react";
+import React from "react";
 import { useGetProductsQuery } from "@/app/api/products";
 import { ProductCard } from "@/components/marketplace/catalog/product-card";
 import { Button } from "@/components/ui/button";
 import { SectionHeader } from "./section-header";
+import { HomeSection } from "./home-section";
 
 const BestSellers: React.FC = () => {
 	const navigate = useNavigate();
@@ -15,8 +16,14 @@ const BestSellers: React.FC = () => {
 	});
 	const listings = productsResult?.data || [];
 
+	if (!isLoading && listings.length === 0) return null;
+
 	return (
-		<>
+		<HomeSection
+			id="best-sellers"
+			variant="background"
+			className="py-8 lg:py-12"
+		>
 			<SectionHeader
 				title="Best Sellers"
 				subtitle="Direct access to the most requested industrial assets and materials."
@@ -56,7 +63,7 @@ const BestSellers: React.FC = () => {
 					View all best sellers
 				</Button>
 			</div>
-		</>
+		</HomeSection>
 	);
 };
 

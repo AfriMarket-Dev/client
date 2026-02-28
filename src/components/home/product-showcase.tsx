@@ -1,11 +1,11 @@
 import { useNavigate } from "@tanstack/react-router";
 import { Package } from "lucide-react";
-import type React from "react";
+import React from "react";
 import { useGetProductsQuery } from "@/app/api/products";
-// import { useGetListingsQuery } from "@/app/api/listings";
 import { ProductCard } from "@/components/marketplace/catalog/product-card";
 import { Button } from "@/components/ui/button";
 import { SectionHeader } from "./section-header";
+import { HomeSection } from "./home-section";
 
 interface ProductShowcaseProps {
 	title: string;
@@ -14,6 +14,8 @@ interface ProductShowcaseProps {
 	limit?: number;
 	className?: string;
 	icon?: React.ReactNode;
+	variant?: "white" | "background" | "muted" | "dark" | "red";
+	withGrid?: boolean;
 }
 
 const ProductShowcase: React.FC<ProductShowcaseProps> = ({
@@ -23,16 +25,24 @@ const ProductShowcase: React.FC<ProductShowcaseProps> = ({
 	limit = 10,
 	className = "",
 	icon,
+	variant = "white",
+	withGrid = false,
 }) => {
 	const navigate = useNavigate();
-	const { data: productsResult } = useGetProductsQuery({
+	const { data: productsResult, isLoading } = useGetProductsQuery({
 		categoryId,
 		limit,
 	});
 	const listings = productsResult?.data || [];
 
+	if (!isLoading && listings.length === 0) return null;
+
 	return (
-		<div className={`py-12 ${className}`}>
+		<HomeSection
+			variant={variant}
+			withGrid={withGrid}
+			className={className}
+		>
 			<div className="max-w-[1600px] mx-auto px-4 lg:px-6">
 				<SectionHeader
 					title={title}
@@ -83,7 +93,7 @@ const ProductShowcase: React.FC<ProductShowcaseProps> = ({
 					</Button>
 				</div>
 			</div>
-		</div>
+		</HomeSection>
 	);
 };
 

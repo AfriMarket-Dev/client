@@ -16,6 +16,7 @@ import { Route as MainRouteImport } from './routes/_main'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard.index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as MainIndexRouteImport } from './routes/_main.index'
+import { Route as AuthVerifyEmailRouteImport } from './routes/auth.verify-email'
 import { Route as AuthSignupRouteImport } from './routes/auth.signup'
 import { Route as AuthSigninRouteImport } from './routes/auth.signin'
 import { Route as AdminServicesRouteImport } from './routes/admin.services'
@@ -24,6 +25,7 @@ import { Route as AdminProductsRouteImport } from './routes/admin.products'
 import { Route as AdminCustomersRouteImport } from './routes/admin.customers'
 import { Route as AdminCategoriesRouteImport } from './routes/admin.categories'
 import { Route as AdminAssignmentsRouteImport } from './routes/admin.assignments'
+import { Route as MainOnboardingRouteImport } from './routes/_main.onboarding'
 import { Route as MainMarketplaceRouteImport } from './routes/_main.marketplace'
 import { Route as MainHelpRouteImport } from './routes/_main.help'
 import { Route as MainCategoriesRouteImport } from './routes/_main.categories'
@@ -80,6 +82,11 @@ const MainIndexRoute = MainIndexRouteImport.update({
   path: '/',
   getParentRoute: () => MainRoute,
 } as any)
+const AuthVerifyEmailRoute = AuthVerifyEmailRouteImport.update({
+  id: '/verify-email',
+  path: '/verify-email',
+  getParentRoute: () => AuthRoute,
+} as any)
 const AuthSignupRoute = AuthSignupRouteImport.update({
   id: '/signup',
   path: '/signup',
@@ -119,6 +126,11 @@ const AdminAssignmentsRoute = AdminAssignmentsRouteImport.update({
   id: '/assignments',
   path: '/assignments',
   getParentRoute: () => AdminRoute,
+} as any)
+const MainOnboardingRoute = MainOnboardingRouteImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
+  getParentRoute: () => MainRoute,
 } as any)
 const MainMarketplaceRoute = MainMarketplaceRouteImport.update({
   id: '/marketplace',
@@ -239,6 +251,7 @@ export interface FileRoutesByFullPath {
   '/categories': typeof MainCategoriesRoute
   '/help': typeof MainHelpRoute
   '/marketplace': typeof MainMarketplaceRoute
+  '/onboarding': typeof MainOnboardingRoute
   '/admin/assignments': typeof AdminAssignmentsRoute
   '/admin/categories': typeof AdminCategoriesRoute
   '/admin/customers': typeof AdminCustomersRoute
@@ -247,6 +260,7 @@ export interface FileRoutesByFullPath {
   '/admin/services': typeof AdminServicesRoute
   '/auth/signin': typeof AuthSigninRoute
   '/auth/signup': typeof AuthSignupRoute
+  '/auth/verify-email': typeof AuthVerifyEmailRoute
   '/admin/': typeof AdminIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/messages': typeof MainProtectedMessagesRoute
@@ -273,6 +287,7 @@ export interface FileRoutesByTo {
   '/categories': typeof MainCategoriesRoute
   '/help': typeof MainHelpRoute
   '/marketplace': typeof MainMarketplaceRoute
+  '/onboarding': typeof MainOnboardingRoute
   '/admin/assignments': typeof AdminAssignmentsRoute
   '/admin/categories': typeof AdminCategoriesRoute
   '/admin/customers': typeof AdminCustomersRoute
@@ -281,6 +296,7 @@ export interface FileRoutesByTo {
   '/admin/services': typeof AdminServicesRoute
   '/auth/signin': typeof AuthSigninRoute
   '/auth/signup': typeof AuthSignupRoute
+  '/auth/verify-email': typeof AuthVerifyEmailRoute
   '/admin': typeof AdminIndexRoute
   '/dashboard': typeof DashboardIndexRoute
   '/messages': typeof MainProtectedMessagesRoute
@@ -311,6 +327,7 @@ export interface FileRoutesById {
   '/_main/categories': typeof MainCategoriesRoute
   '/_main/help': typeof MainHelpRoute
   '/_main/marketplace': typeof MainMarketplaceRoute
+  '/_main/onboarding': typeof MainOnboardingRoute
   '/admin/assignments': typeof AdminAssignmentsRoute
   '/admin/categories': typeof AdminCategoriesRoute
   '/admin/customers': typeof AdminCustomersRoute
@@ -319,6 +336,7 @@ export interface FileRoutesById {
   '/admin/services': typeof AdminServicesRoute
   '/auth/signin': typeof AuthSigninRoute
   '/auth/signup': typeof AuthSignupRoute
+  '/auth/verify-email': typeof AuthVerifyEmailRoute
   '/_main/': typeof MainIndexRoute
   '/admin/': typeof AdminIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
@@ -350,6 +368,7 @@ export interface FileRouteTypes {
     | '/categories'
     | '/help'
     | '/marketplace'
+    | '/onboarding'
     | '/admin/assignments'
     | '/admin/categories'
     | '/admin/customers'
@@ -358,6 +377,7 @@ export interface FileRouteTypes {
     | '/admin/services'
     | '/auth/signin'
     | '/auth/signup'
+    | '/auth/verify-email'
     | '/admin/'
     | '/dashboard/'
     | '/messages'
@@ -384,6 +404,7 @@ export interface FileRouteTypes {
     | '/categories'
     | '/help'
     | '/marketplace'
+    | '/onboarding'
     | '/admin/assignments'
     | '/admin/categories'
     | '/admin/customers'
@@ -392,6 +413,7 @@ export interface FileRouteTypes {
     | '/admin/services'
     | '/auth/signin'
     | '/auth/signup'
+    | '/auth/verify-email'
     | '/admin'
     | '/dashboard'
     | '/messages'
@@ -421,6 +443,7 @@ export interface FileRouteTypes {
     | '/_main/categories'
     | '/_main/help'
     | '/_main/marketplace'
+    | '/_main/onboarding'
     | '/admin/assignments'
     | '/admin/categories'
     | '/admin/customers'
@@ -429,6 +452,7 @@ export interface FileRouteTypes {
     | '/admin/services'
     | '/auth/signin'
     | '/auth/signup'
+    | '/auth/verify-email'
     | '/_main/'
     | '/admin/'
     | '/dashboard/'
@@ -508,6 +532,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MainIndexRouteImport
       parentRoute: typeof MainRoute
     }
+    '/auth/verify-email': {
+      id: '/auth/verify-email'
+      path: '/verify-email'
+      fullPath: '/auth/verify-email'
+      preLoaderRoute: typeof AuthVerifyEmailRouteImport
+      parentRoute: typeof AuthRoute
+    }
     '/auth/signup': {
       id: '/auth/signup'
       path: '/signup'
@@ -563,6 +594,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/assignments'
       preLoaderRoute: typeof AdminAssignmentsRouteImport
       parentRoute: typeof AdminRoute
+    }
+    '/_main/onboarding': {
+      id: '/_main/onboarding'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof MainOnboardingRouteImport
+      parentRoute: typeof MainRoute
     }
     '/_main/marketplace': {
       id: '/_main/marketplace'
@@ -736,6 +774,7 @@ interface MainRouteChildren {
   MainCategoriesRoute: typeof MainCategoriesRoute
   MainHelpRoute: typeof MainHelpRoute
   MainMarketplaceRoute: typeof MainMarketplaceRoute
+  MainOnboardingRoute: typeof MainOnboardingRoute
   MainIndexRoute: typeof MainIndexRoute
   MainProductsProductIdRoute: typeof MainProductsProductIdRoute
   MainServicesServiceIdRoute: typeof MainServicesServiceIdRoute
@@ -749,6 +788,7 @@ const MainRouteChildren: MainRouteChildren = {
   MainCategoriesRoute: MainCategoriesRoute,
   MainHelpRoute: MainHelpRoute,
   MainMarketplaceRoute: MainMarketplaceRoute,
+  MainOnboardingRoute: MainOnboardingRoute,
   MainIndexRoute: MainIndexRoute,
   MainProductsProductIdRoute: MainProductsProductIdRoute,
   MainServicesServiceIdRoute: MainServicesServiceIdRoute,
@@ -797,11 +837,13 @@ const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 interface AuthRouteChildren {
   AuthSigninRoute: typeof AuthSigninRoute
   AuthSignupRoute: typeof AuthSignupRoute
+  AuthVerifyEmailRoute: typeof AuthVerifyEmailRoute
 }
 
 const AuthRouteChildren: AuthRouteChildren = {
   AuthSigninRoute: AuthSigninRoute,
   AuthSignupRoute: AuthSignupRoute,
+  AuthVerifyEmailRoute: AuthVerifyEmailRoute,
 }
 
 const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)

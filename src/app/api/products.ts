@@ -1,6 +1,7 @@
 import { apiSlice } from "@/app/api/api-entry";
 import type { ApiResponse } from "@/app/api/types";
 import { unwrapListResponse, unwrapResponse } from "@/app/api/types";
+import { createSelector } from "@reduxjs/toolkit";
 import type {
   CreateProductInput,
   CreateProductVariantInput,
@@ -124,3 +125,15 @@ export const {
   useAddProductVariantMutation,
   useRemoveProductVariantMutation,
 } = productsApi;
+
+const selectProductsResult = (result: ProductsListResult | undefined) => result;
+
+export const selectProductsData = createSelector(
+  [selectProductsResult],
+  (result) => result?.data ?? [],
+);
+
+export const selectProductsMeta = createSelector(
+  [selectProductsResult],
+  (result) => result?.meta,
+);

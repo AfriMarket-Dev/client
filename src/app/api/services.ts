@@ -2,6 +2,7 @@ import { apiSlice } from "@/app/api/api-entry";
 import type { ApiResponse } from "@/app/api/types";
 import { unwrapListResponse, unwrapResponse } from "@/app/api/types";
 import type { CompanyRef } from "@/types/api";
+import { createSelector } from "@reduxjs/toolkit";
 
 export interface ServiceCategoryRef {
   id: string;
@@ -139,3 +140,15 @@ export const {
   useUpdateServiceMutation,
   useDeleteServiceMutation,
 } = servicesApi;
+
+const selectServicesResult = (result: ServicesListResult | undefined) => result;
+
+export const selectServicesData = createSelector(
+  [selectServicesResult],
+  (result) => result?.data ?? [],
+);
+
+export const selectServicesMeta = createSelector(
+  [selectServicesResult],
+  (result) => result?.meta,
+);

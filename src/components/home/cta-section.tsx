@@ -5,91 +5,118 @@ import {
   RiPagesLine,
 } from "@remixicon/react";
 import type React from "react";
+import { Button } from "../ui/button";
 
 const CTASection: React.FC = () => {
   const navigate = useNavigate();
 
   return (
-    <section className="relative py-24 overflow-hidden bg-slate-950 text-white">
-      {/* Subtle Background */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:50px_50px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none" />
+    <section className="relative py-32 md:py-48 overflow-hidden bg-background border-y border-border/20">
+      {/* Editorial Background Elements */}
+      <div className="absolute inset-0 blueprint-grid opacity-[0.03] pointer-events-none" />
+      <div className="absolute top-0 right-0 w-1/2 h-full bg-primary/2 -skew-x-12 translate-x-1/4 pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto px-4 lg:px-6 relative z-10">
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 text-primary text-xs font-bold tracking-widest uppercase rounded-lg mb-6 border border-primary/20">
-            <div className="w-1.5 h-1.5 rounded-lg bg-primary animate-pulse" />
-            Unified Procurement
-          </div>
-
-          <h2 className="text-4xl md:text-5xl font-heading font-bold text-white mb-6 tracking-tight">
-            Connect with Rwanda's <br />
-            <span className="text-primary">Industrial Network</span>
-          </h2>
-
-          <p className="text-slate-400 text-lg leading-relaxed">
-            A centralized platform verifying the supply chain from manufacturer
-            to job site.
-          </p>
-        </div>
-
-        <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
-          {/* Product Gateway */}
-          <div
-            onClick={() =>
-              navigate({
-                to: "/marketplace",
-                search: { type: "PRODUCT" } as any,
-              })
-            }
-            className="group cursor-pointer bg-white/5 border border-white/10 hover:border-primary/50 p-8 rounded-xl transition-all duration-300 hover:bg-white/[0.07]"
-          >
-            <div className="flex items-start justify-between mb-8">
-              <div className="w-12 h-12 bg-primary/20 text-primary rounded-lg flex items-center justify-center">
-                <RiPagesLine className="w-6 h-6" />
-              </div>
-              <RiArrowRightLine className="text-white/20 group-hover:text-primary group-hover:translate-x-1 transition-all" />
+      <div className="max-w-[1600px] mx-auto px-4 lg:px-8 relative z-10">
+        <div className="grid lg:grid-cols-12 gap-16 items-center">
+          <div className="lg:col-span-5">
+            <div className="inline-flex items-center gap-3 mb-10">
+              <div className="w-8 h-px bg-primary" />
+              <span className="text-[10px] font-black uppercase tracking-[0.4em] text-primary">
+                Supply Chain Protocol
+              </span>
             </div>
 
-            <h3 className="text-2xl font-heading font-bold text-white mb-2 uppercase tracking-wide">
-              Sourcing
-            </h3>
-            <p className="text-slate-400 text-sm mb-6">
-              Browse verified inventory: heavy machinery, raw materials, and
-              tools.
+            <h2 className="text-5xl md:text-6xl lg:text-8xl font-display font-black text-foreground mb-8 tracking-tighter uppercase leading-[0.8]">
+              Industrial
+              <br />
+              Intelligence
+            </h2>
+
+            <p className="text-muted-foreground text-xl leading-relaxed max-w-md font-medium mb-12 border-l-2 border-primary/20 pl-6">
+              Connect with Rwanda's premier industrial network. Verified
+              procurement from regional manufacturers to specialized field
+              labor.
             </p>
 
-            <span className="text-xs font-bold text-primary uppercase tracking-widest group-hover:underline decoration-primary/50 underline-offset-4">
-              View Catalog
-            </span>
+            <div className="flex gap-4">
+              <Button
+                size="lg"
+                onClick={() => navigate({ to: "/marketplace" })}
+                className="bg-primary text-white hover:bg-primary/90 rounded-none h-14 px-10 font-heading font-black uppercase tracking-widest text-xs"
+              >
+                Enter Marketplace
+              </Button>
+            </div>
           </div>
 
-          {/* Service Gateway */}
-          <div
-            onClick={() =>
-              navigate({
-                to: "/marketplace",
-                search: { type: "SERVICE" } as any,
-              })
-            }
-            className="group cursor-pointer bg-white/5 border border-white/10 hover:border-sky-500/50 p-8 rounded-xl transition-all duration-300 hover:bg-white/[0.07]"
-          >
-            <div className="flex items-start justify-between mb-8">
-              <div className="w-12 h-12 bg-sky-500/20 text-sky-500 rounded-lg flex items-center justify-center">
-                <RiBriefcaseLine className="w-6 h-6" />
+          <div className="lg:col-span-1" />
+
+          <div className="lg:col-span-6 grid sm:grid-cols-2 gap-4">
+            {/* Source Protocol */}
+            <div
+              onClick={() =>
+                navigate({
+                  to: "/marketplace",
+                  search: { type: "PRODUCT" } as any,
+                })
+              }
+              className="group cursor-pointer bg-muted/20 border border-border/40 hover:border-primary/50 p-10 rounded-none transition-all duration-500 hover:bg-background relative overflow-hidden"
+            >
+              <div className="absolute top-0 right-0 w-16 h-16 bg-primary/5 -translate-y-1/2 translate-x-1/2 rotate-45 group-hover:bg-primary/10 transition-colors" />
+
+              <div className="relative z-10">
+                <div className="text-primary mb-12">
+                  <RiPagesLine className="w-10 h-10" />
+                </div>
+
+                <h3 className="text-2xl font-display font-black text-foreground mb-4 uppercase tracking-tight leading-none text-primary">
+                  Source
+                  <br />
+                  Assets
+                </h3>
+                <p className="text-muted-foreground text-xs leading-relaxed mb-10 font-bold uppercase tracking-widest opacity-60">
+                  Bulk Procurement · Local Inventory · Equipment Rental
+                </p>
+
+                <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.3em] group-hover:text-primary transition-colors">
+                  Initialize Source{" "}
+                  <RiArrowRightLine className="w-3 h-3 group-hover:translate-x-2 transition-transform" />
+                </div>
               </div>
-              <RiArrowRightLine className="text-white/20 group-hover:text-sky-500 group-hover:translate-x-1 transition-all" />
             </div>
 
-            <h3 className="text-2xl font-heading font-bold text-white mb-2 uppercase tracking-wide">
-              Services
-            </h3>
-            <p className="text-slate-400 text-sm mb-6">
-              Hire certified contractors, engineers, and specialized labor.
-            </p>
+            {/* Service Protocol */}
+            <div
+              onClick={() =>
+                navigate({
+                  to: "/marketplace",
+                  search: { type: "SERVICE" } as any,
+                })
+              }
+              className="group cursor-pointer bg-muted/20 border border-border/40 hover:border-primary/50 p-10 rounded-none transition-all duration-500 hover:bg-background relative overflow-hidden"
+            >
+              <div className="absolute top-0 right-0 w-16 h-16 bg-primary/5 -translate-y-1/2 translate-x-1/2 rotate-45 group-hover:bg-primary/10 transition-colors" />
 
-            <span className="text-xs font-bold text-sky-500 uppercase tracking-widest group-hover:underline decoration-sky-500/50 underline-offset-4">
-              Find Professionals
-            </span>
+              <div className="relative z-10">
+                <div className="text-primary mb-12">
+                  <RiBriefcaseLine className="w-10 h-10" />
+                </div>
+
+                <h3 className="text-2xl font-display font-black text-foreground mb-4 uppercase tracking-tight leading-none text-primary">
+                  Deploy
+                  <br />
+                  Services
+                </h3>
+                <p className="text-muted-foreground text-xs leading-relaxed mb-10 font-bold uppercase tracking-widest opacity-60">
+                  Certified Engineering · Field Logistics · Site Support
+                </p>
+
+                <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.3em] group-hover:text-primary transition-colors">
+                  Initialize Operations{" "}
+                  <RiArrowRightLine className="w-3 h-3 group-hover:translate-x-2 transition-transform" />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

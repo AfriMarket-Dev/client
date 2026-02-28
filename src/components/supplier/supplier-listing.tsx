@@ -127,13 +127,15 @@ const SupplierListing: React.FC<SupplierListingProps> = ({
             handleFiltersChange({ categoryId: val as string })
           }
         >
-          <SelectTrigger className="w-full bg-background">
+          <SelectTrigger className="w-full bg-background rounded-none border-border/20 font-display font-medium uppercase tracking-widest text-[10px] h-10">
             <SelectValue placeholder="All Categories" />
           </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Categories</SelectItem>
+          <SelectContent className="rounded-none border-border/20">
+            <SelectItem value="all" className="rounded-none">
+              All Categories
+            </SelectItem>
             {categories.map((cat) => (
-              <SelectItem key={cat.id} value={cat.id}>
+              <SelectItem key={cat.id} value={cat.id} className="rounded-none">
                 {cat.name}
               </SelectItem>
             ))}
@@ -152,13 +154,19 @@ const SupplierListing: React.FC<SupplierListingProps> = ({
           value={filters.type}
           onValueChange={(val) => handleFiltersChange({ type: val as string })}
         >
-          <SelectTrigger className="w-full bg-background">
+          <SelectTrigger className="w-full bg-background rounded-none border-border/20 font-display font-medium uppercase tracking-widest text-[10px] h-10">
             <SelectValue placeholder="All Types" />
           </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Types</SelectItem>
+          <SelectContent className="rounded-none border-border/20">
+            <SelectItem value="all" className="rounded-none">
+              All Types
+            </SelectItem>
             {COMPANY_TYPES.map((t) => (
-              <SelectItem key={t.value} value={t.value}>
+              <SelectItem
+                key={t.value}
+                value={t.value}
+                className="rounded-none"
+              >
                 {t.label}
               </SelectItem>
             ))}
@@ -177,7 +185,7 @@ const SupplierListing: React.FC<SupplierListingProps> = ({
           placeholder="e.g. Gasabo, Kicukiro"
           value={filters.district}
           onChange={(e) => handleFiltersChange({ district: e.target.value })}
-          className="bg-background"
+          className="bg-background rounded-none border-border/20 font-display font-medium uppercase tracking-widest text-[10px] h-10 placeholder:text-muted-foreground/30"
         />
       </div>
 
@@ -194,14 +202,22 @@ const SupplierListing: React.FC<SupplierListingProps> = ({
             handleFiltersChange({ minRating: val as string })
           }
         >
-          <SelectTrigger className="w-full bg-background">
+          <SelectTrigger className="w-full bg-background rounded-none border-border/20 font-display font-medium uppercase tracking-widest text-[10px] h-10">
             <SelectValue placeholder="Any Rating" />
           </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="0">Any Rating</SelectItem>
-            <SelectItem value="4">4+ Stars</SelectItem>
-            <SelectItem value="4.5">4.5+ Stars</SelectItem>
-            <SelectItem value="5">5 Stars</SelectItem>
+          <SelectContent className="rounded-none border-border/20">
+            <SelectItem value="0" className="rounded-none">
+              Any Rating
+            </SelectItem>
+            <SelectItem value="4" className="rounded-none">
+              4+ Stars
+            </SelectItem>
+            <SelectItem value="4.5" className="rounded-none">
+              4.5+ Stars
+            </SelectItem>
+            <SelectItem value="5" className="rounded-none">
+              5 Stars
+            </SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -209,16 +225,17 @@ const SupplierListing: React.FC<SupplierListingProps> = ({
       <Separator />
 
       {/* Verified Only */}
-      <div className="flex items-center justify-between space-x-2 border p-3 rounded-md border-border bg-background">
+      <div className="flex items-center justify-between space-x-2 border p-4 rounded-none border-border/20 bg-muted/5">
         <Label
           htmlFor="verified-mode"
-          className="text-sm font-medium cursor-pointer flex items-center gap-2"
+          className="text-[10px] font-bold uppercase tracking-widest cursor-pointer flex items-center gap-2 text-foreground/70"
         >
-          <ShieldCheck className="w-4 h-4 text-primary" />
+          <ShieldCheck className="w-3.5 h-3.5 text-primary" />
           Verified Only
         </Label>
         <Switch
           id="verified-mode"
+          className="rounded-none scale-90"
           checked={filters.verified}
           onCheckedChange={(checked) =>
             handleFiltersChange({ verified: checked })
@@ -233,19 +250,22 @@ const SupplierListing: React.FC<SupplierListingProps> = ({
       {/* Header */}
       <div className="bg-background border-b border-border sticky top-0 z-30 py-4">
         <div className="max-w-[1600px] mx-auto px-4 md:px-6">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div>
-              <h1 className="text-2xl font-heading font-bold uppercase text-foreground tracking-wide">
+              <h1 className="text-3xl md:text-4xl font-display font-black uppercase text-foreground tracking-tighter leading-none mb-2">
                 Supplier Directory
               </h1>
+              <p className="text-[10px] font-bold text-muted-foreground/40 uppercase tracking-[0.3em]">
+                Registry protocol / Verified nodes
+              </p>
             </div>
 
-            <div className="flex items-center gap-3">
-              <div className="flex items-center bg-muted/50 border border-border p-1 rounded-sm">
+            <div className="flex items-center gap-4">
+              <div className="flex items-center bg-muted/30 border border-border/10 p-1 rounded-none">
                 <Button
                   variant={viewMode === "grid" ? "secondary" : "ghost"}
                   size="icon"
-                  className="rounded-sm h-8 w-8"
+                  className="rounded-none h-8 w-8"
                   onClick={() => setViewMode("grid")}
                 >
                   <Grid className="w-4 h-4" />
@@ -253,7 +273,7 @@ const SupplierListing: React.FC<SupplierListingProps> = ({
                 <Button
                   variant={viewMode === "list" ? "secondary" : "ghost"}
                   size="icon"
-                  className="rounded-sm h-8 w-8"
+                  className="rounded-none h-8 w-8"
                   onClick={() => setViewMode("list")}
                 >
                   <List className="w-4 h-4" />
@@ -269,18 +289,18 @@ const SupplierListing: React.FC<SupplierListingProps> = ({
           {/* Desktop Sidebar */}
           {showFilters && (
             <aside className="hidden lg:block w-72 shrink-0 sticky top-24 h-[calc(100vh-6rem)] transition-all duration-300">
-              <div className="flex items-center justify-between mb-4 pr-4">
-                <h2 className="text-sm font-heading font-bold uppercase tracking-wide flex items-center gap-2">
+              <div className="flex items-center justify-between mb-8 pr-4">
+                <h2 className="text-xs font-display font-black uppercase tracking-[0.2em] flex items-center gap-2">
                   Filters
                 </h2>
                 <div className="flex items-center gap-2">
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="h-6 text-[10px] uppercase font-bold text-muted-foreground hover:text-destructive"
+                    className="h-6 text-[9px] uppercase font-black tracking-widest text-muted-foreground/40 hover:text-destructive hover:bg-transparent"
                     onClick={handleClearFilters}
                   >
-                    Reset
+                    Reset Registry
                   </Button>
                   <Button
                     variant="ghost"
@@ -308,16 +328,16 @@ const SupplierListing: React.FC<SupplierListingProps> = ({
                   variant="outline"
                   size="icon"
                   className={cn(
-                    "hidden lg:flex shrink-0",
-                    showFilters && "bg-muted/50",
+                    "hidden lg:flex shrink-0 rounded-none border-border/20",
+                    showFilters && "bg-muted/30 border-primary/20",
                   )}
                   onClick={() => setShowFilters(!showFilters)}
                   title={showFilters ? "Hide Filters" : "Show Filters"}
                 >
                   {showFilters ? (
-                    <RiExpandLeftLine className="w-5 h-5 text-muted-foreground" />
+                    <RiExpandLeftLine className="w-4 h-4 text-primary" />
                   ) : (
-                    <PanelLeftOpen className="w-5 h-5 text-muted-foreground" />
+                    <PanelLeftOpen className="w-4 h-4 text-muted-foreground" />
                   )}
                 </Button>
 
@@ -330,7 +350,7 @@ const SupplierListing: React.FC<SupplierListingProps> = ({
                   >
                     <CollapsibleTrigger
                       className={cn(
-                        "inline-flex items-center justify-between whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 w-full sm:w-auto gap-2 shrink-0 sm:justify-center",
+                        "inline-flex items-center justify-between whitespace-nowrap rounded-none text-[10px] font-display font-bold uppercase tracking-widest ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-border/20 bg-background hover:bg-muted h-10 px-4 w-full sm:w-auto gap-4 shrink-0 sm:justify-center transition-all",
                       )}
                     >
                       <span className="flex items-center gap-2">
@@ -343,7 +363,7 @@ const SupplierListing: React.FC<SupplierListingProps> = ({
                           filters.verified) && (
                           <Badge
                             variant="secondary"
-                            className="ml-1 h-5 px-1.5 text-[10px]"
+                            className="ml-2 h-5 px-2 text-[9px] font-black uppercase tracking-widest rounded-none bg-primary text-primary-foreground"
                           >
                             Active
                           </Badge>
@@ -355,8 +375,8 @@ const SupplierListing: React.FC<SupplierListingProps> = ({
                     </CollapsibleTrigger>
                     <CollapsibleContent className="mt-4 p-4 border rounded-md bg-background shadow-sm space-y-6">
                       <div className="flex items-center justify-between mb-2">
-                        <h3 className="font-heading font-bold uppercase text-sm">
-                          Refine Search
+                        <h3 className="font-display font-black uppercase text-xs tracking-widest">
+                          Refine Registry
                         </h3>
                         <Button
                           variant="ghost"
@@ -370,19 +390,19 @@ const SupplierListing: React.FC<SupplierListingProps> = ({
                       <FilterContent />
                       <Button
                         onClick={() => setIsMobileFiltersOpen(false)}
-                        className="w-full mt-4"
+                        className="w-full mt-6 rounded-none font-display font-black uppercase tracking-widest h-12"
                       >
-                        Close Filters
+                        Apply Filters
                       </Button>
                     </CollapsibleContent>
                   </Collapsible>
                 </div>
 
-                <div className="relative flex-1">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <div className="relative flex-1 group">
+                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/30 group-focus-within:text-primary transition-colors" />
                   <Input
-                    placeholder="Search by name, ID..."
-                    className="pl-9 bg-muted/30 border-border rounded-sm focus:ring-1 focus:ring-primary h-10 w-full"
+                    placeholder="SEARCH DIRECTORY NODES..."
+                    className="pl-12 bg-muted/10 border-border/20 rounded-none focus:ring-0 focus:border-primary/40 h-11 w-full font-display font-bold uppercase tracking-widest text-[10px] transition-all"
                     value={filters.searchQuery}
                     onChange={(e) =>
                       handleFiltersChange({ searchQuery: e.target.value })
@@ -401,12 +421,12 @@ const SupplierListing: React.FC<SupplierListingProps> = ({
                   {filters.categoryId !== "all" && (
                     <Badge
                       variant="secondary"
-                      className="gap-1 rounded-sm text-[10px] pl-2 pr-1 h-6"
+                      className="gap-2 rounded-none text-[9px] font-bold uppercase tracking-widest pl-3 pr-1.5 h-7 bg-muted/50 border-border/10"
                     >
                       {categories.find((c) => c.id === filters.categoryId)
                         ?.name || "Category"}
                       <X
-                        className="w-3 h-3 hover:text-destructive cursor-pointer"
+                        className="w-3.5 h-3.5 hover:text-destructive cursor-pointer transition-colors"
                         onClick={() =>
                           handleFiltersChange({ categoryId: "all" })
                         }
@@ -465,46 +485,46 @@ const SupplierListing: React.FC<SupplierListingProps> = ({
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="h-6 text-[10px] px-2 text-destructive hover:bg-destructive/10"
+                    className="h-7 text-[9px] px-3 font-black uppercase tracking-widest text-destructive hover:bg-destructive/10 rounded-none ml-2"
                     onClick={handleClearFilters}
                   >
-                    Clear All
+                    Clear Registry
                   </Button>
                 </div>
               )}
             </div>
 
-            {/* Content */}
             {isLoading ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {Array.from({ length: 9 }).map((_, i) => (
                   <div
-                    key={i}
-                    className="h-64 rounded-sm border border-border bg-muted/30 animate-pulse"
+                    key={`supplier-skeleton-${i}`}
+                    className="h-72 rounded-none border border-border/5 bg-muted/5 animate-pulse"
                   />
                 ))}
               </div>
             ) : (
               <>
                 {companies.length === 0 ? (
-                  <div className="flex flex-col items-center justify-center py-24 text-center border border-dashed border-border rounded-sm bg-muted/5">
-                    <div className="w-20 h-20 bg-muted/20 rounded-full flex items-center justify-center mb-6">
-                      <Building2 className="w-10 h-10 text-muted-foreground/50" />
+                  <div className="flex flex-col items-center justify-center py-32 text-center border border-border/20 rounded-none bg-muted/5 relative overflow-hidden">
+                    {/* Blueprint grid depth */}
+                    <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none" />
+
+                    <div className="w-24 h-24 bg-primary/5 rounded-none border border-primary/20 flex items-center justify-center mb-10 relative z-10 transition-transform duration-500 hover:scale-110">
+                      <Building2 className="w-10 h-10 text-primary/40" />
                     </div>
-                    <h3 className="text-2xl font-heading font-bold uppercase text-foreground mb-3 tracking-wide">
-                      No Suppliers Found
+                    <h3 className="text-3xl font-display font-black uppercase text-foreground mb-4 tracking-tighter relative z-10">
+                      No Suppliers Registry
                     </h3>
-                    <p className="text-muted-foreground max-w-md mx-auto mb-8 text-base leading-relaxed">
-                      We couldn't find any suppliers matching your current
-                      criteria. Try adjusting filters or searching for something
-                      else.
+                    <p className="text-xs font-bold text-muted-foreground/30 uppercase tracking-[0.3em] max-w-md mx-auto mb-12 leading-relaxed relative z-10">
+                      Criteria mismatch / Resource not found
                     </p>
                     <Button
                       size="lg"
-                      className="rounded-sm font-heading uppercase tracking-wider h-12 px-8"
+                      className="rounded-none font-display font-black uppercase tracking-[0.2em] h-14 px-10 relative z-10"
                       onClick={handleClearFilters}
                     >
-                      Reset Filters
+                      Reset Protocol
                     </Button>
                   </div>
                 ) : (
@@ -512,12 +532,12 @@ const SupplierListing: React.FC<SupplierListingProps> = ({
                     className={
                       viewMode === "grid"
                         ? cn(
-                            "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6",
+                            "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8",
                             showFilters
                               ? "xl:grid-cols-3"
                               : "xl:grid-cols-4 2xl:grid-cols-5",
                           )
-                        : "flex flex-col gap-4"
+                        : "flex flex-col gap-6"
                     }
                   >
                     {companies.map((company: Company) => (
@@ -531,10 +551,11 @@ const SupplierListing: React.FC<SupplierListingProps> = ({
                 )}
 
                 {meta && meta.totalPages > 1 && (
-                  <div className="flex justify-center gap-2 mt-12 pt-8 border-t border-border">
+                  <div className="flex justify-center gap-4 mt-16 pt-10 border-t border-border/20">
                     <Button
                       variant="outline"
                       size="sm"
+                      className="rounded-none font-display font-bold uppercase tracking-widest text-[9px] h-10 px-6 border-border/40"
                       disabled={filters.page <= 1}
                       onClick={() =>
                         handleFiltersChange({ page: filters.page - 1 })
@@ -542,12 +563,13 @@ const SupplierListing: React.FC<SupplierListingProps> = ({
                     >
                       Previous
                     </Button>
-                    <span className="flex items-center px-4 text-sm text-muted-foreground font-medium">
-                      Page {meta.page} of {meta.totalPages}
+                    <span className="flex items-center px-6 text-[10px] font-display font-black uppercase tracking-widest text-muted-foreground/30">
+                      Registry Node {meta.page} of {meta.totalPages}
                     </span>
                     <Button
                       variant="outline"
                       size="sm"
+                      className="rounded-none font-display font-bold uppercase tracking-widest text-[9px] h-10 px-6 border-border/40"
                       disabled={filters.page >= meta.totalPages}
                       onClick={() =>
                         handleFiltersChange({ page: filters.page + 1 })
@@ -579,8 +601,11 @@ function SupplierCard({
     .join(", ");
 
   return (
-    <Card className="group border py-0 border-border bg-card hover:border-primary transition-all duration-300 rounded-sm overflow-hidden flex flex-col shadow-none h-full">
-      <div className="relative h-48 overflow-hidden bg-muted">
+    <Card className="group border py-0 border-border/10 bg-card hover:border-primary/40 transition-all duration-500 rounded-none overflow-hidden flex flex-col shadow-none h-full relative">
+      {/* Editorial accent line */}
+      <div className="absolute top-0 left-0 w-[1px] h-full bg-primary/0 group-hover:bg-primary/40 transition-all duration-500 z-20" />
+
+      <div className="relative h-56 overflow-hidden bg-muted/20">
         {company.logoUrl ? (
           <img
             src={company.logoUrl}
@@ -599,47 +624,50 @@ function SupplierCard({
         <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent opacity-60"></div>
 
         {company.isVerified && (
-          <div className="absolute top-3 right-3">
-            <Badge className="bg-background/90 text-foreground border-none font-heading font-bold text-[9px] px-2 h-5 flex items-center gap-1.5 rounded-sm uppercase tracking-wider backdrop-blur-md">
+          <div className="absolute top-4 right-4 z-10">
+            <Badge className="bg-white/90 dark:bg-slate-950/90 text-foreground border border-border/10 font-display font-black text-[9px] px-3 h-6 flex items-center gap-2 rounded-none uppercase tracking-[0.2em] backdrop-blur-md shadow-2xl">
               <ShieldCheck className="w-3 h-3 text-primary" />
               Verified
             </Badge>
           </div>
         )}
 
-        <div className="absolute bottom-4 left-4 right-4 text-white">
-          <h3 className="text-lg font-heading font-bold uppercase leading-tight mb-1 tracking-wide truncate pr-6">
+        <div className="absolute inset-0 bg-slate-950/80 group-hover:bg-slate-950/40 transition-colors duration-500" />
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-transparent to-transparent opacity-80 group-hover:opacity-100 transition-opacity duration-500" />
+
+        <div className="absolute bottom-6 left-6 right-6 text-white z-10">
+          <h3 className="text-xl font-display font-black uppercase leading-[0.9] mb-2 tracking-tighter group-hover:text-primary transition-colors duration-500">
             {company.name}
           </h3>
           {location && (
-            <div className="flex items-center text-white/80 font-medium text-[10px] gap-1 uppercase tracking-wide">
-              <MapPin className="w-3 h-3 text-white/60" />
+            <div className="flex items-center text-white/50 font-bold text-[9px] gap-2 uppercase tracking-[0.2em]">
+              <MapPin className="w-3 h-3 text-primary/60" />
               {location}
             </div>
           )}
         </div>
       </div>
 
-      <CardContent className="pt-5 px-5 pb-5 flex-grow flex flex-col bg-card">
+      <CardContent className="pt-8 px-8 pb-8 flex-grow flex flex-col bg-card relative">
         <div className="flex-grow">
-          <div className="flex justify-between items-start mb-4 gap-2">
-            <div className="flex flex-wrap gap-1.5">
+          <div className="flex justify-between items-start mb-6 gap-2">
+            <div className="flex flex-wrap gap-2">
               <Badge
                 variant="outline"
-                className="bg-muted/50 text-muted-foreground text-[9px] font-bold border-border rounded-sm px-2 h-5 uppercase tracking-tight"
+                className="bg-muted/10 text-muted-foreground/60 text-[9px] font-black border-border/20 rounded-none px-3 h-6 uppercase tracking-[0.1em]"
               >
                 {company.type?.replace(/_/g, " ") || "Supplier"}
               </Badge>
             </div>
-            <div className="flex items-center bg-muted px-1.5 py-0.5 rounded-sm border border-border shrink-0">
-              <Star className="w-3 h-3 text-warning fill-warning mr-1" />
-              <span className="font-heading font-bold text-foreground text-[10px]">
+            <div className="flex items-center bg-muted/50 px-2 py-1 rounded-none border border-border/10 shrink-0">
+              <Star className="w-3 h-3 text-primary fill-primary mr-1.5" />
+              <span className="font-display font-black text-foreground text-[10px] tracking-widest">
                 {rating.toFixed(1)}
               </span>
             </div>
           </div>
 
-          <p className="text-muted-foreground text-xs leading-relaxed line-clamp-2 mb-4 h-9">
+          <p className="text-muted-foreground/60 text-[11px] leading-relaxed line-clamp-2 mb-8 h-10 font-medium uppercase tracking-widest">
             {company.description ||
               "Leading provider of construction materials and heavy equipment solutions."}
           </p>
@@ -647,10 +675,10 @@ function SupplierCard({
 
         <Button
           onClick={onViewProfile}
-          className="w-full rounded-sm h-10 font-heading font-bold uppercase tracking-wider text-[10px] group/btn bg-primary hover:bg-primary/90 text-primary-foreground shadow-none"
+          className="w-full rounded-none h-14 font-display font-black uppercase tracking-[0.2em] text-[10px] group/btn bg-primary hover:bg-primary/90 text-primary-foreground shadow-none border border-primary/20"
         >
           View Profile
-          <ArrowRight className="w-3 h-3 ml-2 transition-transform group-hover/btn:translate-x-0.5" />
+          <ArrowRight className="w-3.5 h-3.5 ml-3 transition-transform duration-500 group-hover/btn:translate-x-1" />
         </Button>
       </CardContent>
     </Card>

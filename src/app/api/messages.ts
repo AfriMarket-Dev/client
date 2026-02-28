@@ -1,4 +1,5 @@
 import { apiSlice } from "@/app/api/api-entry";
+import type { RootState } from "@/app/store";
 import type { ApiResponse } from "@/app/api/types";
 
 export interface ConversationPartner {
@@ -75,7 +76,7 @@ export const messagesApi = apiSlice.injectEndpoints({
 
     // generic direct message (receiverId required)
     sendMessage: builder.mutation<
-      unknown,
+      { id: string; content: string; createdAt: string },
       {
         receiverId: string;
         content: string;
@@ -88,6 +89,54 @@ export const messagesApi = apiSlice.injectEndpoints({
         method: "POST",
         body,
       }),
+      async onQueryStarted(
+        { receiverId, content },
+        { dispatch, queryFulfilled, getState },
+      ) {
+        const state = getState() as unknown as RootState;
+        const me = (
+          state as unknown as {
+            auth: { user?: { id?: string; name?: string } };
+          }
+        ).auth?.user;
+        const tempMessage = {
+          id: `temp-${Date.now()}`,
+          content,
+          createdAt: new Date().toISOString(),
+          sender: { id: me?.id ?? "", name: me?.name ?? "", email: "" },
+          receiver: { id: receiverId, name: "", email: "" },
+        };
+        // find every active getChatHistory cache entry for this partner and patch all of them
+        // this handles any combination of limit/page args the component may use
+        const activeQueries = messagesApi.util.selectInvalidatedBy(getState(), [
+          { type: "Messages", id: receiverId },
+        ]);
+        const patches = activeQueries
+          .filter((q) => q.endpointName === "getChatHistory")
+          .map(({ originalArgs }) =>
+            dispatch(
+              messagesApi.util.updateQueryData(
+                "getChatHistory",
+                originalArgs as {
+                  partnerId: string;
+                  page?: number;
+                  limit?: number;
+                },
+                (draft) => {
+                  draft.items.push(tempMessage);
+                  draft.total += 1;
+                },
+              ),
+            ),
+          );
+        try {
+          await queryFulfilled;
+        } catch {
+          patches.forEach((p) => {
+            p.undo();
+          });
+        }
+      },
       invalidatesTags: (_result, _err, { receiverId }) => [
         { type: "Messages", id: receiverId },
         { type: "Messages", id: "LIST" },

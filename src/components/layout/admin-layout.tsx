@@ -13,7 +13,7 @@ export const AdminLayout = () => {
   const { user } = useSelector((state: RootState) => state.auth);
 
   return (
-    <SidebarProvider defaultOpen={false}>
+    <SidebarProvider defaultOpen={true}>
       <AdminSidebar user={user} />
       <SidebarInset className="flex flex-col bg-background">
         <header className="flex h-16 shrink-0 items-center gap-2 border-b border-border px-6 sticky top-0 bg-background z-20">

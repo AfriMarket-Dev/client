@@ -1,6 +1,7 @@
 import { RiBuilding2Line } from "@remixicon/react";
-import type React from "react";
+import React from "react";
 import { SectionHeader } from "./section-header";
+import { HomeSection } from "./home-section";
 
 const BRANDS = [
 	{ name: "Caterpillar", logo: "CAT" },
@@ -13,9 +14,7 @@ const BRANDS = [
 
 export const FeaturedBrands: React.FC = () => {
 	return (
-		<div className="py-24 bg-white dark:bg-slate-950 relative overflow-hidden">
-			<div className="absolute inset-0 blueprint-grid opacity-[0.05] pointer-events-none" />
-
+		<HomeSection variant="background" borderBottom className="py-8 lg:py-10">
 			<div className="max-w-[1600px] mx-auto px-4 lg:px-6 relative z-10">
 				<SectionHeader
 					title="Industry Leaders"
@@ -40,6 +39,6 @@ export const FeaturedBrands: React.FC = () => {
 					))}
 				</div>
 			</div>
-		</div>
+		</HomeSection>
 	);
 };

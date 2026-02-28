@@ -60,8 +60,24 @@ export const wishlistApi = apiSlice.injectEndpoints({
       query: ({ id, type }) => ({
         url: `/wishlists/${type}s`,
         method: "POST",
-        body: type === "product" ? { [type + "Id"]: id } : { serviceId: id },
+        body: type === "product" ? { productId: id } : { serviceId: id },
       }),
+      async onQueryStarted({ id, type }, { dispatch, queryFulfilled }) {
+        const patchResult = dispatch(
+          wishlistApi.util.updateQueryData(
+            "getWishlist",
+            undefined,
+            (draft) => {
+              draft.unshift({ id, type, createdAt: new Date().toISOString() });
+            },
+          ),
+        );
+        try {
+          await queryFulfilled;
+        } catch {
+          patchResult.undo();
+        }
+      },
       invalidatesTags: (_result, _err, { id }) => [
         { type: "Wishlist", id },
         { type: "Wishlist", id: "LIST" },
@@ -76,6 +92,22 @@ export const wishlistApi = apiSlice.injectEndpoints({
         url: `/wishlists/${type}s/${id}`,
         method: "DELETE",
       }),
+      async onQueryStarted({ id }, { dispatch, queryFulfilled }) {
+        const patchResult = dispatch(
+          wishlistApi.util.updateQueryData(
+            "getWishlist",
+            undefined,
+            (draft) => {
+              return draft.filter((item) => item.id !== id);
+            },
+          ),
+        );
+        try {
+          await queryFulfilled;
+        } catch {
+          patchResult.undo();
+        }
+      },
       invalidatesTags: (_result, _err, { id }) => [
         { type: "Wishlist", id },
         { type: "Wishlist", id: "LIST" },

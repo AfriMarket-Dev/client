@@ -2,27 +2,24 @@ import { useNavigate } from "@tanstack/react-router";
 import {
   RiArrowLeftLine,
   RiBriefcaseLine,
+  RiMailLine,
   RiStoreLine,
 } from "@remixicon/react";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useSignUpMutation } from "@/app/api/auth";
-import { useCreateCompanyMutation } from "@/app/api/companies";
-import { useGetCompanyCategoriesQuery } from "@/app/api/company-categories";
 import { setToken, setUser } from "@/app/features/auth-slice";
 import { SignUpForm } from "@/components/forms/sign-up-form";
-import { CompanySetupForm } from "@/components/forms/company-setup-form";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 
 const SignUpPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const [signUp, { isLoading }] = useSignUpMutation();
-  const [createCompany, { isLoading: isCreatingCompany }] =
-    useCreateCompanyMutation();
-  const { data: categoriesData } = useGetCompanyCategoriesQuery({ limit: 100 });
 
-  const [step, setStep] = useState<"role" | "details" | "company">("role");
+  const [step, setStep] = useState<"role" | "details" | "success">("role");
   const [role, setRole] = useState<"buyer" | "provider">("buyer");
 
   const handleSignUp = async (data: {
@@ -46,32 +43,15 @@ const SignUpPage = () => {
           email: result.user.email,
           name: result.user.name,
           role: result.user.role,
+          needsOnboarding: result.user.needsOnboarding,
         }),
       );
 
-      const isAdmin =
-        result.user.role === "admin" || result.user.role === "agent";
-      const isSupplier =
-        result.user.role === "supplier" || result.user.role === "provider";
-
-      if (isAdmin) {
-        navigate({ to: "/admin", replace: true });
-      } else if (isSupplier) {
-        setStep("company");
-      } else {
-        navigate({ to: "/", replace: true });
-      }
+      setStep("success");
+      toast.success("Verification email sent.");
     } catch (err) {
       console.error("SignUp failed", err);
-    }
-  };
-
-  const handleCompanySubmit = async (data: any) => {
-    try {
-      await createCompany(data).unwrap();
-      navigate({ to: "/dashboard", replace: true });
-    } catch (err) {
-      console.error("Company setup failed", err);
+      toast.error("Sign up failed. Please try again.");
     }
   };
 
@@ -82,7 +62,7 @@ const SignUpPage = () => {
 
   return (
     <>
-      {step === "details" ? (
+      {step === "details" && (
         <button
           onClick={() => setStep("role")}
           className="flex items-center text-muted-foreground hover:text-foreground transition-colors mb-8 group"
@@ -92,16 +72,9 @@ const SignUpPage = () => {
             Back to Role Selection
           </span>
         </button>
-      ) : step === "company" ? (
-        <button
-          onClick={() => navigate({ to: "/dashboard", replace: true })}
-          className="flex items-center text-muted-foreground hover:text-foreground transition-colors mb-8 group"
-        >
-          <span className="text-xs font-heading font-bold uppercase tracking-wider">
-            Skip to Dashboard
-          </span>
-        </button>
-      ) : (
+      )}
+
+      {step === "role" && (
         <button
           onClick={() => navigate({ to: "/" })}
           className="flex items-center text-muted-foreground hover:text-foreground transition-colors mb-8 group"
@@ -119,14 +92,14 @@ const SignUpPage = () => {
             ? "Select Account Type"
             : step === "details"
               ? "Account Details"
-              : "Company Setup"}
+              : "Verify Your Email"}
         </h2>
         <p className="text-muted-foreground">
           {step === "role"
             ? "Choose how you want to use AfrikaMarket."
             : step === "details"
               ? `Completing registration as a ${role === "buyer" ? "Builder/Contractor" : "Supplier"}.`
-              : "Let's set up your supplier profile to start receiving orders."}
+              : "We've sent a verification link to your email address."}
         </p>
       </div>
 
@@ -169,28 +142,42 @@ const SignUpPage = () => {
       ) : step === "details" ? (
         <SignUpForm role={role} onSubmit={handleSignUp} isLoading={isLoading} />
       ) : (
-        <CompanySetupForm
-          onSubmit={handleCompanySubmit}
-          onSkip={() => navigate({ to: "/dashboard", replace: true })}
-          isLoading={isCreatingCompany}
-          categories={categoriesData?.data}
-        />
-      )}
-
-      {step !== "company" && (
-        <div className="mt-8 text-center">
-          <span className="text-muted-foreground">
-            Already have an account?{" "}
-          </span>
-          <button
-            type="button"
-            onClick={() => navigate({ to: "/auth/signin" })}
-            className="text-primary font-bold hover:underline"
-          >
-            Sign In
-          </button>
+        <div className="space-y-6 text-center py-12 border border-dashed border-border rounded-none bg-muted/5 relative overflow-hidden">
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none" />
+          <div className="w-16 h-16 bg-primary/10 text-primary mx-auto flex items-center justify-center rounded-none rotate-45 mb-8 relative z-10">
+            <RiMailLine className="w-8 h-8 -rotate-45" />
+          </div>
+          <div className="space-y-3 relative z-10 px-6">
+            <p className="font-black uppercase tracking-[0.3em] text-sm text-foreground">
+              Verification Transmitted
+            </p>
+            <p className="text-xs text-muted-foreground uppercase tracking-widest max-w-xs mx-auto leading-relaxed font-bold">
+              Please check your inbox and click the verification link to
+              activate your account. You can sign in once verified.
+            </p>
+          </div>
+          <div className="pt-4 relative z-10">
+            <Button
+              variant="outline"
+              onClick={() => navigate({ to: "/auth/signin" })}
+              className="rounded-none font-black uppercase tracking-[0.3em] text-[10px] h-12 px-8 border-border/40"
+            >
+              Go to Sign In
+            </Button>
+          </div>
         </div>
       )}
+
+      <div className="mt-8 text-center">
+        <span className="text-muted-foreground">Already have an account? </span>
+        <button
+          type="button"
+          onClick={() => navigate({ to: "/auth/signin" })}
+          className="text-primary font-bold hover:underline"
+        >
+          Sign In
+        </button>
+      </div>
     </>
   );
 };

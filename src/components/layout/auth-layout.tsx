@@ -5,14 +5,9 @@ import type { RootState } from "@/app/store";
 import { HeaderLogo } from "./header/header-logo";
 
 export const AuthLayout = () => {
-	const { isAuthenticated, user } = useSelector(
+	const { user } = useSelector(
 		(state: RootState) => state.auth,
 	);
-
-	if (isAuthenticated) {
-		const isAdmin = user?.role === "admin" || user?.role === "agent";
-		return <Navigate to={isAdmin ? "/admin" : "/"} replace />;
-	}
 
 	return (
 		<div className="min-h-screen grid lg:grid-cols-2 bg-background">
@@ -33,7 +28,7 @@ export const AuthLayout = () => {
 
 				{/* Content */}
 				<div className="relative z-10 max-w-lg mt-auto mb-20">
-					<h1 className="text-4xl lg:text-5xl font-heading font-bold uppercase mb-6 leading-tight tracking-tight">
+					<h1 className="text-4xl font-heading font-bold uppercase mb-6 leading-tight tracking-tight">
 						Build with <br />{" "}
 						<span className="text-transparent bg-clip-text bg-linear-to-r from-primary to-primary/70">
 							Confidence
@@ -78,7 +73,7 @@ export const AuthLayout = () => {
 				</div>
 
 				<div className="relative z-10 text-[10px] uppercase tracking-widest text-background/40 font-bold flex justify-between items-center">
-					<span>© 2024 AfrikaMarket Systems</span>
+					<span>© 2026 AfrikaMarket Systems</span>
 					<span className="flex items-center gap-2">
 						<div className="w-2 h-2 rounded-full bg-success animate-pulse" />
 						System Operational

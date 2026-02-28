@@ -1,180 +1,184 @@
 import { useNavigate } from "@tanstack/react-router";
 import {
-	RiArrowLeftLine,
-	RiBuildingLine,
-	RiCheckboxCircleLine,
-	RiEyeLine,
-	RiGlobeLine,
-	RiHandHeartLine,
-	RiChat1Line,
-	RiSearchLine,
-	RiTargetLine,
+  RiArrowLeftLine,
+  RiBuildingLine,
+  RiCheckboxCircleLine,
+  RiEyeLine,
+  RiGlobeLine,
+  RiHandHeartLine,
+  RiChat1Line,
+  RiSearchLine,
+  RiTargetLine,
 } from "@remixicon/react";
 import type React from "react";
 import { Button } from "@/components/ui/button";
 
 const AboutPage: React.FC = () => {
-	const navigate = useNavigate();
+  const navigate = useNavigate();
 
-	return (
-		<div className="min-h-screen bg-background">
-			<div className="max-w-5xl mx-auto px-4 py-8 space-y-16">
-				<div className="flex items-center justify-between">
-					<Button
-						variant="ghost"
-						onClick={() => navigate({ to: "/" })}
-						className="group flex items-center gap-2 text-foreground hover:bg-muted py-2 px-3 rounded-sm transition-colors font-heading font-bold uppercase text-xs tracking-wider"
-					>
-						<RiArrowLeftLine
-							size={16}
-							className="group-hover:-translate-x-1 transition-transform"
-						/>
-						Back to Home
-					</Button>
-				</div>
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="max-w-5xl mx-auto px-4 py-8 space-y-16">
+        <div className="flex items-center justify-between">
+          <Button
+            variant="ghost"
+            onClick={() => navigate({ to: "/" })}
+            className="group flex items-center gap-2 text-foreground hover:bg-muted py-2 px-3 rounded-none transition-colors font-display font-bold uppercase text-xs tracking-widest border border-transparent hover:border-border/20"
+          >
+            <RiArrowLeftLine
+              size={16}
+              className="group-hover:-translate-x-1 transition-transform"
+            />
+            Back to Home
+          </Button>
+        </div>
 
-				{/* Hero Section - Clean & Focused */}
-				<section className="text-center py-16 px-4">
-					<div className="inline-flex items-center px-4 py-1.5 border border-primary/20 rounded-full bg-primary/5 text-primary text-xs font-bold uppercase tracking-widest mb-8">
-						<RiGlobeLine className="w-3 h-3 mr-2" />
-						Rwanda's Digital Infrastructure
-					</div>
+        <section className="text-center py-20 px-4 relative overflow-hidden bg-slate-950 border border-primary/20 rounded-none shadow-2xl shadow-primary/5">
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none" />
 
-					<h1 className="text-5xl md:text-6xl font-heading font-bold text-foreground mb-6 leading-tight">
-						Building the Future <br />
-						<span className="text-transparent bg-clip-text bg-linear-to-r from-primary to-orange-600">
-							of Construction
-						</span>
-					</h1>
+          <div className="relative z-10">
+            <div className="inline-flex items-center px-4 py-1.5 border border-primary/30 rounded-none bg-primary/10 text-primary text-[10px] font-extrabold uppercase tracking-[0.3em] mb-10">
+              <RiGlobeLine className="w-3.5 h-3.5 mr-2.5" />
+              DIGITAL INFRASTRUCTURE PROTOCOL
+            </div>
 
-					<p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed font-light">
-						AfrikaMarket is the centralized procurement engine for Rwanda. We
-						verify, connect, and streamline the supply chain for contractors and
-						suppliers alike.
-					</p>
-				</section>
+            <h1 className="text-5xl md:text-6xl font-display font-black text-white mb-8 leading-[0.9] tracking-tighter uppercase">
+              ENGINEERING THE FUTURE <br />
+              <span className="text-primary italic -skew-x-12 inline-block">
+                OF CONSTRUCTION
+              </span>
+            </h1>
 
-				{/* Mission & Vision - Simplified */}
-				<section className="grid md:grid-cols-2 gap-12 items-start py-12 border-y border-border/50">
-					<div className="space-y-6">
-						<div className="w-12 h-12 bg-primary/10 text-primary rounded-lg flex items-center justify-center">
-							<RiTargetLine className="w-6 h-6" />
-						</div>
-						<h2 className="text-3xl font-heading font-bold text-foreground">
-							Our Mission
-						</h2>
-						<p className="text-muted-foreground leading-relaxed">
-							To engineer a frictionless digital marketplace that standardizes
-							trust, transparency, and efficiency in Rwanda's construction
-							industry. We are laying the groundwork for businesses to scale.
-						</p>
-						<ul className="space-y-3 pt-2">
-							{[
-								"Verify every supplier for safety",
-								"Transparent pricing & quotes",
-								"Support local business growth",
-							].map((item, i) => (
-								<li
-									key={i}
-									className="flex items-center text-sm font-medium text-foreground/80"
-								>
-									<RiCheckboxCircleLine className="w-4 h-4 text-primary mr-3" />
-									{item}
-								</li>
-							))}
-						</ul>
-					</div>
+            <p className="text-lg text-muted-foreground/80 max-w-3xl mx-auto leading-relaxed font-medium uppercase tracking-widest">
+              AfrikaMarket is the centralized procurement engine for Rwanda. We
+              verify, connect, and streamline the supply chain for contractors
+              and suppliers through standardized digital verification.
+            </p>
+          </div>
+        </section>
 
-					<div className="space-y-6">
-						<div className="w-12 h-12 bg-foreground/5 text-foreground rounded-lg flex items-center justify-center">
-							<RiEyeLine className="w-6 h-6" />
-						</div>
-						<h2 className="text-3xl font-heading font-bold text-foreground">
-							Our Vision
-						</h2>
-						<p className="text-muted-foreground leading-relaxed">
-							To construct the premier infrastructure where every business—from
-							micro-contractors to large developers—operates on a unified,
-							efficient platform.
-						</p>
-					</div>
-				</section>
+        <section className="grid md:grid-cols-2 gap-16 items-start py-20 border-y border-border/20">
+          <div className="space-y-8">
+            <div className="w-14 h-14 bg-primary/10 text-primary rounded-none flex items-center justify-center border border-primary/20">
+              <RiTargetLine className="w-7 h-7" />
+            </div>
+            <h2 className="text-3xl font-display font-extrabold text-foreground uppercase tracking-tight">
+              Our Mission
+            </h2>
+            <p className="text-muted-foreground leading-relaxed font-medium">
+              To engineer a frictionless digital marketplace that standardizes
+              trust, transparency, and efficiency in Rwanda's construction
+              industry. We are laying the groundwork for businesses to scale.
+            </p>
+            <ul className="space-y-4 pt-2">
+              {[
+                "Verify every supplier for safety",
+                "Transparent pricing & quotes",
+                "Support local business growth",
+              ].map((item) => (
+                <li
+                  key={item}
+                  className="flex items-center text-xs font-bold text-foreground/70 uppercase tracking-widest"
+                >
+                  <RiCheckboxCircleLine className="w-4 h-4 text-primary mr-3" />
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
 
-				{/* How It Works - Linear Flow */}
-				<section className="py-16">
-					<div className="text-center mb-16">
-						<h2 className="text-3xl font-heading font-bold text-foreground mb-4">
-							How It Works
-						</h2>
-						<p className="text-muted-foreground max-w-xl mx-auto">
-							A transparent process connecting you directly with verified
-							suppliers.
-						</p>
-					</div>
+          <div className="space-y-8">
+            <div className="w-14 h-14 bg-foreground/5 text-foreground rounded-none flex items-center justify-center border border-border/10">
+              <RiEyeLine className="w-7 h-7" />
+            </div>
+            <h2 className="text-3xl font-display font-extrabold text-foreground uppercase tracking-tight">
+              Our Vision
+            </h2>
+            <p className="text-muted-foreground leading-relaxed font-medium">
+              To construct the premier infrastructure where every business—from
+              micro-contractors to large developers—operates on a unified,
+              efficient platform through architectural standardization.
+            </p>
+          </div>
+        </section>
 
-					<div className="grid md:grid-cols-3 gap-8 relative">
-						{/* Connector Line (Desktop) */}
-						<div className="hidden md:block absolute top-8 left-[20%] right-[20%] h-px bg-border -z-10 border-t border-dashed border-border" />
+        <section className="py-20">
+          <div className="text-center mb-20">
+            <h2 className="text-3xl font-display font-extrabold text-foreground uppercase tracking-tight mb-4">
+              How It Works
+            </h2>
+            <p className="text-[10px] font-bold text-muted-foreground/40 uppercase tracking-[0.3em] max-w-xl mx-auto">
+              CENTRALIZED WORKFLOW / STANDARDIZED NODES
+            </p>
+          </div>
 
-						{[
-							{
-								icon: RiSearchLine,
-								title: "1. Discover",
-								desc: "Browse verified inventory and services.",
-							},
-							{
-								icon: RiChat1Line,
-								title: "2. Connect",
-								desc: "Chat or request quotes directly.",
-							},
-							{
-								icon: RiHandHeartLine,
-								title: "3. Transact",
-								desc: "Finalize deals securely and efficienty.",
-							},
-						].map((step, i) => (
-							<div key={i} className="text-center bg-background pt-4">
-								<div className="w-16 h-16 mx-auto bg-card border border-border rounded-xl flex items-center justify-center mb-6 shadow-xs">
-									<step.icon
-										className="w-8 h-8 text-primary"
-									/>
-								</div>
-								<h3 className="text-xl font-bold text-foreground mb-2">
-									{step.title}
-								</h3>
-								<p className="text-muted-foreground text-sm">{step.desc}</p>
-							</div>
-						))}
-					</div>
-				</section>
+          <div className="grid md:grid-cols-3 gap-12 relative">
+            <div className="hidden md:block absolute top-12 left-[15%] right-[15%] h-px bg-primary/20 -z-10" />
 
-				{/* Simple Call to Action */}
-				<section className="py-24 text-center border-t border-border">
-					<RiBuildingLine className="w-12 h-12 text-muted-foreground/30 mx-auto mb-6" />
-					<h2 className="text-3xl font-heading font-bold text-foreground mb-6">
-						Ready to start building?
-					</h2>
-					<div className="flex justify-center gap-4">
-						<Button
-							size="lg"
-							onClick={() => navigate({ to: "/products" } as any)}
-							className="bg-primary hover:bg-primary/90 text-white font-bold uppercase tracking-wider px-8"
-						>
-							Browse Marketplace
-						</Button>
-						<Button
-							variant="outline"
-							size="lg"
-							onClick={() => navigate({ to: "/auth/signup" } as any)}
-							className="border-border font-bold uppercase tracking-wider px-8"
-						>
-							Join as Supplier
-						</Button>
-					</div>
-				</section>
-			</div>
-		</div>
-	);
+            {[
+              {
+                icon: RiSearchLine,
+                title: "1. DISCOVER",
+                desc: "Browse verified inventory and services through our node registry.",
+              },
+              {
+                icon: RiChat1Line,
+                title: "2. CONNECT",
+                desc: "Chat or request quotes directly within the secured protocol.",
+              },
+              {
+                icon: RiHandHeartLine,
+                title: "3. TRANSACT",
+                desc: "Finalize deals securely through our verified escrow logic.",
+              },
+            ].map((step) => (
+              <div
+                key={step.title}
+                className="text-center bg-background py-4 relative group"
+              >
+                <div className="w-20 h-20 mx-auto bg-card border border-border/20 rounded-none flex items-center justify-center mb-8 shadow-2xl shadow-primary/5 transition-all duration-500 group-hover:border-primary/40 group-hover:bg-muted/10">
+                  <step.icon className="w-8 h-8 text-primary group-hover:scale-110 transition-transform duration-500" />
+                </div>
+                <h3 className="text-lg font-display font-extrabold text-foreground mb-3 tracking-tight uppercase">
+                  {step.title}
+                </h3>
+                <p className="text-muted-foreground/60 text-[10px] uppercase font-bold tracking-widest leading-relaxed px-4">
+                  {step.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className="py-32 text-center border-t border-border/20">
+          <RiBuildingLine className="w-16 h-16 text-muted-foreground/20 mx-auto mb-10" />
+          <h2 className="text-4xl md:text-5xl font-display font-black text-foreground mb-10 uppercase tracking-tighter">
+            READY TO START <br />
+            <span className="text-primary italic -skew-x-12 inline-block">
+              BUILDING?
+            </span>
+          </h2>
+          <div className="flex flex-col sm:flex-row justify-center gap-4 px-4">
+            <Button
+              size="lg"
+              onClick={() => navigate({ to: "/marketplace" })}
+              className="bg-primary hover:bg-primary/90 text-primary-foreground font-display font-black uppercase tracking-[0.2em] px-10 h-16 rounded-none shadow-2xl shadow-primary/10 border-none"
+            >
+              Browse Marketplace
+            </Button>
+            <Button
+              variant="outline"
+              size="lg"
+              onClick={() => navigate({ to: "/auth/signup" })}
+              className="border-border/40 hover:bg-foreground hover:text-background font-display font-extrabold uppercase tracking-[0.2em] px-10 h-16 rounded-none transition-all"
+            >
+              Join as Supplier
+            </Button>
+          </div>
+        </section>
+      </div>
+    </div>
+  );
 };
 
 export default AboutPage;

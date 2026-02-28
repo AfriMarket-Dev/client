@@ -2,64 +2,76 @@ import { useNavigate } from "@tanstack/react-router";
 import { RiArrowRightLine } from "@remixicon/react";
 import type React from "react";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 interface SectionHeaderProps {
-	title: string;
-	subtitle?: string;
-	label?: string;
-	icon?: React.ReactNode;
-	viewAllHref?: string;
-	viewAllLabel?: string;
+  title: string;
+  subtitle?: string;
+  label?: string;
+  icon?: React.ReactNode;
+  viewAllHref?: string;
+  viewAllLabel?: string;
+  titleClassName?: string;
 }
 
 export const SectionHeader: React.FC<SectionHeaderProps> = ({
-	title,
-	subtitle,
-	label,
-	viewAllHref,
-	viewAllLabel = "View All",
+  title,
+  subtitle,
+  label,
+  viewAllHref,
+  viewAllLabel = "View All",
+  titleClassName,
 }) => {
-	const navigate = useNavigate();
+  const navigate = useNavigate();
 
-	return (
-		<div className="relative mb-5 md:mb-8 group">
-			{/* Decorative vertical line */}
-			<div className="absolute -left-6 top-0 bottom-0 w-[2px] bg-primary/30 transform origin-top scale-y-0 group-hover:scale-y-100 transition-transform duration-700 hidden lg:block" />
+  return (
+    <div className="relative mb-8 md:mb-12 group">
+      {/* Editorial architecture */}
+      <div className="absolute -left-4 top-0 bottom-0 w-[1px] bg-primary/20 hidden lg:block" />
 
-			<div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-3 md:gap-6">
-				<div className="space-y-2">
-					{label && (
-						<div className="flex items-center gap-3">
-							<div className="w-6 h-[1.5px] bg-primary" />
-							<span className="text-[10px] font-bold tracking-[0.25em] text-primary uppercase">
-								{label}
-							</span>
-						</div>
-					)}
-					<h2 className="text-2xl md:text-3xl lg:text-4xl font-heading font-bold text-foreground tracking-tight leading-none">
-						{title}
-					</h2>
-					{subtitle && (
-						<p className="text-muted-foreground/70 text-xs md:text-sm lg:text-base max-w-xl font-normal leading-relaxed">
-							{subtitle}
-						</p>
-					)}
-				</div>
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 md:gap-12">
+        <div className="space-y-4">
+          {label && (
+            <div className="flex items-center gap-4">
+              <div className="w-10 h-px bg-primary" />
+              <span className="text-[10px] font-black tracking-[0.4em] text-primary uppercase">
+                {label}
+              </span>
+            </div>
+          )}
+          <h2
+            className={cn(
+              "text-3xl md:text-4xl lg:text-5xl font-display font-extrabold text-foreground tracking-tight leading-[0.9] uppercase",
+              titleClassName,
+            )}
+          >
+            {title}
+          </h2>
+          {subtitle && (
+            <p className="text-muted-foreground/60 text-xs md:text-sm max-w-2xl font-medium leading-relaxed uppercase tracking-wider">
+              {subtitle}
+            </p>
+          )}
+        </div>
 
-				{viewAllHref && (
-					<div className="flex flex-col items-end gap-1.5 shrink-0">
-						<Button
-							variant="outline"
-							size="sm"
-							onClick={() => navigate({ to: viewAllHref as any })}
-							className="border border-border hover:bg-foreground hover:text-background rounded-lg font-bold transition-all px-5 h-9 uppercase text-[9px] tracking-widest group/btn shadow-none"
-						>
-							{viewAllLabel}
-							<RiArrowRightLine className="ml-2 w-3.5 h-3.5 group-hover/btn:translate-x-1 transition-transform" />
-						</Button>
-					</div>
-				)}
-			</div>
-		</div>
-	);
+        {viewAllHref && (
+          <div className="flex shrink-0">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => navigate({ to: viewAllHref as any })}
+              className="border border-border/40 hover:bg-foreground hover:text-background rounded-none font-black transition-all px-6 h-10 uppercase text-[10px] tracking-[0.2em] group/btn shadow-none bg-transparent"
+            >
+              {viewAllLabel}
+              <RiArrowRightLine className="ml-3 w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
+            </Button>
+          </div>
+        )}
+      </div>
+
+      <div className="mt-8 md:mt-12 h-px bg-border/20 w-full relative">
+        <div className="absolute left-0 top-0 w-24 h-px bg-primary/40" />
+      </div>
+    </div>
+  );
 };

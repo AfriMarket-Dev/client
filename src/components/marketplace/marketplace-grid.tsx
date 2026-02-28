@@ -1,44 +1,46 @@
-import { RiCloseLine } from "@remixicon/react";
 import {
   Check,
   ChevronDown,
+  ChevronLeft,
   Filter,
+  LayoutGrid,
+  List,
   Package,
   Search,
+  SlidersHorizontal,
   X,
-  ChevronLeft as RiExpandLeftLine, // Using ChevronLeft as a fallback if RiExpandLeftLine is missing
 } from "lucide-react";
-import type React from "react";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import React, {
+  memo,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { useSelector } from "react-redux";
+
 import { useGetProductCategoriesQuery } from "@/app/api/product-categories";
 import type { Product } from "@/app/api/products";
-import { useGetProductsQuery } from "@/app/api/products";
+import {
+  selectProductsData,
+  selectProductsMeta,
+  useGetProductsQuery,
+} from "@/app/api/products";
 import type { Service } from "@/app/api/services";
-import { useGetServicesQuery } from "@/app/api/services";
+import {
+  selectServicesData,
+  selectServicesMeta,
+  useGetServicesQuery,
+} from "@/app/api/services";
 import {
   useAddToWishlistMutation,
   useGetWishlistQuery,
   useRemoveFromWishlistMutation,
 } from "@/app/api/wishlist";
 import type { RootState } from "@/app/store";
-import { Button } from "@/components/ui/button";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
-import { ProductCard } from "./catalog/product-card";
-
-/** unified UI type for grid items - merges Product and Service shapes */
-export type MarketplaceItem =
-  | (Product & { itemType: "PRODUCT" })
-  | (Service & { itemType: "SERVICE" });
-
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Collapsible,
   CollapsibleContent,
@@ -58,11 +60,22 @@ import { Separator } from "@/components/ui/separator";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
+import { ProductCard } from "./catalog/product-card";
 
-export interface CatalogFiltersState {
+// ---------------------------------------------------------------------------
+// Types
+// ---------------------------------------------------------------------------
+
+export type ListingType = "all" | "PRODUCT" | "SERVICE";
+
+export type MarketplaceItem =
+  | (Product & { itemType: "PRODUCT" })
+  | (Service & { itemType: "SERVICE" });
+
+export interface CatalogFilters {
   searchQuery: string;
   categoryId: string;
-  type: "all" | "PRODUCT" | "SERVICE";
+  type: ListingType;
   district: string;
   minPrice: string;
   maxPrice: string;
@@ -73,25 +86,9 @@ export interface CatalogFiltersState {
   page: number;
 }
 
-export const defaultCatalogFiltersState = (): CatalogFiltersState => ({
-  searchQuery: "",
-  categoryId: "all",
-  type: "all",
-  district: "",
-  minPrice: "",
-  maxPrice: "",
-  onlyInStock: false,
-  companyType: "all",
-  sortBy: "createdAt",
-  sortOrder: "DESC",
-  page: 1,
-});
-
-interface MarketplaceGridProps {
-  initialCategoryId?: string;
-  onSupplierClick?: (supplierId: string) => void;
-  onProductClick?: (item: MarketplaceItem) => void;
-}
+// ---------------------------------------------------------------------------
+// Constants
+// ---------------------------------------------------------------------------
 
 const PAGE_SIZE = 30;
 
@@ -100,278 +97,557 @@ const COMPANY_TYPES = [
   { value: "WHOLESALER", label: "Wholesaler" },
   { value: "RETAILER", label: "Retailer" },
   { value: "SERVICE_PROVIDER", label: "Service Provider" },
-];
+] as const;
 
-interface FilterContentProps {
-  filters: CatalogFiltersState;
-  activeCategories: any[];
-  priceRange: number[];
-  handleFiltersChange: (updates: Partial<CatalogFiltersState>) => void;
-  handleCategoryChange: (id: string) => void;
-  handleTypeChange: (type: "all" | "PRODUCT" | "SERVICE") => void;
-  handlePriceRangeChange: (value: number[]) => void;
-  handlePriceFilterApply: () => void;
-  setPriceRange: (val: number[]) => void;
+const DEFAULT_PRICE_MAX = 1_000_000;
+
+function defaultFilters(
+  overrides: Partial<CatalogFilters> = {},
+): CatalogFilters {
+  return {
+    searchQuery: "",
+    categoryId: "all",
+    type: "all",
+    district: "",
+    minPrice: "",
+    maxPrice: "",
+    onlyInStock: false,
+    companyType: "all",
+    sortBy: "createdAt",
+    sortOrder: "DESC",
+    page: 1,
+    ...overrides,
+  };
 }
 
-// Reusable Filter Content Component
-const FilterContent: React.FC<FilterContentProps> = ({
-  filters,
-  activeCategories,
-  priceRange,
-  handleFiltersChange,
-  handleCategoryChange,
-  handleTypeChange,
-  handlePriceRangeChange,
-  handlePriceFilterApply,
-  setPriceRange,
-}) => {
-  return (
-    <div className="space-y-8 p-1">
-      {/* Category */}
-      <div className="space-y-4">
-        <Label className="uppercase text-xs font-bold text-muted-foreground tracking-wider block mb-2">
-          Category
-        </Label>
-        <Select
-          value={filters.categoryId}
-          onValueChange={(val) => handleCategoryChange(val || "all")}
-        >
-          <SelectTrigger className="w-full bg-background">
-            <SelectValue placeholder="Select Category" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Categories</SelectItem>
-            {activeCategories.map((c) => (
-              <SelectItem key={c.id} value={c.id}>
-                {c.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
+// ---------------------------------------------------------------------------
+// Props
+// ---------------------------------------------------------------------------
 
-      <Separator />
+interface MarketplaceGridProps {
+  initialCategoryId?: string;
+  initialType?: ListingType;
+  onTypeChange?: (type: ListingType) => void;
+  onSupplierClick?: (supplierId: string) => void;
+  onProductClick?: (item: MarketplaceItem) => void;
+}
 
-      {/* Company Type */}
-      <div className="space-y-4">
-        <Label className="uppercase text-xs font-bold text-muted-foreground tracking-wider block mb-2">
-          Company Type
-        </Label>
-        <Select
-          value={filters.companyType}
-          onValueChange={(val) =>
-            handleFiltersChange({ companyType: val || "all" })
-          }
-        >
-          <SelectTrigger className="w-full bg-background">
-            <SelectValue placeholder="All Company Types" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Types</SelectItem>
-            {COMPANY_TYPES.map((t) => (
-              <SelectItem key={t.value} value={t.value}>
-                {t.label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
+// ---------------------------------------------------------------------------
+// Filter panel
+// ---------------------------------------------------------------------------
 
-      <Separator />
+interface FilterPanelProps {
+  filters: CatalogFilters;
+  categories: Array<{ id: string; name: string }>;
+  priceRange: [number, number];
+  onPriceRangeChange: (value: [number, number]) => void;
+  onPriceCommit: () => void;
+  onFilterChange: (patch: Partial<CatalogFilters>) => void;
+}
 
-      {/* Listing Type */}
-      <div className="space-y-4">
-        <Label className="uppercase text-xs font-bold text-muted-foreground tracking-wider block mb-2">
-          Listing Type
-        </Label>
-        <div className="grid grid-cols-2 gap-2">
-          {(["all", "PRODUCT", "SERVICE"] as const).map((t) => (
-            <Button
-              key={t}
-              variant={filters.type === t ? "default" : "outline"}
-              size="sm"
-              onClick={() => handleTypeChange(t)}
-              className={cn(
-                "w-full text-xs justify-start",
-                filters.type === t
-                  ? "bg-primary text-primary-foreground"
-                  : "bg-background",
-              )}
-            >
-              {filters.type === t && <Check className="w-3 h-3 mr-1" />}
-              {t === "all" ? "Any" : t === "PRODUCT" ? "Product" : "Service"}
-            </Button>
-          ))}
-        </div>
-      </div>
-
-      <Separator />
-
-      {/* Price Range */}
-      <div className="space-y-4">
-        <div className="flex justify-between items-center mb-2">
-          <Label className="uppercase text-xs font-bold text-muted-foreground tracking-wider">
-            Price Range
+const FilterPanel = memo<FilterPanelProps>(
+  ({
+    filters,
+    categories,
+    priceRange,
+    onPriceRangeChange,
+    onPriceCommit,
+    onFilterChange,
+  }) => {
+    return (
+      <div className="space-y-8 p-1">
+        {/* Category */}
+        <div className="space-y-4">
+          <Label className="uppercase text-[10px] font-black text-muted-foreground tracking-[0.2em] block">
+            Category Verticals
           </Label>
-        </div>
-        <Slider
-          defaultValue={[0, 1000000]}
-          value={priceRange}
-          max={2000000}
-          step={10000}
-          onValueChange={(val) => handlePriceRangeChange(val as number[])}
-          onValueCommitted={handlePriceFilterApply}
-          className="py-4"
-        />
-        <div className="flex items-center justify-between text-xs text-muted-foreground mb-4">
-          <span>{priceRange[0].toLocaleString()} RWF</span>
-          <span>{priceRange[1].toLocaleString()}+ RWF</span>
-        </div>
-        <div className="flex gap-2">
-          <Input
-            type="number"
-            placeholder="Min"
-            value={priceRange[0]}
-            onChange={(e) =>
-              setPriceRange([Number(e.target.value), priceRange[1]])
+          <Select
+            value={filters.categoryId}
+            onValueChange={(val) =>
+              onFilterChange({ categoryId: val, page: 1 })
             }
-            className="h-8 text-xs bg-background"
-          />
-          <Input
-            type="number"
-            placeholder="Max"
-            value={priceRange[1]}
-            onChange={(e) =>
-              setPriceRange([priceRange[0], Number(e.target.value)])
+          >
+            <SelectTrigger className="w-full bg-background rounded-none border-border/20 font-display font-medium uppercase tracking-widest text-[10px] h-10">
+              <SelectValue placeholder="All Categories" />
+            </SelectTrigger>
+            <SelectContent className="rounded-none border-border/20">
+              <SelectItem value="all" className="rounded-none">
+                All Categories
+              </SelectItem>
+              {categories.map((c) => (
+                <SelectItem key={c.id} value={c.id} className="rounded-none">
+                  {c.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        <Separator className="opacity-10" />
+
+        {/* Company Type */}
+        <div className="space-y-4">
+          <Label className="uppercase text-[10px] font-black text-muted-foreground tracking-[0.2em] block">
+            Supplier Class
+          </Label>
+          <Select
+            value={filters.companyType}
+            onValueChange={(val) =>
+              onFilterChange({ companyType: val, page: 1 })
             }
-            className="h-8 text-xs bg-background"
+          >
+            <SelectTrigger className="w-full bg-background rounded-none border-border/20 font-display font-medium uppercase tracking-widest text-[10px] h-10">
+              <SelectValue placeholder="All Types" />
+            </SelectTrigger>
+            <SelectContent className="rounded-none border-border/20">
+              <SelectItem value="all" className="rounded-none">
+                All Classes
+              </SelectItem>
+              {COMPANY_TYPES.map((t) => (
+                <SelectItem
+                  key={t.value}
+                  value={t.value}
+                  className="rounded-none"
+                >
+                  {t.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        <Separator className="opacity-10" />
+
+        {/* Listing Type */}
+        <div className="space-y-4">
+          <Label className="uppercase text-[10px] font-black text-muted-foreground tracking-[0.2em] block">
+            Protocol Type
+          </Label>
+          <div className="grid grid-cols-3 gap-2">
+            {(["all", "PRODUCT", "SERVICE"] as const).map((t) => (
+              <Button
+                key={t}
+                variant={filters.type === t ? "default" : "outline"}
+                size="sm"
+                onClick={() => onFilterChange({ type: t, page: 1 })}
+                className={cn(
+                  "w-full text-[9px] font-black uppercase tracking-widest h-9 rounded-none transition-all",
+                  filters.type === t
+                    ? "bg-primary text-primary-foreground border-primary"
+                    : "bg-background border-border/20",
+                )}
+              >
+                {t === "all" ? "Any" : t === "PRODUCT" ? "Product" : "Service"}
+              </Button>
+            ))}
+          </div>
+        </div>
+
+        <Separator className="opacity-10" />
+
+        {/* Sort */}
+        <div className="space-y-4">
+          <Label className="uppercase text-[10px] font-black text-muted-foreground tracking-[0.2em] block">
+            Operational Order
+          </Label>
+          <div className="flex gap-2">
+            <Select
+              value={filters.sortBy}
+              onValueChange={(val) => onFilterChange({ sortBy: val, page: 1 })}
+            >
+              <SelectTrigger className="flex-1 bg-background rounded-none border-border/20 font-display font-medium uppercase tracking-widest text-[10px] h-10">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent className="rounded-none border-border/20">
+                <SelectItem
+                  value="createdAt"
+                  className="rounded-none text-[10px] font-bold uppercase tracking-widest"
+                >
+                  Newest
+                </SelectItem>
+                <SelectItem
+                  value="price"
+                  className="rounded-none text-[10px] font-bold uppercase tracking-widest"
+                >
+                  Price
+                </SelectItem>
+                <SelectItem
+                  value="name"
+                  className="rounded-none text-[10px] font-bold uppercase tracking-widest"
+                >
+                  Name
+                </SelectItem>
+              </SelectContent>
+            </Select>
+            <Button
+              variant="outline"
+              size="sm"
+              className="shrink-0 px-3 rounded-none border-border/20 h-10"
+              onClick={() =>
+                onFilterChange({
+                  sortOrder: filters.sortOrder === "ASC" ? "DESC" : "ASC",
+                  page: 1,
+                })
+              }
+            >
+              {filters.sortOrder === "ASC" ? "↑" : "↓"}
+            </Button>
+          </div>
+        </div>
+
+        <Separator className="opacity-10" />
+
+        {/* Price Range */}
+        <div className="space-y-4">
+          <Label className="uppercase text-[10px] font-black text-muted-foreground tracking-[0.2em] block">
+            Capital Range
+          </Label>
+          <Slider
+            value={priceRange}
+            max={2_000_000}
+            step={10_000}
+            onValueChange={(val) => onPriceRangeChange(val as [number, number])}
+            onValueCommit={onPriceCommit}
+            className="py-4"
+          />
+          <div className="flex items-center justify-between text-[9px] font-black text-primary uppercase tracking-widest">
+            <span>{priceRange[0].toLocaleString()} RWF</span>
+            <span>{priceRange[1].toLocaleString()}+ RWF</span>
+          </div>
+          <div className="flex gap-2">
+            <Input
+              type="number"
+              placeholder="Min"
+              value={priceRange[0] || ""}
+              onChange={(e) =>
+                onPriceRangeChange([Number(e.target.value), priceRange[1]])
+              }
+              className="h-10 bg-background rounded-none border-border/20 text-[10px] font-bold uppercase tracking-widest"
+            />
+            <Input
+              type="number"
+              placeholder="Max"
+              value={priceRange[1] || ""}
+              onChange={(e) =>
+                onPriceRangeChange([priceRange[0], Number(e.target.value)])
+              }
+              className="h-10 bg-background rounded-none border-border/20 text-[10px] font-bold uppercase tracking-widest"
+            />
+          </div>
+          <Button
+            variant="secondary"
+            size="sm"
+            className="w-full text-[10px] font-black uppercase tracking-[0.2em] h-10 rounded-none bg-muted/50 border border-border/10 hover:bg-primary hover:text-white transition-all"
+            onClick={onPriceCommit}
+          >
+            Update Range
+          </Button>
+        </div>
+
+        <Separator className="opacity-10" />
+
+        {/* District */}
+        <div className="space-y-4">
+          <Label className="uppercase text-[10px] font-black text-muted-foreground tracking-[0.2em] block">
+            Location Node
+          </Label>
+          <Input
+            placeholder="e.g. Gasabo, Kicukiro..."
+            value={filters.district}
+            onChange={(e) =>
+              onFilterChange({ district: e.target.value, page: 1 })
+            }
+            className="h-10 bg-background rounded-none border-border/20 text-[10px] font-bold uppercase tracking-widest placeholder:text-muted-foreground/30"
           />
         </div>
-        <Button
-          variant="secondary"
-          size="sm"
-          className="w-full text-xs mt-2"
-          onClick={handlePriceFilterApply}
-        >
-          Apply Price
-        </Button>
+
+        <Separator className="opacity-10" />
+
+        {/* In Stock */}
+        <div className="flex items-center justify-between border p-4 rounded-none border-border/20 bg-muted/5">
+          <Label
+            htmlFor="stock-toggle"
+            className="text-[10px] font-black uppercase tracking-widest cursor-pointer"
+          >
+            Available Now
+          </Label>
+          <Switch
+            id="stock-toggle"
+            className="rounded-none scale-90"
+            checked={filters.onlyInStock}
+            onCheckedChange={(checked) =>
+              onFilterChange({ onlyInStock: checked, page: 1 })
+            }
+          />
+        </div>
       </div>
+    );
+  },
+);
+FilterPanel.displayName = "FilterPanel";
 
-      <Separator />
+// ---------------------------------------------------------------------------
+// Active filter badges
+// ---------------------------------------------------------------------------
 
-      {/* District */}
-      <div className="space-y-4">
-        <Label className="uppercase text-xs font-bold text-muted-foreground tracking-wider block mb-2">
-          Location
-        </Label>
-        <Input
-          placeholder="e.g. Gasabo, Kicukiro..."
-          value={filters.district}
-          onChange={(e) => handleFiltersChange({ district: e.target.value })}
-          className="h-9 bg-background"
-        />
+interface ActiveFiltersProps {
+  filters: CatalogFilters;
+  categories: Array<{ id: string; name: string }>;
+  onFilterChange: (patch: Partial<CatalogFilters>) => void;
+}
+
+const ActiveFilters = memo<ActiveFiltersProps>(
+  ({ filters, categories, onFilterChange }) => {
+    const active =
+      filters.categoryId !== "all" ||
+      filters.type !== "all" ||
+      filters.companyType !== "all" ||
+      filters.district ||
+      filters.minPrice ||
+      filters.maxPrice ||
+      filters.onlyInStock;
+
+    if (!active) return null;
+
+    return (
+      <div className="flex flex-wrap gap-2 items-center mt-2">
+        {filters.categoryId !== "all" && (
+          <FilterBadge
+            label={
+              categories.find((c) => c.id === filters.categoryId)?.name ??
+              "Category"
+            }
+            onRemove={() => onFilterChange({ categoryId: "all", page: 1 })}
+          />
+        )}
+        {filters.companyType !== "all" && (
+          <FilterBadge
+            label={
+              COMPANY_TYPES.find((t) => t.value === filters.companyType)
+                ?.label ?? filters.companyType
+            }
+            onRemove={() => onFilterChange({ companyType: "all", page: 1 })}
+          />
+        )}
+        {filters.type !== "all" && (
+          <FilterBadge
+            label={filters.type}
+            onRemove={() => onFilterChange({ type: "all", page: 1 })}
+          />
+        )}
+        {filters.district && (
+          <FilterBadge
+            label={`Loc: ${filters.district}`}
+            onRemove={() => onFilterChange({ district: "", page: 1 })}
+          />
+        )}
+        {(filters.minPrice || filters.maxPrice) && (
+          <FilterBadge
+            label={`${Number(filters.minPrice || 0).toLocaleString()} – ${Number(
+              filters.maxPrice || DEFAULT_PRICE_MAX,
+            ).toLocaleString()} RWF`}
+            onRemove={() =>
+              onFilterChange({ minPrice: "", maxPrice: "", page: 1 })
+            }
+          />
+        )}
+        {filters.onlyInStock && (
+          <FilterBadge
+            label="In Stock"
+            onRemove={() => onFilterChange({ onlyInStock: false, page: 1 })}
+          />
+        )}
       </div>
+    );
+  },
+);
+ActiveFilters.displayName = "ActiveFilters";
 
-      <Separator />
+const FilterBadge: React.FC<{ label: string; onRemove: () => void }> = ({
+  label,
+  onRemove,
+}) => (
+  <Badge
+    variant="secondary"
+    className="gap-2 rounded-none text-[9px] font-bold uppercase tracking-widest pl-3 pr-1.5 h-7 bg-muted/50 border-border/10"
+  >
+    {label}
+    <button
+      type="button"
+      onClick={onRemove}
+      aria-label={`Remove ${label} filter`}
+    >
+      <X className="w-3.5 h-3.5 hover:text-destructive cursor-pointer transition-colors" />
+    </button>
+  </Badge>
+);
 
-      {/* Availability */}
-      <div className="flex items-center justify-between space-x-2 border p-3 rounded-md border-border bg-background">
-        <Label
-          htmlFor="stock-mode"
-          className="text-sm font-medium cursor-pointer"
-        >
-          In Stock Only
-        </Label>
-        <Switch
-          id="stock-mode"
-          checked={filters.onlyInStock}
-          onCheckedChange={(checked: boolean) =>
-            handleFiltersChange({ onlyInStock: checked })
-          }
-        />
-      </div>
-    </div>
-  );
-};
+// ---------------------------------------------------------------------------
+// Main component
+// ---------------------------------------------------------------------------
 
 const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({
   initialCategoryId = "all",
+  initialType = "all",
+  onTypeChange,
   onSupplierClick,
   onProductClick,
 }) => {
-  const [viewMode] = useState<"grid" | "list">("grid");
-  const [filters, setFilters] = useState<CatalogFiltersState>(() => ({
-    ...defaultCatalogFiltersState(),
-    categoryId: initialCategoryId,
-  }));
-  const [searchInput, setSearchInput] = useState(filters.searchQuery);
-  const [page, setPage] = useState(1);
-  const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
+  const [filters, setFilters] = useState<CatalogFilters>(() =>
+    defaultFilters({ categoryId: initialCategoryId, type: initialType }),
+  );
+
+  const [searchInput, setSearchInput] = useState("");
+  const [priceRange, setPriceRange] = useState<[number, number]>([
+    0,
+    DEFAULT_PRICE_MAX,
+  ]);
   const [showFilters, setShowFilters] = useState(true);
-  const [priceRange, setPriceRange] = useState([0, 1000000]);
+  const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
-  // Debounce search input
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      handleFiltersChange({ searchQuery: searchInput });
-    }, 500);
-    return () => clearTimeout(timeout);
-  }, [searchInput]);
+  const patchFilters = useCallback(
+    (patch: Partial<CatalogFilters>) => {
+      setFilters((prev) => {
+        const next = { ...prev, ...patch };
+        if (patch.type != null && patch.type !== prev.type) {
+          onTypeChange?.(patch.type);
+        }
+        return next;
+      });
+    },
+    [onTypeChange],
+  );
 
-  // Sync slider with filters
+  const resetFilters = useCallback(() => {
+    setFilters(defaultFilters());
+    setSearchInput("");
+    setPriceRange([0, DEFAULT_PRICE_MAX]);
+    onTypeChange?.("all");
+  }, [onTypeChange]);
+
+  const searchDebounce = useRef<ReturnType<typeof setTimeout>>();
   useEffect(() => {
-    if (filters.minPrice || filters.maxPrice) {
-      setPriceRange([
-        Number(filters.minPrice) || 0,
-        Number(filters.maxPrice) || 1000000,
-      ]);
+    clearTimeout(searchDebounce.current);
+    searchDebounce.current = setTimeout(() => {
+      patchFilters({ searchQuery: searchInput, page: 1 });
+    }, 400);
+    return () => clearTimeout(searchDebounce.current);
+  }, [searchInput, patchFilters]);
+
+  const commitPrice = useCallback(() => {
+    patchFilters({
+      minPrice: priceRange[0].toString(),
+      maxPrice: priceRange[1].toString(),
+      page: 1,
+    });
+  }, [priceRange, patchFilters]);
+
+  useEffect(() => {
+    if (!filters.minPrice && !filters.maxPrice) {
+      setPriceRange([0, DEFAULT_PRICE_MAX]);
     }
   }, [filters.minPrice, filters.maxPrice]);
 
-  useEffect(() => {
-    setFilters((f) => ({ ...f, categoryId: initialCategoryId }));
-    setPage(1);
-  }, [initialCategoryId]);
-
-  const sharedQueryParams = {
-    page,
-    limit: PAGE_SIZE,
-    query: filters.searchQuery.trim() || undefined,
-    categoryId: filters.categoryId === "all" ? undefined : filters.categoryId,
-    district: filters.district.trim() || undefined,
-    minPrice: filters.minPrice ? Number(filters.minPrice) : undefined,
-    maxPrice: filters.maxPrice ? Number(filters.maxPrice) : undefined,
-    companyType:
-      filters.companyType === "all" ? undefined : filters.companyType,
-    sortBy: filters.sortBy,
-    sortOrder: filters.sortOrder,
-  };
+  const sharedParams = useMemo(
+    () => ({
+      page: filters.page,
+      limit: PAGE_SIZE,
+      query: filters.searchQuery.trim() || undefined,
+      categoryId: filters.categoryId === "all" ? undefined : filters.categoryId,
+      district: filters.district.trim() || undefined,
+      minPrice: filters.minPrice ? Number(filters.minPrice) : undefined,
+      maxPrice: filters.maxPrice ? Number(filters.maxPrice) : undefined,
+      companyType:
+        filters.companyType === "all" ? undefined : filters.companyType,
+      sortBy: filters.sortBy,
+      sortOrder: filters.sortOrder,
+    }),
+    [filters],
+  );
 
   const skipProducts = filters.type === "SERVICE";
   const skipServices = filters.type === "PRODUCT";
 
-  const { data: productsData } = useGetProductsQuery(
-    { ...sharedQueryParams, inStock: filters.onlyInStock ? true : undefined },
-    { skip: skipProducts },
-  );
+  const { data: productsData, isFetching: productsFetching } =
+    useGetProductsQuery(
+      {
+        ...sharedParams,
+        inStock: filters.onlyInStock ? true : undefined,
+      },
+      {
+        skip: skipProducts,
+        selectFromResult: (res) => ({
+          data: {
+            data: selectProductsData(res.data),
+            meta: selectProductsMeta(res.data),
+          },
+          isFetching: res.isFetching,
+        }),
+      },
+    );
 
-  const { data: servicesData } = useGetServicesQuery(sharedQueryParams, {
-    skip: skipServices,
-  });
+  const { data: servicesData, isFetching: servicesFetching } =
+    useGetServicesQuery(sharedParams, {
+      skip: skipServices,
+      selectFromResult: (res) => ({
+        data: {
+          data: selectServicesData(res.data),
+          meta: selectServicesMeta(res.data),
+        },
+        isFetching: res.isFetching,
+      }),
+    });
+
+  const isFetching = productsFetching || servicesFetching;
 
   const { data: categoriesData } = useGetProductCategoriesQuery({ limit: 50 });
 
   const isAuthenticated = useSelector((s: RootState) => s.auth.isAuthenticated);
-  const { data: wishlist = [] } = useGetWishlistQuery(undefined, {
+  const { data: wishlistRaw = [] } = useGetWishlistQuery(undefined, {
     skip: !isAuthenticated,
   });
   const [addToWishlist] = useAddToWishlistMutation();
   const [removeFromWishlist] = useRemoveFromWishlistMutation();
 
-  const wishlistIds = new Set(
-    Array.isArray(wishlist) ? wishlist.map((l: { id: string }) => l.id) : [],
+  const wishlistIds = useMemo(
+    () =>
+      new Set(
+        Array.isArray(wishlistRaw)
+          ? wishlistRaw.map((l: { id: string }) => l.id)
+          : [],
+      ),
+    [wishlistRaw],
   );
+
+  const items = useMemo<MarketplaceItem[]>(() => {
+    const products = (productsData?.data ?? []).map(
+      (p): MarketplaceItem => ({ ...p, itemType: "PRODUCT" }),
+    );
+    const services = (servicesData?.data ?? []).map(
+      (s): MarketplaceItem => ({ ...s, itemType: "SERVICE" }),
+    );
+    return [...products, ...services];
+  }, [productsData?.data, servicesData?.data]);
+
+  const categories = useMemo(
+    () => categoriesData?.data ?? [],
+    [categoriesData?.data],
+  );
+
+  const paginationMeta = useMemo(() => {
+    if (filters.type === "PRODUCT") {
+      return productsData?.meta ?? null;
+    }
+    if (filters.type === "SERVICE") {
+      return servicesData?.meta ?? null;
+    }
+    const totalPages = Math.max(
+      productsData?.meta?.totalPages ?? 1,
+      servicesData?.meta?.totalPages ?? 1,
+    );
+    return { page: filters.page, totalPages };
+  }, [filters.type, filters.page, productsData?.meta, servicesData?.meta]);
 
   const handleSupplierClick = useCallback(
     (e: React.MouseEvent, companyId: string) => {
@@ -381,161 +657,140 @@ const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({
     [onSupplierClick],
   );
 
-  const handleFiltersChange = (updates: Partial<CatalogFiltersState>) => {
-    setFilters((f) => ({ ...f, ...updates }));
-    setPage(1);
-  };
-
-  const handleClearFilters = () => {
-    setFilters(defaultCatalogFiltersState());
-    setSearchInput("");
-    setPriceRange([0, 1000000]);
-    setPage(1);
-  };
-
-  const handlePriceRangeChange = (value: number[]) => {
-    setPriceRange(value);
-  };
-
-  const applyPriceFilter = () => {
-    setFilters((f) => ({
-      ...f,
-      minPrice: priceRange[0].toString(),
-      maxPrice: priceRange[1].toString(),
-      page: 1,
-    }));
-  };
-
-  const handleTypeChange = (type: "all" | "PRODUCT" | "SERVICE") => {
-    setFilters((f) => ({ ...f, type, page: 1 }));
-  };
-
-  const handleCategoryChange = (categoryId: string) => {
-    setFilters((f) => ({
-      ...f,
-      categoryId,
-      page: 1,
-    }));
-  };
-
-  // Merge product and service API streams for unified rendering.
-  const { apiItems } = useMemo(() => {
-    const products = (productsData?.data ?? []).map((p) => ({
-      ...p,
-      itemType: "PRODUCT" as const,
-    }));
-    const services = (servicesData?.data ?? []).map((s) => ({
-      ...s,
-      itemType: "SERVICE" as const,
-    }));
-    return {
-      apiProducts: products,
-      apiServices: services,
-      apiItems: [...products, ...services],
-    };
-  }, [productsData?.data, servicesData?.data]);
-
-  const activeItems = apiItems;
-
-  const activeCategories = useMemo(
-    () => categoriesData?.data ?? [],
-    [categoriesData?.data],
+  const handleToggleWishlist = useCallback(
+    (e: React.MouseEvent, item: MarketplaceItem) => {
+      e.stopPropagation();
+      const type = item.itemType.toLowerCase() as "product" | "service";
+      if (wishlistIds.has(item.id)) {
+        removeFromWishlist({ id: item.id, type });
+      } else {
+        addToWishlist({ id: item.id, type });
+      }
+    },
+    [wishlistIds, addToWishlist, removeFromWishlist],
   );
 
-  const combinedTotal = useMemo(
-    () => (productsData?.meta?.total ?? 0) + (servicesData?.meta?.total ?? 0),
-    [productsData?.meta?.total, servicesData?.meta?.total],
+  const filterPanelProps: FilterPanelProps = useMemo(
+    () => ({
+      filters,
+      categories,
+      priceRange,
+      onPriceRangeChange: setPriceRange,
+      onPriceCommit: commitPrice,
+      onFilterChange: patchFilters,
+    }),
+    [filters, categories, priceRange, commitPrice, patchFilters],
   );
 
-  const activeMeta = useMemo(() => {
-    if (filters.type === "PRODUCT") return productsData?.meta;
-    if (filters.type === "SERVICE") return servicesData?.meta;
-    return {
-      page,
-      limit: PAGE_SIZE,
-      total: combinedTotal,
-      totalPages: Math.max(1, Math.ceil(combinedTotal / PAGE_SIZE)),
-    };
-  }, [
-    filters.type,
-    productsData?.meta,
-    servicesData?.meta,
-    page,
-    combinedTotal,
-  ]);
-
-  const commonFilterProps = {
-    filters,
-    activeCategories,
-    priceRange,
-    handleFiltersChange,
-    handleCategoryChange,
-    handleTypeChange,
-    handlePriceRangeChange,
-    handlePriceFilterApply: applyPriceFilter,
-    setPriceRange,
-  };
+  const hasActiveFilters =
+    filters.categoryId !== "all" ||
+    filters.type !== "all" ||
+    filters.companyType !== "all" ||
+    !!filters.district ||
+    !!filters.minPrice ||
+    !!filters.maxPrice ||
+    filters.onlyInStock;
 
   return (
     <div className="min-h-screen bg-background pb-20">
+      {/* Header */}
+      <div className="bg-background border-b border-border sticky top-0 z-30 py-4">
+        <div className="max-w-[1600px] mx-auto px-4 md:px-6">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div>
+              <h1 className="text-3xl md:text-4xl font-display font-black uppercase text-foreground tracking-tighter leading-none mb-2">
+                Market Registry
+              </h1>
+              <p className="text-[10px] font-bold text-muted-foreground/40 uppercase tracking-[0.3em]">
+                Asset protocol / Global inventory nodes
+              </p>
+            </div>
+
+            <div className="flex items-center gap-4">
+              <div className="flex items-center bg-muted/30 border border-border/10 p-1 rounded-none">
+                <Button
+                  variant={viewMode === "grid" ? "secondary" : "ghost"}
+                  size="icon"
+                  className="rounded-none h-8 w-8"
+                  onClick={() => setViewMode("grid")}
+                >
+                  <LayoutGrid className="w-4 h-4" />
+                </Button>
+                <Button
+                  variant={viewMode === "list" ? "secondary" : "ghost"}
+                  size="icon"
+                  className="rounded-none h-8 w-8"
+                  onClick={() => setViewMode("list")}
+                >
+                  <List className="w-4 h-4" />
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div className="max-w-[1600px] mx-auto px-4 md:px-6 py-8">
         <div className="flex flex-col lg:flex-row gap-8 items-start">
+          {/* Desktop Sidebar */}
           {showFilters && (
-            <aside className="hidden lg:block w-72 shrink-0 sticky top-24 h-[calc(100vh-6rem)] transition-all duration-300">
-              <div className="flex items-center justify-between mb-4 pr-4">
-                <h2 className="text-lg font-heading font-bold uppercase tracking-wide flex items-center gap-2">
-                  Filters
+            <aside className="hidden lg:block w-72 shrink-0 sticky top-24 h-[calc(100vh-6rem)]">
+              <div className="flex items-center justify-between mb-8 pr-4">
+                <h2 className="text-xs font-display font-black uppercase tracking-[0.2em] flex items-center gap-2">
+                  <SlidersHorizontal className="w-4 h-4" />
+                  Parameters
                 </h2>
                 <div className="flex items-center gap-2">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="h-6 text-[10px] uppercase font-bold text-muted-foreground hover:text-destructive"
-                    onClick={handleClearFilters}
-                  >
-                    Reset
-                  </Button>
+                  {hasActiveFilters && (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="h-6 text-[9px] uppercase font-black tracking-widest text-muted-foreground/40 hover:text-destructive hover:bg-transparent"
+                      onClick={resetFilters}
+                    >
+                      Reset Protocol
+                    </Button>
+                  )}
                   <Button
                     variant="ghost"
                     size="icon"
                     className="h-8 w-8 text-muted-foreground hover:text-foreground md:hidden"
                     onClick={() => setShowFilters(false)}
                   >
-                    <RiExpandLeftLine className="w-4 h-4" />
+                    <ChevronLeft className="w-4 h-4" />
                   </Button>
                 </div>
               </div>
-
               <ScrollArea className="h-[calc(100vh-10rem)] pr-4">
-                <FilterContent {...commonFilterProps} />
+                <FilterPanel {...filterPanelProps} />
               </ScrollArea>
             </aside>
           )}
 
           {/* Main Content */}
           <div className="flex-1 min-w-0">
-            {/* Toolbar & Mobile Filters */}
-            <div className="flex flex-col gap-4 mb-6 sticky top-16 lg:top-0 z-30 bg-background/95 backdrop-blur-md py-4 border-b border-border">
+            {/* Toolbar */}
+            <div className="flex flex-col gap-4 mb-6 sticky top-16 lg:top-0 z-20 bg-background/95 backdrop-blur-md py-2 lg:py-4">
               <div className="flex gap-4 items-center">
-                {/* Desktop Toggle Button (when hidden) */}
                 <Button
                   variant="outline"
                   size="icon"
                   className={cn(
-                    "hidden lg:flex shrink-0",
-                    showFilters && "bg-muted/50",
+                    "hidden lg:flex shrink-0 rounded-none border-border/20",
+                    showFilters && "bg-muted/30 border-primary/20",
                   )}
                   onClick={() => setShowFilters(!showFilters)}
                   title={showFilters ? "Hide Filters" : "Show Filters"}
                 >
-                  {showFilters ? (
-                    <RiExpandLeftLine className="w-5 h-5 text-muted-foreground" />
-                  ) : (
-                    <RiCloseLine className="w-5 h-5 text-muted-foreground" />
-                  )}
+                  <SlidersHorizontal
+                    className={cn(
+                      "w-4 h-4",
+                      hasActiveFilters && "text-primary",
+                    )}
+                  />
                 </Button>
 
-                {/* Mobile Filter Toggle */}
+                {/* Mobile Filter */}
                 <div className="lg:hidden w-full sm:w-auto">
                   <Collapsible
                     open={isMobileFiltersOpen}
@@ -544,238 +799,145 @@ const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({
                   >
                     <CollapsibleTrigger
                       className={cn(
-                        "inline-flex items-center justify-between whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 w-full sm:w-auto gap-2 shrink-0 sm:justify-center",
+                        "inline-flex items-center justify-between whitespace-nowrap rounded-none text-[10px] font-display font-bold uppercase tracking-widest ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-border/20 bg-background hover:bg-muted h-10 px-4 w-full sm:w-auto gap-4 shrink-0 sm:justify-center transition-all",
                       )}
                     >
                       <span className="flex items-center gap-2">
                         <Filter className="w-4 h-4" />
                         Filters
-                        {(filters.minPrice ||
-                          filters.maxPrice ||
-                          filters.district ||
-                          filters.type !== "all" ||
-                          filters.categoryId !== "all" ||
-                          filters.onlyInStock ||
-                          filters.companyType !== "all") && (
+                        {hasActiveFilters && (
                           <Badge
                             variant="secondary"
-                            className="ml-1 h-5 px-1.5 text-[10px]"
+                            className="ml-2 h-5 px-2 text-[9px] font-black uppercase tracking-widest rounded-none bg-primary text-primary-foreground"
                           >
                             Active
                           </Badge>
                         )}
                       </span>
                       <ChevronDown
-                        className={`w-4 h-4 transition-transform ${isMobileFiltersOpen ? "rotate-180" : ""}`}
+                        className={cn(
+                          "w-4 h-4 transition-transform",
+                          isMobileFiltersOpen && "rotate-180",
+                        )}
                       />
                     </CollapsibleTrigger>
-                    <CollapsibleContent className="mt-4 p-4 border rounded-md bg-background shadow-sm space-y-6">
+                    <CollapsibleContent className="mt-4 p-4 border rounded-none border-border/20 bg-background shadow-sm space-y-6">
                       <div className="flex items-center justify-between mb-2">
-                        <h3 className="font-heading font-bold uppercase text-sm">
-                          Refine Search
+                        <h3 className="font-display font-black uppercase text-xs tracking-widest">
+                          Refine Registry
                         </h3>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={handleClearFilters}
-                          className="text-xs h-6"
-                        >
-                          Reset All
-                        </Button>
+                        {hasActiveFilters && (
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={resetFilters}
+                            className="text-[10px] font-black uppercase tracking-widest h-6"
+                          >
+                            Reset All
+                          </Button>
+                        )}
                       </div>
-                      <FilterContent {...commonFilterProps} />
+                      <FilterPanel {...filterPanelProps} />
                       <Button
                         onClick={() => setIsMobileFiltersOpen(false)}
-                        className="w-full mt-4"
+                        className="w-full mt-6 rounded-none font-display font-black uppercase tracking-widest h-12"
                       >
-                        Close Filters
+                        Apply Filters
                       </Button>
                     </CollapsibleContent>
                   </Collapsible>
                 </div>
 
-                <div className="relative flex-1 hidden sm:block">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <div className="relative flex-1 group">
+                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/30 group-focus-within:text-primary transition-colors" />
                   <Input
-                    placeholder="Search products, services..."
-                    className="pl-9 bg-muted/30 border-border rounded-sm focus:ring-1 focus:ring-primary h-10 w-full"
+                    placeholder="SEARCH REGISTRY NODES..."
+                    className="pl-12 bg-muted/10 border-border/20 rounded-none focus:ring-0 focus:border-primary/40 h-11 w-full font-display font-bold uppercase tracking-widest text-[10px] transition-all"
                     value={searchInput}
                     onChange={(e) => setSearchInput(e.target.value)}
                   />
                 </div>
               </div>
 
-              {/* Mobile Search (visible only on mobile) */}
-              <div className="relative flex-1 sm:hidden">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                <Input
-                  placeholder="Search..."
-                  className="pl-9 bg-muted/30 border-border rounded-sm focus:ring-1 focus:ring-primary h-10 w-full"
-                  value={searchInput}
-                  onChange={(e) => setSearchInput(e.target.value)}
-                />
-              </div>
-
-              {/* Active Filters Badges (Mobile/Desktop) */}
-              {(filters.categoryId !== "all" ||
-                filters.type !== "all" ||
-                filters.companyType !== "all" ||
-                filters.district ||
-                filters.minPrice ||
-                filters.maxPrice ||
-                filters.onlyInStock) && (
-                <div className="flex flex-wrap gap-2 items-center">
-                  {filters.categoryId !== "all" && (
-                    <Badge
-                      variant="secondary"
-                      className="gap-1 rounded-sm text-[10px] pl-2 pr-1 h-6"
-                    >
-                      {activeCategories.find((c) => c.id === filters.categoryId)
-                        ?.name || "Category"}
-                      <X
-                        className="w-3 h-3 hover:text-destructive cursor-pointer"
-                        onChange={() => handleCategoryChange("all")}
-                        onClick={() => handleCategoryChange("all")}
-                      />
-                    </Badge>
-                  )}
-                  {filters.companyType !== "all" && (
-                    <Badge
-                      variant="secondary"
-                      className="gap-1 rounded-sm text-[10px] pl-2 pr-1 h-6"
-                    >
-                      {COMPANY_TYPES.find(
-                        (t) => t.value === filters.companyType,
-                      )?.label || filters.companyType}
-                      <X
-                        className="w-3 h-3 hover:text-destructive cursor-pointer"
-                        onClick={() =>
-                          handleFiltersChange({ companyType: "all" })
-                        }
-                      />
-                    </Badge>
-                  )}
-                  {filters.type !== "all" && (
-                    <Badge
-                      variant="secondary"
-                      className="gap-1 rounded-sm text-[10px] pl-2 pr-1 h-6"
-                    >
-                      {filters.type}
-                      <X
-                        className="w-3 h-3 hover:text-destructive cursor-pointer"
-                        onClick={() => handleFiltersChange({ type: "all" })}
-                      />
-                    </Badge>
-                  )}
-                  {filters.district && (
-                    <Badge
-                      variant="secondary"
-                      className="gap-1 rounded-sm text-[10px] pl-2 pr-1 h-6"
-                    >
-                      Loc: {filters.district}
-                      <X
-                        className="w-3 h-3 hover:text-destructive cursor-pointer"
-                        onClick={() => handleFiltersChange({ district: "" })}
-                      />
-                    </Badge>
-                  )}
-                  {(filters.minPrice || filters.maxPrice) && (
-                    <Badge
-                      variant="secondary"
-                      className="gap-1 rounded-sm text-[10px] pl-2 pr-1 h-6"
-                    >
-                      {Number(filters.minPrice || 0).toLocaleString()} -{" "}
-                      {Number(filters.maxPrice || 1000000).toLocaleString()} RWF
-                      <X
-                        className="w-3 h-3 hover:text-destructive cursor-pointer"
-                        onClick={() =>
-                          handleFiltersChange({ minPrice: "", maxPrice: "" })
-                        }
-                      />
-                    </Badge>
-                  )}
-                  {filters.onlyInStock && (
-                    <Badge
-                      variant="secondary"
-                      className="gap-1 rounded-sm text-[10px] pl-2 pr-1 h-6"
-                    >
-                      In Stock
-                      <X
-                        className="w-3 h-3 hover:text-destructive cursor-pointer"
-                        onClick={() =>
-                          handleFiltersChange({ onlyInStock: false })
-                        }
-                      />
-                    </Badge>
-                  )}
-                </div>
-              )}
+              <ActiveFilters
+                filters={filters}
+                categories={categories}
+                onFilterChange={patchFilters}
+              />
             </div>
 
             {/* Results */}
-            {activeItems.length === 0 ? (
-              <div className="flex flex-col items-center justify-center py-24 text-center border border-dashed border-border rounded-sm bg-muted/5">
-                <div className="w-20 h-20 bg-muted/20 rounded-full flex items-center justify-center mb-6">
-                  <Package className="w-10 h-10 text-muted-foreground/50" />
+            {isFetching && items.length === 0 ? (
+              <div
+                className={cn(
+                  "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8",
+                  showFilters
+                    ? "xl:grid-cols-3"
+                    : "xl:grid-cols-4 2xl:grid-cols-5",
+                )}
+              >
+                {Array.from({ length: 9 }).map((_, i) => (
+                  <div
+                    key={i}
+                    className="h-72 rounded-none border border-border/5 bg-muted/5 animate-pulse"
+                  />
+                ))}
+              </div>
+            ) : items.length === 0 ? (
+              <div className="flex flex-col items-center justify-center py-32 text-center border border-border/20 rounded-none bg-muted/5 relative overflow-hidden">
+                <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none" />
+                <div className="w-24 h-24 bg-primary/5 rounded-none border border-primary/20 flex items-center justify-center mb-10 relative z-10 transition-transform duration-500 hover:scale-110">
+                  <Package className="w-10 h-10 text-primary/40" />
                 </div>
-                <h3 className="text-2xl font-heading font-bold uppercase text-foreground mb-3 tracking-wide">
-                  No Results Found
+                <h3 className="text-3xl font-display font-black uppercase text-foreground mb-4 tracking-tighter relative z-10">
+                  No Assets Registry
                 </h3>
-                <p className="text-muted-foreground max-w-md mx-auto mb-8 text-base leading-relaxed">
-                  We couldn't find any products or services matching your
-                  current criteria. Try adjusting your search or clearing
-                  filters.
+                <p className="text-xs font-bold text-muted-foreground/30 uppercase tracking-[0.3em] max-w-md mx-auto mb-12 leading-relaxed relative z-10">
+                  Criteria mismatch / Asset node not found
                 </p>
                 <Button
                   size="lg"
-                  className="rounded-sm font-heading uppercase tracking-wider h-12 px-8"
-                  onClick={handleClearFilters}
+                  className="rounded-none font-display font-black uppercase tracking-[0.2em] h-14 px-10 relative z-10"
+                  onClick={resetFilters}
                 >
-                  Reset All Filters
+                  Reset Protocol
                 </Button>
               </div>
             ) : (
               <>
                 <div
-                  className={
+                  className={cn(
                     viewMode === "grid"
                       ? cn(
-                          "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6",
-                          showFilters ? "xl:grid-cols-4" : "xl:grid-cols-5",
+                          "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8",
+                          showFilters
+                            ? "xl:grid-cols-3"
+                            : "xl:grid-cols-4 2xl:grid-cols-5",
                         )
-                      : "flex flex-col gap-6"
-                  }
+                      : "flex flex-col gap-6",
+                    isFetching &&
+                      "opacity-60 pointer-events-none transition-opacity",
+                  )}
                 >
-                  {activeItems.map((item) => (
+                  {items.map((item) => (
                     <ProductCard
                       key={item.id}
-                      listing={item as any}
+                      listing={item}
                       viewMode={viewMode}
-                      onSupplierClick={(e) =>
-                        item.company &&
-                        handleSupplierClick(
-                          e,
-                          (item.company as { id: string }).id,
-                        )
+                      onSupplierClick={
+                        item.company
+                          ? (e) =>
+                              handleSupplierClick(
+                                e,
+                                (item.company as { id: string }).id,
+                              )
+                          : undefined
                       }
                       onClick={() => onProductClick?.(item)}
                       isInWishlist={isAuthenticated && wishlistIds.has(item.id)}
                       onToggleWishlist={
                         isAuthenticated
-                          ? (e) => {
-                              e.stopPropagation();
-                              const typeStr = item.itemType?.toLowerCase() as
-                                | "product"
-                                | "service";
-                              if (wishlistIds.has(item.id)) {
-                                removeFromWishlist({
-                                  id: item.id,
-                                  type: typeStr,
-                                });
-                              } else {
-                                addToWishlist({ id: item.id, type: typeStr });
-                              }
-                            }
+                          ? (e) => handleToggleWishlist(e, item)
                           : undefined
                       }
                     />
@@ -783,69 +945,30 @@ const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({
                 </div>
 
                 {/* Pagination */}
-                {activeMeta && activeMeta.totalPages > 1 && (
-                  <div className="mt-16 pt-8 border-t border-border">
-                    <Pagination>
-                      <PaginationContent>
-                        <PaginationItem>
-                          <PaginationPrevious
-                            href="#"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              if (page > 1) setPage(page - 1);
-                            }}
-                            className={
-                              page <= 1
-                                ? "pointer-events-none opacity-50"
-                                : "cursor-pointer"
-                            }
-                          />
-                        </PaginationItem>
-                        {/* Page Numbers */}
-                        {Array.from({
-                          length: Math.min(5, activeMeta.totalPages),
-                        }).map((_, i) => {
-                          let pNum = i + 1;
-                          if (activeMeta.totalPages > 5) {
-                            if (page > 3) pNum = page - 2 + i;
-                            if (activeMeta.totalPages - page < 2) {
-                              pNum = activeMeta.totalPages - 4 + i;
-                            }
-                            if (pNum < 1) pNum = i + 1;
-                          }
-                          return (
-                            <PaginationItem key={pNum}>
-                              <PaginationLink
-                                href="#"
-                                isActive={page === pNum}
-                                onClick={(e) => {
-                                  e.preventDefault();
-                                  setPage(pNum);
-                                }}
-                                className="cursor-pointer"
-                              >
-                                {pNum}
-                              </PaginationLink>
-                            </PaginationItem>
-                          );
-                        })}
-                        <PaginationItem>
-                          <PaginationNext
-                            href="#"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              if (page < activeMeta.totalPages)
-                                setPage(page + 1);
-                            }}
-                            className={
-                              page >= activeMeta.totalPages
-                                ? "pointer-events-none opacity-50"
-                                : "cursor-pointer"
-                            }
-                          />
-                        </PaginationItem>
-                      </PaginationContent>
-                    </Pagination>
+                {paginationMeta && paginationMeta.totalPages > 1 && (
+                  <div className="flex justify-center gap-4 mt-16 pt-10 border-t border-border/20">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="rounded-none font-display font-bold uppercase tracking-widest text-[9px] h-10 px-6 border-border/40"
+                      disabled={filters.page <= 1}
+                      onClick={() => patchFilters({ page: filters.page - 1 })}
+                    >
+                      Previous
+                    </Button>
+                    <span className="flex items-center px-6 text-[10px] font-display font-black uppercase tracking-widest text-muted-foreground/30">
+                      Registry Node {paginationMeta.page} of{" "}
+                      {paginationMeta.totalPages}
+                    </span>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="rounded-none font-display font-bold uppercase tracking-widest text-[9px] h-10 px-6 border-border/40"
+                      disabled={filters.page >= paginationMeta.totalPages}
+                      onClick={() => patchFilters({ page: filters.page + 1 })}
+                    >
+                      Next
+                    </Button>
                   </div>
                 )}
               </>
@@ -858,3 +981,15 @@ const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({
 };
 
 export default MarketplaceGrid;
+
+// ---------------------------------------------------------------------------
+// Helpers
+// ---------------------------------------------------------------------------
+
+function buildPageNumbers(currentPage: number, totalPages: number): number[] {
+  const windowSize = Math.min(5, totalPages);
+  let start = Math.max(1, currentPage - Math.floor(windowSize / 2));
+  const end = Math.min(totalPages, start + windowSize - 1);
+  start = Math.max(1, end - windowSize + 1);
+  return Array.from({ length: end - start + 1 }, (_, i) => start + i);
+}

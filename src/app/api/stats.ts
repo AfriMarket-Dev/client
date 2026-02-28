@@ -16,13 +16,15 @@ export const statsApi = apiSlice.injectEndpoints({
     }),
     getMarketplaceStats: builder.query<MarketplaceStats, void>({
       query: () => "/stats/marketplace",
-      transformResponse: (response: ApiResponse<MarketplaceStats>) =>
-        unwrapResponse(response) || {
-          verifiedSuppliers: 0,
-          productsListed: 0,
-          districtsCovered: 0,
-          activeContractors: 0,
-        },
+      transformResponse: (response: ApiResponse<MarketplaceStats>) => {
+        const data = unwrapResponse(response);
+        return {
+          verifiedSuppliers: data?.verifiedSuppliers ?? 0,
+          productsListed: data?.productsListed ?? 0,
+          districtsCovered: data?.districtsCovered ?? 0,
+          activeContractors: data?.activeContractors ?? 0,
+        };
+      },
       providesTags: ["Stats"],
     }),
   }),

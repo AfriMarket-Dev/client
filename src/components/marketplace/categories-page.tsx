@@ -37,44 +37,46 @@ const CategoriesPage: React.FC<CategoriesPageProps> = ({ onBack }) => {
           <Button
             variant="ghost"
             onClick={onBack}
-            className="gap-2 font-heading uppercase text-xs tracking-wider rounded-sm"
+            className="gap-2 font-display font-bold uppercase text-xs tracking-[0.2em] rounded-none hover:bg-muted/50 border border-transparent hover:border-border/20 px-4"
           >
             <RiArrowLeftLine className="w-4 h-4" />
             Back
           </Button>
-          <div className="relative flex-1 max-w-md">
-            <RiSearchLine className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+          <div className="relative flex-1 max-w-md group">
+            <RiSearchLine className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/40 group-focus-within:text-primary transition-colors" />
             <Input
-              placeholder="Search categories..."
+              placeholder="SEARCH CATEGORIES..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 rounded-sm border-border"
+              className="pl-12 rounded-none border-border/20 bg-muted/5 focus:bg-background h-11 font-display font-medium uppercase tracking-widest text-xs"
             />
           </div>
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <h1 className="text-3xl font-heading font-bold uppercase text-foreground mb-2 tracking-wide">
+        <h1 className="text-3xl md:text-4xl font-display font-extrabold uppercase text-foreground mb-4 tracking-tighter leading-none">
           Product Categories
         </h1>
-        <p className="text-muted-foreground mb-8">
-          Browse products by category.
+        <p className="text-xs font-bold text-muted-foreground/40 uppercase tracking-[0.3em] mb-12">
+          Protocol navigation / Browse by node
         </p>
 
         {isLoading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {Array.from({ length: 6 }).map((_, i) => (
+            {Array.from({ length: 9 }).map((_, i) => (
               <div
-                key={i}
-                className="h-32 rounded-sm border border-border bg-muted/30 animate-pulse"
+                key={`skeleton-${i}`}
+                className="h-40 rounded-none border border-border/10 bg-muted/10 animate-pulse"
               />
             ))}
           </div>
         ) : filtered.length === 0 ? (
-          <div className="text-center py-16 bg-card rounded-sm border border-border">
-            <RiPagesLine className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-            <p className="text-muted-foreground">No categories found.</p>
+          <div className="text-center py-20 bg-card rounded-none border border-border/10 shadow-2xl shadow-primary/5">
+            <RiPagesLine className="w-12 h-12 text-muted-foreground/20 mx-auto mb-6" />
+            <p className="text-xs font-bold text-muted-foreground/40 uppercase tracking-widest">
+              No categories found in registry.
+            </p>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -85,19 +87,23 @@ const CategoriesPage: React.FC<CategoriesPageProps> = ({ onBack }) => {
                 onClick={() =>
                   navigate({
                     to: "/marketplace",
-                    search: { category: category.id } as any,
-                  })
+                    search: { category: category.id },
+                  } as any)
                 }
-                className="group text-left p-6 rounded-sm border border-border bg-card hover:border-primary transition-all duration-200"
+                className="group text-left p-8 rounded-none border border-border/10 bg-card hover:border-primary/40 transition-all duration-500 relative overflow-hidden hover:shadow-2xl hover:shadow-primary/5"
               >
-                <div className="w-12 h-12 rounded-sm bg-muted/50 border border-border flex items-center justify-center mb-4 text-muted-foreground group-hover:bg-primary group-hover:text-primary-foreground group-hover:border-primary transition-colors">
+                {/* Editorial accent */}
+                <div className="absolute top-0 left-0 w-[1px] h-full bg-primary/0 group-hover:bg-primary/40 transition-all duration-500" />
+
+                <div className="w-12 h-12 rounded-none bg-muted/20 border border-border/10 flex items-center justify-center mb-6 text-muted-foreground/60 group-hover:bg-primary group-hover:text-primary-foreground group-hover:border-primary transition-all duration-500">
                   <RiPagesLine className="w-6 h-6" />
                 </div>
-                <h2 className="text-xl font-heading font-bold uppercase text-foreground mb-2 group-hover:text-primary transition-colors">
+                <h2 className="text-lg font-display font-extrabold uppercase text-foreground mb-2 group-hover:text-primary transition-colors tracking-tight">
                   {category.name}
                 </h2>
-                <p className="text-muted-foreground text-sm line-clamp-2">
-                  {category.description || "Browse products in this category."}
+                <p className="text-muted-foreground/60 text-[10px] font-medium uppercase tracking-widest leading-relaxed line-clamp-2">
+                  {category.description ||
+                    "Browse inventory nodes in this category."}
                 </p>
               </button>
             ))}

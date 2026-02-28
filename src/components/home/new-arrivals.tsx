@@ -1,6 +1,6 @@
 import { useNavigate } from "@tanstack/react-router";
 import { RiSparklingLine } from "@remixicon/react";
-import type React from "react";
+import React from "react";
 import { useSelector } from "react-redux";
 import { toast } from "sonner";
 import { useGetProductsQuery } from "@/app/api/products";
@@ -13,10 +13,11 @@ import type { RootState } from "@/app/store";
 import { ProductCard } from "@/components/marketplace/catalog/product-card";
 import { Button } from "@/components/ui/button";
 import { SectionHeader } from "./section-header";
+import { HomeSection } from "./home-section";
 
 const NewArrivals: React.FC = () => {
 	const navigate = useNavigate();
-	const { data: productsResult } = useGetProductsQuery({
+	const { data: productsResult, isLoading } = useGetProductsQuery({
 		sortBy: "createdAt",
 		sortOrder: "DESC",
 		limit: 10,
@@ -55,15 +56,22 @@ const NewArrivals: React.FC = () => {
 		}
 	};
 
+	if (!isLoading && listings.length === 0) return null;
+
 	return (
-		<>
+		<HomeSection
+			id="new-arrivals"
+			variant="white"
+			borderBottom
+			className="py-10 lg:py-14"
+		>
 			<SectionHeader
-				title="New Inventory"
-				subtitle="The latest verified industrial listings integrated into the marketplace."
-				label="Recent Nodes"
+				title="New Arrivals"
+				subtitle="The latest verified industrial materials and equipment added to the marketplace."
+				label="Latest Inventory"
 				icon={<RiSparklingLine className="w-5 h-5" />}
 				viewAllHref="/products?sort=newest"
-				viewAllLabel="Browse Fresh Inventory"
+				viewAllLabel="View All New Arrivals"
 			/>
 
 			{listings.length === 0 ? (
@@ -103,7 +111,7 @@ const NewArrivals: React.FC = () => {
 					View all new listings
 				</Button>
 			</div>
-		</>
+		</HomeSection>
 	);
 };
 

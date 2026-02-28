@@ -1,8 +1,14 @@
 import { useForm } from "@tanstack/react-form";
 import type React from "react";
 import { useState } from "react";
-import { AlertCircleIcon, ImageIcon, UploadIcon, XIcon } from "lucide-react";
-import { useGetProductCategoriesQuery } from "@/app/api/product-categories";
+import {
+  AlertCircleIcon,
+  ImageIcon,
+  UploadIcon,
+  XIcon,
+  ClockIcon,
+} from "lucide-react";
+import { useGetServiceCategoriesQuery } from "@/app/api/service-categories";
 import { useFileUpload } from "@/hooks/use-file-upload";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,38 +22,37 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 
-interface ProductFormValues {
+interface ServiceFormValues {
   name: string;
   categoryId: string;
   description: string;
   price: string;
-  stock: string;
-  unit: string;
+  priceType: "FIXED" | "NEGOTIABLE" | "STARTS_AT";
+  duration: string;
 }
 
-interface ProductFormProps {
-  onSubmit: (values: ProductFormValues & { imageUrls: string[] }) => void;
+interface ServiceFormProps {
+  onSubmit: (values: ServiceFormValues & { imageUrls: string[] }) => void;
   onCancel: () => void;
-  initialValues?: Partial<ProductFormValues>;
+  initialValues?: Partial<ServiceFormValues>;
   isLoading?: boolean;
 }
 
 const MAX_IMAGES = 8;
 const MAX_SIZE_MB = 5;
 
-export const ProductForm: React.FC<ProductFormProps> = ({
+export const ServiceForm: React.FC<ServiceFormProps> = ({
   onSubmit,
   onCancel,
   initialValues,
   isLoading,
 }) => {
-  const { data: categoriesData } = useGetProductCategoriesQuery({ limit: 100 });
+  const { data: categoriesData } = useGetServiceCategoriesQuery({ limit: 100 });
   const categories = categoriesData?.data ?? [];
 
   const [
     { files, isDragging, errors: uploadErrors },
     {
-      handleDragEnter,
       handleDragLeave,
       handleDragOver,
       handleDrop,
@@ -65,19 +70,25 @@ export const ProductForm: React.FC<ProductFormProps> = ({
   const [categoryValue, setCategoryValue] = useState(
     initialValues?.categoryId ?? "",
   );
+  const [priceTypeValue, setPriceTypeValue] = useState<
+    "FIXED" | "NEGOTIABLE" | "STARTS_AT"
+  >(initialValues?.priceType ?? "FIXED");
 
   const form = useForm({
     defaultValues: {
       name: initialValues?.name ?? "",
       description: initialValues?.description ?? "",
       price: initialValues?.price ?? "",
-      stock: initialValues?.stock ?? "",
-      unit: initialValues?.unit ?? "unit",
+      duration: initialValues?.duration ?? "",
     },
     onSubmit: async ({ value }) => {
-      // collect file preview URLs (base64 previews or object URLs)
       const imageUrls = files.map((f) => f.preview ?? "").filter(Boolean);
-      onSubmit({ ...value, categoryId: categoryValue, imageUrls });
+      onSubmit({
+        ...value,
+        categoryId: categoryValue,
+        priceType: priceTypeValue,
+        imageUrls,
+      });
     },
   });
 
@@ -90,13 +101,13 @@ export const ProductForm: React.FC<ProductFormProps> = ({
       }}
       className="space-y-5"
     >
-      {/* name */}
+      {/* Name */}
       <form.Field
         name="name"
         children={(field) => (
           <div>
             <Label className="block text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground mb-2">
-              Product Name
+              Service Name
             </Label>
             <Input
               name={field.name}
@@ -104,14 +115,14 @@ export const ProductForm: React.FC<ProductFormProps> = ({
               onBlur={field.handleBlur}
               onChange={(e) => field.handleChange(e.target.value)}
               className="h-11 text-sm bg-background rounded-none border-border/40 focus:border-primary/40 focus:ring-0"
-              placeholder="Enter product name"
+              placeholder="e.g. Electrical Installation"
               required
             />
           </div>
         )}
       />
 
-      {/* category */}
+      {/* Category */}
       <div>
         <Label className="block text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground mb-2">
           Category
@@ -122,7 +133,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
           required
         >
           <SelectTrigger className="h-11 bg-background rounded-none border-border/40 focus:ring-0">
-            <SelectValue placeholder="Select category" />
+            <SelectValue placeholder="Select service category" />
           </SelectTrigger>
           <SelectContent className="rounded-none border-border/40">
             {categories.map((cat: { id: string; name: string }) => (
@@ -134,112 +145,115 @@ export const ProductForm: React.FC<ProductFormProps> = ({
         </Select>
       </div>
 
-      {/* price + stock */}
+      {/* Price Type + Price */}
       <div className="grid grid-cols-2 gap-4">
+        <div>
+          <Label className="block text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground mb-2">
+            Pricing Type
+          </Label>
+          <Select
+            value={priceTypeValue}
+            onValueChange={(val: string | null) => {
+              if (val)
+                setPriceTypeValue(val as "FIXED" | "NEGOTIABLE" | "STARTS_AT");
+            }}
+            required
+          >
+            <SelectTrigger className="h-11 bg-background rounded-none border-border/40 focus:ring-0">
+              <SelectValue placeholder="Select type" />
+            </SelectTrigger>
+            <SelectContent className="rounded-none border-border/40">
+              <SelectItem value="FIXED" className="rounded-none">Fixed Price</SelectItem>
+              <SelectItem value="NEGOTIABLE" className="rounded-none">Negotiable</SelectItem>
+              <SelectItem value="STARTS_AT" className="rounded-none">Starts At</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
         <form.Field
           name="price"
           children={(field) => (
             <div>
               <Label className="block text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground mb-2">
-                Price (RWF)
+                Rate (RWF)
               </Label>
               <Input
                 name={field.name}
-                value={field.state.value}
+                defaultValue={field.state.value}
                 type="number"
                 min="0"
                 step="0.01"
-                onBlur={field.handleBlur}
+                disabled={priceTypeValue === "NEGOTIABLE"}
+                onBlur={(e) => field.handleChange(e.target.value)}
                 onChange={(e) => field.handleChange(e.target.value)}
                 className="h-11 text-sm bg-background rounded-none border-border/40 focus:border-primary/40 focus:ring-0"
-                placeholder="0.00"
-                required
-              />
-            </div>
-          )}
-        />
-        <form.Field
-          name="stock"
-          children={(field) => (
-            <div>
-              <Label className="block text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground mb-2">
-                Stock Quantity
-              </Label>
-              <Input
-                name={field.name}
-                value={field.state.value}
-                type="number"
-                min="0"
-                onBlur={field.handleBlur}
-                onChange={(e) => field.handleChange(e.target.value)}
-                className="h-11 text-sm bg-background rounded-none border-border/40 focus:border-primary/40 focus:ring-0"
-                placeholder="0"
-                required
+                placeholder={priceTypeValue === "NEGOTIABLE" ? "N/A" : "0.00"}
+                required={priceTypeValue !== "NEGOTIABLE"}
               />
             </div>
           )}
         />
       </div>
 
-      {/* unit */}
+      {/* Duration */}
       <form.Field
-        name="unit"
+        name="duration"
         children={(field) => (
           <div>
             <Label className="block text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground mb-2">
-              Unit
+              Timeline / Duration
             </Label>
-            <Input
-              name={field.name}
-              value={field.state.value}
-              onBlur={field.handleBlur}
-              onChange={(e) => field.handleChange(e.target.value)}
-              className="h-11 text-sm bg-background rounded-none border-border/40 focus:border-primary/40 focus:ring-0"
-              placeholder="e.g. piece, kg, box"
-              required
-            />
+            <div className="relative group">
+              <ClockIcon className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground group-focus-within:text-primary transition-colors pointer-events-none" />
+              <Input
+                name={field.name}
+                value={field.state.value}
+                onBlur={field.handleBlur}
+                onChange={(e) => field.handleChange(e.target.value)}
+                className="h-11 text-sm bg-background pl-10 rounded-none border-border/40 focus:border-primary/40 focus:ring-0"
+                placeholder="e.g. 2-3 days, 1 week"
+              />
+            </div>
           </div>
         )}
       />
 
-      {/* description */}
+      {/* Description */}
       <form.Field
         name="description"
         children={(field) => (
           <div>
             <Label className="block text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground mb-2">
-              Description
+              Service Description
             </Label>
             <Textarea
               name={field.name}
               value={field.state.value}
               onBlur={field.handleBlur}
               onChange={(e) => field.handleChange(e.target.value)}
-              rows={3}
+              rows={4}
               className="text-sm resize-none bg-background rounded-none border-border/40 focus:border-primary/40 focus:ring-0"
-              placeholder="Enter product description"
+              placeholder="Describe your service in detail..."
             />
           </div>
         )}
       />
 
-      {/* images */}
+      {/* Images */}
       <div>
         <Label className="block text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground mb-2">
-          Product Images (up to {MAX_IMAGES})
+          Portfolio Images (up to {MAX_IMAGES})
         </Label>
         <div
           className="relative flex min-h-36 flex-col items-center not-data-files:justify-center overflow-hidden rounded-none border border-dashed border-border/40 p-3 transition-colors data-[dragging=true]:bg-accent/50"
           data-dragging={isDragging || undefined}
           data-files={files.length > 0 || undefined}
-          onDragEnter={handleDragEnter}
           onDragLeave={handleDragLeave}
           onDragOver={handleDragOver}
           onDrop={handleDrop}
         >
           <input
             {...getInputProps()}
-            aria-label="Upload product images"
+            aria-label="Upload portfolio images"
             className="sr-only"
           />
           {files.length > 0 ? (
@@ -261,7 +275,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                   </Button>
                 )}
               </div>
-              <div className="grid grid-cols-3 gap-2">
+              <div className="grid grid-cols-4 gap-2">
                 {files.map((file) => (
                   <div
                     className="relative aspect-square rounded-none border border-border/20 bg-muted overflow-hidden"
@@ -292,7 +306,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
               </div>
               <p className="mb-1 font-black uppercase tracking-widest text-[10px]">Drop images here</p>
               <p className="text-muted-foreground text-[9px] uppercase font-bold tracking-tighter">
-                PNG, JPG, GIF or WebP (max {MAX_SIZE_MB}MB)
+                Showcase your work (max {MAX_SIZE_MB}MB)
               </p>
               <Button
                 type="button"
@@ -329,9 +343,9 @@ export const ProductForm: React.FC<ProductFormProps> = ({
         <Button
           type="submit"
           disabled={isLoading}
-          className="flex-1 rounded-none h-11 font-heading font-black uppercase text-[10px] tracking-[0.2em] shadow-lg shadow-primary/20"
+          className="flex-1 rounded-none h-11 font-heading font-black uppercase text-[10px] tracking-[0.2em] bg-primary text-primary-foreground shadow-lg shadow-primary/20"
         >
-          {isLoading ? "Saving..." : "Create Product"}
+          {isLoading ? "Saving..." : "Create Service"}
         </Button>
       </div>
     </form>

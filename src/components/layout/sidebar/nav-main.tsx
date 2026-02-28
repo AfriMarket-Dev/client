@@ -44,7 +44,7 @@ export function NavMain({
               <SidebarMenuItem key={item.title}>
                 <SidebarMenuButton
                   tooltip={item.title}
-                  render={<Link to={item.url} />}
+                  render={<Link to={item.url} preload="intent" />}
                 >
                   {item.icon && <item.icon />}
                   <span>{item.title}</span>
@@ -74,7 +74,9 @@ export function NavMain({
                   {item.items.map((subItem) => (
                     <SidebarMenuSubItem key={subItem.title}>
                       <SidebarMenuSubButton
-                        render={<Link to={subItem.url as any} />}
+                        render={
+                          <Link to={subItem.url as any} preload="intent" />
+                        }
                       >
                         <span>{subItem.title}</span>
                       </SidebarMenuSubButton>

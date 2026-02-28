@@ -1,5 +1,6 @@
 import { apiSlice } from "@/app/api/api-entry";
 import type { ApiResponse } from "@/app/api/types";
+import { createSelector } from "@reduxjs/toolkit";
 
 export interface CompanyCategoryRef {
   id: string;
@@ -163,3 +164,16 @@ export const {
   useUpdateCompanyMutation,
   useDeleteCompanyMutation,
 } = companiesApi;
+
+const selectCompaniesResult = (result: CompaniesListResult | undefined) =>
+  result;
+
+export const selectCompaniesData = createSelector(
+  [selectCompaniesResult],
+  (result) => result?.data ?? [],
+);
+
+export const selectCompaniesMeta = createSelector(
+  [selectCompaniesResult],
+  (result) => result?.meta,
+);

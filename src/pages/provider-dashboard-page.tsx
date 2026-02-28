@@ -7,15 +7,17 @@ import {
   RiStore2Line,
 } from "@remixicon/react";
 import { Package } from "lucide-react";
-import { useCallback, useState } from "react";
+import { useCallback, useState, useMemo } from "react";
 import { toast } from "sonner";
 import { useGetMyCompanyQuery } from "@/app/api/companies";
 import {
-  useDeleteListingMutation,
-  useGetListingsQuery,
-} from "@/app/api/listings";
-import { useGetProductsQuery } from "@/app/api/products";
-import { useGetServicesQuery } from "@/app/api/services";
+  useGetProductsQuery,
+  useDeleteProductMutation,
+} from "@/app/api/products";
+import {
+  useGetServicesQuery,
+  useDeleteServiceMutation,
+} from "@/app/api/services";
 import { AdminCard, AdminPageHeader, AdminStatCard } from "@/components/admin";
 import { ConfirmationModal } from "@/components/common/confirmation-modal";
 import { Badge } from "@/components/ui/badge";
@@ -33,41 +35,79 @@ import { cn } from "@/lib/utils";
 
 export default function ProviderDashboardPage() {
   const navigate = useNavigate();
-  const [deleteModal, setDeleteModal] = useState({
+  const [deleteModal, setDeleteModal] = useState<{
+    isOpen: boolean;
+    listingId: string;
+    listingName: string;
+    itemType: "PRODUCT" | "SERVICE" | null;
+  }>({
     isOpen: false,
     listingId: "",
     listingName: "",
+    itemType: null,
   });
   const { data: company, isLoading: companyLoading } = useGetMyCompanyQuery();
   const companyId = company?.id;
 
-  const { data: listData, isLoading: listLoading } = useGetListingsQuery(
-    companyId ? { companyId, limit: 100 } : { limit: 0 },
-  );
-  const { data: productsResult } = useGetProductsQuery(
-    companyId ? { companyId, limit: 100 } : { limit: 0 },
-  );
-  const { data: servicesResult } = useGetServicesQuery(
-    companyId ? { companyId, limit: 100 } : { limit: 0 },
-  );
-  const [deleteListing, { isLoading: deleting }] = useDeleteListingMutation();
+  const { data: productsResult, isLoading: productsLoading } =
+    useGetProductsQuery(companyId ? { companyId, limit: 100 } : { limit: 0 });
+  const { data: servicesResult, isLoading: servicesLoading } =
+    useGetServicesQuery(companyId ? { companyId, limit: 100 } : { limit: 0 });
+  const [deleteProduct, { isLoading: deletingProduct }] =
+    useDeleteProductMutation();
+  const [deleteService, { isLoading: deletingService }] =
+    useDeleteServiceMutation();
 
-  const listings = listData?.data ?? [];
+  const deleting = deletingProduct || deletingService;
+  const listLoading = productsLoading || servicesLoading;
+
+  const listings = useMemo(() => {
+    const prods = (productsResult?.data ?? []).map((p) => ({
+      ...p,
+      itemType: "PRODUCT" as const,
+    }));
+    const servs = (servicesResult?.data ?? []).map((s) => ({
+      ...s,
+      itemType: "SERVICE" as const,
+    }));
+    return [...prods, ...servs].sort((a, b) => {
+      const dateA = new Date(a.createdAt ?? 0).getTime();
+      const dateB = new Date(b.createdAt ?? 0).getTime();
+      return dateB - dateA;
+    });
+  }, [productsResult?.data, servicesResult?.data]);
+
   const productCount = productsResult?.data.length ?? 0;
   const serviceCount = servicesResult?.data.length ?? 0;
-  const activeListings = listings.filter((listing) => listing.isActive).length;
+  const activeListings = listings.filter(
+    (listing: any) => listing.isActive,
+  ).length;
 
   const handleConfirmDelete = useCallback(async () => {
-    if (!deleteModal.listingId) return;
+    if (!deleteModal.listingId || !deleteModal.itemType) return;
     try {
-      await deleteListing(deleteModal.listingId).unwrap();
+      if (deleteModal.itemType === "PRODUCT") {
+        await deleteProduct(deleteModal.listingId).unwrap();
+      } else {
+        await deleteService(deleteModal.listingId).unwrap();
+      }
       toast.success("Listing deleted successfully");
-      setDeleteModal({ isOpen: false, listingId: "", listingName: "" });
+      setDeleteModal({
+        isOpen: false,
+        listingId: "",
+        listingName: "",
+        itemType: null,
+      });
     } catch (error) {
       console.error(error);
       toast.error("Failed to delete listing");
     }
-  }, [deleteListing, deleteModal.listingId]);
+  }, [
+    deleteProduct,
+    deleteService,
+    deleteModal.listingId,
+    deleteModal.itemType,
+  ]);
 
   if (companyLoading) {
     return (
@@ -190,14 +230,15 @@ export default function ProviderDashboardPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-border">
-                {listings.map((listing) => (
+                {listings.map((listing: any) => (
                   <tr
                     key={listing.id}
                     className="cursor-pointer transition-colors hover:bg-muted/30"
                     onClick={() =>
                       navigate({
                         to: `/dashboard/listings/${listing.id}/edit` as any,
-                      })
+                        search: { type: listing.itemType },
+                      } as any)
                     }
                   >
                     <td className="px-6 py-4">
@@ -213,7 +254,7 @@ export default function ProviderDashboardPage() {
                         variant="outline"
                         className="text-[10px] uppercase tracking-wider"
                       >
-                        {listing.category?.name ?? "General"}
+                        {listing.itemType}
                       </Badge>
                     </td>
                     <td className="px-6 py-4">
@@ -231,7 +272,10 @@ export default function ProviderDashboardPage() {
                         </span>
                       </div>
                     </td>
-                    <td className="px-6 py-4 text-right">
+                    <td
+                      className="px-6 py-4 text-right"
+                      onClick={(e) => e.stopPropagation()}
+                    >
                       <DropdownMenu>
                         <DropdownMenuTrigger
                           render={
@@ -252,7 +296,8 @@ export default function ProviderDashboardPage() {
                                 e.stopPropagation();
                                 navigate({
                                   to: `/dashboard/listings/${listing.id}/edit` as any,
-                                });
+                                  search: { type: listing.itemType },
+                                } as any);
                               }}
                             >
                               <RiEditLine className="mr-2 h-4 w-4" /> Edit
@@ -266,6 +311,7 @@ export default function ProviderDashboardPage() {
                                   isOpen: true,
                                   listingId: listing.id,
                                   listingName: listing.name,
+                                  itemType: listing.itemType,
                                 });
                               }}
                             >
@@ -293,7 +339,12 @@ export default function ProviderDashboardPage() {
         type="delete"
         onConfirm={handleConfirmDelete}
         onCancel={() =>
-          setDeleteModal({ isOpen: false, listingId: "", listingName: "" })
+          setDeleteModal({
+            isOpen: false,
+            listingId: "",
+            listingName: "",
+            itemType: null,
+          })
         }
         isLoading={deleting}
       />

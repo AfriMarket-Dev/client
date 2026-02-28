@@ -17,6 +17,7 @@ export interface SessionUser {
 	email: string;
 	name: string;
 	role: string;
+	needsOnboarding?: boolean;
 	createdAt?: string;
 	updatedAt?: string;
 }

@@ -80,7 +80,7 @@ export const HeroWidget: React.FC<HeroWidgetProps> = ({
 	return (
 		<div
 			className={cn(
-				"bg-background border border-border/60 p-4 flex flex-col h-full transition-all duration-300 relative group/widget rounded-md overflow-hidden hover:shadow-sm",
+				"bg-background border border-border/20 p-6 flex flex-col h-full transition-all duration-300 relative group/widget rounded-none overflow-hidden hover:shadow-2xl hover:shadow-primary/5",
 				getVariantStyles(),
 				className,
 			)}
@@ -96,135 +96,177 @@ export const HeroWidget: React.FC<HeroWidgetProps> = ({
 
 			<div className="flex items-start justify-between mb-4 relative z-10">
 				<div>
-					<h3 className="font-heading font-bold text-lg text-foreground tracking-tight flex items-center gap-2">
+					<h3 className="font-display font-extrabold text-lg text-foreground tracking-tight flex items-center gap-2 uppercase leading-none">
 						{title}
 					</h3>
 					{subtitle && (
-						<p className="text-[10px] text-muted-foreground font-mono uppercase tracking-wider mt-0.5">
+						<p className="text-[8px] text-muted-foreground/50 font-bold uppercase tracking-[0.2em] mt-1 flex items-center gap-2">
+							<span className="w-3 h-px bg-primary/20" />
 							{subtitle}
 						</p>
 					)}
 				</div>
 				<Link
-					to={href as any}
-					className="text-muted-foreground hover:text-foreground transition-all p-1 group/link"
+					to={href as "/marketplace"}
+					className="text-muted-foreground/40 hover:text-primary transition-all p-1 group/link border border-border/10 hover:border-primary/40 rounded-none bg-muted/5"
 				>
-					<RiArrowRightLine className="w-4 h-4 group-hover/link:translate-x-0.5 transition-transform" />
+					<RiArrowRightLine className="w-3 h-3 group-hover/link:translate-x-0.5 transition-transform" />
 				</Link>
 			</div>
 
-			<div className="grid grid-cols-2 gap-2 flex-1">
-				{displayItems.map((item, idx) => (
-					<div key={idx} className="group/item flex flex-col h-full relative">
-						{item.type === "stat" ? (
-							<Link
-								to={href as any}
-								className="block h-full bg-muted/20 rounded-md p-2 border border-border/40 hover:border-border transition-colors flex flex-col justify-center items-center text-center relative overflow-hidden group-hover/widget:bg-muted/30"
+			<div className="space-y-1.5 flex-1 overflow-y-auto pr-1 custom-scrollbar">
+				{displayItems.map((item, idx) => {
+					if (!item) {
+						return (
+							<div
+								key={`placeholder-${idx}`}
+								className="group/item flex flex-col relative"
 							>
-								<div className="relative z-10">
-									<div
-										className={cn(
-											"text-2xl md:text-3xl font-black font-heading leading-none mb-1 group-hover/item:scale-105 transition-transform duration-500 ease-out",
-											getTextAccentColor(),
-										)}
-									>
-										{item.stat}
-									</div>
-									<div className="text-[9px] font-bold uppercase tracking-wider text-muted-foreground leading-tight">
-										{item.statDesc}
-									</div>
+								<div className="absolute -left-2 top-2 text-[8px] font-bold text-muted-foreground/5 uppercase tracking-widest transform -rotate-90 pointer-events-none">
+									N_{["01", "02", "03", "04"][idx]}
 								</div>
-							</Link>
-						) : (
-							<Link
-								to={`/products/${item.id}` as any}
-								className="block h-full transition-colors relative"
-							>
-								{/* Image Container */}
-								<div className="aspect-square bg-muted rounded-md overflow-hidden border border-border/40 group-hover/item:border-border transition-all duration-300 relative mb-2">
-									{item.image ? (
-										<ImageWithFallback
-											src={item.image}
-											alt={item.name || "Item Image"}
-											className="w-full h-full object-cover group-hover/item:scale-105 transition-transform duration-700 ease-out"
-											fallbackSrc="https://placehold.co/300x300/e2e8f0/1e293b?text=Image"
-										/>
-									) : (
-										<div className="w-full h-full flex items-center justify-center bg-muted/50 text-muted-foreground">
-											<div className="text-xl font-black opacity-20">
-												{item.name?.charAt(0)}
-											</div>
-										</div>
-									)}
+								<div className="h-20 bg-muted/10 border border-border/10 rounded-none animate-pulse" />
+							</div>
+						);
+					}
 
-									{item.label && (
+					const linkTarget =
+						item.type === "supplier"
+							? ({
+									to: "/suppliers/$supplierId",
+									params: { supplierId: item.id },
+								} as const)
+							: item.type === "service"
+								? ({
+										to: "/services/$serviceId",
+										params: { serviceId: item.id },
+									} as const)
+								: ({
+										to: "/products/$productId",
+										params: { productId: item.id },
+									} as const);
+
+					return (
+						<div key={item.id} className="group/item flex flex-col relative">
+							<div className="absolute -left-2 top-2 text-[8px] font-bold text-muted-foreground/5 uppercase tracking-widest transform -rotate-90 pointer-events-none group-hover/item:text-primary/15 transition-colors">
+								N_{["01", "02", "03", "04"][idx]}
+							</div>
+							{item.type === "stat" ? (
+								<Link
+									to={href as "/marketplace"}
+									className="h-20 bg-muted/15 rounded-none p-4 border border-border/10 hover:border-primary/40 transition-all flex flex-col justify-center items-start relative overflow-hidden group-hover/widget:bg-muted/25"
+								>
+									<div className="absolute right-[-5%] top-[-10%] text-5xl font-extrabold text-foreground/2 italic pointer-events-none">
+										{idx + 1}
+									</div>
+									<div className="relative z-10">
 										<div
 											className={cn(
-												"absolute top-1.5 left-1.5 text-[8px] font-bold text-white px-1.5 py-0.5 rounded-[2px] shadow-sm z-10 uppercase tracking-wider",
-												getBgAccentColor(),
+												"text-3xl font-extrabold font-display leading-none mb-0.5 tracking-tighter group-hover/item:translate-x-1.5 transition-transform duration-700 ease-out",
+												getTextAccentColor(),
 											)}
 										>
-											{item.label}
+											{item.stat}
 										</div>
-									)}
-
-									{item.type === "supplier" && item.rating && (
-										<div className="absolute bottom-1 right-1 bg-black/60 backdrop-blur-md text-white px-1.5 py-0.5 rounded-[2px] text-[9px] font-bold flex items-center gap-0.5">
-											<RiStarLine className="w-2 h-2 fill-yellow-400 text-yellow-400" />
-											{item.rating}
+										<div className="text-[8px] font-bold uppercase tracking-[0.3em] text-muted-foreground/40 leading-tight">
+											{item.statDesc}
 										</div>
-									)}
-								</div>
+									</div>
+								</Link>
+							) : (
+								<Link
+									to={linkTarget.to as any}
+									params={linkTarget.params as any}
+									className="flex gap-3 p-2 bg-muted/5 border border-border/10 rounded-none hover:bg-muted/15 hover:border-primary/40 transition-all group/link relative overflow-hidden"
+								>
+									<div className="absolute top-0 right-0 w-6 h-6 opacity-0 group-hover/link:opacity-100 transition-opacity">
+										<div className="absolute top-0 right-0 w-px h-full bg-primary/10" />
+										<div className="absolute top-0 right-0 w-full h-px bg-primary/10" />
+									</div>
 
-								{/* Text Content */}
-								<div className="flex flex-col gap-0.5 px-0.5">
-									<h4 className="text-[11px] font-bold text-foreground line-clamp-1 group-hover/item:text-foreground/80 transition-colors tracking-tight">
-										{item.name || "Item Name"}
-									</h4>
+									{/* Image Container */}
+									<div className="h-12 w-12 shrink-0 bg-muted rounded-none overflow-hidden border border-border/10 group-hover/item:border-primary/30 transition-all duration-300 relative">
+										{item.image ? (
+											<ImageWithFallback
+												src={item.image}
+												alt={item.name || "Item Image"}
+												className="w-full h-full object-cover group-hover/item:scale-110 transition-transform duration-1000 ease-out"
+												fallbackSrc="https://placehold.co/100x100/e2e8f0/1e293b?text=Image"
+											/>
+										) : (
+											<div className="w-full h-full flex items-center justify-center bg-muted/50 text-muted-foreground">
+												<div className="text-lg font-black opacity-15 font-display">
+													{item.name?.charAt(0)}
+												</div>
+											</div>
+										)}
 
-									{item.type === "supplier" ? (
-										<div className="text-[9px] text-muted-foreground flex items-center gap-1 truncate font-mono">
-											{item.subtext}
-										</div>
-									) : item.type === "service" ? (
-										<div className="flex flex-col">
-											<div className="text-[9px] text-muted-foreground truncate mb-0.5">
+										{item.label && (
+											<div
+												className={cn(
+													"absolute top-0 left-0 text-[5px] font-black text-white px-1 py-0.5 z-10 uppercase tracking-[0.1em] leading-none",
+													getBgAccentColor(),
+												)}
+											>
+												{item.label}
+											</div>
+										)}
+
+										{item.type === "supplier" && item.rating && (
+											<div className="absolute bottom-0 right-0 bg-background/95 backdrop-blur-sm text-foreground px-1 py-0.5 text-[7px] font-black flex items-center gap-0.5 border-tl border-border/10">
+												<RiStarLine className="w-1.5 h-1.5 fill-primary text-primary" />
+												{item.rating}
+											</div>
+										)}
+									</div>
+
+									{/* Text Content */}
+									<div className="flex-1 flex flex-col justify-center gap-0.5 py-0">
+										<h4 className="text-[10px] font-black text-foreground uppercase tracking-tight line-clamp-1 group-hover/item:text-primary transition-colors leading-tight">
+											{item.name || "Item Name"}
+										</h4>
+
+										{item.type === "supplier" ? (
+											<div className="text-[7px] font-black text-muted-foreground/30 truncate uppercase tracking-widest leading-none">
 												{item.subtext}
 											</div>
-											<div className="text-[10px] font-bold text-foreground font-mono">
-												{typeof item.price === "number"
-													? `RWF ${item.price.toLocaleString()}`
-													: item.price}
-											</div>
-										</div>
-									) : (
-										<div className="flex flex-col">
-											{item.subtext && (
-												<div className="text-[9px] text-muted-foreground truncate">
+										) : item.type === "service" ? (
+											<div className="flex flex-col gap-0">
+												<div className="text-[7px] font-black text-muted-foreground/30 truncate uppercase tracking-widest leading-none">
 													{item.subtext}
 												</div>
-											)}
-											{item.price && (
-												<div
-													className={cn(
-														"text-[10px] font-bold font-mono",
-														item.label
-															? getTextAccentColor()
-															: "text-foreground",
-													)}
-												>
+												<div className="text-[9px] font-black text-primary font-display tracking-tight leading-tight">
 													{typeof item.price === "number"
 														? `RWF ${item.price.toLocaleString()}`
 														: item.price}
 												</div>
-											)}
-										</div>
-									)}
-								</div>
-							</Link>
-						)}
-					</div>
-				))}
+											</div>
+										) : (
+											<div className="flex flex-col gap-0">
+												{item.subtext && (
+													<div className="text-[7px] font-black text-muted-foreground/30 truncate uppercase tracking-widest leading-none">
+														{item.subtext}
+													</div>
+												)}
+												{item.price && (
+													<div
+														className={cn(
+															"text-[9px] font-black font-display tracking-tight text-primary leading-tight",
+														)}
+													>
+														{typeof item.price === "number"
+															? `RWF ${item.price.toLocaleString()}`
+															: item.price}
+													</div>
+												)}
+											</div>
+										)}
+									</div>
+								</Link>
+							)}
+						</div>
+					);
+				})}
 			</div>
 		</div>
 	);
