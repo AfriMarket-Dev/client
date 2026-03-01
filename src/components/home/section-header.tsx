@@ -33,7 +33,7 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({
           {label && (
             <div className="flex items-center gap-4">
               <div className="w-10 h-px bg-primary" />
-              <span className="text-[10px] font-black tracking-[0.4em] text-primary uppercase">
+              <span className="text-[10px] font-bold tracking-[0.3em] text-primary uppercase">
                 {label}
               </span>
             </div>
@@ -59,7 +59,7 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({
               variant="outline"
               size="sm"
               onClick={() => navigate({ to: viewAllHref as any })}
-              className="border border-border/40 hover:bg-foreground hover:text-background rounded-none font-black transition-all px-6 h-10 uppercase text-[10px] tracking-[0.2em] group/btn shadow-none bg-transparent"
+              className="border border-border/40 hover:bg-foreground hover:text-background rounded-none font-bold transition-all px-6 h-10 uppercase text-[10px] tracking-[0.2em] group/btn shadow-none bg-transparent"
             >
               {viewAllLabel}
               <RiArrowRightLine className="ml-3 w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />

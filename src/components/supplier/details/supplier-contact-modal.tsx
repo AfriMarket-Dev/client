@@ -1,88 +1,125 @@
-import type React from "react";
-import { toast } from "sonner";
+import { MessageSquare, Phone, Mail } from "lucide-react";
+import React from "react";
+import type { Company } from "@/app/api/companies";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 
 interface SupplierContactModalProps {
-	company: any;
-	message: string;
-	setMessage: (msg: string) => void;
-	sendingInquiry: boolean;
-	onClose: () => void;
-	onSubmit: (e: React.FormEvent) => void;
+  company: Company;
+  message: string;
+  setMessage: (val: string) => void;
+  sendingInquiry: boolean;
+  isOpen: boolean;
+  onClose: () => void;
+  onSubmit: (e?: React.FormEvent) => void;
 }
 
 export const SupplierContactModal: React.FC<SupplierContactModalProps> = ({
-	company,
-	message,
-	setMessage,
-	sendingInquiry,
-	onClose,
-	onSubmit,
+  company,
+  message,
+  setMessage,
+  sendingInquiry,
+  isOpen,
+  onClose,
+  onSubmit,
 }) => {
-	return (
-		<div className="fixed inset-0 bg-black/80 z-60 flex items-center justify-center p-4 backdrop-blur-sm animate-in fade-in duration-200">
-			<Card className="bg-background rounded-none border border-border max-w-md w-full p-8 shadow-2xl relative">
-				<button
-					onClick={onClose}
-					className="absolute top-4 right-4 text-muted-foreground hover:text-foreground"
-				>
-					<span className="sr-only">Close</span>
-					<div className="w-6 h-6 flex items-center justify-center text-xl">
-						×
-					</div>
-				</button>
+  const contactMethods = [
+    {
+      icon: <Phone className="w-5 h-5" />,
+      label: "Phone",
+      value: company.phone || "Not available",
+      actionLabel: "Call Now",
+      disabled: !company.phone,
+    },
+    {
+      icon: <Mail className="w-5 h-5" />,
+      label: "Email",
+      value: company.email || "Not available",
+      actionLabel: "Send Email",
+      disabled: !company.email,
+    },
+    {
+      icon: <MessageSquare className="w-5 h-5" />,
+      label: "Marketplace Chat",
+      value: "Average response: 2h",
+      actionLabel: "Start Chat",
+      disabled: false,
+    },
+  ];
 
-				<h2 className="text-2xl font-heading font-bold uppercase text-foreground mb-2 tracking-wide">
-					Initial Inquiry
-				</h2>
-				<p className="text-sm text-muted-foreground mb-6">
-					Connect with {company.name} regarding services or products.
-				</p>
+  return (
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="max-w-md p-0 overflow-hidden border-none rounded-none">
+        <DialogHeader className="p-8 bg-slate-950 text-white">
+          <DialogTitle className="text-2xl font-black uppercase tracking-tight text-center">
+            Contact Supplier
+          </DialogTitle>
+          <span className="text-[10px] text-center font-bold uppercase tracking-[0.3em] opacity-50 block mt-2">
+            {company.name}
+          </span>
+        </DialogHeader>
 
-				<form className="space-y-5" onSubmit={onSubmit}>
-					<div className="space-y-1.5">
-						<label className="text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground">
-							Subject Ref
-						</label>
-						<input
-							type="text"
-							readOnly
-							value={`INQ: ${company.name} [ID: ${company.id?.slice(0, 6) || "N/A"}]`}
-							className="w-full px-4 py-3 border border-border rounded-none bg-muted/20 outline-none text-xs font-mono text-muted-foreground cursor-not-allowed"
-						/>
-					</div>
-					<div className="space-y-1.5">
-						<label className="text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground">
-							Message Details
-						</label>
-						<textarea
-							rows={4}
-							value={message}
-							onChange={(e) => setMessage(e.target.value)}
-							placeholder="Describe your requirements..."
-							className="w-full px-4 py-3 border border-border rounded-none bg-background outline-none resize-none text-sm focus:border-primary focus:ring-1 focus:ring-primary transition-colors"
-						/>
-					</div>
-					<div className="grid grid-cols-2 gap-4 pt-4">
-						<Button
-							type="button"
-							variant="outline"
-							onClick={onClose}
-							className="w-full rounded-none h-11 font-heading uppercase tracking-wider text-[10px]"
-						>
-							Cancel
-						</Button>
-						<Button
-							type="submit"
-							disabled={!message.trim() || sendingInquiry}
-							className="w-full rounded-none h-11 font-heading uppercase tracking-wider text-[10px]"
-						>
-							{sendingInquiry ? "Sending..." : "Submit Inquiry"}
-						</Button>
-					</div>
-				</form>
-			</Card>
-		</div>
-	);
+        <div className="p-8 space-y-4 bg-white">
+          {contactMethods.map((method, idx) => (
+            <div
+              key={idx}
+              className={`flex items-center justify-between p-4 border border-slate-100 ${
+                method.disabled ? "opacity-50" : "hover:bg-slate-50"
+              } transition-colors`}
+            >
+              <div className="flex items-center gap-4">
+                <div className="w-10 h-10 flex items-center justify-center bg-slate-100 text-slate-600">
+                  {method.icon}
+                </div>
+                <div>
+                  <span className="text-[9px] block uppercase font-bold text-muted-foreground tracking-widest mb-0.5">
+                    {method.label}
+                  </span>
+                  <span className="text-xs font-black text-slate-900 leading-none">
+                    {method.value}
+                  </span>
+                </div>
+              </div>
+              <Button
+                size="sm"
+                variant="outline"
+                disabled={method.disabled}
+                className="rounded-none h-8 text-[9px] font-black uppercase tracking-widest px-4 border-slate-300"
+              >
+                {method.actionLabel}
+              </Button>
+            </div>
+          ))}
+        </div>
+
+        <div className="px-8 pb-8 pt-0 bg-white space-y-3">
+          <textarea
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            placeholder="Type your message here..."
+            className="w-full h-32 p-4 border border-slate-200 rounded-none text-sm focus:ring-1 focus:ring-primary outline-none"
+          />
+          <Button
+            onClick={onSubmit}
+            disabled={sendingInquiry || !message.trim()}
+            className="w-full rounded-none h-12 text-[10px] font-bold uppercase tracking-[0.2em] bg-slate-950"
+          >
+            {sendingInquiry ? "Sending..." : "Send Message"}
+          </Button>
+          <Button
+            onClick={onClose}
+            variant="ghost"
+            className="w-full rounded-none h-12 text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground"
+          >
+            Close
+          </Button>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
 };

@@ -11,28 +11,28 @@ import React from "react";
 import { Badge } from "@/components/ui/badge";
 import { ImageWithFallback } from "@/components/common/image-with-fallback";
 import {
-	Select,
-	SelectContent,
-	SelectGroup,
-	SelectItem,
-	SelectLabel,
-	SelectTrigger,
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
 } from "../ui/select";
 
 const DEFAULT_SEARCH_CATEGORY = "All Categories";
 
 interface HeroFeaturedProduct {
-	id: string;
-	name: string;
-	image?: string;
-	category: string;
-	price: string;
-	originalPrice?: string;
-	discount?: string;
-	supplier: string;
-	rating: number;
-	reviews: number;
-	tag: string;
+  id: string;
+  name: string;
+  image?: string;
+  category: string;
+  price: string;
+  originalPrice?: string;
+  discount?: string;
+  supplier: string;
+  rating: number;
+  reviews: number;
+  tag: string;
 }
 
 const formatRwf = (value: number): string => `RWF ${value.toLocaleString()}`;
@@ -40,481 +40,481 @@ const formatRwf = (value: number): string => `RWF ${value.toLocaleString()}`;
 const getProductPrimaryVariant = (product: Product) => product.variants?.[0];
 
 const mapProductToHeroFeaturedProduct = (
-	product: Product,
+  product: Product,
 ): HeroFeaturedProduct => {
-	const variant = getProductPrimaryVariant(product);
-	const basePrice = Number(variant?.price ?? 0);
-	const discountPercent = Number(variant?.discount ?? 0);
-	const discountedPrice =
-		discountPercent > 0
-			? Math.max(Math.round(basePrice * (1 - discountPercent / 100)), 0)
-			: basePrice;
-	const supplierRating = Number(product.company?.rating ?? 0);
+  const variant = getProductPrimaryVariant(product);
+  const basePrice = Number(variant?.price ?? 0);
+  const discountPercent = Number(variant?.discount ?? 0);
+  const discountedPrice =
+    discountPercent > 0
+      ? Math.max(Math.round(basePrice * (1 - discountPercent / 100)), 0)
+      : basePrice;
+  const supplierRating = Number(product.company?.rating ?? 0);
 
-	return {
-		id: product.id,
-		name: product.name,
-		image: variant?.images?.[0],
-		category: product.category?.name || "General",
-		price: formatRwf(discountedPrice),
-		originalPrice:
-			discountPercent > 0 && basePrice > 0 ? formatRwf(basePrice) : undefined,
-		discount:
-			discountPercent > 0 ? `-${Math.round(discountPercent)}%` : undefined,
-		supplier: product.company?.name || "Unknown Supplier",
-		rating: Number.isFinite(supplierRating) ? supplierRating : 0,
-		reviews: Number(product.views ?? 0),
-		tag: product.isFeatured ? "FEATURED" : "LIVE",
-	};
+  return {
+    id: product.id,
+    name: product.name,
+    image: variant?.images?.[0],
+    category: product.category?.name || "General",
+    price: formatRwf(discountedPrice),
+    originalPrice:
+      discountPercent > 0 && basePrice > 0 ? formatRwf(basePrice) : undefined,
+    discount:
+      discountPercent > 0 ? `-${Math.round(discountPercent)}%` : undefined,
+    supplier: product.company?.name || "Unknown Supplier",
+    rating: Number.isFinite(supplierRating) ? supplierRating : 0,
+    reviews: Number(product.views ?? 0),
+    tag: product.isFeatured ? "FEATURED" : "LIVE",
+  };
 };
 
 const mapCompanyToWidgetItem = (company: Company): HeroWidgetItem => ({
-	id: company.id,
-	type: "supplier",
-	name: company.name,
-	image: company.logoUrl,
-	subtext: company.type || company.district || "Supplier",
-	rating: Number(company.averageRating || 0),
-	label: company.isVerified ? "VERIFIED" : "SUPPLIER",
+  id: company.id,
+  type: "supplier",
+  name: company.name,
+  image: company.logoUrl,
+  subtext: company.type || company.district || "Supplier",
+  rating: Number(company.averageRating || 0),
+  label: company.isVerified ? "VERIFIED" : "SUPPLIER",
 });
 
 const mapProductToWidgetItem = (product: Product): HeroWidgetItem => {
-	const variant = getProductPrimaryVariant(product);
-	const price = Number(variant?.price ?? 0);
-	const discount = Number(variant?.discount ?? 0);
-	const discountedPrice =
-		discount > 0
-			? Math.max(Math.round(price * (1 - discount / 100)), 0)
-			: price;
+  const variant = getProductPrimaryVariant(product);
+  const price = Number(variant?.price ?? 0);
+  const discount = Number(variant?.discount ?? 0);
+  const discountedPrice =
+    discount > 0
+      ? Math.max(Math.round(price * (1 - discount / 100)), 0)
+      : price;
 
-	return {
-		id: product.id,
-		type: "product",
-		name: product.name,
-		image: variant?.images?.[0],
-		price: discountedPrice,
-		label: discount > 0 ? `${Math.round(discount)}% OFF` : undefined,
-		subtext: product.category?.name || "Product",
-	};
+  return {
+    id: product.id,
+    type: "product",
+    name: product.name,
+    image: variant?.images?.[0],
+    price: discountedPrice,
+    label: discount > 0 ? `${Math.round(discount)}% OFF` : undefined,
+    subtext: product.category?.name || "Product",
+  };
 };
 
 const mapServiceToWidgetItem = (service: Service): HeroWidgetItem => {
-	const servicePrice =
-		service.priceType === "NEGOTIABLE"
-			? "Negotiable"
-			: service.priceType === "STARTS_AT" && service.price != null
-				? `From RWF ${Number(service.price).toLocaleString()}`
-				: service.price != null
-					? Number(service.price)
-					: "Quote";
+  const servicePrice =
+    service.priceType === "NEGOTIABLE"
+      ? "Negotiable"
+      : service.priceType === "STARTS_AT" && service.price != null
+        ? `From RWF ${Number(service.price).toLocaleString()}`
+        : service.price != null
+          ? Number(service.price)
+          : "Quote";
 
-	return {
-		id: service.id,
-		type: "service",
-		name: service.name,
-		image: service.images?.[0],
-		subtext: service.category?.name || service.company?.name || "Service",
-		price: servicePrice,
-	};
+  return {
+    id: service.id,
+    type: "service",
+    name: service.name,
+    image: service.images?.[0],
+    subtext: service.category?.name || service.company?.name || "Service",
+    price: servicePrice,
+  };
 };
 
 // sub-components
 
 const FeaturedProductCard: React.FC<{
-	product: HeroFeaturedProduct;
-	isActive: boolean;
+  product: HeroFeaturedProduct;
+  isActive: boolean;
 }> = ({ product, isActive }) => {
-	const navigate = useNavigate();
+  const navigate = useNavigate();
 
-	return (
-		<div
-			className={`absolute inset-0 transition-opacity duration-700 ${
-				isActive
-					? "opacity-100 pointer-events-auto"
-					: "opacity-0 pointer-events-none"
-			}`}
-		>
-			<div className="absolute inset-0">
-				<ImageWithFallback
-					src={product.image}
-					alt={product.name}
-					className="w-full h-full object-cover"
-				/>
-				<div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/60 to-slate-900/10" />
-				<div className="absolute inset-0 bg-gradient-to-r from-slate-950/80 to-transparent md:hidden" />
-			</div>
+  return (
+    <div
+      className={`absolute inset-0 transition-opacity duration-700 ${
+        isActive
+          ? "opacity-100 pointer-events-auto"
+          : "opacity-0 pointer-events-none"
+      }`}
+    >
+      <div className="absolute inset-0">
+        <ImageWithFallback
+          src={product.image}
+          alt={product.name}
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/60 to-slate-900/10" />
+        <div className="absolute inset-0 bg-gradient-to-r from-slate-950/80 to-transparent md:hidden" />
+      </div>
 
-			<div className="absolute top-4 left-4 z-10">
-				<Badge className="bg-primary text-white border-none text-[10px] font-black tracking-[0.3em] px-3 py-1.5 h-auto rounded-none uppercase">
-					{product.tag}
-				</Badge>
-			</div>
+      <div className="absolute top-4 left-4 z-10">
+        <Badge className="bg-primary text-white border-none text-[10px] font-black tracking-[0.3em] px-3 py-1.5 h-auto rounded-none uppercase">
+          {product.tag}
+        </Badge>
+      </div>
 
-			<div className="absolute top-4 right-4 z-10">
-				{product.discount && (
-					<div className="bg-emerald-500 text-white text-[10px] font-black rounded-none px-2 py-1 uppercase tracking-widest">
-						{product.discount}
-					</div>
-				)}
-			</div>
+      <div className="absolute top-4 right-4 z-10">
+        {product.discount && (
+          <div className="bg-emerald-500 text-white text-[10px] font-black rounded-none px-2 py-1 uppercase tracking-widest">
+            {product.discount}
+          </div>
+        )}
+      </div>
 
-			<div className="absolute bottom-0 left-0 right-0 z-10 p-6 md:p-8">
-				<div className="flex items-center gap-3 mb-4">
-					<div className="w-8 h-px bg-primary" />
-					<p className="text-[10px] font-black text-primary uppercase tracking-[0.4em]">
-						{product.category}
-					</p>
-				</div>
+      <div className="absolute bottom-0 left-0 right-0 z-10 p-6 md:p-8">
+        <div className="flex items-center gap-3 mb-4">
+          <div className="w-8 h-px bg-primary" />
+          <p className="text-[10px] font-black text-primary uppercase tracking-[0.4em]">
+            {product.category}
+          </p>
+        </div>
 
-				<h3 className="text-white font-black text-2xl md:text-4xl leading-[0.9] mb-4 uppercase tracking-tighter max-w-[80%]">
-					{product.name}
-				</h3>
+        <h3 className="text-white font-black text-2xl md:text-4xl leading-[0.9] mb-4 uppercase tracking-tighter max-w-[80%]">
+          {product.name}
+        </h3>
 
-				<div className="flex items-center gap-1.5 mb-6 opacity-60">
-					<div className="flex items-center gap-0.5">
-						{[...Array(5)].map((_, i) => (
-							<Star
-								key={i}
-								className={`w-2.5 h-2.5 ${
-									i < Math.floor(product.rating)
-										? "fill-amber-400 text-amber-400"
-										: "fill-white/20 text-white/20"
-								}`}
-							/>
-						))}
-					</div>
-					<span className="text-white text-[9px] font-black uppercase tracking-widest">
-						{product.rating > 0 ? product.rating : "N/A"} · {product.reviews}{" "}
-						VIEWS
-					</span>
-				</div>
+        <div className="flex items-center gap-1.5 mb-6 opacity-60">
+          <div className="flex items-center gap-0.5">
+            {[1, 2, 3, 4, 5].map((star) => (
+              <Star
+                key={star}
+                className={`w-2.5 h-2.5 ${
+                  star <= Math.floor(product.rating)
+                    ? "fill-amber-400 text-amber-400"
+                    : "fill-white/20 text-white/20"
+                }`}
+              />
+            ))}
+          </div>
+          <span className="text-white text-[9px] font-black uppercase tracking-widest">
+            {product.rating > 0 ? product.rating : "N/A"} · {product.reviews}{" "}
+            VIEWS
+          </span>
+        </div>
 
-				<div className="flex items-baseline gap-4 mb-8">
-					<span className="text-white font-black text-3xl tracking-tighter">
-						{product.price}
-					</span>
-					{product.originalPrice && (
-						<span className="text-white/30 text-xs line-through font-bold">
-							{product.originalPrice}
-						</span>
-					)}
-				</div>
+        <div className="flex items-baseline gap-4 mb-8">
+          <span className="text-white font-black text-3xl tracking-tighter">
+            {product.price}
+          </span>
+          {product.originalPrice && (
+            <span className="text-white/30 text-xs line-through font-bold">
+              {product.originalPrice}
+            </span>
+          )}
+        </div>
 
-				<div className="flex items-center justify-between border-t border-white/10 pt-6">
-					<div className="flex items-center gap-3">
-						<div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-						<span className="text-white/40 text-[9px] font-black uppercase tracking-[0.2em]">
-							{product.supplier}
-						</span>
-					</div>
-					<Button
-						onClick={() => navigate({ to: "/marketplace" })}
-						className="bg-white hover:bg-slate-100 text-slate-950 rounded-none h-9 px-5 text-[10px] font-black tracking-[0.2em] uppercase gap-2 group border-none"
-					>
-						VIEW{" "}
-						<ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-					</Button>
-				</div>
-			</div>
-		</div>
-	);
+        <div className="flex items-center justify-between border-t border-white/10 pt-6">
+          <div className="flex items-center gap-3">
+            <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="text-white/40 text-[9px] font-black uppercase tracking-[0.2em]">
+              {product.supplier}
+            </span>
+          </div>
+          <Button
+            onClick={() => navigate({ to: "/marketplace" })}
+            className="bg-white hover:bg-slate-100 text-slate-950 rounded-none h-9 px-5 text-[10px] font-black tracking-[0.2em] uppercase gap-2 group border-none"
+          >
+            VIEW{" "}
+            <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 // hero component
 
 const Hero: React.FC = () => {
-	const navigate = useNavigate();
-	const [query, setQuery] = React.useState("");
-	const [activeCategory, setActiveCategory] = React.useState(
-		DEFAULT_SEARCH_CATEGORY,
-	);
-	const [activeFeatured, setActiveFeatured] = React.useState(0);
-	const { data: featuredProductsResult } = useGetProductsQuery({
-		limit: 3,
-		isFeatured: true,
-		sortBy: "createdAt",
-		sortOrder: "DESC",
-	});
-	const { data: latestProductsResult } = useGetProductsQuery({
-		limit: 3,
-		sortBy: "createdAt",
-		sortOrder: "DESC",
-	});
-	const { data: productCategoriesResult } = useGetProductCategoriesQuery({
-		limit: 8,
-	});
-	const { data: marketplaceStats } = useGetMarketplaceStatsQuery();
-	const { data: companiesResult } = useGetCompaniesQuery({
-		limit: 6,
-		isVerified: true,
-		sortBy: "averageRating",
-		sortOrder: "DESC",
-	});
-	const { data: servicesResult } = useGetServicesQuery({
-		limit: 3,
-		sortBy: "createdAt",
-		sortOrder: "DESC",
-	});
+  const navigate = useNavigate();
+  const [query, setQuery] = React.useState("");
+  const [activeCategory, setActiveCategory] = React.useState(
+    DEFAULT_SEARCH_CATEGORY,
+  );
+  const [activeFeatured, setActiveFeatured] = React.useState(0);
+  const { data: featuredProductsResult } = useGetProductsQuery({
+    limit: 3,
+    isFeatured: true,
+    sortBy: "createdAt",
+    sortOrder: "DESC",
+  });
+  const { data: latestProductsResult } = useGetProductsQuery({
+    limit: 3,
+    sortBy: "createdAt",
+    sortOrder: "DESC",
+  });
+  const { data: productCategoriesResult } = useGetProductCategoriesQuery({
+    limit: 8,
+  });
+  const { data: marketplaceStats } = useGetMarketplaceStatsQuery();
+  const { data: companiesResult } = useGetCompaniesQuery({
+    limit: 6,
+    isVerified: true,
+    sortBy: "averageRating",
+    sortOrder: "DESC",
+  });
+  const { data: servicesResult } = useGetServicesQuery({
+    limit: 3,
+    sortBy: "createdAt",
+    sortOrder: "DESC",
+  });
 
-	const featuredProducts = React.useMemo(() => {
-		const preferred = featuredProductsResult?.data ?? [];
-		const fallback = latestProductsResult?.data ?? [];
-		const source = preferred.length > 0 ? preferred : fallback;
-		return source.slice(0, 3).map(mapProductToHeroFeaturedProduct);
-	}, [featuredProductsResult?.data, latestProductsResult?.data]);
+  const featuredProducts = React.useMemo(() => {
+    const preferred = featuredProductsResult?.data ?? [];
+    const fallback = latestProductsResult?.data ?? [];
+    const source = preferred.length > 0 ? preferred : fallback;
+    return source.slice(0, 3).map(mapProductToHeroFeaturedProduct);
+  }, [featuredProductsResult?.data, latestProductsResult?.data]);
 
-	const searchCategories = React.useMemo(
-		() => [
-			DEFAULT_SEARCH_CATEGORY,
-			...(productCategoriesResult?.data.map((category) => category.name) ?? []),
-		],
-		[productCategoriesResult?.data],
-	);
+  const searchCategories = React.useMemo(
+    () => [
+      DEFAULT_SEARCH_CATEGORY,
+      ...(productCategoriesResult?.data.map((category) => category.name) ?? []),
+    ],
+    [productCategoriesResult?.data],
+  );
 
-	const activeTags = React.useMemo(
-		() => featuredProducts.map((product) => product.name).slice(0, 4),
-		[featuredProducts],
-	);
+  const activeTags = React.useMemo(
+    () => featuredProducts.map((product) => product.name).slice(0, 4),
+    [featuredProducts],
+  );
 
-	const manufacturerItems = React.useMemo<HeroWidgetItem[]>(() => {
-		const companies = (companiesResult?.data ?? []).slice(0, 3);
-		return [
-			{
-				id: "manufacturers-stat",
-				type: "stat",
-				stat: `${marketplaceStats?.verifiedSuppliers ?? 0}+`,
-				statDesc: "Direct",
-			},
-			...companies.map(mapCompanyToWidgetItem),
-		];
-	}, [companiesResult?.data, marketplaceStats?.verifiedSuppliers]);
+  const manufacturerItems = React.useMemo<HeroWidgetItem[]>(() => {
+    const companies = (companiesResult?.data ?? []).slice(0, 3);
+    return [
+      {
+        id: "manufacturers-stat",
+        type: "stat",
+        stat: `${marketplaceStats?.verifiedSuppliers ?? 0}+`,
+        statDesc: "Direct",
+      },
+      ...companies.map(mapCompanyToWidgetItem),
+    ];
+  }, [companiesResult?.data, marketplaceStats?.verifiedSuppliers]);
 
-	const productItems = React.useMemo<HeroWidgetItem[]>(() => {
-		const products = featuredProductsResult?.data?.slice(0, 3) ?? [];
-		return [
-			{
-				id: "products-stat",
-				type: "stat",
-				stat: `${marketplaceStats?.productsListed ?? 0}+`,
-				statDesc: "Available",
-			},
-			...products.map(mapProductToWidgetItem),
-		];
-	}, [featuredProductsResult?.data, marketplaceStats?.productsListed]);
+  const productItems = React.useMemo<HeroWidgetItem[]>(() => {
+    const products = featuredProductsResult?.data?.slice(0, 3) ?? [];
+    return [
+      {
+        id: "products-stat",
+        type: "stat",
+        stat: `${marketplaceStats?.productsListed ?? 0}+`,
+        statDesc: "Available",
+      },
+      ...products.map(mapProductToWidgetItem),
+    ];
+  }, [featuredProductsResult?.data, marketplaceStats?.productsListed]);
 
-	const supplierItems = React.useMemo<HeroWidgetItem[]>(() => {
-		const companies = (companiesResult?.data ?? []).slice(3, 6);
-		return [
-			{
-				id: "suppliers-stat",
-				type: "stat",
-				stat: `${marketplaceStats?.verifiedSuppliers ?? 0}+`,
-				statDesc: "Verified",
-			},
-			...companies.map(mapCompanyToWidgetItem),
-		];
-	}, [companiesResult?.data, marketplaceStats?.verifiedSuppliers]);
+  const supplierItems = React.useMemo<HeroWidgetItem[]>(() => {
+    const companies = (companiesResult?.data ?? []).slice(3, 6);
+    return [
+      {
+        id: "suppliers-stat",
+        type: "stat",
+        stat: `${marketplaceStats?.verifiedSuppliers ?? 0}+`,
+        statDesc: "Verified",
+      },
+      ...companies.map(mapCompanyToWidgetItem),
+    ];
+  }, [companiesResult?.data, marketplaceStats?.verifiedSuppliers]);
 
-	const serviceItems = React.useMemo<HeroWidgetItem[]>(() => {
-		const services = servicesResult?.data?.slice(0, 3) ?? [];
-		return [
-			{
-				id: "services-stat",
-				type: "stat",
-				stat: `${marketplaceStats?.activeContractors ?? 0}+`,
-				statDesc: "Active",
-			},
-			...services.map(mapServiceToWidgetItem),
-		];
-	}, [marketplaceStats?.activeContractors, servicesResult?.data]);
+  const serviceItems = React.useMemo<HeroWidgetItem[]>(() => {
+    const services = servicesResult?.data?.slice(0, 3) ?? [];
+    return [
+      {
+        id: "services-stat",
+        type: "stat",
+        stat: `${marketplaceStats?.activeContractors ?? 0}+`,
+        statDesc: "Active",
+      },
+      ...services.map(mapServiceToWidgetItem),
+    ];
+  }, [marketplaceStats?.activeContractors, servicesResult?.data]);
 
-	React.useEffect(() => {
-		if (featuredProducts.length === 0) return;
-		const id = setInterval(() => {
-			setActiveFeatured((prev) => (prev + 1) % featuredProducts.length);
-		}, 5000);
-		return () => clearInterval(id);
-	}, [featuredProducts.length]);
+  React.useEffect(() => {
+    if (featuredProducts.length === 0) return;
+    const id = setInterval(() => {
+      setActiveFeatured((prev) => (prev + 1) % featuredProducts.length);
+    }, 5000);
+    return () => clearInterval(id);
+  }, [featuredProducts.length]);
 
-	React.useEffect(() => {
-		if (activeFeatured >= featuredProducts.length) {
-			setActiveFeatured(0);
-		}
-	}, [activeFeatured, featuredProducts.length]);
+  React.useEffect(() => {
+    if (activeFeatured >= featuredProducts.length) {
+      setActiveFeatured(0);
+    }
+  }, [activeFeatured, featuredProducts.length]);
 
-	const handleSearch = (e: React.FormEvent) => {
-		e.preventDefault();
-		navigate({
-			to: "/marketplace",
-			search: {
-				q: query,
-				category: activeCategory,
-			},
-		} as { to: "/marketplace"; search: any });
-	};
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    navigate({
+      to: "/marketplace",
+      search: {
+        q: query,
+        category: activeCategory,
+      },
+    } as { to: "/marketplace"; search: any });
+  };
 
-	return (
-		<section className="relative py-2 md:py-4 bg-background industrial-grain">
-			<div className="max-w-[1600px] mx-auto px-3 md:px-4 lg:px-6">
-				<div className="relative rounded-none overflow-hidden border border-border/20 shadow-2xl mb-6 lg:mb-8 bg-slate-950 min-h-[260px] md:min-h-[320px] lg:min-h-[380px] flex flex-col md:flex-row shadow-primary/5">
-					{/* search panel */}
-					<div className="relative z-10 flex flex-col justify-center px-5 py-6 md:px-10 md:py-8 flex-1 md:max-w-[58%]">
-						<div
-							className="absolute inset-0 blueprint-grid opacity-[0.03] pointer-events-none"
-							style={{
-								maskImage: "linear-gradient(to right, black 20%, transparent)",
-							}}
-						/>
-						<div className="absolute top-0 left-0 w-32 h-32 bg-primary/10 blur-[100px] pointer-events-none" />
+  return (
+    <section className="relative py-2 md:py-4 bg-background industrial-grain">
+      <div className="max-w-[1600px] mx-auto px-3 md:px-4 lg:px-6">
+        <div className="relative rounded-none overflow-hidden border border-border/20 shadow-2xl mb-6 lg:mb-8 bg-slate-950 min-h-[260px] md:min-h-[320px] lg:min-h-[380px] flex flex-col md:flex-row shadow-primary/5">
+          {/* search panel */}
+          <div className="relative z-10 flex flex-col justify-center px-5 py-6 md:px-10 md:py-8 flex-1 md:max-w-[58%]">
+            <div
+              className="absolute inset-0 blueprint-grid opacity-[0.03] pointer-events-none"
+              style={{
+                maskImage: "linear-gradient(to right, black 20%, transparent)",
+              }}
+            />
+            <div className="absolute top-0 left-0 w-32 h-32 bg-primary/10 blur-[100px] pointer-events-none" />
 
-						<div className="flex items-center gap-4 mb-4 relative">
-							<span className="inline-flex items-center gap-2.5 text-primary text-[9px] font-black uppercase tracking-[0.4em]">
-								<div className="w-8 h-px bg-primary" />
-								Verified Marketplace
-							</span>
-						</div>
+            <div className="flex items-center gap-4 mb-4 relative">
+              <span className="inline-flex items-center gap-2.5 text-primary text-[9px] font-black uppercase tracking-[0.4em]">
+                <div className="w-8 h-px bg-primary" />
+                Construction Marketplace
+              </span>
+            </div>
 
-						<h1 className="text-display font-extrabold text-white leading-[0.95] mb-6 relative tracking-tight">
-							<span className="block text-3xl md:text-4xl lg:text-5xl uppercase">
-								FIND EVERY
-							</span>
-							<span className="block text-3xl md:text-4xl lg:text-5xl text-primary italic -skew-x-12 inline-block translate-x-4">
-								TOOL, MATERIAL
-							</span>
-							<span className="block text-3xl md:text-4xl lg:text-5xl uppercase">
-								& SUPPLIER.
-							</span>
-						</h1>
+            <h1 className="text-display font-extrabold text-white leading-[0.95] mb-6 relative tracking-tight">
+              <span className="block text-3xl md:text-4xl lg:text-5xl uppercase">
+                FIND EVERY
+              </span>
+              <span className="block text-3xl md:text-4xl lg:text-5xl text-primary italic -skew-x-12 inline-block translate-x-4">
+                MATERIAL, SERVICE
+              </span>
+              <span className="block text-3xl md:text-4xl lg:text-5xl uppercase">
+                & SUPPLIER.
+              </span>
+            </h1>
 
-						<form onSubmit={handleSearch} className="relative">
-							<div className="flex items-stretch rounded-none relative overflow-hidden border border-white/10 bg-white/5 backdrop-blur-md shadow-2xl shadow-black/40 focus-within:border-primary/40 focus-within:bg-white/10 transition-all duration-300">
-								<Select
-									value={activeCategory}
-									onValueChange={(val: string | null) => {
-										if (val) setActiveCategory(val);
-									}}
-								>
-									<SelectTrigger className="!h-auto px-4 md:px-6 flex items-center gap-2 text-[9px] md:text-[10px] font-black text-white/40 hover:text-primary uppercase tracking-[0.3em] border-r border-white/10 transition-all whitespace-nowrap bg-transparent rounded-none border-y-0 border-l-0 group/select">
-										<span className="opacity-50">CATEGORY:</span>
-										<span className="text-white group-hover/select:translate-x-1 transition-transform">
-											{activeCategory === DEFAULT_SEARCH_CATEGORY
-												? "ALL"
-												: activeCategory.toUpperCase()}
-										</span>
-									</SelectTrigger>
-									<SelectContent className="bg-slate-950/95 backdrop-blur-xl border border-white/10 rounded-none shadow-2xl p-1 min-w-[240px]">
-										<SelectGroup>
-											<SelectLabel className="text-[9px] font-black uppercase tracking-[0.4em] text-white/30 px-3 py-4 border-b border-white/5 mb-2">
-												System Categories
-											</SelectLabel>
-											{searchCategories.map((cat) => (
-												<SelectItem
-													key={cat}
-													value={cat}
-													className="text-[10px] font-black uppercase tracking-widest text-white/60 focus:bg-primary focus:text-white rounded-none transition-all py-3 px-4 mb-1 h-auto"
-												>
-													{cat}
-												</SelectItem>
-											))}
-										</SelectGroup>
-									</SelectContent>
-								</Select>
+            <form onSubmit={handleSearch} className="relative">
+              <div className="flex items-stretch rounded-none relative overflow-hidden border border-white/10 bg-white/5 backdrop-blur-md shadow-2xl shadow-black/40 focus-within:border-primary/40 focus-within:bg-white/10 transition-all duration-300">
+                <Select
+                  value={activeCategory}
+                  onValueChange={(val: string | null) => {
+                    if (val) setActiveCategory(val);
+                  }}
+                >
+                  <SelectTrigger className="!h-auto px-4 md:px-6 flex items-center gap-2 text-[9px] md:text-[10px] font-black text-white/40 hover:text-primary uppercase tracking-[0.3em] border-r border-white/10 transition-all whitespace-nowrap bg-transparent rounded-none border-y-0 border-l-0 group/select">
+                    <span className="opacity-50">CATEGORY:</span>
+                    <span className="text-white group-hover/select:translate-x-1 transition-transform">
+                      {activeCategory === DEFAULT_SEARCH_CATEGORY
+                        ? "ALL"
+                        : activeCategory.toUpperCase()}
+                    </span>
+                  </SelectTrigger>
+                  <SelectContent className="bg-slate-950/95 backdrop-blur-xl border border-white/10 rounded-none shadow-2xl p-1 min-w-[240px]">
+                    <SelectGroup>
+                      <SelectLabel className="text-[9px] font-black uppercase tracking-[0.4em] text-white/30 px-3 py-4 border-b border-white/5 mb-2">
+                        System Categories
+                      </SelectLabel>
+                      {searchCategories.map((cat) => (
+                        <SelectItem
+                          key={cat}
+                          value={cat}
+                          className="text-[10px] font-black uppercase tracking-widest text-white/60 focus:bg-primary focus:text-white rounded-none transition-all py-3 px-4 mb-1 h-auto"
+                        >
+                          {cat}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
 
-								<input
-									type="text"
-									value={query}
-									onChange={(e) => setQuery(e.target.value)}
-									placeholder="PROTOCOL_SEARCH..."
-									className="flex-1 bg-transparent px-6 py-4 md:py-5 text-white text-sm md:text-lg placeholder:text-white/10 outline-none min-w-0 font-display font-medium tracking-tight"
-								/>
+                <input
+                  type="text"
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  placeholder="Search materials, services, suppliers..."
+                  className="flex-1 bg-transparent px-6 py-4 md:py-5 text-white text-sm md:text-lg placeholder:text-white/10 outline-none min-w-0 font-display font-medium tracking-tight"
+                />
 
-								<button
-									type="submit"
-									className="shrink-0 bg-primary hover:bg-primary/90 active:scale-95 transition-all px-6 md:px-10 flex items-center gap-3 text-white font-black text-[10px] uppercase tracking-[0.3em] group/search"
-								>
-									<Search className="w-4 h-4 group-hover:scale-110 transition-transform" />
-									<span className="hidden sm:inline">Search</span>
-								</button>
-							</div>
+                <button
+                  type="submit"
+                  className="shrink-0 bg-primary hover:bg-primary/90 active:scale-95 transition-all px-6 md:px-10 flex items-center gap-3 text-white font-black text-[10px] uppercase tracking-[0.3em] group/search"
+                >
+                  <Search className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                  <span className="hidden sm:inline">Search</span>
+                </button>
+              </div>
 
-							<div className="flex items-center gap-3 mt-4 flex-wrap">
-								<span className="text-[8px] text-white/30 font-black uppercase tracking-[0.4em]">
-									Active:
-								</span>
-								{activeTags.map((tag) => (
-									<Badge
-										variant={"secondary"}
-										key={tag}
-										className="rounded-none bg-white/[0.03] border-white/10 text-white/50 text-[8px] font-black uppercase tracking-widest px-2 py-0.5 hover:bg-primary/20 hover:text-primary transition-colors cursor-pointer"
-									>
-										{tag}
-									</Badge>
-								))}
-							</div>
-						</form>
-					</div>
+              <div className="flex items-center gap-3 mt-4 flex-wrap">
+                <span className="text-[8px] text-white/30 font-black uppercase tracking-[0.4em]">
+                  Active:
+                </span>
+                {activeTags.map((tag) => (
+                  <Badge
+                    variant={"secondary"}
+                    key={tag}
+                    className="rounded-none bg-white/[0.03] border-white/10 text-white/50 text-[8px] font-black uppercase tracking-widest px-2 py-0.5 hover:bg-primary/20 hover:text-primary transition-colors cursor-pointer"
+                  >
+                    {tag}
+                  </Badge>
+                ))}
+              </div>
+            </form>
+          </div>
 
-					{/* featured products */}
-					<div className="relative md:w-[42%] min-h-[200px] md:min-h-0 shrink-0 overflow-hidden border-t md:border-t-0 md:border-l border-white/5">
-						{featuredProducts.map((product, i) => (
-							<FeaturedProductCard
-								key={product.id}
-								product={product}
-								isActive={i === activeFeatured}
-							/>
-						))}
+          {/* featured products */}
+          <div className="relative md:w-[42%] min-h-[200px] md:min-h-0 shrink-0 overflow-hidden border-t md:border-t-0 md:border-l border-white/5">
+            {featuredProducts.map((product, i) => (
+              <FeaturedProductCard
+                key={product.id}
+                product={product}
+                isActive={i === activeFeatured}
+              />
+            ))}
 
-						<div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-20 flex gap-1">
-							{featuredProducts.map((_, i) => (
-								<button
-									key={i}
-									onClick={() => setActiveFeatured(i)}
-									className={`h-0.5 rounded-lg transition-all duration-300 ${
-										i === activeFeatured
-											? "w-4 bg-primary"
-											: "w-1 bg-white/20 hover:bg-white/40"
-									}`}
-									aria-label={`Show featured product ${i + 1}`}
-								/>
-							))}
-						</div>
-					</div>
-				</div>
+            <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-20 flex gap-1">
+              {featuredProducts.map((product, i) => (
+                <button
+                  key={product.id}
+                  onClick={() => setActiveFeatured(i)}
+                  className={`h-0.5 rounded-lg transition-all duration-300 ${
+                    i === activeFeatured
+                      ? "w-4 bg-primary"
+                      : "w-1 bg-white/20 hover:bg-white/40"
+                  }`}
+                  aria-label={`Show featured product ${i + 1}`}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
 
-				{/* widgets grid - Integrated and Tightened */}
-				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 md:gap-3 mt-2 relative z-20 px-4 md:px-0">
-					<HeroWidget
-						title="Manufacturers"
-						subtitle="Direct source"
-						items={manufacturerItems}
-						href="/suppliers?type=manufacturer"
-						variant="default"
-					/>
-					<HeroWidget
-						title="Premium Assets"
-						subtitle="Trending now"
-						items={productItems}
-						href="/products?sort=popular"
-						variant="blue"
-					/>
-					<HeroWidget
-						title="Verified Nodes"
-						subtitle="Elite partners"
-						items={supplierItems}
-						href="/suppliers"
-						variant="emerald"
-					/>
-					<HeroWidget
-						title="Operational"
-						subtitle="Field solutions"
-						items={serviceItems}
-						href="/services"
-						variant="orange"
-					/>
-				</div>
-			</div>
-		</section>
-	);
+        {/* widgets grid - Integrated and Tightened */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 md:gap-3 mt-2 relative z-20 px-4 md:px-0">
+          <HeroWidget
+            title="Top Manufacturers"
+            subtitle="Direct access"
+            items={manufacturerItems}
+            href="/suppliers?type=manufacturer"
+            variant="default"
+          />
+          <HeroWidget
+            title="Top Products"
+            subtitle="Trending now"
+            items={productItems}
+            href="/products?sort=popular"
+            variant="blue"
+          />
+          <HeroWidget
+            title="Top Suppliers"
+            subtitle="Trusted partners"
+            items={supplierItems}
+            href="/suppliers"
+            variant="emerald"
+          />
+          <HeroWidget
+            title="Top Services"
+            subtitle="Expert solutions"
+            items={serviceItems}
+            href="/services"
+            variant="orange"
+          />
+        </div>
+      </div>
+    </section>
+  );
 };
 
 export default Hero;

@@ -14,9 +14,9 @@ export const AdminTable: React.FC<AdminTableProps> = ({
 			<table className="w-full">
 				<thead>
 					<tr className="border-b border-border bg-muted">
-						{headers.map((header, index) => (
+						{headers.map((header) => (
 							<th
-								key={index}
+								key={header}
 								className="px-4 py-3 text-left text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground"
 							>
 								{header}

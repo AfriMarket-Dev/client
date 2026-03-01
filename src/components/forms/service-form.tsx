@@ -1,6 +1,5 @@
 import { useForm } from "@tanstack/react-form";
 import type React from "react";
-import { useState } from "react";
 import {
   AlertCircleIcon,
   ImageIcon,
@@ -29,10 +28,12 @@ interface ServiceFormValues {
   price: string;
   priceType: "FIXED" | "NEGOTIABLE" | "STARTS_AT";
   duration: string;
+  discount: string;
+  imageUrls: string[];
 }
 
 interface ServiceFormProps {
-  onSubmit: (values: ServiceFormValues & { imageUrls: string[] }) => void;
+  onSubmit: (values: ServiceFormValues) => void;
   onCancel: () => void;
   initialValues?: Partial<ServiceFormValues>;
   isLoading?: boolean;
@@ -67,28 +68,20 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
     multiple: true,
   });
 
-  const [categoryValue, setCategoryValue] = useState(
-    initialValues?.categoryId ?? "",
-  );
-  const [priceTypeValue, setPriceTypeValue] = useState<
-    "FIXED" | "NEGOTIABLE" | "STARTS_AT"
-  >(initialValues?.priceType ?? "FIXED");
-
   const form = useForm({
     defaultValues: {
       name: initialValues?.name ?? "",
+      categoryId: initialValues?.categoryId ?? "",
       description: initialValues?.description ?? "",
       price: initialValues?.price ?? "",
+      priceType: initialValues?.priceType ?? "FIXED",
       duration: initialValues?.duration ?? "",
-    },
+      discount: initialValues?.discount?.toString() ?? "",
+      imageUrls: initialValues?.imageUrls ?? [],
+    } as ServiceFormValues,
     onSubmit: async ({ value }) => {
-      const imageUrls = files.map((f) => f.preview ?? "").filter(Boolean);
-      onSubmit({
-        ...value,
-        categoryId: categoryValue,
-        priceType: priceTypeValue,
-        imageUrls,
-      });
+      const newPreviews = files.map((f) => f.preview ?? "").filter(Boolean);
+      onSubmit({ ...value, imageUrls: [...value.imageUrls, ...newPreviews] });
     },
   });
 
@@ -102,9 +95,8 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
       className="space-y-5"
     >
       {/* Name */}
-      <form.Field
-        name="name"
-        children={(field) => (
+      <form.Field name="name">
+        {(field) => (
           <div>
             <Label className="block text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground mb-2">
               Service Name
@@ -120,107 +112,146 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
             />
           </div>
         )}
-      />
+      </form.Field>
 
       {/* Category */}
-      <div>
-        <Label className="block text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground mb-2">
-          Category
-        </Label>
-        <Select
-          value={categoryValue}
-          onValueChange={(val) => setCategoryValue(val ?? "")}
-          required
-        >
-          <SelectTrigger className="h-11 bg-background rounded-none border-border/40 focus:ring-0">
-            <SelectValue placeholder="Select service category" />
-          </SelectTrigger>
-          <SelectContent className="rounded-none border-border/40">
-            {categories.map((cat: { id: string; name: string }) => (
-              <SelectItem key={cat.id} value={cat.id} className="rounded-none">
-                {cat.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
+      <form.Field name="categoryId">
+        {(field) => (
+          <div>
+            <Label className="block text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground mb-2">
+              Category
+            </Label>
+            <Select
+              value={field.state.value}
+              onValueChange={(val) => field.handleChange(val ?? "")}
+              required
+            >
+              <SelectTrigger className="h-11 bg-background rounded-none border-border/40 focus:ring-0">
+                <SelectValue placeholder="Select service category" />
+              </SelectTrigger>
+              <SelectContent className="rounded-none border-border/40">
+                {categories.map((cat: { id: string; name: string }) => (
+                  <SelectItem
+                    key={cat.id}
+                    value={cat.id}
+                    className="rounded-none"
+                  >
+                    {cat.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        )}
+      </form.Field>
 
       {/* Price Type + Price */}
       <div className="grid grid-cols-2 gap-4">
-        <div>
-          <Label className="block text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground mb-2">
-            Pricing Type
-          </Label>
-          <Select
-            value={priceTypeValue}
-            onValueChange={(val: string | null) => {
-              if (val)
-                setPriceTypeValue(val as "FIXED" | "NEGOTIABLE" | "STARTS_AT");
-            }}
-            required
-          >
-            <SelectTrigger className="h-11 bg-background rounded-none border-border/40 focus:ring-0">
-              <SelectValue placeholder="Select type" />
-            </SelectTrigger>
-            <SelectContent className="rounded-none border-border/40">
-              <SelectItem value="FIXED" className="rounded-none">Fixed Price</SelectItem>
-              <SelectItem value="NEGOTIABLE" className="rounded-none">Negotiable</SelectItem>
-              <SelectItem value="STARTS_AT" className="rounded-none">Starts At</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-        <form.Field
-          name="price"
-          children={(field) => (
+        <form.Field name="priceType">
+          {(field) => (
+            <div>
+              <Label className="block text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground mb-2">
+                Pricing Type
+              </Label>
+              <Select
+                value={field.state.value}
+                onValueChange={(val: any) => {
+                  if (val) field.handleChange(val);
+                }}
+                required
+              >
+                <SelectTrigger className="h-11 bg-background rounded-none border-border/40 focus:ring-0">
+                  <SelectValue placeholder="Select type" />
+                </SelectTrigger>
+                <SelectContent className="rounded-none border-border/40">
+                  <SelectItem value="FIXED" className="rounded-none">
+                    Fixed Price
+                  </SelectItem>
+                  <SelectItem value="NEGOTIABLE" className="rounded-none">
+                    Negotiable
+                  </SelectItem>
+                  <SelectItem value="STARTS_AT" className="rounded-none">
+                    Starts At
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          )}
+        </form.Field>
+        <form.Field name="price">
+          {(field) => (
             <div>
               <Label className="block text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground mb-2">
                 Rate (RWF)
               </Label>
               <Input
                 name={field.name}
-                defaultValue={field.state.value}
+                value={field.state.value}
                 type="number"
                 min="0"
                 step="0.01"
-                disabled={priceTypeValue === "NEGOTIABLE"}
-                onBlur={(e) => field.handleChange(e.target.value)}
+                disabled={form.getFieldValue("priceType") === "NEGOTIABLE"}
+                onBlur={field.handleBlur}
                 onChange={(e) => field.handleChange(e.target.value)}
                 className="h-11 text-sm bg-background rounded-none border-border/40 focus:border-primary/40 focus:ring-0"
-                placeholder={priceTypeValue === "NEGOTIABLE" ? "N/A" : "0.00"}
-                required={priceTypeValue !== "NEGOTIABLE"}
+                placeholder={
+                  form.getFieldValue("priceType") === "NEGOTIABLE"
+                    ? "N/A"
+                    : "0.00"
+                }
+                required={form.getFieldValue("priceType") !== "NEGOTIABLE"}
               />
             </div>
           )}
-        />
+        </form.Field>
       </div>
 
-      {/* Duration */}
-      <form.Field
-        name="duration"
-        children={(field) => (
-          <div>
-            <Label className="block text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground mb-2">
-              Timeline / Duration
-            </Label>
-            <div className="relative group">
-              <ClockIcon className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground group-focus-within:text-primary transition-colors pointer-events-none" />
+      {/* Duration + Discount */}
+      <div className="grid grid-cols-2 gap-4">
+        <form.Field name="duration">
+          {(field) => (
+            <div>
+              <Label className="block text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground mb-2">
+                Timeline / Duration
+              </Label>
+              <div className="relative group">
+                <ClockIcon className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground group-focus-within:text-primary transition-colors pointer-events-none" />
+                <Input
+                  name={field.name}
+                  value={field.state.value}
+                  onBlur={field.handleBlur}
+                  onChange={(e) => field.handleChange(e.target.value)}
+                  className="h-11 text-sm bg-background pl-10 rounded-none border-border/40 focus:border-primary/40 focus:ring-0"
+                  placeholder="e.g. 2-3 days"
+                />
+              </div>
+            </div>
+          )}
+        </form.Field>
+        <form.Field name="discount">
+          {(field) => (
+            <div>
+              <Label className="block text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground mb-2">
+                Discount (%)
+              </Label>
               <Input
                 name={field.name}
                 value={field.state.value}
+                type="number"
+                min="0"
+                max="100"
                 onBlur={field.handleBlur}
                 onChange={(e) => field.handleChange(e.target.value)}
-                className="h-11 text-sm bg-background pl-10 rounded-none border-border/40 focus:border-primary/40 focus:ring-0"
-                placeholder="e.g. 2-3 days, 1 week"
+                className="h-11 text-sm bg-background rounded-none border-border/40 focus:border-primary/40 focus:ring-0"
+                placeholder="0"
               />
             </div>
-          </div>
-        )}
-      />
+          )}
+        </form.Field>
+      </div>
 
-      {/* Description */}
-      <form.Field
-        name="description"
-        children={(field) => (
+      <form.Field name="description">
+        {(field) => (
           <div>
             <Label className="block text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground mb-2">
               Service Description
@@ -236,7 +267,7 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
             />
           </div>
         )}
-      />
+      </form.Field>
 
       {/* Images */}
       <div>
@@ -304,7 +335,9 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
               <div className="mb-2 flex size-10 shrink-0 items-center justify-center rounded-none border border-border/40 bg-background">
                 <ImageIcon className="size-4 opacity-60" />
               </div>
-              <p className="mb-1 font-black uppercase tracking-widest text-[10px]">Drop images here</p>
+              <p className="mb-1 font-black uppercase tracking-widest text-[10px]">
+                Drop images here
+              </p>
               <p className="text-muted-foreground text-[9px] uppercase font-bold tracking-tighter">
                 Showcase your work (max {MAX_SIZE_MB}MB)
               </p>

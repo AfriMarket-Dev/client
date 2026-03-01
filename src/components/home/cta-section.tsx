@@ -21,20 +21,19 @@ const CTASection: React.FC = () => {
             <div className="inline-flex items-center gap-3 mb-10">
               <div className="w-8 h-px bg-primary" />
               <span className="text-[10px] font-black uppercase tracking-[0.4em] text-primary">
-                Supply Chain Protocol
+                Get Connected
               </span>
             </div>
 
-            <h2 className="text-5xl md:text-6xl lg:text-8xl font-display font-black text-foreground mb-8 tracking-tighter uppercase leading-[0.8]">
-              Industrial
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-display font-black text-foreground mb-8 tracking-tighter uppercase leading-[0.8]">
+              Source Everything
               <br />
-              Intelligence
+              For Construction
             </h2>
 
             <p className="text-muted-foreground text-xl leading-relaxed max-w-md font-medium mb-12 border-l-2 border-primary/20 pl-6">
-              Connect with Rwanda's premier industrial network. Verified
-              procurement from regional manufacturers to specialized field
-              labor.
+              Browse Rwanda's largest network of construction suppliers,
+              materials, and services. Connect directly with verified providers.
             </p>
 
             <div className="flex gap-4">
@@ -68,16 +67,16 @@ const CTASection: React.FC = () => {
                 </div>
 
                 <h3 className="text-2xl font-display font-black text-foreground mb-4 uppercase tracking-tight leading-none text-primary">
-                  Source
+                  Browse
                   <br />
-                  Assets
+                  Materials
                 </h3>
                 <p className="text-muted-foreground text-xs leading-relaxed mb-10 font-bold uppercase tracking-widest opacity-60">
-                  Bulk Procurement · Local Inventory · Equipment Rental
+                  Building Materials · Tools · Equipment
                 </p>
 
                 <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.3em] group-hover:text-primary transition-colors">
-                  Initialize Source{" "}
+                  Explore Products{" "}
                   <RiArrowRightLine className="w-3 h-3 group-hover:translate-x-2 transition-transform" />
                 </div>
               </div>
@@ -100,16 +99,16 @@ const CTASection: React.FC = () => {
                 </div>
 
                 <h3 className="text-2xl font-display font-black text-foreground mb-4 uppercase tracking-tight leading-none text-primary">
-                  Deploy
+                  Find
                   <br />
                   Services
                 </h3>
                 <p className="text-muted-foreground text-xs leading-relaxed mb-10 font-bold uppercase tracking-widest opacity-60">
-                  Certified Engineering · Field Logistics · Site Support
+                  Contractors · Engineering · Logistics
                 </p>
 
                 <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.3em] group-hover:text-primary transition-colors">
-                  Initialize Operations{" "}
+                  Explore Services{" "}
                   <RiArrowRightLine className="w-3 h-3 group-hover:translate-x-2 transition-transform" />
                 </div>
               </div>

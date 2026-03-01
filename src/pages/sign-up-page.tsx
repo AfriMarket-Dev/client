@@ -6,16 +6,13 @@ import {
   RiStoreLine,
 } from "@remixicon/react";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
 import { useSignUpMutation } from "@/app/api/auth";
-import { setToken, setUser } from "@/app/features/auth-slice";
 import { SignUpForm } from "@/components/forms/sign-up-form";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 
 const SignUpPage = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   const [signUp, { isLoading }] = useSignUpMutation();
 
@@ -29,24 +26,12 @@ const SignUpPage = () => {
     role: "buyer" | "provider";
   }) => {
     try {
-      const result = await signUp({
+      await signUp({
         name: data.name,
         email: data.email,
         password: data.password,
         role: data.role,
       }).unwrap();
-
-      dispatch(setToken(result.token));
-      dispatch(
-        setUser({
-          id: result.user.id,
-          email: result.user.email,
-          name: result.user.name,
-          role: result.user.role,
-          needsOnboarding: result.user.needsOnboarding,
-        }),
-      );
-
       setStep("success");
       toast.success("Verification email sent.");
     } catch (err) {
@@ -64,6 +49,7 @@ const SignUpPage = () => {
     <>
       {step === "details" && (
         <button
+          type="button"
           onClick={() => setStep("role")}
           className="flex items-center text-muted-foreground hover:text-foreground transition-colors mb-8 group"
         >
@@ -76,6 +62,7 @@ const SignUpPage = () => {
 
       {step === "role" && (
         <button
+          type="button"
           onClick={() => navigate({ to: "/" })}
           className="flex items-center text-muted-foreground hover:text-foreground transition-colors mb-8 group"
         >
@@ -98,7 +85,7 @@ const SignUpPage = () => {
           {step === "role"
             ? "Choose how you want to use AfrikaMarket."
             : step === "details"
-              ? `Completing registration as a ${role === "buyer" ? "Builder/Contractor" : "Supplier"}.`
+              ? `Completing registration as a ${role === "buyer" ? "Contractor / Customer" : "Supplier / Service Provider"}.`
               : "We've sent a verification link to your email address."}
         </p>
       </div>
@@ -106,6 +93,7 @@ const SignUpPage = () => {
       {step === "role" ? (
         <div className="space-y-4">
           <button
+            type="button"
             onClick={() => handleRoleSelect("buyer")}
             className="w-full p-6 border border-muted hover:border-primary/50 bg-muted/10 hover:bg-muted/20 rounded-sm transition-all text-left group flex items-start space-x-4"
           >
@@ -114,15 +102,16 @@ const SignUpPage = () => {
             </div>
             <div>
               <h3 className="text-lg font-heading font-bold uppercase mb-1">
-                Buyer
+                Contractor / Customer
               </h3>
               <p className="text-sm text-muted-foreground">
-                I want to source materials and manage projects.
+                I want to source materials and find construction services.
               </p>
             </div>
           </button>
 
           <button
+            type="button"
             onClick={() => handleRoleSelect("provider")}
             className="w-full p-6 border border-muted hover:border-primary/50 bg-muted/10 hover:bg-muted/20 rounded-sm transition-all text-left group flex items-start space-x-4"
           >
@@ -131,10 +120,11 @@ const SignUpPage = () => {
             </div>
             <div>
               <h3 className="text-lg font-heading font-bold uppercase mb-1">
-                Provider
+                Supplier / Provider
               </h3>
               <p className="text-sm text-muted-foreground">
-                I want to sell construction materials and reach buyers.
+                I want to list materials or services for the construction
+                industry.
               </p>
             </div>
           </button>
@@ -143,13 +133,13 @@ const SignUpPage = () => {
         <SignUpForm role={role} onSubmit={handleSignUp} isLoading={isLoading} />
       ) : (
         <div className="space-y-6 text-center py-12 border border-dashed border-border rounded-none bg-muted/5 relative overflow-hidden">
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none" />
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-size-[24px_24px] pointer-events-none" />
           <div className="w-16 h-16 bg-primary/10 text-primary mx-auto flex items-center justify-center rounded-none rotate-45 mb-8 relative z-10">
             <RiMailLine className="w-8 h-8 -rotate-45" />
           </div>
           <div className="space-y-3 relative z-10 px-6">
             <p className="font-black uppercase tracking-[0.3em] text-sm text-foreground">
-              Verification Transmitted
+              Verification Email Sent
             </p>
             <p className="text-xs text-muted-foreground uppercase tracking-widest max-w-xs mx-auto leading-relaxed font-bold">
               Please check your inbox and click the verification link to

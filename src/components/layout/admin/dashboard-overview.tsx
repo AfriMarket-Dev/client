@@ -95,9 +95,9 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
 		</div>
 
 		<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-			{stats.map((stat, index) => (
+			{stats.map((stat) => (
 				<AdminCard
-					key={index}
+					key={stat.label}
 					noPadding
 					className="hover:border-primary transition-colors border border-border"
 				>
@@ -146,9 +146,9 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
 				className="lg:col-span-2 border border-border"
 			>
 				<div className="divide-y divide-border">
-					{recentActivities.map((activity, index) => (
+					{recentActivities.map((activity) => (
 						<div
-							key={index}
+							key={activity.message}
 							className="p-6 flex items-start gap-4 hover:bg-muted/10 transition-colors group"
 						>
 							<div

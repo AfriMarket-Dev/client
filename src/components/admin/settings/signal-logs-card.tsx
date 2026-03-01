@@ -34,8 +34,8 @@ export const SignalLogsCard: React.FC = () => {
       headerActions={<RiPulseLine size={16} className="text-primary" />}
     >
       <AdminTable headers={["Signal Type", "Terminal ID", "Temporal Marker"]}>
-        {activities.map((activity, index) => (
-          <tr key={index} className="hover:bg-muted/50 transition-colors">
+        {activities.map((activity) => (
+          <tr key={`${activity.action}-${activity.time}`} className="hover:bg-muted/50 transition-colors">
             <td className="px-4 py-4">
               <Badge
                 variant="outline"

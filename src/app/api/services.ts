@@ -56,6 +56,7 @@ export interface CreateServiceInput {
   price?: number;
   priceType?: "FIXED" | "NEGOTIABLE" | "STARTS_AT";
   duration?: string;
+  discount?: number;
   images?: string[];
   categoryId: string;
   companyId: string;

@@ -1,107 +1,105 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type {
-	CatalogFilters,
-	ListingType,
+  CatalogFilters,
+  ListingType,
 } from "@/components/marketplace/types";
+import { useMarketplaceParams } from "./use-marketplace-params";
 
 const DEFAULT_PRICE_MAX = 1_000_000;
 
-function defaultFilters(
-	overrides: Partial<CatalogFilters> = {},
-): CatalogFilters {
-	return {
-		searchQuery: "",
-		categoryId: "all",
-		type: "all",
-		district: "",
-		minPrice: "",
-		maxPrice: "",
-		onlyInStock: false,
-		companyType: "all",
-		sortBy: "createdAt",
-		sortOrder: "DESC",
-		page: 1,
-		...overrides,
-	};
-}
-
 export function useMarketplaceFilters(
-	initialCategoryId = "all",
-	initialType: ListingType = "all",
-	onTypeChange?: (type: ListingType) => void,
+  _initialCategoryId = "all",
+  _initialType: ListingType = "all",
+  onTypeChange?: (type: ListingType) => void,
 ) {
-	const [filters, setFilters] = useState<CatalogFilters>(() =>
-		defaultFilters({ categoryId: initialCategoryId, type: initialType }),
-	);
+  const [filters, setFilters] = useMarketplaceParams();
 
-	const [searchInput, setSearchInput] = useState("");
-	const [priceRange, setPriceRange] = useState<[number, number]>([
-		0,
-		DEFAULT_PRICE_MAX,
-	]);
+  const [searchInput, setSearchInput] = useState(filters.searchQuery);
+  const [priceRange, setPriceRange] = useState<[number, number]>([
+    filters.minPrice ? Number(filters.minPrice) : 0,
+    filters.maxPrice ? Number(filters.maxPrice) : DEFAULT_PRICE_MAX,
+  ]);
 
-	const patchFilters = useCallback(
-		(patch: Partial<CatalogFilters>) => {
-			setFilters((prev) => {
-				const next = { ...prev, ...patch };
-				if (patch.type != null && patch.type !== prev.type) {
-					onTypeChange?.(patch.type);
-				}
-				return next;
-			});
-		},
-		[onTypeChange],
-	);
+  // Sync state if filters change (e.g. from URL or reset)
+  useEffect(() => {
+    setSearchInput(filters.searchQuery);
+  }, [filters.searchQuery]);
 
-	const resetFilters = useCallback(() => {
-		setFilters(defaultFilters());
-		setSearchInput("");
-		setPriceRange([0, DEFAULT_PRICE_MAX]);
-		onTypeChange?.("all");
-	}, [onTypeChange]);
+  useEffect(() => {
+    setPriceRange([
+      filters.minPrice ? Number(filters.minPrice) : 0,
+      filters.maxPrice ? Number(filters.maxPrice) : DEFAULT_PRICE_MAX,
+    ]);
+  }, [filters.minPrice, filters.maxPrice]);
 
-	const searchDebounce = useRef<ReturnType<typeof setTimeout>>();
-	useEffect(() => {
-		clearTimeout(searchDebounce.current);
-		searchDebounce.current = setTimeout(() => {
-			patchFilters({ searchQuery: searchInput, page: 1 });
-		}, 400);
-		return () => clearTimeout(searchDebounce.current);
-	}, [searchInput, patchFilters]);
+  const patchFilters = useCallback(
+    (patch: Partial<CatalogFilters>) => {
+      setFilters((prev) => {
+        const next = { ...prev, ...patch };
+        if (patch.type != null && patch.type !== prev.type) {
+          onTypeChange?.(patch.type as ListingType);
+        }
+        return next;
+      });
+    },
+    [setFilters, onTypeChange],
+  );
 
-	const commitPrice = useCallback(() => {
-		patchFilters({
-			minPrice: priceRange[0].toString(),
-			maxPrice: priceRange[1].toString(),
-			page: 1,
-		});
-	}, [priceRange, patchFilters]);
+  const resetFilters = useCallback(() => {
+    setFilters({
+      searchQuery: "",
+      categoryId: "all",
+      type: "all",
+      district: "",
+      minPrice: "",
+      maxPrice: "",
+      onlyInStock: false,
+      companyType: "all",
+      sortBy: "createdAt",
+      sortOrder: "DESC",
+      page: 1,
+    });
+    onTypeChange?.("all");
+  }, [setFilters, onTypeChange]);
 
-	useEffect(() => {
-		if (!filters.minPrice && !filters.maxPrice) {
-			setPriceRange([0, DEFAULT_PRICE_MAX]);
-		}
-	}, [filters.minPrice, filters.maxPrice]);
+  const searchDebounce = useRef<ReturnType<typeof setTimeout>>(undefined);
+  useEffect(() => {
+    if (searchInput === filters.searchQuery) return; // Skip if already synced
 
-	const hasActiveFilters =
-		filters.categoryId !== "all" ||
-		filters.type !== "all" ||
-		filters.companyType !== "all" ||
-		!!filters.district ||
-		!!filters.minPrice ||
-		!!filters.maxPrice ||
-		filters.onlyInStock;
+    clearTimeout(searchDebounce.current);
+    searchDebounce.current = setTimeout(() => {
+      setFilters({ searchQuery: searchInput, page: 1 });
+    }, 400);
+    return () => clearTimeout(searchDebounce.current);
+  }, [searchInput, filters.searchQuery, setFilters]);
 
-	return {
-		filters,
-		setFilters,
-		patchFilters,
-		resetFilters,
-		searchInput,
-		setSearchInput,
-		priceRange,
-		setPriceRange,
-		commitPrice,
-		hasActiveFilters,
-	};
+  const commitPrice = useCallback(() => {
+    setFilters({
+      minPrice: priceRange[0].toString(),
+      maxPrice: priceRange[1].toString(),
+      page: 1,
+    });
+  }, [priceRange, setFilters]);
+
+  const hasActiveFilters =
+    filters.categoryId !== "all" ||
+    filters.type !== "all" ||
+    filters.companyType !== "all" ||
+    !!filters.district ||
+    !!filters.minPrice ||
+    !!filters.maxPrice ||
+    filters.onlyInStock;
+
+  return {
+    filters,
+    setFilters,
+    patchFilters,
+    resetFilters,
+    searchInput,
+    setSearchInput,
+    priceRange,
+    setPriceRange,
+    commitPrice,
+    hasActiveFilters,
+  };
 }

@@ -28,7 +28,7 @@ const FeaturedServices: React.FC = () => {
       <div className="max-w-[1600px] mx-auto px-4 lg:px-6">
         <SectionHeader
           title="Services & Rentals"
-          subtitle="Expert contractors and heavy equipment rentals for your next project."
+          subtitle="Professional services available from verified providers."
           label="Expert Services"
           icon={<RiBriefcaseLine className="w-5 h-5" />}
           viewAllHref="/products?type=SERVICE"
@@ -73,7 +73,7 @@ const FeaturedServices: React.FC = () => {
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center text-[10px] font-black uppercase tracking-widest opacity-20">
-                        IMG_NOT_FOUND
+                        No Image
                       </div>
                     )}
                     <div className="absolute top-0 left-0 bg-primary text-white px-3 py-1.5 text-[8px] font-black uppercase tracking-[0.3em] shadow-2xl">
@@ -85,7 +85,7 @@ const FeaturedServices: React.FC = () => {
                     {company?.district && (
                       <div className="flex items-center gap-2 text-[8px] font-black text-primary uppercase tracking-[0.3em] mb-4">
                         <RiMapPinLine className="w-3 h-3" />
-                        {company.district} // Service Area
+                        {company.district}
                       </div>
                     )}
                     <h3 className="text-sm font-display font-black text-foreground mb-6 line-clamp-2 uppercase tracking-widest leading-relaxed group-hover:text-primary transition-colors min-h-[2.5rem]">

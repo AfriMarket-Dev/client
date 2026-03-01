@@ -1,5 +1,5 @@
-import { Link } from "@tanstack/react-router";
 import { RiArrowRightLine, RiStarLine } from "@remixicon/react";
+import { Link } from "@tanstack/react-router";
 import type React from "react";
 import { ImageWithFallback } from "@/components/common/image-with-fallback";
 import { cn } from "@/lib/utils";
@@ -185,7 +185,7 @@ export const HeroWidget: React.FC<HeroWidgetProps> = ({
 									</div>
 
 									{/* Image Container */}
-									<div className="h-12 w-12 shrink-0 bg-muted rounded-none overflow-hidden border border-border/10 group-hover/item:border-primary/30 transition-all duration-300 relative">
+									<div className="h-16 w-16 shrink-0 bg-muted rounded-none overflow-hidden border border-border/10 group-hover/item:border-primary/30 transition-all duration-300 relative">
 										{item.image ? (
 											<ImageWithFallback
 												src={item.image}

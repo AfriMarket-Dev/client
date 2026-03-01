@@ -23,7 +23,7 @@ export const TopProductsCard: React.FC<TopProductsCardProps> = ({
 			<div className="space-y-4">
 				{products.map((product, index) => (
 					<div
-						key={index}
+						key={product.name}
 						className="flex items-center space-x-4 p-4 hover:bg-gray-50 rounded-xl transition-colors"
 					>
 						<div className="flex-shrink-0">
@@ -93,9 +93,9 @@ export const RecentActivitiesCard: React.FC<RecentActivitiesCardProps> = ({
 			</div>
 
 			<div className="space-y-4">
-				{activities.map((activity, index) => (
+				{activities.map((activity) => (
 					<div
-						key={index}
+						key={activity.message}
 						className="flex items-start space-x-3 p-3 hover:bg-gray-50 rounded-xl transition-colors"
 					>
 						<div className={`p-2 rounded-lg ${activity.color} flex-shrink-0`}>

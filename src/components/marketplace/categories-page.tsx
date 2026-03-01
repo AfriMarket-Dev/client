@@ -45,7 +45,7 @@ const CategoriesPage: React.FC<CategoriesPageProps> = ({ onBack }) => {
           <div className="relative flex-1 max-w-md group">
             <RiSearchLine className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/40 group-focus-within:text-primary transition-colors" />
             <Input
-              placeholder="SEARCH CATEGORIES..."
+              placeholder="Search categories..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-12 rounded-none border-border/20 bg-muted/5 focus:bg-background h-11 font-display font-medium uppercase tracking-widest text-xs"
@@ -55,16 +55,17 @@ const CategoriesPage: React.FC<CategoriesPageProps> = ({ onBack }) => {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <h1 className="text-3xl md:text-4xl font-display font-extrabold uppercase text-foreground mb-4 tracking-tighter leading-none">
+        <h1 className="text-3xl md:text-4xl font-display font-bold uppercase text-foreground mb-4 tracking-tighter leading-none">
           Product Categories
         </h1>
         <p className="text-xs font-bold text-muted-foreground/40 uppercase tracking-[0.3em] mb-12">
-          Protocol navigation / Browse by node
+          Discover specialized materials and services
         </p>
 
         {isLoading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {Array.from({ length: 9 }).map((_, i) => (
+              // biome-ignore lint/suspicious/noArrayIndexKey: Static skeleton array
               <div
                 key={`skeleton-${i}`}
                 className="h-40 rounded-none border border-border/10 bg-muted/10 animate-pulse"
@@ -75,7 +76,7 @@ const CategoriesPage: React.FC<CategoriesPageProps> = ({ onBack }) => {
           <div className="text-center py-20 bg-card rounded-none border border-border/10 shadow-2xl shadow-primary/5">
             <RiPagesLine className="w-12 h-12 text-muted-foreground/20 mx-auto mb-6" />
             <p className="text-xs font-bold text-muted-foreground/40 uppercase tracking-widest">
-              No categories found in registry.
+              No categories found.
             </p>
           </div>
         ) : (
@@ -87,8 +88,11 @@ const CategoriesPage: React.FC<CategoriesPageProps> = ({ onBack }) => {
                 onClick={() =>
                   navigate({
                     to: "/marketplace",
-                    search: { category: category.id },
-                  } as any)
+                    search: { categoryId: category.id } as Record<
+                      string,
+                      string
+                    >,
+                  })
                 }
                 className="group text-left p-8 rounded-none border border-border/10 bg-card hover:border-primary/40 transition-all duration-500 relative overflow-hidden hover:shadow-2xl hover:shadow-primary/5"
               >
@@ -97,12 +101,12 @@ const CategoriesPage: React.FC<CategoriesPageProps> = ({ onBack }) => {
                 <div className="w-12 h-12 rounded-none bg-muted/20 border border-border/10 flex items-center justify-center mb-6 text-muted-foreground/60 group-hover:bg-primary group-hover:text-primary-foreground group-hover:border-primary transition-all duration-500">
                   <RiPagesLine className="w-6 h-6" />
                 </div>
-                <h2 className="text-lg font-display font-extrabold uppercase text-foreground mb-2 group-hover:text-primary transition-colors tracking-tight">
+                <h2 className="text-lg font-display font-bold uppercase text-foreground mb-2 group-hover:text-primary transition-colors tracking-tight">
                   {category.name}
                 </h2>
                 <p className="text-muted-foreground/60 text-[10px] font-medium uppercase tracking-widest leading-relaxed line-clamp-2">
                   {category.description ||
-                    "Browse inventory nodes in this category."}
+                    "Explore products and services in this category."}
                 </p>
               </button>
             ))}

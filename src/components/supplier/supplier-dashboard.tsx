@@ -1,16 +1,17 @@
 import { RiMenuLine } from "@remixicon/react";
-import type React from "react";
-import { useState } from "react";
+import React, { useState, lazy } from "react";
 import { DashboardOverview } from "@/components/layout/admin/dashboard-overview";
 import {
 	DashboardSidebar,
 	type DashboardTab,
 } from "@/components/layout/admin/dashboard-sidebar";
-import AnalyticsDashboard from "./analytics-dashboard";
-import InquiriesList from "./inquiries-list";
-import MessageCenter from "./message-center";
-import ProductManagement from "./product-management";
-import ProfileSettings from "./profile-settings";
+import { SuspenseLoader } from "@/components/common/suspense-loader";
+
+const AnalyticsDashboard = lazy(() => import("./analytics-dashboard"));
+const InquiriesList = lazy(() => import("./inquiries-list"));
+const MessageCenter = lazy(() => import("./message-center"));
+const ProductManagement = lazy(() => import("./product-management"));
+const ProfileSettings = lazy(() => import("./profile-settings"));
 
 interface SupplierDashboardProps {
 	onLogout: () => void;
@@ -35,12 +36,15 @@ const SupplierDashboard: React.FC<SupplierDashboardProps> = ({
 				isOpen={sidebarOpen}
 			/>
 
-			{sidebarOpen && (
+			{sidebarOpen ? (
 				<div
+					role="button"
+					tabIndex={0}
 					className="fixed inset-0 bg-foreground/50 backdrop-blur-sm z-40 lg:hidden"
 					onClick={() => setSidebarOpen(false)}
+					onKeyDown={(e) => e.key === 'Enter' && setSidebarOpen(false)}
 				/>
-			)}
+			) : null}
 
 			<div className="flex-1 flex flex-col h-screen overflow-hidden">
 				{/* Mobile Header */}
@@ -69,16 +73,18 @@ const SupplierDashboard: React.FC<SupplierDashboardProps> = ({
 				</header>
 
 				<main className="flex-1 overflow-y-auto p-4 lg:p-8">
-					{activeTab === "overview" && (
-						<DashboardOverview onAddProduct={() => setActiveTab("products")} />
-					)}
-					{activeTab === "products" && <ProductManagement />}
-					{activeTab === "messages" && <MessageCenter role="provider" />}
-					{activeTab === "inquiries" && <InquiriesList />}
-					{activeTab === "analytics" && <AnalyticsDashboard />}
-					{activeTab === "settings" && (
-						<ProfileSettings supplierData={supplierData} />
-					)}
+					<SuspenseLoader>
+						{activeTab === "overview" ? (
+							<DashboardOverview onAddProduct={() => setActiveTab("products")} />
+						) : null}
+						{activeTab === "products" ? <ProductManagement /> : null}
+						{activeTab === "messages" ? <MessageCenter role="provider" /> : null}
+						{activeTab === "inquiries" ? <InquiriesList /> : null}
+						{activeTab === "analytics" ? <AnalyticsDashboard /> : null}
+						{activeTab === "settings" ? (
+							<ProfileSettings supplierData={supplierData} />
+						) : null}
+					</SuspenseLoader>
 				</main>
 			</div>
 		</div>

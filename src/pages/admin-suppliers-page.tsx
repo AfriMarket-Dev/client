@@ -69,7 +69,7 @@ export default function AdminSuppliersPage() {
   const navigate = useNavigate();
 
   const { data: companiesResult, isLoading } = useGetCompaniesQuery({
-    limit: 200,
+    limit: 100,
   });
   const [deleteCompany, { isLoading: deleting }] = useDeleteCompanyMutation();
   const [updateCompany, { isLoading: suspending }] = useUpdateCompanyMutation();
@@ -87,20 +87,26 @@ export default function AdminSuppliersPage() {
           : "pending",
       verificationStatus: company.isVerified ? "verified" : "unverified",
       joinDate: toDateLabel(company.createdAt),
-      visits: company.visits ?? 0,
+      visits: Number(company.visits) || 0,
     }));
   }, [companiesResult]);
 
   const handleViewDetails = useCallback(
     (supplierId: string) => {
-      navigate({ to: `/admin/suppliers/${supplierId}` as any });
+      navigate({
+        to: "/admin/suppliers/$supplierId",
+        params: { supplierId },
+      });
     },
     [navigate],
   );
 
   const handleEditSupplier = useCallback(
     (supplierId: string) => {
-      navigate({ to: `/admin/suppliers/${supplierId}/edit` as any });
+      navigate({
+        to: "/admin/suppliers/$supplierId/edit",
+        params: { supplierId },
+      });
     },
     [navigate],
   );
@@ -258,6 +264,25 @@ export default function AdminSuppliersPage() {
                     onClick={() => handleEditSupplier(supplier.id)}
                   >
                     <RiEditLine className="mr-2 h-4 w-4" /> Edit supplier
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    onClick={() =>
+                      navigate({
+                        to: `/admin/suppliers/${supplier.id}/products/new` as any,
+                      })
+                    }
+                  >
+                    <RiAddLine className="mr-2 h-4 w-4" /> Add Product
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() =>
+                      navigate({
+                        to: `/admin/suppliers/${supplier.id}/services/new` as any,
+                      })
+                    }
+                  >
+                    <RiAddLine className="mr-2 h-4 w-4" /> Add Service
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem

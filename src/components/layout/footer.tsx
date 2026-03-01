@@ -78,8 +78,8 @@ export const Footer: React.FC<FooterProps> = ({
               </h2>
               <div className="w-20 h-1 bg-primary mb-8" />
               <p className="text-muted-foreground text-lg leading-relaxed max-w-md font-medium">
-                Strategic industrial node connecting verified regional
-                manufacturers with enterprise contractors.
+                The premier construction marketplace for Rwanda. Connecting
+                contractors with verified suppliers and professional services.
               </p>
             </div>
 
@@ -87,7 +87,7 @@ export const Footer: React.FC<FooterProps> = ({
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 pt-8 border-t border-border/20">
               <div className="space-y-2">
                 <span className="block text-[10px] font-black uppercase tracking-[0.3em] text-primary mb-2">
-                  Operational HQ
+                  Headquarters
                 </span>
                 <span className="text-foreground font-bold text-sm">
                   Kigali International, Rwanda
@@ -95,18 +95,18 @@ export const Footer: React.FC<FooterProps> = ({
               </div>
               <div className="space-y-2">
                 <span className="block text-[10px] font-black uppercase tracking-[0.3em] text-primary mb-2">
-                  Protocol Access
+                  Contact Us
                 </span>
                 <span className="text-foreground font-bold text-sm">
-                  terminal@afrikamarket.rw
+                  contact@afrikamarket.rw
                 </span>
               </div>
             </div>
 
             <div className="flex gap-4 pt-4">
-              {socialLinks.map((social, index) => (
+              {socialLinks.map((social) => (
                 <a
-                  key={index}
+                  key={social.label}
                   href={social.href}
                   aria-label={social.label}
                   className="flex items-center justify-center w-11 h-11 bg-muted/20 border border-border/50 rounded-none hover:bg-foreground hover:text-background hover:border-foreground transition-all duration-500 text-muted-foreground"
@@ -120,31 +120,36 @@ export const Footer: React.FC<FooterProps> = ({
           {/* Footer Links - Compact Grid */}
           <div className="lg:col-span-7">
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-12 lg:gap-8">
-              {footerSections.map((section, index) => (
-                <div key={index} className="space-y-8">
+              {footerSections.map((section) => (
+                <div key={section.title} className="space-y-8">
                   <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-foreground/40 pb-4 border-b border-border/20">
                     {section.title}
                   </h3>
                   <ul className="space-y-4">
-                    {section.links.map((link, linkIndex) => (
-                      <li key={linkIndex}>
-                        {typeof link === "object" && link.onClick ? (
-                          <button
-                            onClick={link.onClick}
-                            className="text-muted-foreground/60 hover:text-primary transition-all text-left text-[11px] font-black uppercase tracking-widest"
-                          >
-                            {link.label}
-                          </button>
-                        ) : (
-                          <a
-                            href="#"
-                            className="text-muted-foreground/60 hover:text-primary transition-all text-[11px] font-black uppercase tracking-widest"
-                          >
-                            {typeof link === "string" ? link : link.label}
-                          </a>
-                        )}
-                      </li>
-                    ))}
+                    {section.links.map((link) => {
+                      const label =
+                        typeof link === "string" ? link : link.label;
+                      return (
+                        <li key={label}>
+                          {typeof link === "object" && link.onClick ? (
+                            <button
+                              type="button"
+                              onClick={link.onClick}
+                              className="text-muted-foreground/60 hover:text-primary transition-all text-left text-[11px] font-black uppercase tracking-widest"
+                            >
+                              {link.label}
+                            </button>
+                          ) : (
+                            <a
+                              href="#"
+                              className="text-muted-foreground/60 hover:text-primary transition-all text-[11px] font-black uppercase tracking-widest"
+                            >
+                              {label}
+                            </a>
+                          )}
+                        </li>
+                      );
+                    })}
                   </ul>
                 </div>
               ))}
@@ -155,20 +160,20 @@ export const Footer: React.FC<FooterProps> = ({
         {/* Legal & Compliance */}
         <div className="mt-32 pt-12 border-t border-border/10 flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
           <div className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/40">
-            © 2026 AFRIKAMARKET RWANDA · NODE_01
+            © 2026 AFRIKAMARKET RWANDA
           </div>
           <div className="flex gap-12">
             <a
               href="#"
               className="text-[9px] font-black uppercase tracking-[0.3em] text-muted-foreground/40 hover:text-primary transition-colors"
             >
-              Privacy Protocol
+              Privacy Policy
             </a>
             <a
               href="#"
               className="text-[9px] font-black uppercase tracking-[0.3em] text-muted-foreground/40 hover:text-primary transition-colors"
             >
-              Compliance Agreement
+              Terms of Service
             </a>
           </div>
         </div>

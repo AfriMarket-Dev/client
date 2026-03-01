@@ -57,12 +57,12 @@ export const PerformanceTrendsCard: React.FC<PerformanceTrendsCardProps> = ({
 
 			<div className="relative">
 				<div className="h-80 flex items-end justify-between space-x-4 px-4">
-					{chartData.map((data, index) => {
+					{chartData.map((data) => {
 						const primaryHeight = (data.value / (maxValue || 1)) * 280;
 						const secondaryHeight = (data.secondary / (maxValue || 1)) * 280;
 
 						return (
-							<div key={index} className="flex-1 flex flex-col items-center">
+							<div key={data.month} className="flex-1 flex flex-col items-center">
 								<div className="w-full flex justify-center space-x-1 mb-3">
 									<div className="relative group">
 										<div

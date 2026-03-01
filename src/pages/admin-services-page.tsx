@@ -1,125 +1,247 @@
 import { useNavigate } from "@tanstack/react-router";
 import {
-	RiEyeLine,
-	RiLoader2Line,
-	RiSearchLine,
-	RiServiceLine,
-	RiStarLine,
+  RiDeleteBinLine,
+  RiEditLine,
+  RiEyeLine,
+  RiMoreLine,
+  RiServiceLine,
 } from "@remixicon/react";
 import { useCallback, useMemo, useState } from "react";
-import { useGetServicesQuery } from "@/app/api/services";
+import { toast } from "sonner";
+import {
+  useDeleteServiceMutation,
+  useGetServicesQuery,
+} from "@/app/api/services";
 import { AdminCard, AdminPageHeader } from "@/components/admin";
+import { ConfirmationModal } from "@/components/common/confirmation-modal";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { DataTable } from "@/components/ui/data-table";
+import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import type { ColumnDef } from "@tanstack/react-table";
+
+interface ServiceRow {
+  id: string;
+  name: string;
+  category: string;
+  supplier: string;
+  supplierId: string;
+  status: "active" | "inactive";
+  price: number;
+  views: number;
+}
 
 export default function AdminServicesPage() {
-	const [searchTerm, setSearchTerm] = useState("");
-	const navigate = useNavigate();
+  const navigate = useNavigate();
+  const { data: servicesResult, isLoading } = useGetServicesQuery({
+    limit: 100,
+    sortBy: "createdAt",
+    sortOrder: "DESC",
+  });
+  const [deleteService, { isLoading: deleting }] = useDeleteServiceMutation();
+  const [deleteModal, setDeleteModal] = useState<{
+    isOpen: boolean;
+    serviceId: string;
+    serviceName: string;
+  }>({
+    isOpen: false,
+    serviceId: "",
+    serviceName: "",
+  });
 
-	const handleNavigateToService = useCallback(
-		(serviceId: string) => {
-			navigate({ to: `/services/${serviceId}` as any });
-		},
-		[navigate],
-	);
+  const services: ServiceRow[] = useMemo(() => {
+    return (servicesResult?.data ?? []).map((service) => ({
+      id: service.id,
+      name: service.name,
+      category: service.category?.name ?? "Uncategorized",
+      supplier: service.company?.name ?? "Unknown supplier",
+      supplierId: service.company?.id ?? "",
+      status: service.isActive ? "active" : "inactive",
+      price: Number(service.price) || 0,
+      views: Number(service.views) || 0,
+    }));
+  }, [servicesResult]);
 
-	const { data: servicesResult, isLoading } = useGetServicesQuery({
-		limit: 100,
-		sortBy: "createdAt",
-		sortOrder: "DESC",
-	});
+  const openDeleteModal = useCallback((row: ServiceRow) => {
+    setDeleteModal({
+      isOpen: true,
+      serviceId: row.id,
+      serviceName: row.name,
+    });
+  }, []);
 
-	const services = servicesResult?.data ?? [];
-	const filteredServices = useMemo(() => {
-		return services.filter((service) =>
-			(service.name || "").toLowerCase().includes(searchTerm.toLowerCase()),
-		);
-	}, [searchTerm, services]);
+  const closeDeleteModal = useCallback(() => {
+    setDeleteModal({ isOpen: false, serviceId: "", serviceName: "" });
+  }, []);
 
-	return (
-		<div className="space-y-5 pb-10">
-			<AdminPageHeader title="Services" subtitle="All service listings on the platform" />
+  const handleDelete = useCallback(async () => {
+    if (!deleteModal.serviceId) return;
+    try {
+      await deleteService(deleteModal.serviceId).unwrap();
+      toast.success("Service deleted successfully");
+      closeDeleteModal();
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to delete service");
+    }
+  }, [closeDeleteModal, deleteModal.serviceId, deleteService]);
 
-			<AdminCard noPadding>
-				<div className="p-3">
-					<div className="relative">
-						<RiSearchLine className="absolute left-3 top-3 text-muted-foreground" size={18} />
-						<input
-							type="text"
-							placeholder="Search services..."
-							value={searchTerm}
-							onChange={(e) => setSearchTerm(e.target.value)}
-							className="h-11 w-full rounded-sm border border-border bg-background py-2 pr-4 pl-10 text-sm"
-						/>
-					</div>
-				</div>
-			</AdminCard>
+  const columns: ColumnDef<ServiceRow>[] = useMemo(
+    () => [
+      {
+        accessorKey: "name",
+        header: ({ column }) => (
+          <DataTableColumnHeader column={column} title="Service" />
+        ),
+        cell: ({ row }) => (
+          <div className="flex items-center gap-3">
+            <div className="rounded-sm border border-orange-100 bg-orange-50 p-2 shrink-0">
+              <RiServiceLine size={16} className="text-orange-600" />
+            </div>
+            <div>
+              <p className="font-heading font-bold text-sm text-foreground">
+                {row.original.name}
+              </p>
+              <p className="text-xs text-muted-foreground">{row.original.id}</p>
+            </div>
+          </div>
+        ),
+      },
+      {
+        accessorKey: "category",
+        header: ({ column }) => (
+          <DataTableColumnHeader column={column} title="Category" />
+        ),
+      },
+      {
+        accessorKey: "supplier",
+        header: ({ column }) => (
+          <DataTableColumnHeader column={column} title="Supplier" />
+        ),
+      },
+      {
+        accessorKey: "status",
+        header: ({ column }) => (
+          <DataTableColumnHeader column={column} title="Status" />
+        ),
+        cell: ({ row }) => (
+          <Badge
+            variant={row.original.status === "active" ? "success" : "secondary"}
+            className="uppercase tracking-wider text-[10px]"
+          >
+            {row.original.status}
+          </Badge>
+        ),
+      },
+      {
+        accessorKey: "price",
+        header: ({ column }) => (
+          <DataTableColumnHeader column={column} title="Price" />
+        ),
+        cell: ({ row }) => (
+          <span className="font-medium">
+            RWF {row.original.price.toLocaleString()}
+          </span>
+        ),
+      },
+      {
+        accessorKey: "views",
+        header: ({ column }) => (
+          <DataTableColumnHeader column={column} title="Views" />
+        ),
+      },
+      {
+        id: "actions",
+        cell: ({ row }) => (
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              render={
+                <Button variant="ghost" className="h-8 w-8 p-0">
+                  <span className="sr-only">Open menu</span>
+                  <RiMoreLine className="h-4 w-4" />
+                </Button>
+              }
+            />
+            <DropdownMenuContent align="end">
+              <DropdownMenuGroup>
+                <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                <DropdownMenuItem
+                  onClick={() =>
+                    navigate({
+                      to: `/services/${row.original.id}` as any,
+                    })
+                  }
+                >
+                  <RiEyeLine className="mr-2 h-4 w-4" /> View details
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  disabled={!row.original.supplierId}
+                  onClick={() =>
+                    navigate({
+                      to: `/admin/suppliers/${row.original.supplierId}/service/${row.original.id}/edit` as any,
+                    })
+                  }
+                >
+                  <RiEditLine className="mr-2 h-4 w-4" /> Edit
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  className="text-destructive"
+                  onClick={() => openDeleteModal(row.original)}
+                >
+                  <RiDeleteBinLine className="mr-2 h-4 w-4" /> Delete
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        ),
+      },
+    ],
+    [navigate, openDeleteModal],
+  );
 
-			{isLoading ? (
-				<div className="flex justify-center p-12">
-					<RiLoader2Line className="h-8 w-8 animate-spin text-muted-foreground" />
-				</div>
-			) : filteredServices.length === 0 ? (
-				<div className="rounded-sm border border-dashed border-border p-16 text-center text-muted-foreground">
-					No services found.
-				</div>
-			) : (
-				<div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
-					{filteredServices.map((service) => (
-						<AdminCard key={service.id} noPadding className="flex flex-col">
-							<div className="flex items-start justify-between border-b border-border p-4">
-								<div className="flex items-center gap-3">
-									<div className="rounded-sm border border-primary/20 bg-primary/10 p-2.5">
-										<RiServiceLine size={18} className="text-primary" />
-									</div>
-									<div>
-										<h3 className="text-sm font-heading font-bold text-foreground">{service.name}</h3>
-										<p className="text-xs text-muted-foreground">{service.category?.name ?? "Uncategorized"}</p>
-									</div>
-								</div>
-								<Badge variant={service.isActive ? "success" : "secondary"} className="uppercase text-[10px] tracking-wider">
-									{service.isActive ? "active" : "inactive"}
-								</Badge>
-							</div>
+  return (
+    <div className="space-y-5 pb-10">
+      <AdminPageHeader
+        title="Services"
+        subtitle="All service listings on the platform"
+      />
 
-							<div className="flex flex-1 flex-col gap-4 p-4">
-								<p className="line-clamp-3 text-sm text-muted-foreground">
-									{service.description || "No description provided."}
-								</p>
+      <AdminCard noPadding className="p-4">
+        {isLoading ? (
+          <div className="p-8 text-sm text-muted-foreground">
+            Loading services...
+          </div>
+        ) : (
+          <DataTable
+            columns={columns}
+            data={services}
+            filterColumn="name"
+            filterPlaceholder="Search services..."
+          />
+        )}
+      </AdminCard>
 
-								<div className="grid grid-cols-2 gap-3 rounded-sm border border-border bg-muted/10 p-3 text-xs">
-									<div>
-										<p className="uppercase tracking-wider text-muted-foreground">Price</p>
-										<p className="mt-1 font-semibold text-foreground">RWF {(service.price ?? 0).toLocaleString()}</p>
-									</div>
-									<div>
-										<p className="uppercase tracking-wider text-muted-foreground">Views</p>
-										<p className="mt-1 font-semibold text-foreground">{service.views ?? 0}</p>
-									</div>
-								</div>
-
-								<div className="flex items-center justify-between border-t border-border pt-3 text-xs text-muted-foreground">
-									<span className="flex items-center gap-1">
-										<RiStarLine size={12} className="text-amber-500" />
-										{service.company?.rating ?? 0}
-									</span>
-									<span>{service.company?.name ?? "Unknown provider"}</span>
-								</div>
-							</div>
-
-							<div className="border-t border-border p-4">
-								<Button
-									variant="outline"
-									onClick={() => handleNavigateToService(service.id)}
-									className="h-10 w-full rounded-sm"
-								>
-									<RiEyeLine size={14} className="mr-2" /> View details
-								</Button>
-							</div>
-						</AdminCard>
-					))}
-				</div>
-			)}
-		</div>
-	);
+      <ConfirmationModal
+        isOpen={deleteModal.isOpen}
+        title="Delete Service"
+        message={`Delete \"${deleteModal.serviceName}\"? This action cannot be undone.`}
+        confirmText="Delete"
+        cancelText="Cancel"
+        type="delete"
+        onConfirm={handleDelete}
+        onCancel={closeDeleteModal}
+        isLoading={deleting}
+      />
+    </div>
+  );
 }

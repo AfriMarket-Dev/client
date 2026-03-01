@@ -1,6 +1,5 @@
 import { useForm } from "@tanstack/react-form";
 import type React from "react";
-import { useState } from "react";
 import { AlertCircleIcon, ImageIcon, UploadIcon, XIcon } from "lucide-react";
 import { useGetProductCategoriesQuery } from "@/app/api/product-categories";
 import { useFileUpload } from "@/hooks/use-file-upload";
@@ -21,12 +20,14 @@ interface ProductFormValues {
   categoryId: string;
   description: string;
   price: string;
+  priceType: "FIXED" | "NEGOTIABLE" | "STARTS_AT";
   stock: string;
   unit: string;
+  imageUrls: string[];
 }
 
 interface ProductFormProps {
-  onSubmit: (values: ProductFormValues & { imageUrls: string[] }) => void;
+  onSubmit: (values: ProductFormValues) => void;
   onCancel: () => void;
   initialValues?: Partial<ProductFormValues>;
   isLoading?: boolean;
@@ -62,22 +63,21 @@ export const ProductForm: React.FC<ProductFormProps> = ({
     multiple: true,
   });
 
-  const [categoryValue, setCategoryValue] = useState(
-    initialValues?.categoryId ?? "",
-  );
-
   const form = useForm({
     defaultValues: {
       name: initialValues?.name ?? "",
+      categoryId: initialValues?.categoryId ?? "",
       description: initialValues?.description ?? "",
       price: initialValues?.price ?? "",
+      priceType: initialValues?.priceType ?? "FIXED",
       stock: initialValues?.stock ?? "",
       unit: initialValues?.unit ?? "unit",
-    },
+      imageUrls: initialValues?.imageUrls ?? [],
+    } as ProductFormValues,
     onSubmit: async ({ value }) => {
-      // collect file preview URLs (base64 previews or object URLs)
-      const imageUrls = files.map((f) => f.preview ?? "").filter(Boolean);
-      onSubmit({ ...value, categoryId: categoryValue, imageUrls });
+      // Combine existing image URLs with new file previews
+      const newPreviews = files.map((f) => f.preview ?? "").filter(Boolean);
+      onSubmit({ ...value, imageUrls: [...value.imageUrls, ...newPreviews] });
     },
   });
 
@@ -90,10 +90,8 @@ export const ProductForm: React.FC<ProductFormProps> = ({
       }}
       className="space-y-5"
     >
-      {/* name */}
-      <form.Field
-        name="name"
-        children={(field) => (
+      <form.Field name="name">
+        {(field) => (
           <div>
             <Label className="block text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground mb-2">
               Product Name
@@ -109,36 +107,74 @@ export const ProductForm: React.FC<ProductFormProps> = ({
             />
           </div>
         )}
-      />
+      </form.Field>
 
       {/* category */}
-      <div>
-        <Label className="block text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground mb-2">
-          Category
-        </Label>
-        <Select
-          value={categoryValue}
-          onValueChange={(val) => setCategoryValue(val ?? "")}
-          required
-        >
-          <SelectTrigger className="h-11 bg-background rounded-none border-border/40 focus:ring-0">
-            <SelectValue placeholder="Select category" />
-          </SelectTrigger>
-          <SelectContent className="rounded-none border-border/40">
-            {categories.map((cat: { id: string; name: string }) => (
-              <SelectItem key={cat.id} value={cat.id} className="rounded-none">
-                {cat.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
+      <form.Field name="categoryId">
+        {(field) => (
+          <div>
+            <Label className="block text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground mb-2">
+              Category
+            </Label>
+            <Select
+              value={field.state.value}
+              onValueChange={(val) => field.handleChange(val ?? "")}
+              required
+            >
+              <SelectTrigger className="h-11 bg-background rounded-none border-border/40 focus:ring-0">
+                <SelectValue placeholder="Select category" />
+              </SelectTrigger>
+              <SelectContent className="rounded-none border-border/40">
+                {categories.map((cat: { id: string; name: string }) => (
+                  <SelectItem
+                    key={cat.id}
+                    value={cat.id}
+                    className="rounded-none"
+                  >
+                    {cat.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        )}
+      </form.Field>
 
-      {/* price + stock */}
+      {/* Price Type + Price */}
       <div className="grid grid-cols-2 gap-4">
-        <form.Field
-          name="price"
-          children={(field) => (
+        <form.Field name="priceType">
+          {(field) => (
+            <div>
+              <Label className="block text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground mb-2">
+                Pricing Type
+              </Label>
+              <Select
+                value={field.state.value}
+                onValueChange={(val: any) => {
+                  if (val) field.handleChange(val);
+                }}
+                required
+              >
+                <SelectTrigger className="h-11 bg-background rounded-none border-border/40 focus:ring-0">
+                  <SelectValue placeholder="Select type" />
+                </SelectTrigger>
+                <SelectContent className="rounded-none border-border/40">
+                  <SelectItem value="FIXED" className="rounded-none">
+                    Fixed Price
+                  </SelectItem>
+                  <SelectItem value="NEGOTIABLE" className="rounded-none">
+                    Negotiable
+                  </SelectItem>
+                  <SelectItem value="STARTS_AT" className="rounded-none">
+                    Starts At
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          )}
+        </form.Field>
+        <form.Field name="price">
+          {(field) => (
             <div>
               <Label className="block text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground mb-2">
                 Price (RWF)
@@ -149,18 +185,26 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                 type="number"
                 min="0"
                 step="0.01"
+                disabled={form.getFieldValue("priceType") === "NEGOTIABLE"}
                 onBlur={field.handleBlur}
                 onChange={(e) => field.handleChange(e.target.value)}
                 className="h-11 text-sm bg-background rounded-none border-border/40 focus:border-primary/40 focus:ring-0"
-                placeholder="0.00"
-                required
+                placeholder={
+                  form.getFieldValue("priceType") === "NEGOTIABLE"
+                    ? "N/A"
+                    : "0.00"
+                }
+                required={form.getFieldValue("priceType") !== "NEGOTIABLE"}
               />
             </div>
           )}
-        />
-        <form.Field
-          name="stock"
-          children={(field) => (
+        </form.Field>
+      </div>
+
+      {/* stock + unit */}
+      <div className="grid grid-cols-2 gap-4">
+        <form.Field name="stock">
+          {(field) => (
             <div>
               <Label className="block text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground mb-2">
                 Stock Quantity
@@ -178,34 +222,30 @@ export const ProductForm: React.FC<ProductFormProps> = ({
               />
             </div>
           )}
-        />
+        </form.Field>
+        <form.Field name="unit">
+          {(field) => (
+            <div>
+              <Label className="block text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground mb-2">
+                Unit
+              </Label>
+              <Input
+                name={field.name}
+                value={field.state.value}
+                onBlur={field.handleBlur}
+                onChange={(e) => field.handleChange(e.target.value)}
+                className="h-11 text-sm bg-background rounded-none border-border/40 focus:border-primary/40 focus:ring-0"
+                placeholder="e.g. piece, kg, box"
+                required
+              />
+            </div>
+          )}
+        </form.Field>
       </div>
 
-      {/* unit */}
-      <form.Field
-        name="unit"
-        children={(field) => (
-          <div>
-            <Label className="block text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground mb-2">
-              Unit
-            </Label>
-            <Input
-              name={field.name}
-              value={field.state.value}
-              onBlur={field.handleBlur}
-              onChange={(e) => field.handleChange(e.target.value)}
-              className="h-11 text-sm bg-background rounded-none border-border/40 focus:border-primary/40 focus:ring-0"
-              placeholder="e.g. piece, kg, box"
-              required
-            />
-          </div>
-        )}
-      />
-
       {/* description */}
-      <form.Field
-        name="description"
-        children={(field) => (
+      <form.Field name="description">
+        {(field) => (
           <div>
             <Label className="block text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground mb-2">
               Description
@@ -221,7 +261,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
             />
           </div>
         )}
-      />
+      </form.Field>
 
       {/* images */}
       <div>
@@ -290,7 +330,9 @@ export const ProductForm: React.FC<ProductFormProps> = ({
               <div className="mb-2 flex size-10 shrink-0 items-center justify-center rounded-none border border-border/40 bg-background">
                 <ImageIcon className="size-4 opacity-60" />
               </div>
-              <p className="mb-1 font-black uppercase tracking-widest text-[10px]">Drop images here</p>
+              <p className="mb-1 font-black uppercase tracking-widest text-[10px]">
+                Drop images here
+              </p>
               <p className="text-muted-foreground text-[9px] uppercase font-bold tracking-tighter">
                 PNG, JPG, GIF or WebP (max {MAX_SIZE_MB}MB)
               </p>

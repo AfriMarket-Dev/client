@@ -84,15 +84,17 @@ const FeaturedProducts: React.FC = () => {
           </div>
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6">
-            {listings.map((listing) => (
+            {listings.map((product) => (
               <ProductCard
-                key={listing.id}
-                listing={listing}
-                onClick={() => navigate({ to: `/products/${listing.id}` as any })}
+                key={product.id}
+                product={product as any}
+                onClick={() =>
+                  navigate({ to: `/products/${product.id}` as any })
+                }
                 isInWishlist={wishlist.some(
-                  (l: { id: string }) => l.id === listing.id,
+                  (l: { id: string }) => l.id === product.id,
                 )}
-                onToggleWishlist={(e) => handleToggleWishlist(e, listing.id)}
+                onToggleWishlist={(e) => handleToggleWishlist(e, product.id)}
               />
             ))}
           </div>
@@ -103,7 +105,10 @@ const FeaturedProducts: React.FC = () => {
             variant="outline"
             size="lg"
             onClick={() =>
-              navigate({ to: "/marketplace", search: { type: "PRODUCT" } as any })
+              navigate({
+                to: "/marketplace",
+                search: { type: "PRODUCT" } as any,
+              })
             }
           >
             View all products

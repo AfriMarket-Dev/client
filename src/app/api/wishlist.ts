@@ -1,10 +1,10 @@
 import { apiSlice } from "@/app/api/api-entry";
-import type { Listing } from "@/app/api/listings";
+import type { Product } from "@/app/api/products";
 import type { Service } from "@/app/api/services";
 import type { ApiResponse } from "@/app/api/types";
 
 interface WishlistResponse {
-  products: Listing[];
+  products: Product[];
   services: Service[];
 }
 

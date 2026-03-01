@@ -247,8 +247,8 @@ const AnalyticsDashboard: React.FC = () => {
 
 			{/* Key Metrics Grid */}
 			<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-				{stats.map((stat, index) => (
-					<MetricCard key={index} {...stat} />
+				{stats.map((stat) => (
+					<MetricCard key={stat.label} {...stat} />
 				))}
 			</div>
 
@@ -296,9 +296,9 @@ const AnalyticsDashboard: React.FC = () => {
 						icon: Activity,
 						color: "from-primary to-primary/90",
 					},
-				].map((action, index) => (
+				].map((action) => (
 					<button
-						key={index}
+						key={action.label}
 						className={`bg-gradient-to-r ${action.color} text-white p-4 rounded-xl font-semibold hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1`}
 					>
 						<action.icon className="w-5 h-5 mx-auto mb-2" />

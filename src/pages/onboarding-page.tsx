@@ -47,7 +47,7 @@ const OnboardingPage = () => {
       navigate({ to: "/dashboard", replace: true });
     } catch (err) {
       console.error("Onboarding failed", err);
-      toast.error("Failed to initialize business profile.");
+      toast.error("Failed to complete business profile setup.");
     }
   };
 
@@ -61,15 +61,14 @@ const OnboardingPage = () => {
             <div className="flex items-center gap-3">
               <div className="w-10 h-px bg-primary" />
               <span className="text-[10px] font-black tracking-[0.4em] text-primary uppercase">
-                Operational_Initialization
+                Step 1: Profile Setup
               </span>
             </div>
             <h1 className="text-3xl md:text-4xl font-display font-black uppercase text-foreground tracking-tighter leading-none">
               Company Setup
             </h1>
             <p className="text-muted-foreground text-sm uppercase tracking-widest font-bold">
-              Define your industrial node to start receiving procurement
-              requests.
+              Complete your business profile to start receiving inquiries.
             </p>
           </div>
 

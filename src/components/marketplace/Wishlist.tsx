@@ -121,6 +121,7 @@ const Wishlist: React.FC<WishlistProps> = ({
 				<div className="max-w-7xl mx-auto px-4">
 					<div className="flex gap-6">
 						<button
+							type="button"
 							onClick={() => setActiveTab("products")}
 							className={`flex items-center py-4 px-2 border-b font-heading font-bold text-xs uppercase tracking-wider transition-colors ${
 								activeTab === "products"
@@ -132,6 +133,7 @@ const Wishlist: React.FC<WishlistProps> = ({
 							Products ({wishlistProducts.length})
 						</button>
 						<button
+							type="button"
 							onClick={() => setActiveTab("suppliers")}
 							className={`flex items-center py-4 px-2 border-b font-heading font-bold text-xs uppercase tracking-wider transition-colors ${
 								activeTab === "suppliers"
@@ -337,9 +339,9 @@ const Wishlist: React.FC<WishlistProps> = ({
 											<div className="flex flex-wrap gap-1.5 mb-3">
 												{supplier.specialties
 													.slice(0, 2)
-													.map((specialty, index) => (
+													.map((specialty) => (
 														<Badge
-															key={index}
+															key={specialty}
 															variant="secondary"
 															className="text-[10px] font-bold uppercase tracking-tight"
 														>

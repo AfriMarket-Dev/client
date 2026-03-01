@@ -10,70 +10,77 @@ import { ImageWithFallback } from "@/components/common/image-with-fallback";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
+import type { MarketplaceItem } from "../types";
+
 interface ProductCardProps {
-  listing: any;
+  product: MarketplaceItem;
   viewMode?: "grid" | "list";
   onSupplierClick?: (e: React.MouseEvent) => void;
   onClick: () => void;
   isInWishlist?: boolean;
   onToggleWishlist?: (e: React.MouseEvent) => void;
-  isFlashSale?: boolean;
 }
 
-function firstPrice(listing: any): number {
-  if (listing.price) return Number(listing.price);
-  const v = listing.variants?.[0];
+function firstPrice(product: MarketplaceItem): number {
+  if (product.price) return Number(product.price);
+  const v = (product as any).variants?.[0];
   return v ? Number(v.price) : 0;
 }
 
-function firstImage(listing: any): string | null {
-  const v = listing.variants?.[0];
+function firstImage(product: MarketplaceItem): string | null {
+  const v = (product as any).variants?.[0];
   const imgs = v?.images;
-  return imgs?.length ? imgs[0] : listing.images?.[0] || null;
+  return imgs?.length ? imgs[0] : (product as any).images?.[0] || null;
 }
 
-function firstDiscount(listing: any): number {
-  if (listing.discount) return listing.discount;
-  const v = listing.variants?.[0];
+function firstDiscount(product: MarketplaceItem): number {
+  if ((product as any).discount) return (product as any).discount;
+  const v = (product as any).variants?.[0];
   return v?.discount || 0;
+}
+
+function firstUnit(product: MarketplaceItem): string {
+  const v = (product as any).variants?.[0];
+  return v?.unit || "UNIT";
 }
 
 export const ProductCard: React.FC<ProductCardProps> = React.memo(
   ({
-    listing,
+    product,
     viewMode = "grid",
     onSupplierClick,
     onClick,
     isInWishlist,
     onToggleWishlist,
-    isFlashSale,
   }) => {
-    const company = listing.company;
-    const basePrice = useMemo(() => firstPrice(listing), [listing]);
-    const discount = useMemo(() => firstDiscount(listing), [listing]);
+    const company = product.company;
+    const basePrice = useMemo(() => firstPrice(product), [product]);
+    const discount = useMemo(() => firstDiscount(product), [product]);
     const price = discount > 0 ? basePrice * (1 - discount / 100) : basePrice;
-    const img = useMemo(() => firstImage(listing), [listing]);
+    const img = useMemo(() => firstImage(product), [product]);
+    const unit = useMemo(() => firstUnit(product), [product]);
     const router = useRouter();
 
     const handleMouseEnter = () => {
-      if (listing.type === "PRODUCT") {
-        router.preloadRoute({
-          to: "/products/$productId",
-          params: { productId: listing.id },
-        });
-      } else if (listing.type === "SERVICE") {
-        router.preloadRoute({
-          to: "/services/$serviceId",
-          params: { serviceId: listing.id },
-        });
-      }
+      router.preloadRoute({
+        to: "/products/$productId",
+        params: { productId: product.id },
+      });
     };
 
     if (viewMode === "list") {
       return (
         <div
+          role="button"
+          tabIndex={0}
           className="group flex gap-5 bg-card border border-border/20 hover:border-primary/30 rounded-none p-4 transition-all duration-300 hover:shadow-2xl hover:shadow-primary/5 cursor-pointer relative overflow-hidden"
           onClick={onClick}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              onClick();
+            }
+          }}
           onMouseEnter={handleMouseEnter}
         >
           <div className="absolute top-0 left-0 w-1 h-full bg-primary/0 group-hover:bg-primary/40 transition-all duration-500" />
@@ -82,7 +89,7 @@ export const ProductCard: React.FC<ProductCardProps> = React.memo(
             {img ? (
               <ImageWithFallback
                 src={img}
-                alt={listing.name}
+                alt={product.name}
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
               />
             ) : (
@@ -96,10 +103,10 @@ export const ProductCard: React.FC<ProductCardProps> = React.memo(
             <div className="flex justify-between items-start">
               <div>
                 <div className="text-[10px] font-bold text-primary/70 mb-1.5 uppercase tracking-[0.3em] font-display">
-                  {listing.category?.name ?? "General"}
+                  {product.category?.name ?? "General"}
                 </div>
                 <h3 className="text-lg font-display font-extrabold text-foreground group-hover:text-primary transition-colors line-clamp-1 leading-tight uppercase tracking-tight">
-                  {listing.name}
+                  {product.name}
                 </h3>
               </div>
               {onToggleWishlist && (
@@ -121,7 +128,7 @@ export const ProductCard: React.FC<ProductCardProps> = React.memo(
             </div>
 
             <p className="text-sm text-muted-foreground/70 line-clamp-2 mt-3 max-w-3xl leading-relaxed">
-              {listing.description}
+              {product.description}
             </p>
 
             <div className="mt-auto flex items-end justify-between">
@@ -138,11 +145,22 @@ export const ProductCard: React.FC<ProductCardProps> = React.memo(
                 </div>
                 {company && (
                   <div
+                    role="button"
+                    tabIndex={0}
                     className="flex items-center gap-2 mt-2 text-[10px] text-muted-foreground/50 hover:text-primary transition-colors cursor-pointer w-fit uppercase font-bold tracking-widest"
                     onClick={(e) => {
                       if (onSupplierClick) {
                         e.stopPropagation();
                         onSupplierClick(e);
+                      }
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        if (onSupplierClick) {
+                          e.stopPropagation();
+                          onSupplierClick(e as any);
+                        }
                       }
                     }}
                   >
@@ -161,28 +179,30 @@ export const ProductCard: React.FC<ProductCardProps> = React.memo(
 
     return (
       <div
+        role="button"
+        tabIndex={0}
         className={cn(
-          "group flex flex-col bg-card border transition-all duration-500 cursor-pointer h-full relative rounded-none overflow-hidden hover:shadow-2xl hover:shadow-primary/5",
-          isFlashSale
-            ? "border-primary/40"
-            : "border-border/20 hover:border-primary/40",
+          "group flex flex-col bg-card border transition-all duration-500 cursor-pointer h-full relative rounded-none overflow-hidden hover:shadow-2xl hover:shadow-primary/5 border-border/20 hover:border-primary/40",
         )}
         onClick={onClick}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            onClick();
+          }
+        }}
         onMouseEnter={handleMouseEnter}
       >
         <div
           className={cn(
-            "absolute top-0 left-0 w-full h-[1px] transition-all duration-500 z-20",
-            isFlashSale
-              ? "bg-primary"
-              : "bg-primary/0 group-hover:bg-primary/40",
+            "absolute top-0 left-0 w-full h-px transition-all duration-500 z-20 bg-primary/0 group-hover:bg-primary/40",
           )}
         />
-        <div className="relative aspect-[4/3] md:aspect-square overflow-hidden bg-muted/10">
+        <div className="relative aspect-4/3 md:aspect-square overflow-hidden bg-muted/10">
           {img ? (
             <ImageWithFallback
               src={img}
-              alt={listing.name}
+              alt={product.name}
               className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
             />
           ) : (
@@ -194,12 +214,7 @@ export const ProductCard: React.FC<ProductCardProps> = React.memo(
           )}
 
           <div className="absolute top-2 left-2 flex flex-col gap-1 z-10">
-            {isFlashSale && (
-              <div className="bg-primary text-white text-[8px] font-black px-2 py-1 rounded-none uppercase tracking-[0.2em] shadow-2xl animate-pulse">
-                FLASH SALE
-              </div>
-            )}
-            {listing.isFeatured && (
+            {product.isFeatured && (
               <div className="bg-amber-500 text-white text-[9px] font-bold px-2 py-0.5 rounded-none uppercase tracking-widest shadow-2xl">
                 Featured
               </div>
@@ -207,11 +222,6 @@ export const ProductCard: React.FC<ProductCardProps> = React.memo(
             {discount > 0 && (
               <div className="bg-emerald-600 text-white text-[9px] font-bold px-2 py-0.5 rounded-none uppercase tracking-widest shadow-2xl">
                 {discount}% OFF
-              </div>
-            )}
-            {listing.type === "SERVICE" && (
-              <div className="bg-sky-600 text-white text-[9px] font-bold px-2 py-0.5 rounded-none uppercase tracking-widest shadow-2xl">
-                Verified Pro
               </div>
             )}
           </div>
@@ -243,7 +253,7 @@ export const ProductCard: React.FC<ProductCardProps> = React.memo(
         <div className="p-2 md:p-3.5 flex flex-col grow gap-1 md:gap-2.5">
           <div className="space-y-1.5">
             <h3 className="text-xs md:text-[13px] font-display font-extrabold text-foreground tracking-tight leading-tight line-clamp-2 md:min-h-10 group-hover:text-primary transition-colors uppercase">
-              {listing.name}
+              {product.name}
             </h3>
 
             <div className="flex items-center gap-1.5">
@@ -253,7 +263,7 @@ export const ProductCard: React.FC<ProductCardProps> = React.memo(
                     RWF {price.toLocaleString()}
                   </div>
                   <div className="text-[9px] text-muted-foreground/40 font-bold uppercase tracking-widest mb-px">
-                    / PIECE
+                    / {unit}
                   </div>
                 </div>
                 {discount > 0 && (
@@ -267,12 +277,7 @@ export const ProductCard: React.FC<ProductCardProps> = React.memo(
 
           <div className="hidden md:block space-y-1.5">
             <div className="flex items-center justify-between text-[9px] text-muted-foreground/50 uppercase font-bold tracking-widest">
-              <span>
-                MOQ:{" "}
-                <span className="text-foreground tracking-normal font-extrabold">
-                  10 UNITS
-                </span>
-              </span>
+              <span>{product.category?.name ?? "Product"}</span>
               {discount > 0 && (
                 <span className="text-[9px] bg-primary/5 text-primary px-1.5 py-0.5 rounded-none font-bold">
                   {discount}% OFF
@@ -283,10 +288,10 @@ export const ProductCard: React.FC<ProductCardProps> = React.memo(
             <div className="flex items-center gap-1 opacity-60">
               <RiStarLine size={10} className="text-amber-500 fill-amber-500" />
               <span className="text-[10px] font-bold text-foreground font-display">
-                4.8
+                -
               </span>
               <span className="text-[9px] text-muted-foreground uppercase font-bold tracking-widest">
-                (120+ SOLD)
+                ({product.views || 0} VIEWS)
               </span>
             </div>
           </div>
@@ -294,11 +299,22 @@ export const ProductCard: React.FC<ProductCardProps> = React.memo(
           <div className="mt-auto pt-2 md:pt-2.5 border-t border-border/40 space-y-1.5 md:space-y-2">
             {company && (
               <div
+                role="button"
+                tabIndex={0}
                 className="flex items-start justify-between gap-2 group/comp cursor-pointer"
                 onClick={(e) => {
                   if (onSupplierClick) {
                     e.stopPropagation();
                     onSupplierClick(e);
+                  }
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    if (onSupplierClick) {
+                      e.stopPropagation();
+                      onSupplierClick(e as any);
+                    }
                   }
                 }}
               >
@@ -311,10 +327,12 @@ export const ProductCard: React.FC<ProductCardProps> = React.memo(
                       <span className="text-[9px] md:text-[10px] font-bold text-foreground/80 truncate group-hover/comp:text-primary transition-colors uppercase tracking-tight">
                         {company.name}
                       </span>
-                      <RiShieldCheckLine
-                        size={10}
-                        className="text-emerald-500 shrink-0 opacity-80"
-                      />
+                      {company.isVerified && (
+                        <RiShieldCheckLine
+                          size={10}
+                          className="text-emerald-500 shrink-0 opacity-80"
+                        />
+                      )}
                     </div>
                     <div className="hidden md:flex items-center gap-2 text-[8px] text-muted-foreground/40 font-bold uppercase tracking-widest mt-0.5">
                       <span>{company.type}</span>

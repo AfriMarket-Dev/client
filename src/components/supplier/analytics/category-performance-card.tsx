@@ -34,7 +34,7 @@ export const CategoryPerformanceCard: React.FC<
 
 						return (
 							<path
-								key={index}
+								key={category.category}
 								d={pathData}
 								fill={category.color
 									.replace("bg-", "")
@@ -66,8 +66,8 @@ export const CategoryPerformanceCard: React.FC<
 			</div>
 
 			<div className="space-y-3">
-				{categories.map((category, index) => (
-					<div key={index} className="flex items-center justify-between">
+				{categories.map((category) => (
+					<div key={category.category} className="flex items-center justify-between">
 						<div className="flex items-center">
 							<div className={`w-3 h-3 ${category.color} rounded-full mr-3`} />
 							<span className="text-sm font-medium text-gray-700">

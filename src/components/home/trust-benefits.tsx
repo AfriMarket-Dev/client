@@ -32,8 +32,8 @@ export const TrustBenefits: React.FC = () => {
 		<section className="py-12 bg-background border-b border-border/40">
 			<div className="max-w-[1600px] mx-auto px-4 lg:px-6">
 				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12">
-					{BENEFITS.map((benefit, index) => (
-						<div key={index} className="flex items-start gap-5 group">
+					{BENEFITS.map((benefit) => (
+						<div key={benefit.title} className="flex items-start gap-5 group">
 							<div className="flex-shrink-0 w-12 h-12 rounded-xl bg-primary/5 text-primary flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-all duration-300">
 								{benefit.icon}
 							</div>

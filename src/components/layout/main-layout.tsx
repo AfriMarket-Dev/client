@@ -2,6 +2,7 @@ import { Outlet, useNavigate } from "@tanstack/react-router";
 import { useCallback } from "react";
 import { Footer } from "./footer";
 import { Header } from "./header";
+import { SuspenseLoader } from "../common/suspense-loader";
 
 export const MainLayout = () => {
   const navigate = useNavigate();
@@ -18,7 +19,9 @@ export const MainLayout = () => {
     <div className="min-h-screen flex flex-col bg-background industrial-grain relative">
       <Header />
       <main className="flex-grow">
-        <Outlet />
+        <SuspenseLoader>
+          <Outlet />
+        </SuspenseLoader>
       </main>
       <Footer onAboutClick={handleAboutClick} onHelpClick={handleHelpClick} />
     </div>

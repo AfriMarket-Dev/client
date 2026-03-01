@@ -54,7 +54,7 @@ function toDateLabel(value?: string) {
 export default function AdminProductsPage() {
   const navigate = useNavigate();
   const { data: productsResult, isLoading } = useGetProductsQuery({
-    limit: 200,
+    limit: 100,
     sortBy: "createdAt",
     sortOrder: "DESC",
   });
@@ -78,7 +78,7 @@ export default function AdminProductsPage() {
       supplierId: product.company?.id ?? "",
       status: product.isActive ? "active" : "inactive",
       createdDate: toDateLabel(product.createdAt),
-      views: product.views ?? 0,
+      views: Number(product.views) || 0,
     }));
   }, [productsResult]);
 

@@ -13,8 +13,14 @@ const BRANDS = [
 ];
 
 export const FeaturedBrands: React.FC = () => {
+	const sectionId = React.useId();
 	return (
-		<HomeSection variant="background" borderBottom className="py-8 lg:py-10">
+		<HomeSection
+			id={sectionId}
+			variant="background"
+			borderBottom
+			className="py-8 lg:py-10"
+		>
 			<div className="max-w-[1600px] mx-auto px-4 lg:px-6 relative z-10">
 				<SectionHeader
 					title="Industry Leaders"
@@ -24,9 +30,9 @@ export const FeaturedBrands: React.FC = () => {
 				/>
 
 				<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-px bg-border/40 border border-border/40">
-					{BRANDS.map((brand, idx) => (
+					{BRANDS.map((brand) => (
 						<div
-							key={idx}
+							key={brand.name}
 							className="h-40 bg-white dark:bg-slate-900 flex flex-col items-center justify-center group hover:bg-primary/5 transition-all duration-500 cursor-pointer rounded-lg"
 						>
 							<span className="text-3xl font-heading font-black text-muted-foreground/30 group-hover:text-primary transition-colors tracking-tighter italic">

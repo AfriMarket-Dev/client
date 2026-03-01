@@ -11,8 +11,9 @@ import { useGetMarketplaceStatsQuery } from "@/app/api/stats";
 export const MarketplaceStats: React.FC = () => {
   const { data: stats } = useGetMarketplaceStatsQuery();
 
-  function formatNumber(num: number | undefined, appendPlus = true): string {
-    if (num === undefined) return "...";
+  function formatNumber(val: any, appendPlus = true): string {
+    const num = Number(val);
+    if (val === undefined || isNaN(num)) return "...";
     if (num >= 1000) {
       return `${(num / 1000).toFixed(1).replace(/\.0$/, "")}k${appendPlus ? "+" : ""}`;
     }

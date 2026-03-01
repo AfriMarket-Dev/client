@@ -2,7 +2,6 @@ import React from "react";
 import { useGetProductCategoriesQuery } from "@/app/api/product-categories";
 import BestSellers from "@/components/home/best-sellers";
 import CTASection from "@/components/home/cta-section";
-import { FeaturedBrands } from "@/components/home/featured-brands";
 import FeaturedProducts from "@/components/home/featured-products";
 import FeaturedServices from "@/components/home/featured-services";
 import Hero from "@/components/home/hero";
@@ -39,7 +38,7 @@ const HomePage: React.FC = () => {
               title={category.name}
               subtitle={
                 category.description ||
-                `Industrial-grade assets and materials within the ${category.name} vertical.`
+                `Explore ${category.name} products and materials.`
               }
               categoryId={category.id}
               limit={10}
@@ -63,13 +62,11 @@ const HomePage: React.FC = () => {
 
       <NewArrivals />
 
-      <FeaturedBrands />
-
       <FeaturedServices />
 
       <PromoBanner
-        title="Heavy Asset Acquisition"
-        subtitle="Full inventory of construction machinery for strategic project deployment."
+        title="Heavy Equipment"
+        subtitle="Browse construction machinery and heavy equipment from verified suppliers."
         ctaText="Explore Machinery"
         ctaLink="/products?category=heavy-equipment"
         variant="dark"

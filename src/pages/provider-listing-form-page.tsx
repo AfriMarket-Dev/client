@@ -37,7 +37,7 @@ export default function ProviderListingFormPage() {
         unit: values.unit || "unit",
         categoryId: values.categoryId,
         companyId,
-        priceType: "FIXED" as const,
+        priceType: values.priceType || "FIXED",
         images: values.imageUrls || [],
         variants: [
           {
@@ -71,6 +71,7 @@ export default function ProviderListingFormPage() {
         price: values.price ? Number(values.price) : 0,
         priceType: values.priceType || "FIXED",
         duration: values.duration,
+        discount: values.discount ? Number(values.discount) : 0,
         categoryId: values.categoryId,
         companyId,
         images: values.imageUrls || [],

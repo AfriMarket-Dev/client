@@ -67,9 +67,9 @@ export const SupplierTabsContent: React.FC<SupplierTabsContentProps> = ({
 									"Custom Packaging",
 									"Brand Consulting",
 									"Regulatory Compliance",
-								].map((item, i) => (
+								].map((item) => (
 									<div
-										key={i}
+										key={item}
 										className="flex items-center gap-3 p-3 border border-border/40 bg-muted/5"
 									>
 										<div className="w-1.5 h-1.5 bg-primary/40 rotate-45" />
@@ -87,14 +87,14 @@ export const SupplierTabsContent: React.FC<SupplierTabsContentProps> = ({
 								Gallery
 							</h3>
 							<div className="grid grid-cols-3 gap-2">
-								{galleryImages.map((src, i) => (
+								{galleryImages.map((src, idx) => (
 									<div
-										key={i}
+										key={src}
 										className="aspect-video bg-muted relative group overflow-hidden border border-border/40"
 									>
 										<ImageWithFallback
 											src={src}
-											alt={`Gallery ${i}`}
+											alt={`Gallery ${idx}`}
 											className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
 										/>
 									</div>
@@ -116,12 +116,12 @@ export const SupplierTabsContent: React.FC<SupplierTabsContentProps> = ({
 								</Button>
 							</div>
 							<div className="grid sm:grid-cols-2 gap-6">
-								{featuredListings.map((product, i) => {
+								{featuredListings.map((product) => {
 									const img = firstImage(product);
 									const price = firstPrice(product);
 									return (
 										<button
-											key={i}
+											key={product.id}
 											onClick={() => onProductClick(product)}
 											className="flex gap-4 p-4 border border-border bg-background group hover:border-primary/40 transition-colors text-left w-full"
 										>
@@ -164,9 +164,9 @@ export const SupplierTabsContent: React.FC<SupplierTabsContentProps> = ({
 									{ label: "Same Day (Local)", desc: "Orders before 12pm" },
 									{ label: "Next Day", desc: "Major cities" },
 									{ label: "Standard", desc: "3-5 Business Days" },
-								].map((opt, i) => (
+								].map((opt) => (
 									<li
-										key={i}
+										key={opt.label}
 										className="flex justify-between items-start text-sm"
 									>
 										<span className="font-bold text-foreground">
@@ -241,15 +241,14 @@ export const SupplierTabsContent: React.FC<SupplierTabsContentProps> = ({
 				<div className="border border-border p-8 bg-muted/5 space-y-8">
 					<div className="flex items-center gap-6 pb-8 border-b border-border">
 						<div className="text-center">
-							<div className="text-5xl font-black font-heading text-foreground">
-								4.8
-							</div>
-							<div className="flex gap-1 justify-center my-2 text-primary text-xs">
-								{[1, 2, 3, 4, 5].map((i) => (
-									<Star key={i} className="w-4 h-4 fill-primary" />
-								))}
-							</div>
-							<div className="text-xs uppercase font-bold tracking-wider text-muted-foreground">
+						<div className="text-5xl font-black font-heading text-foreground">
+							4.8
+						</div>
+						<div className="flex gap-1 justify-center my-2 text-primary text-xs">
+							{[1, 2, 3, 4, 5].map((star) => (
+								<Star key={star} className="w-4 h-4 fill-primary" />
+							))}
+						</div>							<div className="text-xs uppercase font-bold tracking-wider text-muted-foreground">
 								{company.reviewCount || 203} Reviews
 							</div>
 						</div>
@@ -327,9 +326,9 @@ export const SupplierTabsContent: React.FC<SupplierTabsContentProps> = ({
 									value: "+27 82 555 6789",
 									icon: MessageCircle,
 								},
-							].map((contact, i) => (
+							].map((contact) => (
 								<a
-									key={i}
+									key={contact.label}
 									href="#"
 									className="flex items-center gap-4 p-4 border border-border bg-background hover:border-primary/50 transition-colors group"
 								>

@@ -39,20 +39,20 @@ const AboutPage: React.FC = () => {
           <div className="relative z-10">
             <div className="inline-flex items-center px-4 py-1.5 border border-primary/30 rounded-none bg-primary/10 text-primary text-[10px] font-extrabold uppercase tracking-[0.3em] mb-10">
               <RiGlobeLine className="w-3.5 h-3.5 mr-2.5" />
-              DIGITAL INFRASTRUCTURE PROTOCOL
+              About AfrikaMarket
             </div>
 
             <h1 className="text-5xl md:text-6xl font-display font-black text-white mb-8 leading-[0.9] tracking-tighter uppercase">
-              ENGINEERING THE FUTURE <br />
+              BUILDING RWANDA'S <br />
               <span className="text-primary italic -skew-x-12 inline-block">
-                OF CONSTRUCTION
+                CONSTRUCTION NETWORK
               </span>
             </h1>
 
             <p className="text-lg text-muted-foreground/80 max-w-3xl mx-auto leading-relaxed font-medium uppercase tracking-widest">
-              AfrikaMarket is the centralized procurement engine for Rwanda. We
-              verify, connect, and streamline the supply chain for contractors
-              and suppliers through standardized digital verification.
+              AfrikaMarket is the construction marketplace for Rwanda. We
+              verify, connect, and simplify the search for contractors and
+              suppliers through a trusted directory of verified providers.
             </p>
           </div>
         </section>
@@ -66,9 +66,9 @@ const AboutPage: React.FC = () => {
               Our Mission
             </h2>
             <p className="text-muted-foreground leading-relaxed font-medium">
-              To engineer a frictionless digital marketplace that standardizes
-              trust, transparency, and efficiency in Rwanda's construction
-              industry. We are laying the groundwork for businesses to scale.
+              To build a trusted and direct marketplace that connects buyers
+              with reliable suppliers in Rwanda's construction industry. We are
+              simplifying how professional projects find their materials.
             </p>
             <ul className="space-y-4 pt-2">
               {[
@@ -95,9 +95,9 @@ const AboutPage: React.FC = () => {
               Our Vision
             </h2>
             <p className="text-muted-foreground leading-relaxed font-medium">
-              To construct the premier infrastructure where every business—from
-              micro-contractors to large developers—operates on a unified,
-              efficient platform through architectural standardization.
+              To become the primary network where every business—from
+              specialized contractors to large developers—connects through a
+              simple and efficient platform.
             </p>
           </div>
         </section>
@@ -108,7 +108,7 @@ const AboutPage: React.FC = () => {
               How It Works
             </h2>
             <p className="text-[10px] font-bold text-muted-foreground/40 uppercase tracking-[0.3em] max-w-xl mx-auto">
-              CENTRALIZED WORKFLOW / STANDARDIZED NODES
+              Simple. Direct. Trusted.
             </p>
           </div>
 
@@ -119,17 +119,17 @@ const AboutPage: React.FC = () => {
               {
                 icon: RiSearchLine,
                 title: "1. DISCOVER",
-                desc: "Browse verified inventory and services through our node registry.",
+                desc: "Search for materials, services, and suppliers across Rwanda.",
               },
               {
                 icon: RiChat1Line,
                 title: "2. CONNECT",
-                desc: "Chat or request quotes directly within the secured protocol.",
+                desc: "Message suppliers, request quotes, and compare offerings.",
               },
               {
                 icon: RiHandHeartLine,
-                title: "3. TRANSACT",
-                desc: "Finalize deals securely through our verified escrow logic.",
+                title: "3. COLLABORATE",
+                desc: "Connect with suppliers directly to discuss projects and pricing.",
               },
             ].map((step) => (
               <div
