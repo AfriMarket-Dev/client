@@ -1,12 +1,12 @@
-import { useNavigate, useRouterState } from "@tanstack/react-router";
 import {
-	RiNotification3Line,
 	RiDashboardLine,
+	RiFlashlightLine,
+	RiNotification3Line,
 	RiSearchLine,
 	RiShoppingCartLine,
 	RiUserLine,
-	RiFlashlightLine,
 } from "@remixicon/react";
+import { useNavigate, useRouterState } from "@tanstack/react-router";
 import { Package } from "lucide-react";
 import type React from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";

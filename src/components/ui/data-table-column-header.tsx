@@ -1,5 +1,10 @@
+import {
+	RiArrowDownLine,
+	RiArrowUpDownLine,
+	RiArrowUpLine,
+	RiEyeOffLine,
+} from "@remixicon/react";
 import type { Column } from "@tanstack/react-table";
-import { RiArrowDownLine, RiArrowUpLine, RiArrowUpDownLine, RiEyeOffLine } from "@remixicon/react";
 import { Button } from "@/components/ui/button";
 import {
 	DropdownMenu,

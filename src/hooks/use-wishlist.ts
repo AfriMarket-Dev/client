@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import type { Product, Supplier } from "../types";
+import type { Product, Supplier } from "@/types";
 
 interface WishlistItem {
 	id: string;

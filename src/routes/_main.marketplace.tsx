@@ -1,8 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
-import MarketplacePage from "@/pages/marketplace/marketplace-page";
-import { store } from "@/app/store";
-import { productsApi } from "@/app/api/products";
-import { servicesApi } from "@/app/api/services";
+import { MarketplacePage } from "@/features/marketplace/components/marketplace-page";
+import { productsApi } from "@/services/api/products";
+import { servicesApi } from "@/services/api/services";
+import { store } from "@/store";
 
 type MarketplaceSearch = {
 	category?: string;

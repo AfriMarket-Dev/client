@@ -1,15 +1,15 @@
 import {
 	RiArrowRightUpLine,
-	RiNotification3Line,
 	RiEyeLine,
 	RiFileTextLine,
+	RiNotification3Line,
 } from "@remixicon/react";
 import { Package, TrendingUp } from "lucide-react";
 import type React from "react";
-import { AdminCard } from "@/components/admin/admin-card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CardContent } from "@/components/ui/card";
+import { Card as AdminCard } from "@/features/admin/components/card";
 import { cn } from "@/lib/utils";
 
 interface DashboardOverviewProps {
