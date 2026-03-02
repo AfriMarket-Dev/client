@@ -1,0 +1,22 @@
+"use no memo";
+
+import { Navigate, Outlet } from "@tanstack/react-router";
+import { useSelector } from "react-redux";
+import type { RootState } from "@/app/store";
+
+export const AdminRoute = () => {
+	const { isAuthenticated, user } = useSelector(
+		(state: RootState) => state.auth,
+	);
+
+	if (!isAuthenticated) {
+		return <Navigate to="/auth/signin" replace />;
+	}
+
+	const allowedRoles = ["admin", "agent"];
+	if (!user?.role || !allowedRoles.includes(user.role)) {
+		return <Navigate to="/" replace />;
+	}
+
+	return <Outlet />;
+};
