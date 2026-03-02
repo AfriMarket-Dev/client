@@ -13,7 +13,8 @@
     "test": "vitest run",
     "format": "biome format",
     "lint": "biome lint",
-    "check": "biome check"
+    "check": "biome check",
+    "prepare": "husky"
   },
   "dependencies": {
     "@base-ui/react": "^1.2.0",
@@ -62,6 +63,7 @@
     "@vitejs/plugin-react": "^5.1.1",
     "@vitest/coverage-v8": "^4.0.18",
     "babel-plugin-react-compiler": "^1.0.0",
+    "husky": "^9.1.7",
     "jsdom": "^27.0.0",
     "typescript": "~5.9.3",
     "vite": "^7.3.1",

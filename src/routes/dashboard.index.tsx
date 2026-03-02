@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import ProviderDashboardPage from "@/pages/provider-dashboard-page";
+import { DashboardSwitcher } from "@/features/dashboard/components/dashboard-switcher";
 
 export const Route = createFileRoute("/dashboard/")({
-	component: ProviderDashboardPage,
+	component: DashboardSwitcher,
 });

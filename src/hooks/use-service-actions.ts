@@ -2,15 +2,15 @@ import { useRouter } from "@tanstack/react-router";
 import { useCallback, useState } from "react";
 import { useSelector } from "react-redux";
 import { toast } from "sonner";
-import { useLogInteractionMutation } from "@/app/api/interactions";
-import { useStartServiceChatMutation } from "@/app/api/messages";
+import { useLogInteractionMutation } from "@/services/api/interactions";
+import { useStartServiceChatMutation } from "@/services/api/messages";
 import {
 	useAddToWishlistMutation,
 	useGetWishlistQuery,
 	useRemoveFromWishlistMutation,
-} from "@/app/api/wishlist";
-import type { RootState } from "@/app/store";
-import type { Service } from "@/components/marketplace/service/types";
+} from "@/services/api/wishlist";
+import type { RootState } from "@/store";
+import type { Service } from "@/types";
 
 export function useServiceActions(service: Service) {
 	const router = useRouter();

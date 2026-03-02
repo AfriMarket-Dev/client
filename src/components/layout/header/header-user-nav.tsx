@@ -1,17 +1,14 @@
-import { Link, useNavigate } from "@tanstack/react-router";
 import {
 	RiArrowDownSLine,
-	RiHeartLine,
-	RiDashboardLine,
-	RiLogoutBoxRLine,
 	RiChat1Line,
+	RiDashboardLine,
+	RiHeartLine,
+	RiLogoutBoxRLine,
 	RiUserLine,
 } from "@remixicon/react";
+import { Link, useNavigate } from "@tanstack/react-router";
 import type React from "react";
 import { useDispatch } from "react-redux";
-import { useSignOutMutation } from "@/app/api/auth";
-import { useGetWishlistQuery } from "@/app/api/wishlist";
-import { logout } from "@/app/features/auth-slice";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -24,8 +21,13 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useSignOutMutation } from "@/services/api/auth";
+import { useGetWishlistQuery } from "@/services/api/wishlist";
+import { ROLES } from "@/shared/constants";
+import { ROUTES } from "@/shared/constants/routes";
+import { logout } from "@/store/slices/auth-slice";
 
-const PROVIDER_ROLES = ["provider", "admin", "agent"];
+const PROVIDER_ROLES = [ROLES.PROVIDER, ROLES.ADMIN, ROLES.AGENT] as string[];
 
 interface HeaderUserNavProps {
 	isAuthenticated: boolean;
@@ -49,7 +51,7 @@ export const HeaderUserNav: React.FC<HeaderUserNavProps> = ({
 			await signOut().unwrap();
 		} catch {}
 		dispatch(logout());
-		navigate({ to: "/" });
+		navigate({ to: ROUTES.HOME });
 	};
 	return (
 		<div className="flex items-center gap-2 md:gap-4">
@@ -59,7 +61,7 @@ export const HeaderUserNav: React.FC<HeaderUserNavProps> = ({
 						variant="ghost"
 						size="icon"
 						className="relative h-9 w-9 text-muted-foreground/80 hover:text-primary hover:bg-primary/5 rounded-lg transition-all"
-						onClick={() => navigate({ to: "/wishlist" })}
+						onClick={() => navigate({ to: ROUTES.PROTECTED.WISHLIST })}
 					>
 						<RiHeartLine size={18} />
 						{wishlistCount > 0 && (
@@ -72,7 +74,7 @@ export const HeaderUserNav: React.FC<HeaderUserNavProps> = ({
 						variant="ghost"
 						size="icon"
 						className="h-9 w-9 text-muted-foreground/80 hover:text-primary hover:bg-primary/5 rounded-lg transition-all"
-						onClick={() => navigate({ to: "/messages" })}
+						onClick={() => navigate({ to: ROUTES.PROTECTED.MESSAGES })}
 					>
 						<RiChat1Line size={18} />
 					</Button>
@@ -130,15 +132,12 @@ export const HeaderUserNav: React.FC<HeaderUserNavProps> = ({
 									</div>
 								</div>
 							</DropdownMenuLabel>
-							{(user.role === "admin" || user.role === "agent") && (
+							{(user.role === ROLES.ADMIN || user.role === ROLES.AGENT) && (
 								<DropdownMenuItem
-									onClick={() => navigate({ to: "/admin" })}
+									onClick={() => navigate({ to: ROUTES.ADMIN.INDEX })}
 									className="cursor-pointer rounded-md focus:bg-primary/5 focus:text-primary py-2.5 transition-colors"
 								>
-									<RiDashboardLine
-										size={16}
-										className="mr-3 opacity-70"
-									/>
+									<RiDashboardLine size={16} className="mr-3 opacity-70" />
 									<span className="font-bold uppercase text-[10px] tracking-[0.15em]">
 										Admin Panel
 									</span>
@@ -146,20 +145,17 @@ export const HeaderUserNav: React.FC<HeaderUserNavProps> = ({
 							)}
 							{PROVIDER_ROLES.includes(user.role) && (
 								<DropdownMenuItem
-									onClick={() => navigate({ to: "/dashboard" })}
+									onClick={() => navigate({ to: ROUTES.DASHBOARD.INDEX })}
 									className="cursor-pointer rounded-md focus:bg-primary/5 focus:text-primary py-2.5 transition-colors"
 								>
-									<RiDashboardLine
-										size={16}
-										className="mr-3 opacity-70"
-									/>
+									<RiDashboardLine size={16} className="mr-3 opacity-70" />
 									<span className="font-bold uppercase text-[10px] tracking-[0.15em]">
 										Supplier Dashboard
 									</span>
 								</DropdownMenuItem>
 							)}
 							<DropdownMenuItem
-								onClick={() => navigate({ to: "/profile" })}
+								onClick={() => navigate({ to: ROUTES.PROTECTED.PROFILE })}
 								className="cursor-pointer rounded-md focus:bg-primary/5 focus:text-primary py-2.5 transition-colors"
 							>
 								<RiUserLine size={16} className="mr-3 opacity-70" />
@@ -182,7 +178,7 @@ export const HeaderUserNav: React.FC<HeaderUserNavProps> = ({
 				</DropdownMenu>
 			) : (
 				<div className="hidden md:flex items-center gap-3">
-					<Link to="/auth/signin">
+					<Link to={ROUTES.AUTH.SIGNIN}>
 						<Button
 							variant="ghost"
 							className="font-heading font-bold uppercase tracking-[0.15em] hover:text-primary hover:bg-primary/5 text-[11px] h-10 px-5 rounded-lg transition-all"
@@ -190,7 +186,7 @@ export const HeaderUserNav: React.FC<HeaderUserNavProps> = ({
 							Sign In
 						</Button>
 					</Link>
-					<Link to="/auth/signup">
+					<Link to={ROUTES.AUTH.SIGNUP}>
 						<Button className="font-heading font-bold text-[11px] uppercase tracking-[0.15em] h-10 px-6 rounded-lg bg-primary text-white hover:bg-primary/90 shadow-lg shadow-primary/20 transition-all active:scale-95">
 							Join Free
 						</Button>

@@ -1,8 +1,10 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
-import { store } from "@/app/store";
 import { AdminLayout } from "@/components/layout/admin-layout";
+import { ROLES } from "@/shared/constants";
+import { ROUTES } from "@/shared/constants/routes";
+import { store } from "@/store";
 
-const ALLOWED_ROLES = ["admin", "agent"];
+const ALLOWED_ROLES = [ROLES.ADMIN, ROLES.AGENT] as string[];
 
 export const Route = createFileRoute("/admin")({
 	beforeLoad: () => {
@@ -10,17 +12,17 @@ export const Route = createFileRoute("/admin")({
 
 		if (isAuthenticated && (!user || !user.role)) {
 			store.dispatch({ type: "auth/logout" });
-			throw redirect({ to: "/auth/signin" });
+			throw redirect({ to: ROUTES.AUTH.SIGNIN });
 		}
 
 		if (!isAuthenticated) {
 			throw redirect({
-				to: "/auth/signin",
+				to: ROUTES.AUTH.SIGNIN,
 			});
 		}
 		if (!user?.role || !ALLOWED_ROLES.includes(user.role)) {
 			throw redirect({
-				to: "/",
+				to: ROUTES.HOME,
 			});
 		}
 	},

@@ -1,33 +1,25 @@
 "use client";
 
-import * as React from "react";
-
 import {
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
+	SidebarMenu,
+	SidebarMenuButton,
+	SidebarMenuItem,
 } from "@/components/ui/sidebar";
-
-export interface NavHeaderInfo {
-  name: string;
-  logo?: React.ElementType;
-  logoUrl?: string;
-  plan: string;
-}
+import type { NavHeaderInfo } from "@/types";
 
 export function NavHeader({ info }: { info: NavHeaderInfo }) {
-  if (!info) {
-    return null;
-  }
+	if (!info) {
+		return null;
+	}
 
-  return (
-    <SidebarMenu>
-      <SidebarMenuItem>
-        <SidebarMenuButton
-          size="lg"
-          className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
-        >
-          {/* <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg overflow-hidden">
+	return (
+		<SidebarMenu>
+			<SidebarMenuItem>
+				<SidebarMenuButton
+					size="lg"
+					className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+				>
+					{/* <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg overflow-hidden">
             {info.logoUrl ? (
               <img
                 src={info.logoUrl}
@@ -38,12 +30,12 @@ export function NavHeader({ info }: { info: NavHeaderInfo }) {
               <info.logo className="size-4" />
             ) : null}
           </div> */}
-          <div className="grid flex-1 text-left text-sm leading-tight">
-            <span className="truncate font-medium">{info.name}</span>
-            <span className="truncate text-xs">{info.plan}</span>
-          </div>
-        </SidebarMenuButton>
-      </SidebarMenuItem>
-    </SidebarMenu>
-  );
+					<div className="grid flex-1 text-left text-sm leading-tight">
+						<span className="truncate font-medium">{info.name}</span>
+						<span className="truncate text-xs">{info.plan}</span>
+					</div>
+				</SidebarMenuButton>
+			</SidebarMenuItem>
+		</SidebarMenu>
+	);
 }

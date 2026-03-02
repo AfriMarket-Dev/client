@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import type { SupplierFiltersState } from "@/components/supplier/listing/types";
+import type { SupplierFiltersState } from "@/types";
 
 const defaultFilters: SupplierFiltersState = {
 	searchQuery: "",

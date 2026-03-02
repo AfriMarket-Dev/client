@@ -1,7 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
-import { useGetProfileQuery, useUpdateProfileMutation } from "@/app/api/users";
-import { handleRtkQueryError } from "@/lib/utils";
 import { toast } from "sonner";
+import { handleRtkQueryError } from "@/lib/utils";
+import {
+	useGetProfileQuery,
+	useUpdateProfileMutation,
+} from "@/services/api/users";
 
 export function useAdminProfile() {
 	const [isEditing, setIsEditing] = useState(false);
@@ -92,7 +95,7 @@ export function useAdminProfile() {
 					image: formData.avatar,
 				},
 			}).unwrap();
-			
+
 			toast.success("Profile synchronized successfully");
 			setIsEditing(false);
 		} catch (err) {

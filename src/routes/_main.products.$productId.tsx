@@ -1,13 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
-import ProductPage from "@/pages/marketplace/product-page";
-import { store } from "@/app/store";
-import { productsApi } from "@/app/api/products";
+import { ProductDetailsPage } from "@/features/marketplace/components/product-details-page";
+import { productsApi } from "@/services/api/products";
+import { store } from "@/store";
 
 export const Route = createFileRoute("/_main/products/$productId")({
-  component: ProductPage,
-  loader: ({ params }) => {
-    store.dispatch(
-      productsApi.endpoints.getProductById.initiate(params.productId),
-    );
-  },
+	component: ProductDetailsPage,
+	loader: ({ params }) => {
+		store.dispatch(
+			productsApi.endpoints.getProductById.initiate(params.productId),
+		);
+	},
 });

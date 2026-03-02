@@ -1,3 +1,10 @@
+import {
+	RiArrowLeftDoubleLine,
+	RiArrowLeftSLine,
+	RiArrowRightDoubleLine,
+	RiArrowRightSLine,
+	RiSettings2Line,
+} from "@remixicon/react";
 import type {
 	ColumnDef,
 	ColumnFiltersState,
@@ -13,13 +20,6 @@ import {
 	getSortedRowModel,
 	useReactTable,
 } from "@tanstack/react-table";
-import {
-	RiArrowLeftSLine,
-	RiArrowRightSLine,
-	RiArrowLeftDoubleLine,
-	RiArrowRightDoubleLine,
-	RiSettings2Line,
-} from "@remixicon/react";
 import * as React from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -89,7 +89,9 @@ export function DataTable<TData, TValue>({
 		onSortingChange: setSorting,
 		onColumnFiltersChange: setColumnFilters,
 		getCoreRowModel: getCoreRowModel(),
-		getPaginationRowModel: manualPagination ? undefined : getPaginationRowModel(),
+		getPaginationRowModel: manualPagination
+			? undefined
+			: getPaginationRowModel(),
 		getSortedRowModel: getSortedRowModel(),
 		getFilteredRowModel: getFilteredRowModel(),
 		onColumnVisibilityChange: setColumnVisibility,
