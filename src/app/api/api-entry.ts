@@ -7,7 +7,8 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { logout } from "@/app/features/auth-slice";
 import type { RootState } from "@/app/store";
 
-const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000/api";
+const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:3000";
+const BASE_URL = `${API_BASE.replace(/\/$/, "")}/api`;
 
 const baseQuery = fetchBaseQuery({
   baseUrl: BASE_URL,
