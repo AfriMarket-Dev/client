@@ -67,9 +67,14 @@ export default function AdminSuppliersPage() {
     supplierName: "",
   });
   const navigate = useNavigate();
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 10,
+  });
 
   const { data: companiesResult, isLoading } = useGetCompaniesQuery({
-    limit: 100,
+    page: pagination.pageIndex + 1,
+    limit: pagination.pageSize,
   });
   const [deleteCompany, { isLoading: deleting }] = useDeleteCompanyMutation();
   const [updateCompany, { isLoading: suspending }] = useUpdateCompanyMutation();
@@ -252,7 +257,7 @@ export default function AdminSuppliersPage() {
                   </Button>
                 }
               />
-              <DropdownMenuContent align="end">
+              <DropdownMenuContent align="end" className="w-56">
                 <DropdownMenuGroup>
                   <DropdownMenuLabel>Actions</DropdownMenuLabel>
                   <DropdownMenuItem
@@ -338,6 +343,10 @@ export default function AdminSuppliersPage() {
             data={suppliers}
             filterColumn="name"
             filterPlaceholder="Search suppliers..."
+            manualPagination
+            pageCount={companiesResult?.meta?.totalPages || 0}
+            onPaginationChange={setPagination}
+            state={{ pagination }}
           />
         )}
       </AdminCard>

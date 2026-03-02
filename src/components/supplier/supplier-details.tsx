@@ -11,7 +11,6 @@ import { SupplierContactModal } from "./details/supplier-contact-modal";
 import { SupplierHeader } from "./details/supplier-header";
 import { SupplierTabsContent } from "./details/supplier-tabs-content";
 
-/** local alias for supplier listing items */
 type SupplierItem = Product;
 
 interface SupplierDetailsProps {
@@ -43,23 +42,28 @@ const SupplierDetails: React.FC<SupplierDetailsProps> = ({
     sendingInquiry,
   } = useSupplierActions(company);
 
-  // Derived Data
-  const rating = Number(company?.averageRating ?? 4.8);
+  const rating = Number(company?.averageRating ?? 5.0);
   const location =
-    [company?.district, (company as any)?.province]
+    [company?.district, company?.province]
       .filter(Boolean)
       .join(", ") || "Kigali, Rwanda";
+  
   const tags = [
-    "Wholesale",
-    "Distributor",
+    company?.type?.replace('_', ' '),
     "Verified",
-    (company?.category as any)?.name,
-  ].filter(Boolean);
+    company?.category?.name,
+  ].filter((t): t is string => Boolean(t));
+
+  const joinedYear = company?.createdAt 
+    ? new Date(company.createdAt).getFullYear() 
+    : "2024";
 
   if (isLoading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="animate-pulse text-muted-foreground">Loading...</div>
+        <div className="animate-pulse text-muted-foreground uppercase text-[10px] font-bold tracking-[0.2em]">
+          Accessing Supply Node...
+        </div>
       </div>
     );
   }
@@ -68,11 +72,11 @@ const SupplierDetails: React.FC<SupplierDetailsProps> = ({
     return (
       <div className="min-h-screen bg-muted/30 flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-foreground mb-4">
-            Supplier Not Found
+          <h2 className="text-2xl font-bold text-foreground mb-4 uppercase tracking-tighter">
+            Node Offline: Supplier Not Found
           </h2>
-          <Button onClick={onBack} variant="outline">
-            Back to Suppliers
+          <Button onClick={onBack} variant="outline" className="rounded-none">
+            Back to Directory
           </Button>
         </div>
       </div>
@@ -82,6 +86,7 @@ const SupplierDetails: React.FC<SupplierDetailsProps> = ({
   return (
     <div className="min-h-screen bg-background space-y-6 overflow-x-hidden industrial-grain">
       <SupplierActions
+        company={company}
         isMobile
         onContactClick={() => setShowContactModal(true)}
       />
@@ -94,12 +99,17 @@ const SupplierDetails: React.FC<SupplierDetailsProps> = ({
             onClick={onBack}
             className="pl-0 gap-2 text-muted-foreground hover:text-primary font-heading uppercase text-xs tracking-wider hover:bg-transparent"
           >
-            <ChevronLeft className="w-4 h-4" /> Back to Suppliers
+            <ChevronLeft className="w-4 h-4" /> Back to Network
           </Button>
         </div>
 
         {/* Profile Header */}
-        <SupplierHeader company={company} location={location} rating={rating} />
+        <SupplierHeader 
+          company={company} 
+          location={location} 
+          rating={rating} 
+          onContactClick={() => setShowContactModal(true)}
+        />
 
         <div className="space-y-6 md:ml-[232px]">
           {/* Tags */}
@@ -118,7 +128,7 @@ const SupplierDetails: React.FC<SupplierDetailsProps> = ({
           <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-px bg-border/40 border border-border/40">
             <div className="bg-background p-3">
               <div className="text-[10px] uppercase font-bold text-muted-foreground tracking-wider mb-1">
-                Products
+                Listings
               </div>
               <div className="text-lg font-bold font-heading text-foreground">
                 {listings.length}
@@ -126,10 +136,10 @@ const SupplierDetails: React.FC<SupplierDetailsProps> = ({
             </div>
             <div className="bg-background p-3">
               <div className="text-[10px] uppercase font-bold text-muted-foreground tracking-wider mb-1">
-                Min. Order
+                Platform Vis.
               </div>
               <div className="text-lg font-bold font-heading text-foreground">
-                $500
+                {company.visits || 0}
               </div>
             </div>
             <div className="bg-background p-3">
@@ -137,12 +147,10 @@ const SupplierDetails: React.FC<SupplierDetailsProps> = ({
                 Joined
               </div>
               <div className="text-lg font-bold font-heading text-foreground">
-                2021
+                {joinedYear}
               </div>
             </div>
           </div>
-
-          <SupplierActions onContactClick={() => setShowContactModal(true)} />
         </div>
 
         {/* Tabs Section */}

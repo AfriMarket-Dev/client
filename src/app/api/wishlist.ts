@@ -8,23 +8,33 @@ interface WishlistResponse {
   services: Service[];
 }
 
-export type WishlistItem = any;
+export type WishlistItem =
+  | (Product & { type: "product"; itemType: "PRODUCT" })
+  | (Service & { type: "service"; itemType: "SERVICE" })
+  | {
+      id: string;
+      type: "product" | "service";
+      itemType?: "PRODUCT" | "SERVICE";
+      createdAt?: string;
+    };
 
 export const wishlistApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getWishlist: builder.query<WishlistItem[], void>({
       query: () => "/wishlists",
-      transformResponse: (response: ApiResponse<WishlistResponse>): any => {
+      transformResponse: (response: ApiResponse<WishlistResponse>): WishlistItem[] => {
         const data = response.data;
         if (!data) return [];
 
         const products = (data.products || []).map((p) => ({
           ...p,
           type: "product" as const,
+          itemType: "PRODUCT" as const,
         })) as WishlistItem[];
         const services = (data.services || []).map((s) => ({
           ...s,
           type: "service" as const,
+          itemType: "SERVICE" as const,
         })) as WishlistItem[];
         // sort by newest if possible, else just merge
         return ([...products, ...services] as any[]).sort((a, b) => {

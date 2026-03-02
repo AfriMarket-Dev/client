@@ -2,81 +2,92 @@ import { useNavigate } from "@tanstack/react-router";
 import { useCallback, useState } from "react";
 import { useSelector } from "react-redux";
 import { toast } from "sonner";
+import { useLogInteractionMutation } from "@/app/api/interactions";
 import { useStartProductChatMutation } from "@/app/api/messages";
 import {
-	useAddToWishlistMutation,
-	useGetWishlistQuery,
-	useRemoveFromWishlistMutation,
+  useAddToWishlistMutation,
+  useGetWishlistQuery,
+  useRemoveFromWishlistMutation,
 } from "@/app/api/wishlist";
 import type { RootState } from "@/app/store";
 
 export function useProductActions(productId: string) {
-	const navigate = useNavigate();
-	const [messageOpen, setMessageOpen] = useState(false);
-	const [messageText, setMessageText] = useState("");
+  const navigate = useNavigate();
+  const [messageOpen, setMessageOpen] = useState(false);
+  const [messageText, setMessageText] = useState("");
 
-	const { isAuthenticated } = useSelector((state: RootState) => state.auth);
-	const { data: wishlist = [] } = useGetWishlistQuery(undefined, {
-		skip: !isAuthenticated,
-	});
-	const [addToWishlist] = useAddToWishlistMutation();
-	const [removeFromWishlist] = useRemoveFromWishlistMutation();
-	const [startProductChat] = useStartProductChatMutation();
+  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
+  const { data: wishlist = [] } = useGetWishlistQuery(undefined, {
+    skip: !isAuthenticated,
+  });
+  const [addToWishlist] = useAddToWishlistMutation();
+  const [removeFromWishlist] = useRemoveFromWishlistMutation();
+  const [startProductChat] = useStartProductChatMutation();
+  const [logInteraction] = useLogInteractionMutation();
 
-	const isInWishlist =
-		Array.isArray(wishlist) &&
-		wishlist.some((saved: any) => saved.id === productId);
+  const trackAndNavigate = useCallback(
+    (type: "CALL_CLICK" | "EMAIL_CLICK" | "WHATSAPP_CLICK", href: string) => {
+      logInteraction({ type, productId });
+      window.open(href, "_blank", "noopener,noreferrer");
+    },
+    [logInteraction, productId],
+  );
 
-	const handleToggleWishlist = useCallback(async () => {
-		if (!isAuthenticated) {
-			toast.error("Please login to add to wishlist");
-			return;
-		}
-		try {
-			if (isInWishlist) {
-				await removeFromWishlist({ id: productId, type: "product" }).unwrap();
-				toast.success("Removed from wishlist");
-			} else {
-				await addToWishlist({ id: productId, type: "product" }).unwrap();
-				toast.success("Added to wishlist");
-			}
-		} catch (error) {
-			console.error(error);
-			toast.error("Failed to update wishlist");
-		}
-	}, [
-		isAuthenticated,
-		isInWishlist,
-		productId,
-		addToWishlist,
-		removeFromWishlist,
-	]);
+  const isInWishlist =
+    Array.isArray(wishlist) &&
+    wishlist.some((saved: { id: string }) => saved.id === productId);
 
-	const handleSubmitInquiry = useCallback(async () => {
-		if (!messageText.trim()) return;
-		try {
-			await startProductChat({
-				productId,
-				content: messageText.trim(),
-			}).unwrap();
-			toast.success("Inquiry sent successfully!");
-			setMessageOpen(false);
-			setMessageText("");
-			navigate({ to: "/messages" });
-		} catch (error) {
-			console.error(error);
-			toast.error("Inquiry delivery failed.");
-		}
-	}, [productId, messageText, startProductChat, navigate]);
+  const handleToggleWishlist = useCallback(async () => {
+    if (!isAuthenticated) {
+      toast.error("Please login to add to wishlist");
+      return;
+    }
+    try {
+      if (isInWishlist) {
+        await removeFromWishlist({ id: productId, type: "product" }).unwrap();
+        toast.success("Removed from wishlist");
+      } else {
+        await addToWishlist({ id: productId, type: "product" }).unwrap();
+        toast.success("Added to wishlist");
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to update wishlist");
+    }
+  }, [
+    isAuthenticated,
+    isInWishlist,
+    productId,
+    addToWishlist,
+    removeFromWishlist,
+  ]);
 
-	return {
-		messageOpen,
-		setMessageOpen,
-		messageText,
-		setMessageText,
-		isInWishlist,
-		handleToggleWishlist,
-		handleSubmitInquiry,
-		isAuthenticated,
-	};
+  const handleSubmitInquiry = useCallback(async () => {
+    if (!messageText.trim()) return;
+    try {
+      await startProductChat({
+        productId,
+        content: messageText.trim(),
+      }).unwrap();
+      toast.success("Inquiry sent successfully!");
+      setMessageOpen(false);
+      setMessageText("");
+      navigate({ to: "/messages" });
+    } catch (error) {
+      console.error(error);
+      toast.error("Inquiry delivery failed.");
+    }
+  }, [productId, messageText, startProductChat, navigate]);
+
+  return {
+    messageOpen,
+    setMessageOpen,
+    messageText,
+    setMessageText,
+    isInWishlist,
+    handleToggleWishlist,
+    trackAndNavigate,
+    handleSubmitInquiry,
+    isAuthenticated,
+  };
 }

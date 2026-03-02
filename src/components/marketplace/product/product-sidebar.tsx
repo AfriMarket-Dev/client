@@ -1,7 +1,12 @@
-import { RiShieldCheckLine } from "@remixicon/react";
+import {
+  RiWhatsappLine,
+  RiPhoneLine,
+  RiMailLine,
+  RiShareForwardLine,
+} from "@remixicon/react";
 import type React from "react";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { cn, shareContent } from "@/lib/utils";
 
 interface ProductSidebarProps {
   company?: {
@@ -9,14 +14,31 @@ interface ProductSidebarProps {
     name: string;
     district?: string;
     isVerified?: boolean;
+    phone?: string;
+    email?: string;
   };
+  productName?: string;
   onSupplierClick: (id: string) => void;
+  trackAndNavigate: (
+    type: "CALL_CLICK" | "EMAIL_CLICK" | "WHATSAPP_CLICK",
+    href: string,
+  ) => void;
 }
 
 export const ProductSidebar: React.FC<ProductSidebarProps> = ({
   company,
+  productName,
   onSupplierClick,
+  trackAndNavigate,
 }) => {
+  const handleShare = () => {
+    shareContent({
+      title: productName || "Industrial Material",
+      text: `Check out this material: ${productName}`,
+      url: window.location.href,
+    });
+  };
+
   return (
     <div className="lg:col-span-4 space-y-8 sticky top-24">
       {/* Provider ID Card */}
@@ -36,7 +58,7 @@ export const ProductSidebar: React.FC<ProductSidebarProps> = ({
               {company?.name?.charAt(0) ?? "S"}
             </div>
             <div className="space-y-1">
-              <h4 className="font-display font-black text-2xl uppercase tracking-tighter text-foreground leading-[0.85]">
+              <h4 className="font-display font-black text-lg uppercase tracking-tighter text-foreground leading-[0.85]">
                 {company?.name ?? "AfrikaMarket Seller"}
               </h4>
               <p className="text-[10px] text-primary font-black uppercase tracking-[0.2em]">
@@ -63,25 +85,75 @@ export const ProductSidebar: React.FC<ProductSidebarProps> = ({
 
           <Button
             variant="outline"
-            className="w-full rounded-none border-border h-12 font-heading font-black uppercase tracking-[0.3em] text-[9px] hover:bg-foreground hover:text-background transition-colors"
+            className="w-full rounded-none border-border h-12 font-heading font-black uppercase tracking-[0.3em] text-[9px] hover:bg-foreground hover:text-background transition-colors mb-8"
             onClick={() => company?.id && onSupplierClick(company.id)}
           >
             View Professional Bio
           </Button>
-        </div>
-      </div>
 
-      {/* Security Badge */}
-      <div className="bg-foreground text-background p-8 rounded-none relative overflow-hidden group">
-        <div className="absolute top-0 right-0 w-16 h-16 bg-primary/20 -mr-8 -mt-8 rotate-45" />
-        <RiShieldCheckLine className="w-8 h-8 opacity-20 mb-6" />
-        <h4 className="font-display font-black text-lg uppercase tracking-tight mb-3">
-          Elite Standard Guarantee
-        </h4>
-        <p className="text-xs text-background/60 leading-relaxed font-medium">
-          Enterprise-grade vetting. Quality assurance protocols strictly
-          enforced for every engagement.
-        </p>
+          <div className="space-y-4">
+            <span className="block text-[8px] uppercase font-black text-muted-foreground tracking-[0.4em] mb-4">
+              Direct Engagement
+            </span>
+            <div className="grid grid-cols-2 gap-3">
+              {company?.phone && (
+                <>
+                  <Button
+                    variant="outline"
+                    className="rounded-none border-border h-12 flex items-center justify-center gap-2 hover:border-emerald-500 hover:text-emerald-600 transition-colors"
+                    onClick={() =>
+                      trackAndNavigate(
+                        "WHATSAPP_CLICK",
+                        `https://wa.me/${company.phone?.replace(/\D/g, "")}`,
+                      )
+                    }
+                  >
+                    <RiWhatsappLine className="w-4 h-4" />
+                    <span className="text-[9px] font-black uppercase tracking-widest">
+                      WhatsApp
+                    </span>
+                  </Button>
+                  <Button
+                    variant="outline"
+                    className="rounded-none border-border h-12 flex items-center justify-center gap-2 hover:border-primary hover:text-primary transition-colors"
+                    onClick={() =>
+                      trackAndNavigate("CALL_CLICK", `tel:${company.phone}`)
+                    }
+                  >
+                    <RiPhoneLine className="w-4 h-4" />
+                    <span className="text-[9px] font-black uppercase tracking-widest">
+                      Call
+                    </span>
+                  </Button>
+                </>
+              )}
+              {company?.email && (
+                <Button
+                  variant="outline"
+                  className="col-span-2 rounded-none border-border h-12 flex items-center justify-center gap-2 hover:border-blue-500 hover:text-blue-600 transition-colors"
+                  onClick={() =>
+                    trackAndNavigate("EMAIL_CLICK", `mailto:${company.email}`)
+                  }
+                >
+                  <RiMailLine className="w-4 h-4" />
+                  <span className="text-[9px] font-black uppercase tracking-widest">
+                    Official Email
+                  </span>
+                </Button>
+              )}
+              <Button
+                variant="outline"
+                className="col-span-2 rounded-none border-border h-12 flex items-center justify-center gap-2 hover:border-primary hover:text-primary transition-colors"
+                onClick={handleShare}
+              >
+                <RiShareForwardLine className="w-4 h-4" />
+                <span className="text-[9px] font-black uppercase tracking-widest">
+                  Share Protocol
+                </span>
+              </Button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

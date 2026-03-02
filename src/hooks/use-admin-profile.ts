@@ -1,19 +1,37 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { useGetProfileQuery, useUpdateProfileMutation } from "@/app/api/users";
+import { handleRtkQueryError } from "@/lib/utils";
+import { toast } from "sonner";
 
 export function useAdminProfile() {
 	const [isEditing, setIsEditing] = useState(false);
 	const [showPassword, setShowPassword] = useState(false);
 	const [showNewPassword, setShowNewPassword] = useState(false);
 
+	const { data: profile, isLoading } = useGetProfileQuery();
+	const [updateProfile, { isLoading: isUpdating }] = useUpdateProfileMutation();
+
 	const [formData, setFormData] = useState({
-		fullName: "Admin User",
-		email: "admin@afrimarket.com",
-		phone: "+234-123-456-7890",
-		location: "Lagos, Nigeria",
-		bio: "Platform administrator managing AfrikaMarket operations and customer relationships.",
-		avatar:
-			"https://images.pexels.com/photos/5668473/pexels-photo-5668473.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&fit=crop",
+		fullName: "",
+		email: "",
+		phone: "",
+		location: "",
+		bio: "",
+		avatar: "/logo.svg",
 	});
+
+	useEffect(() => {
+		if (profile) {
+			setFormData({
+				fullName: profile.name || "",
+				email: profile.email || "",
+				phone: profile.phoneNumber || "",
+				location: "Kigali, Rwanda", // Default if not in profile
+				bio: "Platform administrator managing AfrikaMarket operations.",
+				avatar: profile.image || "/logo.svg",
+			});
+		}
+	}, [profile]);
 
 	const [passwordData, setPasswordData] = useState({
 		currentPassword: "",
@@ -62,10 +80,25 @@ export function useAdminProfile() {
 		setSecuritySettings((prev) => ({ ...prev, sessionTimeout: value }));
 	}, []);
 
-	const handleSaveProfile = useCallback(() => {
-		setIsEditing(false);
-		// Logic to save profile...
-	}, []);
+	const handleSaveProfile = useCallback(async () => {
+		if (!profile?.id) return;
+
+		try {
+			await updateProfile({
+				id: profile.id,
+				data: {
+					name: formData.fullName,
+					phoneNumber: formData.phone,
+					image: formData.avatar,
+				},
+			}).unwrap();
+			
+			toast.success("Profile synchronized successfully");
+			setIsEditing(false);
+		} catch (err) {
+			handleRtkQueryError(err, "Failed to synchronize profile");
+		}
+	}, [profile?.id, formData, updateProfile]);
 
 	return {
 		isEditing,
@@ -84,5 +117,7 @@ export function useAdminProfile() {
 		handleSecurityToggle,
 		handleSessionTimeoutChange,
 		handleSaveProfile,
+		isLoading,
+		isUpdating,
 	};
 }

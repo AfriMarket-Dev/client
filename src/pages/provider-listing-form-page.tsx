@@ -93,7 +93,7 @@ export default function ProviderListingFormPage() {
           New Listing
         </h1>
         <p className="text-muted-foreground text-sm font-medium">
-          Showcase your inventory or expertise on AfriMarket.
+          Showcase your inventory or expertise on AfrikaMarket.
         </p>
       </div>
 

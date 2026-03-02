@@ -3,9 +3,8 @@ import {
 	Calendar,
 	Eye,
 	MessageCircle,
-	Package,
+	Star,
 	TrendingUp,
-	Users,
 } from "lucide-react";
 import type React from "react";
 import { useMemo, useState } from "react";
@@ -14,182 +13,122 @@ import { RecentActivitiesCard, TopProductsCard } from "./analytics/list-cards";
 import { MetricCard } from "./analytics/metric-card";
 import { PerformanceSummaryCard } from "./analytics/performance-summary-card";
 import { PerformanceTrendsCard } from "./analytics/performance-trends-card";
+import { useGetProviderStatsQuery } from "@/app/api/stats";
 
 const AnalyticsDashboard: React.FC = () => {
 	const [timeRange, setTimeRange] = useState("30d");
 	const [activeChart, setActiveChart] = useState<
 		"inquiries" | "views" | "conversion"
-	>("inquiries");
+	>("views");
 
-	const stats = [
-		{
-			label: "Total Views",
-			value: "12,456",
-			change: "+23.5%",
-			trend: "up" as const,
-			icon: Eye,
-			color: "blue",
-			description: "Profile and product views",
-		},
-		{
-			label: "Product Inquiries",
-			value: "342",
-			change: "+12.3%",
-			trend: "up" as const,
-			icon: MessageCircle,
-			color: "green",
-			description: "Customer inquiries received",
-		},
-		{
-			label: "Conversion Rate",
-			value: "8.7%",
-			change: "+2.1%",
-			trend: "up" as const,
-			icon: TrendingUp,
-			color: "primary",
-			description: "Views to inquiries ratio",
-		},
-		{
-			label: "Response Rate",
-			value: "94.2%",
-			change: "-1.2%",
-			trend: "down" as const,
-			icon: Activity,
-			color: "purple",
-			description: "Inquiry response rate",
-		},
-	];
+	const { data: providerStats, isLoading } = useGetProviderStatsQuery();
 
-	const topProducts = [
-		{
-			name: "Samsung Galaxy A54 5G",
-			views: 2456,
-			inquiries: 45,
-			conversionRate: 12.3,
-			revenue: 15600,
-			image:
-				"https://images.pexels.com/photos/404280/pexels-photo-404280.jpeg?auto=compress&cs=tinysrgb&w=100",
-		},
-		{
-			name: "Wireless Bluetooth Earbuds",
-			views: 1890,
-			inquiries: 38,
-			conversionRate: 9.8,
-			revenue: 12400,
-			image:
-				"https://images.pexels.com/photos/3394650/pexels-photo-3394650.jpeg?auto=compress&cs=tinysrgb&w=100",
-		},
-		{
-			name: "Premium Cotton Ankara Fabric",
-			views: 1567,
-			inquiries: 29,
-			conversionRate: 8.2,
-			revenue: 8900,
-			image:
-				"https://images.pexels.com/photos/6214476/pexels-photo-6214476.jpeg?auto=compress&cs=tinysrgb&w=100",
-		},
-		{
-			name: "Modern Living Room Set",
-			views: 1234,
-			inquiries: 22,
-			conversionRate: 7.1,
-			revenue: 18500,
-			image:
-				"https://images.pexels.com/photos/1350789/pexels-photo-1350789.jpeg?auto=compress&cs=tinysrgb&w=100",
-		},
-	];
+	const stats = useMemo(() => {
+		if (!providerStats) return [];
+		
+		const overview = providerStats.overview;
+		
+		return [
+			{
+				label: "Total Visibility",
+				value: overview.totalViews.toLocaleString(),
+				change: "Live",
+				trend: "up" as const,
+				icon: Eye,
+				color: "blue",
+				description: "Profile and inventory impressions",
+			},
+			{
+				label: "Network Engagement",
+				value: overview.totalInteractions.toLocaleString(),
+				change: "Live",
+				trend: "up" as const,
+				icon: MessageCircle,
+				color: "green",
+				description: "Customer calls, messages, and shares",
+			},
+			{
+				label: "Entity Nodes",
+				value: overview.companiesCount.toString(),
+				change: "Live",
+				trend: "up" as const,
+				icon: TrendingUp,
+				color: "primary",
+				description: "Verified supplier accounts managed",
+			},
+			{
+				label: "Trust Score",
+				value: overview.averageRating.toFixed(1),
+				change: overview.totalReviews.toString(),
+				trend: "up" as const,
+				icon: Star,
+				color: "purple",
+				description: "Average rating from network logs",
+			},
+		];
+	}, [providerStats]);
+
+	// Use real data for Top Products if available in ProviderStats
+	const topProducts = useMemo(() => {
+		if (!providerStats || !providerStats.companies) return [];
+		
+		return providerStats.companies
+			.map(company => ({
+				name: company.name,
+				views: company.interactions.views,
+				inquiries: company.interactions.whatsappClicks + company.interactions.callClicks,
+				conversionRate: company.overview.rating,
+				revenue: company.overview.visits, // using visits as proxy if revenue not in API
+				image: "/logo.svg",
+			}))
+			.slice(0, 4);
+	}, [providerStats]);
 
 	const chartDataMap = {
 		inquiries: [
-			{ month: "Jan", value: 45, secondary: 42 },
-			{ month: "Feb", value: 52, secondary: 48 },
-			{ month: "Mar", value: 48, secondary: 46 },
-			{ month: "Apr", value: 61, secondary: 58 },
-			{ month: "May", value: 55, secondary: 52 },
-			{ month: "Jun", value: 67, secondary: 63 },
+			{ month: "Jan", value: 0, secondary: 0 },
+			{ month: "Feb", value: 0, secondary: 0 },
+			{ month: "Mar", value: 0, secondary: 0 },
+			{ month: "Apr", value: 0, secondary: 0 },
+			{ month: "May", value: 0, secondary: 0 },
+			{ month: "Jun", value: 0, secondary: 0 },
 		],
 		views: [
-			{ month: "Jan", value: 1200, secondary: 980 },
-			{ month: "Feb", value: 1450, secondary: 1200 },
-			{ month: "Mar", value: 1380, secondary: 1150 },
-			{ month: "Apr", value: 1650, secondary: 1400 },
-			{ month: "May", value: 1580, secondary: 1320 },
-			{ month: "Jun", value: 1820, secondary: 1560 },
+			{ month: "Jan", value: 0, secondary: 0 },
+			{ month: "Feb", value: 0, secondary: 0 },
+			{ month: "Mar", value: 0, secondary: 0 },
+			{ month: "Apr", value: 0, secondary: 0 },
+			{ month: "May", value: 0, secondary: 0 },
+			{ month: "Jun", value: 0, secondary: 0 },
 		],
 		conversion: [
-			{ month: "Jan", value: 6.2, secondary: 5.8 },
-			{ month: "Feb", value: 7.1, secondary: 6.5 },
-			{ month: "Mar", value: 6.8, secondary: 6.2 },
-			{ month: "Apr", value: 8.3, secondary: 7.9 },
-			{ month: "May", value: 7.9, secondary: 7.4 },
-			{ month: "Jun", value: 8.7, secondary: 8.2 },
+			{ month: "Jan", value: 0, secondary: 0 },
+			{ month: "Feb", value: 0, secondary: 0 },
+			{ month: "Mar", value: 0, secondary: 0 },
+			{ month: "Apr", value: 0, secondary: 0 },
+			{ month: "May", value: 0, secondary: 0 },
+			{ month: "Jun", value: 0, secondary: 0 },
 		],
 	};
 
 	const categoryPerformance = [
 		{
-			category: "Electronics",
-			percentage: 45,
-			value: 156,
-			color: "bg-blue-500",
-			textColor: "text-blue-600",
-		},
-		{
-			category: "Fashion & Textiles",
-			percentage: 25,
-			value: 87,
-			color: "bg-green-500",
-			textColor: "text-green-600",
-		},
-		{
-			category: "Home & Garden",
-			percentage: 20,
-			value: 69,
+			category: "Construction Materials",
+			percentage: 100,
+			value: providerStats?.overview.totalViews || 0,
 			color: "bg-primary",
 			textColor: "text-primary",
-		},
-		{
-			category: "Beauty & Health",
-			percentage: 10,
-			value: 35,
-			color: "bg-purple-500",
-			textColor: "text-purple-600",
-		},
+		}
 	];
 
 	const recentActivities = [
 		{
-			type: "view",
-			message:
-				"Samsung Galaxy A54 5G viewed by John Kamau from Nairobi Electronics",
-			time: "2 hours ago",
-			icon: Eye,
-			color: "text-blue-600 bg-blue-100",
-		},
-		{
-			type: "inquiry",
-			message:
-				"New inquiry for Wireless Earbuds from Sarah Mwangi (Kigali Fashion)",
-			time: "4 hours ago",
-			icon: MessageCircle,
-			color: "text-green-600 bg-green-100",
-		},
-		{
-			type: "response",
-			message:
-				"Responded to David Ochieng's furniture inquiry with custom quote",
-			time: "6 hours ago",
+			type: "system",
+			message: "Supply node analytics active and monitoring live transmissions.",
+			time: "Real-time",
 			icon: Activity,
 			color: "text-primary bg-primary/10",
-		},
-		{
-			type: "view",
-			message:
-				"Ankara Fabric collection viewed 15 times from 8 different customers",
-			time: "8 hours ago",
-			icon: TrendingUp,
-			color: "text-purple-600 bg-purple-100",
-		},
+		}
 	];
 
 	const currentChartData = useMemo(
@@ -216,31 +155,45 @@ const AnalyticsDashboard: React.FC = () => {
 		}
 	}, [activeChart]);
 
+	if (isLoading) {
+		return (
+			<div className="space-y-8 animate-pulse">
+				<div className="h-12 w-64 bg-muted rounded-xl" />
+				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+					{[1, 2, 3, 4].map(i => (
+						<div key={i} className="h-32 bg-muted rounded-2xl" />
+					))}
+				</div>
+				<div className="h-96 bg-muted rounded-2xl" />
+			</div>
+		);
+	}
+
 	return (
 		<div className="space-y-8">
 			{/* Header */}
 			<div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
 				<div>
-					<h2 className="text-3xl font-bold text-gray-900">
-						Analytics Dashboard
+					<h2 className="text-3xl font-display font-black uppercase text-foreground tracking-tight leading-tight">
+						Analytics Terminal
 					</h2>
-					<p className="text-gray-600 mt-1">
-						Track your business performance and insights
+					<p className="text-muted-foreground font-medium uppercase text-xs tracking-widest mt-1">
+						Direct operational metrics and network insights
 					</p>
 				</div>
 				<div className="flex items-center space-x-4">
 					<select
 						value={timeRange}
 						onChange={(e) => setTimeRange(e.target.value)}
-						className="px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent bg-white"
+						className="px-4 py-2 border border-border/40 rounded-none focus:ring-1 focus:ring-primary outline-none bg-background text-[10px] font-black uppercase tracking-widest"
 					>
 						<option value="7d">Last 7 days</option>
 						<option value="30d">Last 30 days</option>
 						<option value="90d">Last 90 days</option>
 						<option value="1y">Last year</option>
 					</select>
-					<div className="flex items-center bg-gray-100 rounded-lg p-1">
-						<Calendar className="w-4 h-4 text-gray-500 mx-2" />
+					<div className="flex items-center bg-muted/20 border border-border/40 p-2 rounded-none">
+						<Calendar className="w-4 h-4 text-primary" />
 					</div>
 				</div>
 			</div>
@@ -258,7 +211,7 @@ const AnalyticsDashboard: React.FC = () => {
 					activeChart={activeChart}
 					onActiveChartChange={setActiveChart}
 					chartData={currentChartData}
-					maxValue={maxValue}
+					maxValue={maxValue > 0 ? maxValue : 100}
 					labels={chartLabels}
 				/>
 				<CategoryPerformanceCard categories={categoryPerformance} />
@@ -272,40 +225,6 @@ const AnalyticsDashboard: React.FC = () => {
 
 			{/* Performance Summary */}
 			<PerformanceSummaryCard />
-
-			{/* Quick Actions */}
-			<div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-				{[
-					{
-						label: "Add New Product",
-						icon: Package,
-						color: "from-blue-500 to-blue-600",
-					},
-					{
-						label: "View Messages",
-						icon: MessageCircle,
-						color: "from-green-500 to-green-600",
-					},
-					{
-						label: "Check Inquiries",
-						icon: Users,
-						color: "from-purple-500 to-purple-600",
-					},
-					{
-						label: "Update Profile",
-						icon: Activity,
-						color: "from-primary to-primary/90",
-					},
-				].map((action) => (
-					<button
-						key={action.label}
-						className={`bg-gradient-to-r ${action.color} text-white p-4 rounded-xl font-semibold hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1`}
-					>
-						<action.icon className="w-5 h-5 mx-auto mb-2" />
-						<div className="text-sm">{action.label}</div>
-					</button>
-				))}
-			</div>
 		</div>
 	);
 };

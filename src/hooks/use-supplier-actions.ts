@@ -1,8 +1,9 @@
 import { useCallback, useState } from "react";
 import { toast } from "sonner";
 import { useSendMessageMutation } from "@/app/api/messages";
+import type { Company } from "@/app/api/companies";
 
-export function useSupplierActions(company: any) {
+export function useSupplierActions(company: Company | null | undefined) {
   const [showContactModal, setShowContactModal] = useState(false);
   const [message, setMessage] = useState("");
   const [sendMessage, { isLoading: sendingInquiry }] = useSendMessageMutation();

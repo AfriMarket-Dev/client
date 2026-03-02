@@ -16,15 +16,17 @@ import { useSelector } from "react-redux";
 import {
   useGetWishlistQuery,
   useRemoveFromWishlistMutation,
+  type WishlistItem,
 } from "@/app/api/wishlist";
 import type { RootState } from "@/app/store";
 import { Button } from "@/components/ui/button";
 import { ProductCard } from "./catalog/product-card";
 import { ServiceCard } from "./catalog/service-card";
+import type { MarketplaceItem } from "./types";
 
 interface WishlistProps {
   onBack: () => void;
-  onProductClick: (item: any) => void;
+  onProductClick: (item: MarketplaceItem) => void;
   onSupplierClick: (supplierId: string) => void;
 }
 
@@ -46,7 +48,7 @@ const Wishlist: React.FC<WishlistProps> = ({
   >("products");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
-  const products = useMemo(
+  const products = useMemo<WishlistItem[]>(
     () =>
       Array.isArray(wishlistRaw)
         ? wishlistRaw.filter((item) => item.type === "product")
@@ -54,7 +56,7 @@ const Wishlist: React.FC<WishlistProps> = ({
     [wishlistRaw],
   );
 
-  const services = useMemo(
+  const services = useMemo<WishlistItem[]>(
     () =>
       Array.isArray(wishlistRaw)
         ? wishlistRaw.filter((item) => item.type === "service")
@@ -64,7 +66,7 @@ const Wishlist: React.FC<WishlistProps> = ({
 
   const wishlistCount = wishlistRaw.length;
 
-  const handleToggleWishlist = (e: React.MouseEvent, item: any) => {
+  const handleToggleWishlist = (e: React.MouseEvent, item: WishlistItem) => {
     e.stopPropagation();
     removeFromWishlist({ id: item.id, type: item.type });
   };
@@ -195,14 +197,16 @@ const Wishlist: React.FC<WishlistProps> = ({
                 {products.map((item) => (
                   <ProductCard
                     key={item.id}
-                    product={{ ...item, itemType: "PRODUCT" } as any}
+                    product={item as MarketplaceItem}
                     viewMode={viewMode}
                     isInWishlist={true}
                     onToggleWishlist={(e) => handleToggleWishlist(e, item)}
-                    onClick={() => onProductClick(item)}
+                    onClick={() => onProductClick(item as MarketplaceItem)}
                     onSupplierClick={(e) => {
                       e.stopPropagation();
-                      onSupplierClick(item.company?.id);
+                      if ("company" in item && item.company?.id) {
+                        onSupplierClick(item.company.id);
+                      }
                     }}
                   />
                 ))}
@@ -231,17 +235,20 @@ const Wishlist: React.FC<WishlistProps> = ({
                 {services.map((item) => (
                   <ServiceCard
                     key={item.id}
-                    service={item}
+                    service={item as any}
                     viewMode={viewMode}
                     isInWishlist={true}
                     onToggleWishlist={(e) => handleToggleWishlist(e, item)}
-                    onClick={() => onProductClick(item)}
+                    onClick={() => onProductClick(item as MarketplaceItem)}
                     onSupplierClick={(e) => {
                       e.stopPropagation();
-                      onSupplierClick(item.company?.id);
+                      if ("company" in item && item.company?.id) {
+                        onSupplierClick(item.company.id);
+                      }
                     }}
                   />
                 ))}
+
               </div>
             )}
           </div>

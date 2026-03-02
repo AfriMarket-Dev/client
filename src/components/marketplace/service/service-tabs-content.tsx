@@ -7,6 +7,8 @@ import {
   RiMapPinLine,
 } from "@remixicon/react";
 import type { Service } from "@/app/api/services";
+import { ReviewList } from "../reviews/review-list";
+import { AddReviewDialog } from "../reviews/add-review-dialog";
 
 interface ServiceTabsContentProps {
   service: Service;
@@ -32,7 +34,7 @@ export const ServiceTabsContent: React.FC<ServiceTabsContentProps> = ({
             </h2>
           </div>
           <div className="prose prose-slate max-w-none">
-            <p className="text-slate-600 leading-relaxed text-sm">
+            <p className="text-slate-600 leading-relaxed text-xs">
               {service.description ||
                 "Detailed description of this professional construction service will appear here. The provider hasn't updated the full overview yet."}
             </p>
@@ -112,7 +114,7 @@ export const ServiceTabsContent: React.FC<ServiceTabsContentProps> = ({
               {service.company?.name?.charAt(0) || "S"}
             </div>
             <div className="flex-1">
-              <h3 className="text-xl font-black uppercase tracking-tight mb-2">
+              <h3 className="text-lg font-black uppercase tracking-tight mb-2">
                 {service.company?.name || "Professional Provider"}
               </h3>
               <div className="flex items-center gap-4 opacity-70 mb-4">
@@ -136,6 +138,26 @@ export const ServiceTabsContent: React.FC<ServiceTabsContentProps> = ({
             </div>
           </div>
         </section>
+      </div>
+    );
+  }
+
+  if (activeTab === "reviews") {
+    return (
+      <div className="space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-500">
+        <div className="flex justify-between items-center pb-6 border-b border-border/40">
+          <div className="space-y-1">
+            <h3 className="font-heading font-black uppercase text-xs tracking-[0.4em] text-foreground/40">
+              Service Feedback
+            </h3>
+            <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest">
+              Performance metrics from verified clients
+            </p>
+          </div>
+          <AddReviewDialog serviceId={service.id} />
+        </div>
+
+        <ReviewList serviceId={service.id} />
       </div>
     );
   }

@@ -35,8 +35,9 @@ export const HeroWidget: React.FC<HeroWidgetProps> = ({
 	className,
 	variant = "default",
 }) => {
-	// Ensure we always have 4 slots, filling with placeholders if needed
-	const displayItems = [...items, ...Array(4)].slice(0, 4);
+	// Ensure we always have 4 slots for consistent layout height, 
+	// but only show skeletons if we are loading or have no items yet.
+	const displayItems = items.length > 0 ? items : [];
 
 	const getVariantStyles = () => {
 		switch (variant) {
@@ -191,7 +192,7 @@ export const HeroWidget: React.FC<HeroWidgetProps> = ({
 												src={item.image}
 												alt={item.name || "Item Image"}
 												className="w-full h-full object-cover group-hover/item:scale-110 transition-transform duration-1000 ease-out"
-												fallbackSrc="https://placehold.co/100x100/e2e8f0/1e293b?text=Image"
+												fallbackSrc="/logo.svg"
 											/>
 										) : (
 											<div className="w-full h-full flex items-center justify-center bg-muted/50 text-muted-foreground">

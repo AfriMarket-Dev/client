@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 interface ProfileInfoCardProps {
   isEditing: boolean;
   formData: any;
+  isUpdating?: boolean;
   onEdit: () => void;
   onCancel: () => void;
   onSave: () => void;
@@ -16,6 +17,7 @@ interface ProfileInfoCardProps {
 export const ProfileInfoCard: React.FC<ProfileInfoCardProps> = ({
   isEditing,
   formData,
+  isUpdating,
   onEdit,
   onCancel,
   onSave,
@@ -159,10 +161,11 @@ export const ProfileInfoCard: React.FC<ProfileInfoCardProps> = ({
             <div className="flex gap-3 pt-4 border-t-2 border-border">
               <Button
                 onClick={onSave}
+                disabled={isUpdating}
                 className="flex-1 rounded-sm h-12 font-heading font-bold uppercase text-xs tracking-widest shadow-xl shadow-primary/20"
               >
                 <RiSaveLine size={16} className="mr-2" />
-                Synchronize
+                {isUpdating ? "Synchronizing..." : "Synchronize"}
               </Button>
               <Button
                 variant="outline"

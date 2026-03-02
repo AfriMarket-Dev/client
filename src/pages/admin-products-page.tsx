@@ -53,8 +53,14 @@ function toDateLabel(value?: string) {
 
 export default function AdminProductsPage() {
   const navigate = useNavigate();
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 10,
+  });
+
   const { data: productsResult, isLoading } = useGetProductsQuery({
-    limit: 100,
+    page: pagination.pageIndex + 1,
+    limit: pagination.pageSize,
     sortBy: "createdAt",
     sortOrder: "DESC",
   });
@@ -177,7 +183,7 @@ export default function AdminProductsPage() {
                 </Button>
               }
             />
-            <DropdownMenuContent align="end">
+            <DropdownMenuContent align="end" className="w-56">
               <DropdownMenuGroup>
                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
                 <DropdownMenuItem
@@ -242,6 +248,10 @@ export default function AdminProductsPage() {
             data={products}
             filterColumn="name"
             filterPlaceholder="Search products..."
+            manualPagination
+            pageCount={productsResult?.meta?.totalPages || 0}
+            onPaginationChange={setPagination}
+            state={{ pagination }}
           />
         )}
       </AdminCard>

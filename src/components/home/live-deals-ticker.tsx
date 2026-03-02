@@ -1,36 +1,43 @@
 import { useNavigate } from "@tanstack/react-router";
-import { RiPulseLine, RiShoppingCartLine } from "@remixicon/react";
+import { RiPulseLine, RiShieldFlashLine, RiBroadcastLine } from "@remixicon/react";
 import type React from "react";
 import { useEffect, useState } from "react";
 
-const MOCK_LIVE_ACTIVITIES = [
+const LIVE_NETWORK_FEED = [
 	{
 		id: 1,
-		user: "Contractor_KGL",
-		action: "purchased",
-		item: "Caterpillar 320 GC Excavator",
-		time: "2m ago",
+		entity: "KGL_Logistics",
+		action: "transmitted",
+		detail: "New Bulk Cement Inventory (5000+ Units)",
+		time: "1m ago",
 	},
 	{
 		id: 2,
-		user: "BuildRwanda Ltd",
-		action: "bid on",
-		item: "500 Bags of Cement",
-		time: "5m ago",
+		entity: "Eng_Mutesa",
+		action: "connected with",
+		detail: "Heavy Machinery Provider [Gasabo Node]",
+		time: "4m ago",
 	},
 	{
 		id: 3,
-		user: "Eng_Mutesa",
-		action: "viewing",
-		item: "Bosch Professional Drill Set",
+		entity: "BuildRwanda_Corp",
+		action: "broadcasted",
+		detail: "RFQ: Reinforcement Steel (12mm)",
 		time: "Just now",
 	},
 	{
 		id: 4,
-		user: "Kigali_Infra",
-		action: "ordered",
-		item: "Komatsu D65 Dozer",
-		time: "12m ago",
+		entity: "Infra_Systems",
+		action: "secured",
+		detail: "Logistics Contract for Regional Transit",
+		time: "10m ago",
+	},
+    {
+		id: 5,
+		entity: "System_Core",
+		action: "verified",
+		detail: "3 New Supplier Nodes Synchronized",
+		time: "Live",
 	},
 ];
 
@@ -40,56 +47,56 @@ export const LiveDealsTicker: React.FC = () => {
 
 	useEffect(() => {
 		const timer = setInterval(() => {
-			setCurrentIndex((prev) => (prev + 1) % MOCK_LIVE_ACTIVITIES.length);
-		}, 4000);
+			setCurrentIndex((prev) => (prev + 1) % LIVE_NETWORK_FEED.length);
+		}, 5000);
 		return () => clearInterval(timer);
 	}, []);
 
-	const activity = MOCK_LIVE_ACTIVITIES[currentIndex];
+	const feed = LIVE_NETWORK_FEED[currentIndex];
 
 	return (
-		<div className="w-full bg-slate-900 border-b border-white/5 py-1.5 md:py-2 overflow-hidden">
+		<div className="w-full bg-primary border-b border-primary/20 py-2 md:py-2.5 overflow-hidden shadow-lg shadow-primary/10">
 			<div className="max-w-[1600px] mx-auto px-4 lg:px-6 flex items-center justify-between">
 				<div className="flex items-center gap-4">
-					<div className="flex items-center gap-2 text-primary">
-						<span className="relative flex h-2 w-2">
-							<span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
-						</span>
-						<span className="text-[10px] font-bold uppercase tracking-widest font-heading">
-							Live
+					<div className="flex items-center gap-2 text-white">
+						<RiBroadcastLine size={14} className="animate-pulse" />
+						<span className="text-[10px] font-black uppercase tracking-[0.25em] font-heading">
+							Live Network Feed
 						</span>
 					</div>
 
-					<div className="h-4 w-[1px] bg-white/10" />
+					<div className="h-4 w-[1px] bg-white/20" />
 
-					<div className="flex items-center gap-2 text-xs text-slate-300 font-sans">
-						<span className="font-bold text-white">{activity.user}</span>
-						<span className="text-slate-500">{activity.action}</span>
+					<div className="flex items-center gap-2 text-[11px] text-white/90 font-sans tracking-tight">
+						<span className="font-black uppercase text-[10px]">{feed.entity}</span>
+						<span className="text-white/60 lowercase italic font-medium">{feed.action}</span>
 						<span
-							className="text-primary cursor-pointer hover:underline"
+							className="font-bold hover:underline cursor-pointer"
 							onClick={() => navigate({ to: "/marketplace" as any })}
 						>
-							<span className="truncate max-w-[120px] inline-block align-bottom">
-								{activity.item}
+							<span className="truncate max-w-[180px] md:max-w-none inline-block align-bottom uppercase">
+								{feed.detail}
 							</span>
 						</span>
-						<span className="hidden sm:inline text-[10px] text-slate-600 ml-2 font-mono">
-							[{activity.time}]
+						<span className="hidden sm:inline text-[9px] text-white/40 ml-2 font-mono font-bold">
+							[{feed.time}]
 						</span>
 					</div>
 				</div>
 
-				<div className="hidden md:flex items-center gap-6 text-[10px] font-bold uppercase tracking-widest text-slate-500">
+				<div className="hidden md:flex items-center gap-8 text-[9px] font-black uppercase tracking-[0.2em] text-white/70">
 					<div className="flex items-center gap-2">
-						<RiPulseLine className="w-3 h-3" />
-						<span>High Demand</span>
+						<RiShieldFlashLine size={14} className="text-white" />
+						<span>99.9% Nodes Active</span>
 					</div>
 					<div className="flex items-center gap-2">
-						<RiShoppingCartLine className="w-3 h-3" />
-						<span>124 Orders Today</span>
+						<RiPulseLine size={14} className="text-white" />
+						<span>RWF 1.2B Secured Flow</span>
 					</div>
 				</div>
 			</div>
 		</div>
 	);
 };
+
+export default LiveDealsTicker;

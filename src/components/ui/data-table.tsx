@@ -1,6 +1,7 @@
 import type {
 	ColumnDef,
 	ColumnFiltersState,
+	PaginationState,
 	SortingState,
 	VisibilityState,
 } from "@tanstack/react-table";
@@ -52,6 +53,12 @@ interface DataTableProps<TData, TValue> {
 	data: TData[];
 	filterColumn?: string;
 	filterPlaceholder?: string;
+	pageCount?: number;
+	manualPagination?: boolean;
+	onPaginationChange?: (pagination: any) => void;
+	state?: {
+		pagination?: PaginationState;
+	};
 }
 
 export function DataTable<TData, TValue>({
@@ -59,6 +66,10 @@ export function DataTable<TData, TValue>({
 	data,
 	filterColumn,
 	filterPlaceholder = "Filter...",
+	pageCount,
+	manualPagination,
+	onPaginationChange,
+	state: externalState,
 }: DataTableProps<TData, TValue>) {
 	const [sorting, setSorting] = React.useState<SortingState>([]);
 	const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -67,6 +78,10 @@ export function DataTable<TData, TValue>({
 	const [columnVisibility, setColumnVisibility] =
 		React.useState<VisibilityState>({});
 	const [rowSelection, setRowSelection] = React.useState({});
+	const [pagination, setPagination] = React.useState({
+		pageIndex: 0,
+		pageSize: 10,
+	});
 
 	const table = useReactTable({
 		data,
@@ -74,16 +89,20 @@ export function DataTable<TData, TValue>({
 		onSortingChange: setSorting,
 		onColumnFiltersChange: setColumnFilters,
 		getCoreRowModel: getCoreRowModel(),
-		getPaginationRowModel: getPaginationRowModel(),
+		getPaginationRowModel: manualPagination ? undefined : getPaginationRowModel(),
 		getSortedRowModel: getSortedRowModel(),
 		getFilteredRowModel: getFilteredRowModel(),
 		onColumnVisibilityChange: setColumnVisibility,
 		onRowSelectionChange: setRowSelection,
+		onPaginationChange: onPaginationChange || setPagination,
+		manualPagination,
+		pageCount,
 		state: {
 			sorting,
 			columnFilters,
 			columnVisibility,
 			rowSelection,
+			pagination: externalState?.pagination || pagination,
 		},
 	});
 
@@ -120,7 +139,7 @@ export function DataTable<TData, TValue>({
 							</Button>
 						}
 					/>
-					<DropdownMenuContent align="end" className="w-[150px]">
+					<DropdownMenuContent align="end" className="w-48">
 						<DropdownMenuGroup>
 							<DropdownMenuLabel>Toggle columns</DropdownMenuLabel>
 							<DropdownMenuSeparator />

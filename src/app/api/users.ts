@@ -1,5 +1,5 @@
 import { apiSlice } from "@/app/api/api-entry";
-import type { ApiResponse } from "@/app/api/types";
+import type { ApiResponse, PaginatedMeta } from "@/app/api/types";
 
 export interface UserProfile {
   id: string;
@@ -40,10 +40,25 @@ export const usersApi = apiSlice.injectEndpoints({
       invalidatesTags: ["Users", "Session"],
     }),
     getUsers: builder.query<
-      { data: UserProfile[]; meta: any },
+      { data: UserProfile[]; meta: PaginatedMeta },
       { page?: number; limit?: number }
     >({
       query: ({ page = 1, limit = 20 }) => `/users?page=${page}&limit=${limit}`,
+      transformResponse: (
+        response: ApiResponse<UserProfile[]>,
+      ): { data: UserProfile[]; meta: PaginatedMeta } => {
+        const data = Array.isArray(response.data) ? response.data : [];
+        const meta = response.meta ?? {};
+        return {
+          data,
+          meta: {
+            total: meta.total ?? data.length,
+            page: meta.page ?? 1,
+            limit: meta.limit ?? 20,
+            totalPages: meta.totalPages ?? 0,
+          },
+        };
+      },
       providesTags: ["Users"],
     }),
     getUserById: builder.query<UserProfile, string>({

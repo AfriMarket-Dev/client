@@ -1,4 +1,4 @@
-import { Outlet } from "@tanstack/react-router";
+import { Link, Outlet } from "@tanstack/react-router";
 import { useSelector } from "react-redux";
 import type { RootState } from "@/app/store";
 import {
@@ -8,6 +8,8 @@ import {
 } from "@/components/ui/sidebar";
 import { AdminSidebar } from "./admin/admin-sidebar";
 import { Separator } from "@/components/ui/separator";
+import { Button } from "@/components/ui/button";
+import { RiExternalLinkLine } from "@remixicon/react";
 
 export const AdminLayout = () => {
   const { user } = useSelector((state: RootState) => state.auth);
@@ -24,7 +26,17 @@ export const AdminLayout = () => {
               AfrikaMarket <span className="text-primary mx-2">/</span> Admin
               Control
             </h2>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-6">
+              <Link to="/">
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="text-[10px] font-black uppercase tracking-widest gap-2 h-9 px-4 border border-transparent hover:border-border"
+                >
+                  <RiExternalLinkLine size={14} />
+                  Public Site
+                </Button>
+              </Link>
               <div className="text-right hidden sm:block">
                 <p className="text-[10px] font-bold uppercase text-foreground leading-none">
                   {user?.name}

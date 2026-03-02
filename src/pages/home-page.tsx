@@ -7,6 +7,7 @@ import FeaturedServices from "@/components/home/featured-services";
 import Hero from "@/components/home/hero";
 import HotDeals from "@/components/home/hot-deals";
 import { MarketplaceSubNav } from "@/components/home/marketplace-sub-nav";
+import LiveDealsTicker from "@/components/home/live-deals-ticker";
 import NewArrivals from "@/components/home/new-arrivals";
 import ProductShowcase from "@/components/home/product-showcase";
 import PromoBanner from "@/components/home/promo-banner";
@@ -20,14 +21,21 @@ const HomePage: React.FC = () => {
 
   return (
     <div className="flex flex-col pb-20 industrial-grain bg-background min-h-screen">
+      <LiveDealsTicker />
       <MarketplaceSubNav />
       <Hero />
 
-      <HotDeals />
+      <div id="hot-deals">
+        <HotDeals />
+      </div>
 
-      <TrendingProducts />
+      <div id="trending">
+        <TrendingProducts />
+      </div>
 
-      <BestSellers />
+      <div id="best-sellers">
+        <BestSellers />
+      </div>
 
       <CategoryGrid />
 
@@ -60,7 +68,9 @@ const HomePage: React.FC = () => {
         ))}
       </div>
 
-      <NewArrivals />
+      <div id="new-arrivals">
+        <NewArrivals />
+      </div>
 
       <FeaturedServices />
 
@@ -72,7 +82,9 @@ const HomePage: React.FC = () => {
         variant="dark"
       />
 
-      <FeaturedProducts />
+      <div id="featured-products">
+        <FeaturedProducts />
+      </div>
 
       <CTASection />
 

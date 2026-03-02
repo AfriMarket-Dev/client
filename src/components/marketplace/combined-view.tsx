@@ -77,8 +77,8 @@ export const CombinedView: React.FC<CombinedViewProps> = ({
     return (
       <div
         className={cn(
-          "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8",
-          showFilters ? "xl:grid-cols-3" : "xl:grid-cols-4 2xl:grid-cols-5",
+          "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6",
+          showFilters ? "xl:grid-cols-4" : "xl:grid-cols-5 2xl:grid-cols-6",
         )}
       >
         {Array.from({ length: 9 }).map((_, i) => (
@@ -114,10 +114,10 @@ export const CombinedView: React.FC<CombinedViewProps> = ({
         className={cn(
           viewMode === "grid"
             ? cn(
-                "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8",
+                "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6",
                 showFilters
-                  ? "xl:grid-cols-3"
-                  : "xl:grid-cols-4 2xl:grid-cols-5",
+                  ? "xl:grid-cols-4"
+                  : "xl:grid-cols-5 2xl:grid-cols-6",
               )
             : "flex flex-col gap-6",
           isFetching && "opacity-60",
@@ -125,8 +125,8 @@ export const CombinedView: React.FC<CombinedViewProps> = ({
       >
         {items.map((item) => {
           const isService = item.itemType === "SERVICE";
+          const uniqueKey = `${item.id}-${item.itemType}`;
           const commonProps = {
-            key: item.id,
             viewMode,
             isInWishlist: isAuthenticated && wishlistIds.has(item.id),
             onToggleWishlist: (e: React.MouseEvent) =>
@@ -137,9 +137,9 @@ export const CombinedView: React.FC<CombinedViewProps> = ({
           };
 
           return isService ? (
-            <ServiceCard {...commonProps} service={item as any} />
+            <ServiceCard key={uniqueKey} {...commonProps} service={item as any} />
           ) : (
-            <ProductCard {...commonProps} product={item as any} />
+            <ProductCard key={uniqueKey} {...commonProps} product={item as any} />
           );
         })}
       </div>

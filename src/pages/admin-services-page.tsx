@@ -42,8 +42,14 @@ interface ServiceRow {
 
 export default function AdminServicesPage() {
   const navigate = useNavigate();
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 10,
+  });
+
   const { data: servicesResult, isLoading } = useGetServicesQuery({
-    limit: 100,
+    page: pagination.pageIndex + 1,
+    limit: pagination.pageSize,
     sortBy: "createdAt",
     sortOrder: "DESC",
   });
@@ -171,7 +177,7 @@ export default function AdminServicesPage() {
                 </Button>
               }
             />
-            <DropdownMenuContent align="end">
+            <DropdownMenuContent align="end" className="w-56">
               <DropdownMenuGroup>
                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
                 <DropdownMenuItem
@@ -227,6 +233,10 @@ export default function AdminServicesPage() {
             data={services}
             filterColumn="name"
             filterPlaceholder="Search services..."
+            manualPagination
+            pageCount={servicesResult?.meta?.totalPages || 0}
+            onPaginationChange={setPagination}
+            state={{ pagination }}
           />
         )}
       </AdminCard>

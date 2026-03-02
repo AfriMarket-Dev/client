@@ -22,26 +22,44 @@ interface ProductCardProps {
 }
 
 function firstPrice(product: MarketplaceItem): number {
-  if (product.price) return Number(product.price);
-  const v = (product as any).variants?.[0];
-  return v ? Number(v.price) : 0;
+  if ("price" in product && product.price) return Number(product.price);
+  if ("variants" in product) {
+    const v = product.variants?.[0];
+    return v ? Number(v.price) : 0;
+  }
+  return 0;
 }
 
 function firstImage(product: MarketplaceItem): string | null {
-  const v = (product as any).variants?.[0];
-  const imgs = v?.images;
-  return imgs?.length ? imgs[0] : (product as any).images?.[0] || null;
+  if ("variants" in product) {
+    const v = product.variants?.[0];
+    const imgs = v?.images;
+    if (imgs?.length) return imgs[0];
+  }
+  if ("images" in product && product.images?.length) {
+    return product.images[0];
+  }
+  return null;
 }
 
 function firstDiscount(product: MarketplaceItem): number {
-  if ((product as any).discount) return (product as any).discount;
-  const v = (product as any).variants?.[0];
-  return v?.discount || 0;
+  if ("discount" in product && typeof (product as any).discount === 'number') {
+    return (product as any).discount;
+  }
+  if ("variants" in product) {
+    const v = product.variants?.[0];
+    return v?.discount || 0;
+  }
+  return 0;
 }
 
 function firstUnit(product: MarketplaceItem): string {
-  const v = (product as any).variants?.[0];
-  return v?.unit || "UNIT";
+  if ("unit" in product && product.unit) return product.unit;
+  if ("variants" in product) {
+    const v = product.variants?.[0];
+    return v?.unit || "UNIT";
+  }
+  return "UNIT";
 }
 
 export const ProductCard: React.FC<ProductCardProps> = React.memo(

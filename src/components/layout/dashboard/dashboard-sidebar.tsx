@@ -2,7 +2,6 @@ import {
   RiDashboardLine,
   RiApps2Line,
   RiSettings4Line,
-  RiArrowLeftLine,
   RiFileList3Line,
   RiAddCircleLine,
 } from "@remixicon/react";
@@ -50,11 +49,6 @@ const navMain = [
     title: "Settings",
     url: "/profile",
     icon: RiSettings4Line,
-  },
-  {
-    title: "Exit",
-    url: "/",
-    icon: RiArrowLeftLine,
   },
 ];
 

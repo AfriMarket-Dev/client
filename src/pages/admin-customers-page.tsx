@@ -7,7 +7,7 @@ import {
   RiStarLine,
   RiUserLine,
 } from "@remixicon/react";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useGetCompaniesQuery } from "@/app/api/companies";
 import { AdminCard, AdminPageHeader, AdminStatCard } from "@/components/admin";
 import { Badge } from "@/components/ui/badge";
@@ -45,8 +45,14 @@ function formatDate(value?: string) {
 }
 
 export default function AdminCustomersPage() {
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 10,
+  });
+
   const { data: companiesResult, isLoading } = useGetCompaniesQuery({
-    limit: 100,
+    page: pagination.pageIndex + 1,
+    limit: pagination.pageSize,
   });
 
   const customers: CustomerRow[] = useMemo(() => {
@@ -143,7 +149,7 @@ export default function AdminCustomersPage() {
                 </Button>
               }
             />
-            <DropdownMenuContent align="end">
+            <DropdownMenuContent align="end" className="w-56">
               <DropdownMenuGroup>
                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
                 <DropdownMenuItem>
@@ -219,6 +225,10 @@ export default function AdminCustomersPage() {
             data={customers}
             filterColumn="name"
             filterPlaceholder="Search by name..."
+            manualPagination
+            pageCount={companiesResult?.meta?.totalPages || 0}
+            onPaginationChange={setPagination}
+            state={{ pagination }}
           />
         )}
       </AdminCard>

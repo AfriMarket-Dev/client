@@ -1,7 +1,8 @@
-import { RiChat3Line } from "@remixicon/react";
+import { Eye, History, ShieldCheck } from "lucide-react";
 import type React from "react";
 import { Button } from "@/components/ui/button";
-import type { Service } from "./types";
+import { RiChat3Line } from "@remixicon/react";
+import type { Service } from "@/app/api/services";
 
 interface ServiceInfoProps {
   service: Service;
@@ -13,84 +14,80 @@ export const ServiceInfo: React.FC<ServiceInfoProps> = ({
   onInquire,
 }) => {
   return (
-    <>
-      <div className="hidden md:block pb-12">
-        <div className="space-y-8">
-          <div className="flex items-center gap-4 text-primary">
-            <div className="w-12 h-px bg-primary/30" />
-            <span className="font-heading font-bold uppercase tracking-[0.3em] text-[10px] text-muted-foreground whitespace-nowrap">
-              Service
-            </span>
-            <div className="flex-1 h-px bg-border/20" />
+    <div className="space-y-6">
+      {/* Title & Badges */}
+      <div className="space-y-4">
+        <div className="flex flex-wrap items-center gap-3">
+          <div className="flex items-center gap-1.5 bg-muted/30 px-2 py-0.5 border border-border/10">
+            <Eye className="w-3 h-3 text-muted-foreground" />
+            <span className="text-[9px] font-black text-muted-foreground uppercase tracking-widest">{service.views || 0} Views</span>
           </div>
-
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-extrabold uppercase text-foreground tracking-tighter leading-[0.8] max-w-4xl">
-            {service.name}
-          </h1>
-
-          <div className="grid md:grid-cols-12 gap-8 items-start">
-            <div className="md:col-span-7">
-              <p className="text-xl text-muted-foreground font-light leading-relaxed">
-                {service.description}
-              </p>
+          <div className="flex items-center gap-1.5 bg-primary/5 px-2 py-0.5 border border-primary/10">
+            <History className="w-3 h-3 text-primary" />
+            <span className="text-[9px] font-black text-primary uppercase tracking-widest">{service.totalRequests || 0} Requests</span>
+          </div>
+          {service.company?.isVerified && (
+            <div className="flex items-center gap-1.5 bg-emerald-500/5 px-2 py-0.5 border border-emerald-500/10">
+              <ShieldCheck className="w-3 h-3 text-emerald-600" />
+              <span className="text-[9px] font-black text-emerald-600 uppercase tracking-widest">Certified</span>
             </div>
-            <div className="md:col-span-1 hidden md:flex justify-center pt-2">
-              <div className="w-px h-24 bg-border/30" />
-            </div>
-            <div className="md:col-span-4 flex flex-col justify-end">
-              <div className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest mb-2 opacity-60">
-                {service.priceType === "NEGOTIABLE"
-                  ? "Service Quotation"
-                  : "Active Rate"}
-              </div>
-              <div className="text-3xl font-heading font-bold text-foreground uppercase">
-                {service.priceType === "NEGOTIABLE" ? (
-                  "Price Negotiable"
-                ) : (
-                  <>
-                    {service.priceType === "STARTS_AT" && "Starts at "}
-                    RWF {Number(service.price || 0).toLocaleString()}
-                    {service.duration && (
-                      <span className="text-sm text-muted-foreground ml-2">
-                        / {service.duration}
-                      </span>
-                    )}
-                  </>
-                )}
-              </div>
+          )}
+        </div>
 
-              <Button
-                onClick={onInquire}
-                size="lg"
-                className="mt-6 rounded-none h-14 bg-primary text-primary-foreground hover:bg-primary/90 transition-all duration-300 font-heading font-bold uppercase tracking-[0.2em] text-[10px] shadow-lg shadow-primary/20"
-              >
-                <RiChat3Line size={16} className="mr-2" />
-                Place Inquiry
-              </Button>
-            </div>
+        <h1 className="text-2xl md:text-3xl lg:text-4xl font-display font-black uppercase text-foreground tracking-tight leading-tight">
+          {service.name}
+        </h1>
+      </div>
+
+      {/* Price Section - Prominent & Simple */}
+      <div className="py-6 border-y border-border/40">
+        <div className="flex flex-col gap-1">
+          <span className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em]">
+            {service.priceType === "NEGOTIABLE" ? "Service Quotation" : "Active Engagement Rate"}
+          </span>
+          <div className="flex items-baseline gap-2">
+            <span className="text-3xl md:text-4xl font-heading font-black text-foreground">
+              {service.priceType === "NEGOTIABLE" ? (
+                "Price Negotiable"
+              ) : (
+                <>
+                  {service.priceType === "STARTS_AT" && <span className="text-xs uppercase mr-1 text-muted-foreground font-bold tracking-widest">From</span>}
+                  RWF {Number(service.price || 0).toLocaleString()}
+                </>
+              )}
+            </span>
+            {service.priceType !== "NEGOTIABLE" && service.duration && (
+              <span className="text-xs text-muted-foreground font-black uppercase tracking-widest">
+                / {service.duration}
+              </span>
+            )}
           </div>
         </div>
       </div>
 
-      <div className="md:hidden space-y-4">
-        <div className="flex items-baseline gap-2">
-          <span className="text-3xl font-heading font-bold text-primary">
-            {service.priceType === "NEGOTIABLE"
-              ? "Negotiable"
-              : `RWF ${Number(service.price || 0).toLocaleString()}`}
-          </span>
-          <span className="text-muted-foreground font-bold uppercase text-[10px] tracking-widest">
-            {service.priceType === "STARTS_AT"
-              ? "/ STARTING"
-              : service.duration
-                ? `/ ${service.duration}`
-                : ""}
-          </span>
+      {/* Description */}
+      <div className="space-y-4">
+        <div className="flex items-center gap-2 text-muted-foreground">
+          <div className="w-6 h-px bg-border" />
+          <span className="text-[9px] font-black uppercase tracking-[0.3em]">Professional Brief</span>
         </div>
-        <p className="text-sm text-muted-foreground leading-relaxed">
-          {service.description}
+        <p className="text-sm md:text-base text-muted-foreground font-medium leading-relaxed max-w-2xl">
+          {service.description ||
+            "Professional industry service calibrated for enterprise requirements and reliability. Full capability details and service level agreements are outlined below."}
         </p>
       </div>
-    </>
+
+      {/* Primary Action */}
+      <div className="pt-4 flex flex-col sm:flex-row gap-4">
+        <Button
+          onClick={onInquire}
+          size="lg"
+          className="h-14 flex-1 rounded-none bg-foreground text-background hover:bg-foreground/90 transition-all duration-300 font-heading font-black uppercase tracking-[0.2em] text-[11px] shadow-xl"
+        >
+          <RiChat3Line size={18} className="mr-2" />
+          Initialize Service Engagement
+        </Button>
+      </div>
+    </div>
   );
 };

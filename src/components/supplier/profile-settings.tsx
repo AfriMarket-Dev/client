@@ -38,7 +38,7 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ supplierData }) => {
 		position: supplierData?.position || "Sales Manager",
 		avatar:
 			supplierData?.avatar ||
-			"https://images.pexels.com/photos/5668473/pexels-photo-5668473.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&fit=crop",
+			"/logo.svg",
 	});
 
 	const [companyData] = useState({
@@ -53,7 +53,7 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ supplierData }) => {
 		website: "https://afrotechimports.com",
 		coverImage:
 			supplierData?.coverImage ||
-			"https://images.pexels.com/photos/163064/play-stone-network-networked-interactive-163064.jpeg?auto=compress&cs=tinysrgb&w=800&h=300&fit=crop",
+			"/logo.svg",
 		specialties: supplierData?.specialties || [
 			"Electronics",
 			"Mobile Phones",

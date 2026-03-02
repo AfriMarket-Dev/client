@@ -1,14 +1,16 @@
-import { RiMenuLine } from "@remixicon/react";
+import { RiExternalLinkLine, RiMenuLine } from "@remixicon/react";
 import React, { useState, lazy } from "react";
+import { Link } from "@tanstack/react-router";
 import { DashboardOverview } from "@/components/layout/admin/dashboard-overview";
 import {
 	DashboardSidebar,
 	type DashboardTab,
 } from "@/components/layout/admin/dashboard-sidebar";
 import { SuspenseLoader } from "@/components/common/suspense-loader";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 const AnalyticsDashboard = lazy(() => import("./analytics-dashboard"));
-const InquiriesList = lazy(() => import("./inquiries-list"));
 const MessageCenter = lazy(() => import("./message-center"));
 const ProductManagement = lazy(() => import("./product-management"));
 const ProfileSettings = lazy(() => import("./profile-settings"));
@@ -47,39 +49,65 @@ const SupplierDashboard: React.FC<SupplierDashboardProps> = ({
 			) : null}
 
 			<div className="flex-1 flex flex-col h-screen overflow-hidden">
-				{/* Mobile Header */}
-				<header className="bg-background border-b border-border lg:hidden p-4 flex items-center justify-between">
+				{/* Dashboard Header */}
+				<header className="bg-background border-b border-border h-16 shrink-0 px-4 md:px-8 flex items-center justify-between z-30 sticky top-0">
 					<div className="flex items-center gap-3">
 						<button
 							onClick={() => setSidebarOpen(true)}
-							className="p-2 -ml-2 text-muted-foreground hover:text-foreground transition-colors"
+							className="lg:hidden p-2 -ml-2 text-muted-foreground hover:text-foreground transition-colors"
 						>
 							<RiMenuLine className="w-6 h-6" />
 						</button>
-						<span className="font-bold text-foreground uppercase tracking-wider text-sm">
-							Provider Portal
+						<span className="font-heading font-black text-foreground uppercase tracking-[0.2em] text-[11px]">
+							AfrikaMarket <span className="text-primary mx-1.5">/</span> Provider Portal
 						</span>
 					</div>
-					<div className="w-8 h-8 bg-muted rounded-full overflow-hidden border border-border">
-						<img
-							src={
-								supplierData?.avatar ||
-								"https://images.pexels.com/photos/5668473/pexels-photo-5668473.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&fit=crop"
-							}
-							className="w-full h-full object-cover"
-							alt=""
-						/>
+					
+					<div className="flex items-center gap-4 md:gap-8">
+						<Link to="/">
+							<Button 
+								variant="ghost" 
+								size="sm" 
+								className="text-[10px] font-black uppercase tracking-widest gap-2 h-9 px-4 border border-transparent hover:border-border hidden sm:flex"
+							>
+								<RiExternalLinkLine size={14} />
+								Public Site
+							</Button>
+							<Button variant="ghost" size="icon" className="sm:hidden h-9 w-9">
+								<RiExternalLinkLine size={16} />
+							</Button>
+						</Link>
+
+						<div className="flex items-center gap-3 pl-4 md:pl-8 border-l border-border/40">
+							<div className="text-right hidden md:block">
+								<p className="text-[10px] font-bold uppercase text-foreground leading-none">
+									{supplierData?.name || "Verified Supplier"}
+								</p>
+								<p className="text-[9px] font-mono text-muted-foreground mt-1">
+									PROVIDER NODE
+								</p>
+							</div>
+							<div className="w-9 h-9 bg-muted rounded-none overflow-hidden border border-border/40">
+								<img
+									src={supplierData?.avatar || "/logo.svg"}
+									className="w-full h-full object-cover"
+									alt=""
+								/>
+							</div>
+						</div>
 					</div>
 				</header>
 
-				<main className="flex-1 overflow-y-auto p-4 lg:p-8">
+				<main className={cn(
+					"flex-1 p-4 lg:p-8",
+					activeTab === "messages" ? "overflow-hidden flex flex-col" : "overflow-y-auto"
+				)}>
 					<SuspenseLoader>
 						{activeTab === "overview" ? (
 							<DashboardOverview onAddProduct={() => setActiveTab("products")} />
 						) : null}
 						{activeTab === "products" ? <ProductManagement /> : null}
-						{activeTab === "messages" ? <MessageCenter role="provider" /> : null}
-						{activeTab === "inquiries" ? <InquiriesList /> : null}
+						{activeTab === "messages" || activeTab === "inquiries" ? <MessageCenter role="provider" /> : null}
 						{activeTab === "analytics" ? <AnalyticsDashboard /> : null}
 						{activeTab === "settings" ? (
 							<ProfileSettings supplierData={supplierData} />

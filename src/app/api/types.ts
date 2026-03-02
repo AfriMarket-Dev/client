@@ -8,6 +8,16 @@ export interface ApiResponse<T> {
     limit?: number;
     totalPages?: number;
   };
+  /**
+   * Present on error responses from the backend HttpExceptionFilter.
+   * Most client code will instead rely on RTK Query error handling,
+   * but this keeps the shape aligned with the Nest ApiResponse.
+   */
+  error?: {
+    statusCode: number;
+    message: string | string[];
+    error: string;
+  };
   timestamp?: string;
   path?: string;
 }

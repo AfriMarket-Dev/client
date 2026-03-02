@@ -1,7 +1,8 @@
-import { RiStarFill } from "@remixicon/react";
-import type React from "react";
+import React from "react";
 import { Badge } from "@/components/ui/badge";
 import { TabsContent } from "@/components/ui/tabs";
+import { ReviewList } from "../reviews/review-list";
+import { AddReviewDialog } from "../reviews/add-review-dialog";
 
 interface ProductTabsContentProps {
   description: string;
@@ -23,7 +24,7 @@ export const ProductTabsContent: React.FC<ProductTabsContentProps> = ({
           <h3 className="font-heading font-black uppercase text-xs tracking-[0.4em] text-foreground/40 pb-4 border-b border-border/40">
             Material Information
           </h3>
-          <p className="text-sm leading-relaxed text-muted-foreground max-w-2xl">
+          <p className="text-xs leading-relaxed text-muted-foreground max-w-2xl">
             {description ||
               "Comprehensive technical details and description for this industrial asset are currently being finalized."}
           </p>
@@ -44,7 +45,7 @@ export const ProductTabsContent: React.FC<ProductTabsContentProps> = ({
                     {fact.label}
                   </span>
                   <div className="flex-1 border-b border-dashed border-border/60 mx-4 mb-1 group-hover:border-primary/40 transition-colors" />
-                  <span className="text-sm font-bold font-heading whitespace-nowrap">
+                  <span className="text-xs font-bold font-heading whitespace-nowrap">
                     {fact.value}
                   </span>
                 </div>
@@ -58,7 +59,7 @@ export const ProductTabsContent: React.FC<ProductTabsContentProps> = ({
         <div className="border border-border p-8 bg-muted/5">
           <div className="flex justify-between items-start border-b border-border/40 pb-6 mb-6">
             <div>
-              <h4 className="font-display font-bold text-xl uppercase tracking-tighter">
+              <h4 className="font-display font-bold text-lg uppercase tracking-tighter">
                 {variantName || "Standard Variant"}
               </h4>
               <span className="text-[10px] text-primary font-bold uppercase tracking-[0.2em]">
@@ -72,7 +73,7 @@ export const ProductTabsContent: React.FC<ProductTabsContentProps> = ({
               FACTORY READY
             </Badge>
           </div>
-          <p className="text-sm text-muted-foreground leading-relaxed">
+          <p className="text-xs text-muted-foreground leading-relaxed">
             Specifications for this hardware component are calibrated for
             standard industrial environments. For custom modifications or
             high-stress certifications, please contact the supplier directly.
@@ -80,16 +81,24 @@ export const ProductTabsContent: React.FC<ProductTabsContentProps> = ({
         </div>
       </TabsContent>
 
-      <TabsContent value="reviews" className="mt-12">
-        <div className="border border-border p-12 text-center bg-muted/5">
-          <RiStarFill className="w-12 h-12 mx-auto mb-6 text-primary/10" />
-          <h3 className="font-heading font-bold uppercase tracking-widest text-sm mb-2">
-            Awaiting Performance Metrics
-          </h3>
-          <p className="text-xs text-muted-foreground max-w-xs mx-auto">
-            No industrial reviews have been submitted for this product.
-          </p>
+      <TabsContent value="reviews" className="mt-12 space-y-12">
+        <div className="flex justify-between items-center pb-6 border-b border-border/40">
+          <div className="space-y-1">
+            <h3 className="font-heading font-black uppercase text-xs tracking-[0.4em] text-foreground/40">
+              Industrial Feedback
+            </h3>
+            <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest">
+              Performance metrics from verified partners
+            </p>
+          </div>
+          <AddReviewDialog
+            productId={keyFacts.find((f) => f.label === "ID")?.value || ""}
+          />
         </div>
+
+        <ReviewList
+          productId={keyFacts.find((f) => f.label === "ID")?.value || ""}
+        />
       </TabsContent>
     </>
   );

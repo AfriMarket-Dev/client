@@ -1,17 +1,20 @@
 import { MapPin, ShieldCheck, Star } from "lucide-react";
 import type React from "react";
 import { Badge } from "@/components/ui/badge";
+import { SupplierActions } from "./supplier-actions";
 
 interface SupplierHeaderProps {
   company: any;
   location: string;
   rating: number;
+  onContactClick?: () => void;
 }
 
 export const SupplierHeader: React.FC<SupplierHeaderProps> = ({
   company,
   location,
   rating,
+  onContactClick,
 }) => {
   return (
     <div className="grid md:grid-cols-[200px_1fr] gap-8 items-start">
@@ -34,16 +37,13 @@ export const SupplierHeader: React.FC<SupplierHeaderProps> = ({
       <div className="space-y-6">
         <div>
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-2">
-            <h1 className="text-3xl md:text-4xl font-heading font-bold uppercase text-foreground">
+            <h1 className="text-2xl md:text-3xl font-heading font-bold uppercase text-foreground">
               {company?.name}
             </h1>
             <div className="flex items-center gap-2">
               {company?.isVerified && (
-                <Badge
-                  variant="outline"
-                  className="rounded-full border-emerald-500/30 bg-emerald-500/10 text-emerald-500 gap-1 pl-1 pr-2 uppercase text-[10px] font-bold tracking-wider"
-                >
-                  <ShieldCheck className="w-3 h-3 fill-emerald-500 text-white" />{" "}
+                <Badge variant="success" className="rounded-sm">
+                  <ShieldCheck className="w-3 h-3" />
                   Verified Supplier
                 </Badge>
               )}
@@ -75,6 +75,10 @@ export const SupplierHeader: React.FC<SupplierHeaderProps> = ({
               "Leading supplier of construction materials and specialized services across Rwanda. Providing high-quality supplies and dedicated support for your projects."}
           </p>
         </div>
+
+        {onContactClick && (
+          <SupplierActions company={company} onContactClick={onContactClick} />
+        )}
       </div>
     </div>
   );

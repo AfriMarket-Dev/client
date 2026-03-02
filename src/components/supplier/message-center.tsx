@@ -1,5 +1,6 @@
 import {
 	ChevronLeft,
+	Loader2,
 	MessageSquare,
 	MoreVertical,
 	Paperclip,
@@ -9,84 +10,69 @@ import {
 	Smile,
 	Video,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useSelector } from "react-redux";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { cn } from "@/lib/utils";
-
-interface Message {
-	id: string;
-	senderId: string;
-	text: string;
-	timestamp: string;
-	isOwn: boolean;
-}
-
-interface Chat {
-	id: string;
-	name: string;
-	avatar: string;
-	lastMessage: string;
-	time: string;
-	unread: number;
-	online: boolean;
-}
+import { cn, handleRtkQueryError } from "@/lib/utils";
+import {
+	useGetConversationsQuery,
+	useGetChatHistoryQuery,
+	useSendMessageMutation,
+} from "@/app/api/messages";
+import type { RootState } from "@/app/store";
+import { format } from "date-fns";
 
 interface MessageCenterProps {
 	role: "buyer" | "provider";
 }
 
 const MessageCenter: React.FC<MessageCenterProps> = () => {
-	const [activeChat, setActiveChat] = useState<string | null>("1");
-	const [message, setMessage] = useState("");
+	const user = useSelector((state: RootState) => state.auth.user);
+	const [activeChatId, setActiveChatId] = useState<string | null>(null);
+	const [messageText, setMessageText] = useState("");
+	const messagesEndRef = useRef<HTMLDivElement>(null);
 
-	const chats: Chat[] = [
-		{
-			id: "1",
-			name: "Jean-Paul Habimana",
-			avatar:
-				"https://images.pexels.com/photos/5668473/pexels-photo-5668473.jpeg?auto=compress&cs=tinysrgb&w=100",
-			lastMessage: "Can we finalize the cement delivery?",
-			time: "10:30 AM",
-			unread: 2,
-			online: true,
-		},
-		{
-			id: "2",
-			name: "Alice Umutoni",
-			avatar:
-				"https://images.pexels.com/photos/5625120/pexels-photo-5625120.jpeg?auto=compress&cs=tinysrgb&w=100",
-			lastMessage: "Sent the quote for the steel bars.",
-			time: "Yesterday",
-			unread: 0,
-			online: false,
-		},
-	];
+	const { data: conversations, isLoading: isLoadingConversations } =
+		useGetConversationsQuery();
 
-	const messages: Message[] = [
-		{
-			id: "1",
-			senderId: "2",
-			text: "Hello, I'm inquiring about the premium cement.",
-			timestamp: "9:00 AM",
-			isOwn: false,
-		},
-		{
-			id: "2",
-			senderId: "1",
-			text: "Hi! Yes, we have 500 bags in stock.",
-			timestamp: "9:05 AM",
-			isOwn: true,
-		},
-		{
-			id: "3",
-			senderId: "2",
-			text: "Great. Can we finalize the cement delivery for next Tuesday?",
-			timestamp: "10:30 AM",
-			isOwn: false,
-		},
-	];
+	const { data: chatHistory, isLoading: isLoadingHistory } =
+		useGetChatHistoryQuery(
+			{ partnerId: activeChatId ?? "" },
+			{ skip: !activeChatId },
+		);
+
+	const [sendMessage, { isLoading: isSending }] = useSendMessageMutation();
+
+	const activeChat = conversations?.find((c) => c.partner.id === activeChatId);
+
+	const scrollToBottom = () => {
+		messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+	};
+
+	useEffect(() => {
+		if (chatHistory?.items) {
+			scrollToBottom();
+		}
+	}, [chatHistory?.items]);
+
+	const handleSendMessage = async (e: React.FormEvent) => {
+		e.preventDefault();
+		if (!messageText.trim() || !activeChatId || isSending) return;
+
+		try {
+			const text = messageText;
+			setMessageText(""); // Clear immediately for UX
+			await sendMessage({
+				receiverId: activeChatId,
+				content: text,
+			}).unwrap();
+		} catch (err) {
+			setMessageText(messageText); // Restore on error
+			handleRtkQueryError(err, "Failed to send message");
+		}
+	};
 
 	return (
 		<div className="flex h-full bg-background border border-border rounded-sm overflow-hidden shadow-2xl">
@@ -94,7 +80,7 @@ const MessageCenter: React.FC<MessageCenterProps> = () => {
 			<div
 				className={cn(
 					"w-full md:w-80 lg:w-96 border-r-2 border-border flex flex-col bg-muted/10",
-					activeChat && "hidden md:flex",
+					activeChatId && "hidden md:flex",
 				)}
 			>
 				<div className="p-6 border-b-2 border-border bg-background">
@@ -111,82 +97,86 @@ const MessageCenter: React.FC<MessageCenterProps> = () => {
 				</div>
 
 				<div className="flex-1 overflow-y-auto">
-					{chats.map((chat) => (
-						<button
-							key={chat.id}
-							onClick={() => setActiveChat(chat.id)}
-							className={cn(
-								"w-full p-4 flex items-start gap-4 hover:bg-muted/50 transition-all border-b-2 border-border/50 group text-left",
-								activeChat === chat.id
-									? "bg-background border-l-4 border-l-primary"
-									: "border-l-4 border-l-transparent",
-							)}
-						>
-							<div className="relative shrink-0">
-								<Avatar className="h-12 w-12 rounded-sm border border-border shadow-md">
-									<AvatarImage src={chat.avatar} />
-									<AvatarFallback className="font-heading font-bold">
-										{chat.name.charAt(0)}
-									</AvatarFallback>
-								</Avatar>
-								{chat.online && (
-									<div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-success rounded-full border border-background" />
+					{isLoadingConversations ? (
+						<div className="flex items-center justify-center h-full p-8">
+							<Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
+						</div>
+					) : conversations?.length === 0 ? (
+						<div className="p-8 text-center text-muted-foreground uppercase text-[10px] font-bold tracking-widest">
+							No transmissions found
+						</div>
+					) : (
+						conversations?.map((conv) => (
+							<button
+								key={conv.partner.id}
+								onClick={() => setActiveChatId(conv.partner.id)}
+								className={cn(
+									"w-full p-4 flex items-start gap-4 hover:bg-muted/50 transition-all border-b-2 border-border/50 group text-left",
+									activeChatId === conv.partner.id
+										? "bg-background border-l-4 border-l-primary"
+										: "border-l-4 border-l-transparent",
 								)}
-							</div>
-							<div className="flex-1 min-w-0">
-								<div className="flex justify-between items-start mb-1">
-									<span className="font-heading font-bold text-foreground text-sm uppercase truncate">
-										{chat.name}
-									</span>
-									<span className="text-[9px] font-black text-muted-foreground uppercase tracking-widest shrink-0">
-										{chat.time}
-									</span>
+							>
+								<div className="relative shrink-0">
+									<Avatar className="h-12 w-12 rounded-sm border border-border shadow-md">
+										<AvatarImage src={conv.partner.image} />
+										<AvatarFallback className="font-heading font-bold">
+											{conv.partner.name.charAt(0)}
+										</AvatarFallback>
+									</Avatar>
+									{/* Status marker could be dynamic if API supported it */}
+									<div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-success rounded-full border border-background" />
 								</div>
-								<p className="text-xs text-muted-foreground truncate font-medium uppercase tracking-tight">
-									{chat.lastMessage}
-								</p>
-							</div>
-							{chat.unread > 0 && (
-								<div className="bg-primary text-primary-foreground text-[10px] font-black h-5 w-5 rounded-full flex items-center justify-center shrink-0 shadow-lg shadow-primary/20">
-									{chat.unread}
+								<div className="flex-1 min-w-0">
+									<div className="flex justify-between items-start mb-1">
+										<span className="font-heading font-bold text-foreground text-sm uppercase truncate">
+											{conv.partner.name}
+										</span>
+										<span className="text-[9px] font-black text-muted-foreground uppercase tracking-widest shrink-0">
+											{conv.lastMessageAt ? format(new Date(conv.lastMessageAt), "HH:mm") : ""}
+										</span>
+									</div>
+									<p className="text-xs text-muted-foreground truncate font-medium uppercase tracking-tight">
+										{conv.lastMessage}
+									</p>
 								</div>
-							)}
-						</button>
-					))}
+							</button>
+						))
+					)}
 				</div>
 			</div>
 
 			{/* Main Chat Area */}
 			<div
 				className={cn(
-					"flex-1 flex flex-col bg-background",
-					!activeChat && "hidden md:flex",
+					"flex-1 flex flex-col bg-background relative",
+					!activeChatId && "hidden md:flex",
 				)}
 			>
-				{activeChat ? (
+				{activeChatId ? (
 					<>
-						<div className="h-20 border-b-2 border-border px-6 flex items-center justify-between bg-background/80 backdrop-blur-md relative z-10">
+						<div className="h-20 border-b-2 border-border px-6 flex items-center justify-between bg-background/80 backdrop-blur-md relative z-10 shrink-0">
 							<div className="flex items-center gap-4">
 								<Button
 									variant="ghost"
 									size="icon"
 									className="md:hidden"
-									onClick={() => setActiveChat(null)}
+									onClick={() => setActiveChatId(null)}
 								>
 									<ChevronLeft className="w-5 h-5" />
 								</Button>
 								<div className="flex items-center gap-3">
 									<Avatar className="h-10 w-10 rounded-sm border border-border">
 										<AvatarImage
-											src={chats.find((c) => c.id === activeChat)?.avatar}
+											src={activeChat?.partner.image}
 										/>
 										<AvatarFallback className="font-heading font-bold">
-											J
+											{activeChat?.partner.name.charAt(0)}
 										</AvatarFallback>
 									</Avatar>
 									<div>
 										<div className="font-heading font-bold text-foreground text-sm uppercase tracking-widest">
-											{chats.find((c) => c.id === activeChat)?.name}
+											{activeChat?.partner.name}
 										</div>
 										<div className="flex items-center text-success text-[10px] font-black uppercase tracking-[0.2em]">
 											<div className="w-1.5 h-1.5 bg-success rounded-full mr-1.5 animate-pulse" />
@@ -220,53 +210,64 @@ const MessageCenter: React.FC<MessageCenterProps> = () => {
 							</div>
 						</div>
 
-						<div className="flex-1 overflow-y-auto p-6 space-y-6 bg-muted/5 relative">
+						<div className="flex-1 overflow-y-auto p-6 space-y-6 bg-muted/5 relative min-h-0">
 							<div className="absolute inset-0 african-pattern opacity-5 pointer-events-none" />
-							{messages.map((msg) => (
-								<div
-									key={msg.id}
-									className={cn(
-										"flex",
-										msg.isOwn ? "justify-end" : "justify-start",
-									)}
-								>
-									<div
-										className={cn(
-											"max-w-[80%] lg:max-w-[60%] rounded-sm p-4 relative border",
-											msg.isOwn
-												? "bg-foreground text-background border-foreground shadow-xl"
-												: "bg-background text-foreground border-border",
-										)}
-									>
-										<p
-											className={cn(
-												"text-sm font-medium leading-relaxed",
-												msg.isOwn ? "" : "font-mono italic",
-											)}
-										>
-											{msg.text}
-										</p>
-										<div
-											className={cn(
-												"text-[8px] font-black uppercase tracking-widest mt-2",
-												msg.isOwn
-													? "text-background/60 text-right"
-													: "text-muted-foreground",
-											)}
-										>
-											{msg.timestamp}
-										</div>
-									</div>
+							{isLoadingHistory ? (
+								<div className="flex items-center justify-center h-full">
+									<Loader2 className="w-8 h-8 animate-spin text-primary" />
 								</div>
-							))}
+							) : (
+								chatHistory?.items.map((msg) => {
+									const isOwn = msg.sender.id === user?.id;
+									return (
+										<div
+											key={msg.id}
+											className={cn(
+												"flex",
+												isOwn ? "justify-end" : "justify-start",
+											)}
+										>
+											<div
+												className={cn(
+													"max-w-[80%] lg:max-w-[60%] rounded-sm p-4 relative border",
+													isOwn
+														? "bg-foreground text-background border-foreground shadow-xl"
+														: "bg-background text-foreground border-border",
+												)}
+											>
+												<p
+													className={cn(
+														"text-sm font-medium leading-relaxed",
+														isOwn ? "" : "font-mono italic",
+													)}
+												>
+													{msg.content}
+												</p>
+												<div
+													className={cn(
+														"text-[8px] font-black uppercase tracking-widest mt-2",
+														isOwn
+															? "text-background/60 text-right"
+															: "text-muted-foreground",
+													)}
+												>
+													{format(new Date(msg.createdAt), "HH:mm")}
+												</div>
+											</div>
+										</div>
+									);
+								})
+							)}
+							<div ref={messagesEndRef} />
 						</div>
 
-						<div className="p-6 border-t-2 border-border bg-background">
+						<div className="p-6 border-t-2 border-border bg-background shrink-0">
 							<form
 								className="flex items-center gap-3"
-								onSubmit={(e) => e.preventDefault()}
+								onSubmit={handleSendMessage}
 							>
 								<Button
+									type="button"
 									variant="outline"
 									size="icon"
 									className="h-12 w-12 border border-border rounded-sm hover:bg-muted shrink-0"
@@ -275,10 +276,11 @@ const MessageCenter: React.FC<MessageCenterProps> = () => {
 								</Button>
 								<div className="relative flex-1">
 									<Input
-										value={message}
-										onChange={(e) => setMessage(e.target.value)}
+										value={messageText}
+										onChange={(e) => setMessageText(e.target.value)}
 										placeholder="TYPE TRANSMISSION..."
 										className="h-12 bg-muted/10 border border-border rounded-sm px-4 pr-12 font-bold uppercase text-xs tracking-wider shadow-none focus:bg-background"
+										disabled={isSending}
 									/>
 									<button
 										type="button"
@@ -287,8 +289,15 @@ const MessageCenter: React.FC<MessageCenterProps> = () => {
 										<Smile className="w-5 h-5" />
 									</button>
 								</div>
-								<Button className="h-12 px-6 rounded-sm font-heading font-bold uppercase tracking-widest shadow-lg shadow-primary/20 shrink-0">
-									<Send className="w-4 h-4 mr-2" />
+								<Button 
+									className="h-12 px-6 rounded-sm font-heading font-bold uppercase tracking-widest shadow-lg shadow-primary/20 shrink-0"
+									disabled={isSending || !messageText.trim()}
+								>
+									{isSending ? (
+										<Loader2 className="w-4 h-4 mr-2 animate-spin" />
+									) : (
+										<Send className="w-4 h-4 mr-2" />
+									)}
 									Send
 								</Button>
 							</form>

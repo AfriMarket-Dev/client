@@ -1,7 +1,5 @@
 export { default as AnalyticsDashboard } from "./analytics-dashboard";
-export { default as ConstructionSuppliers } from "./construction-suppliers";
 export { default as FeaturedSuppliers } from "./featured-suppliers";
-export { default as InquiriesList } from "./inquiries-list";
 export { default as MessageCenter } from "./message-center";
 export { default as ProductManagement } from "./product-management";
 export { default as ProfileSettings } from "./profile-settings";

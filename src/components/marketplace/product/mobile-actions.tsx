@@ -5,13 +5,13 @@ import {
   RiShareForwardLine,
   RiWhatsappLine,
 } from "@remixicon/react";
-import type React from "react";
+import React from "react";
 import { Button } from "@/components/ui/button";
-import type { Service } from "./types";
 import { shareContent } from "@/lib/utils";
 
 interface MobileActionsProps {
-  service: Service;
+  productName: string;
+  phone?: string;
   isInWishlist: boolean;
   onToggleWishlist: () => void;
   onContactClick: () => void;
@@ -22,18 +22,17 @@ interface MobileActionsProps {
 }
 
 export const MobileActions: React.FC<MobileActionsProps> = ({
-  service,
+  productName,
+  phone,
   isInWishlist,
   onToggleWishlist,
   onContactClick,
   trackAndNavigate,
 }) => {
-  const phone = service?.company?.phone ?? "";
-
   const handleShare = () => {
     shareContent({
-      title: service.name || "Professional Service",
-      text: `Check out this service: ${service.name}`,
+      title: productName || "Industrial Material",
+      text: `Check out this material: ${productName}`,
       url: window.location.href,
     });
   };
