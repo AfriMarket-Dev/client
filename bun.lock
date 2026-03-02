@@ -51,6 +51,7 @@
         "@vitejs/plugin-react": "^5.1.1",
         "@vitest/coverage-v8": "^4.0.18",
         "babel-plugin-react-compiler": "^1.0.0",
+        "husky": "^9.1.7",
         "jsdom": "^27.0.0",
         "typescript": "~5.9.3",
         "vite": "^7.3.1",
@@ -952,6 +953,8 @@
     "https-proxy-agent": ["https-proxy-agent@7.0.6", "", { "dependencies": { "agent-base": "^7.1.2", "debug": "4" } }, ""],
 
     "human-signals": ["human-signals@8.0.1", "", {}, ""],
+
+    "husky": ["husky@9.1.7", "", { "bin": { "husky": "bin.js" } }, "sha512-5gs5ytaNjBrh5Ow3zrvdUUY+0VxIuWVL4i9irt6friV+BqdCfmV11CQTWMiBYWHbXhco+J1kHfTOUkePhCDvMA=="],
 
     "iconv-lite": ["iconv-lite@0.7.2", "", { "dependencies": { "safer-buffer": ">= 2.1.2 < 3.0.0" } }, ""],
 

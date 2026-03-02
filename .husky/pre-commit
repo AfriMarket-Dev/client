@@ -1,0 +1,12 @@
+echo "🔍 Running pre-commit checks..."
+
+# Run linting
+bun run lint || exit 1
+
+# Run type checking
+bunx tsc --noEmit || exit 1
+
+# Run tests
+bun run test || exit 1
+
+echo "✅ All checks passed!"
