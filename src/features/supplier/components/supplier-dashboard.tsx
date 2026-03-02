@@ -114,7 +114,7 @@ const SupplierDashboard: React.FC<SupplierDashboardProps> = ({
 						) : null}
 						{activeTab === "products" ? <ProductManagement /> : null}
 						{activeTab === "messages" || activeTab === "inquiries" ? (
-							<MessageCenter />
+							<MessageCenter role="provider" />
 						) : null}
 						{activeTab === "analytics" ? <AnalyticsDashboard /> : null}
 						{activeTab === "settings" ? (
