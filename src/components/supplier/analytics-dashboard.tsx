@@ -48,13 +48,13 @@ const AnalyticsDashboard: React.FC = () => {
 				description: "Customer calls, messages, and shares",
 			},
 			{
-				label: "Entity Nodes",
+				label: "Active Suppliers",
 				value: overview.companiesCount.toString(),
 				change: "Live",
 				trend: "up" as const,
 				icon: TrendingUp,
 				color: "primary",
-				description: "Verified supplier accounts managed",
+				description: "Total verified supplier accounts",
 			},
 			{
 				label: "Trust Score",
@@ -124,7 +124,7 @@ const AnalyticsDashboard: React.FC = () => {
 	const recentActivities = [
 		{
 			type: "system",
-			message: "Supply node analytics active and monitoring live transmissions.",
+			message: "Supplier analytics active and monitoring live activities.",
 			time: "Real-time",
 			icon: Activity,
 			color: "text-primary bg-primary/10",
@@ -175,10 +175,10 @@ const AnalyticsDashboard: React.FC = () => {
 			<div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
 				<div>
 					<h2 className="text-3xl font-display font-black uppercase text-foreground tracking-tight leading-tight">
-						Analytics Terminal
+						Analytics Dashboard
 					</h2>
 					<p className="text-muted-foreground font-medium uppercase text-xs tracking-widest mt-1">
-						Direct operational metrics and network insights
+						Direct performance metrics and business insights
 					</p>
 				</div>
 				<div className="flex items-center space-x-4">

@@ -29,9 +29,11 @@ export default function AdminCategoriesPage() {
 		null,
 	);
 	const [deleteConfirmation, setDeleteConfirmation] = useState("");
+	const [page, setPage] = useState(1);
 
 	const { data: categoriesResult, isLoading } = useGetProductCategoriesQuery({
-		limit: 100,
+		page,
+		limit: 12,
 	});
 	const [createCategory, { isLoading: creating }] =
 		useCreateProductCategoryMutation();
@@ -163,6 +165,32 @@ export default function AdminCategoriesPage() {
 					))
 				)}
 			</div>
+
+			{categoriesResult?.meta && categoriesResult.meta.totalPages > 1 && (
+				<div className="flex justify-center gap-2 mt-8 pt-6 border-t border-border">
+					<Button
+						variant="outline"
+						size="sm"
+						disabled={page <= 1}
+						onClick={() => setPage((p) => p - 1)}
+						className="rounded-sm h-10 px-6 font-bold uppercase text-[10px] tracking-widest"
+					>
+						Previous
+					</Button>
+					<span className="flex items-center px-4 text-[10px] font-black uppercase tracking-widest text-muted-foreground/40">
+						Page {page} of {categoriesResult.meta.totalPages}
+					</span>
+					<Button
+						variant="outline"
+						size="sm"
+						disabled={page >= categoriesResult.meta.totalPages}
+						onClick={() => setPage((p) => p + 1)}
+						className="rounded-sm h-10 px-6 font-bold uppercase text-[10px] tracking-widest"
+					>
+						Next
+					</Button>
+				</div>
+			)}
 
 			<ActionModal
 				isOpen={showAddModal}

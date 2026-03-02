@@ -22,14 +22,14 @@ export const EncryptionKeyCard: React.FC<EncryptionKeyCardProps> = ({
 }) => {
   return (
     <AdminCard
-      title="Encryption Key"
-      subtitle="Rotate access credentials"
+      title="Change Password"
+      subtitle="Update your login credentials"
       headerActions={<RiLockLine size={16} className="text-primary" />}
     >
       <div className="space-y-6">
         <div className="space-y-2">
           <label className="block text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground ml-1">
-            Active Key
+            Current Password
           </label>
           <div className="relative">
             <input
@@ -51,7 +51,7 @@ export const EncryptionKeyCard: React.FC<EncryptionKeyCardProps> = ({
 
         <div className="space-y-2">
           <label className="block text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground ml-1">
-            New Key Matrix
+            New Password
           </label>
           <div className="relative">
             <input
@@ -73,7 +73,7 @@ export const EncryptionKeyCard: React.FC<EncryptionKeyCardProps> = ({
 
         <div className="space-y-2">
           <label className="block text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground ml-1">
-            Key Verification
+            Confirm New Password
           </label>
           <input
             type="password"
@@ -86,7 +86,7 @@ export const EncryptionKeyCard: React.FC<EncryptionKeyCardProps> = ({
         </div>
 
         <Button className="w-full h-12 rounded-sm font-heading font-bold uppercase text-xs tracking-widest mt-2 shadow-lg shadow-primary/10">
-          Rotate Access Key
+          Update Password
         </Button>
       </div>
     </AdminCard>
@@ -106,8 +106,8 @@ export const HardenedProtocolCard: React.FC<HardenedProtocolCardProps> = ({
 }) => {
   return (
     <AdminCard
-      title="Hardened Protocol"
-      subtitle="Account fortification parameters"
+      title="Login Security"
+      subtitle="Fortify your account access"
       headerActions={<RiShieldLine size={16} className="text-primary" />}
     >
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -115,10 +115,10 @@ export const HardenedProtocolCard: React.FC<HardenedProtocolCardProps> = ({
           <div className="flex items-center justify-between p-5 bg-muted/30 border border-border rounded-sm">
             <div className="min-w-0 pr-4">
               <p className="font-heading font-bold text-sm text-foreground uppercase tracking-widest leading-none mb-2">
-                Double Factor
+                Two-Factor Auth
               </p>
               <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-tight">
-                Cryptographic verification requirement
+                Add an extra layer of protection
               </p>
             </div>
             <button
@@ -142,10 +142,10 @@ export const HardenedProtocolCard: React.FC<HardenedProtocolCardProps> = ({
           <div className="flex items-center justify-between p-5 bg-muted/30 border border-border rounded-sm">
             <div className="min-w-0 pr-4">
               <p className="font-heading font-bold text-sm text-foreground uppercase tracking-widest leading-none mb-2">
-                Access Alerts
+                Login Alerts
               </p>
               <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-tight">
-                Notify on new session establishment
+                Get notified of new logins
               </p>
             </div>
             <button
@@ -171,10 +171,10 @@ export const HardenedProtocolCard: React.FC<HardenedProtocolCardProps> = ({
           <div className="absolute inset-0 african-pattern opacity-10 invert" />
           <div className="relative z-10">
             <p className="text-[10px] font-black uppercase tracking-[0.2em] text-primary mb-2">
-              Auto-Termination
+              Automatic Logout
             </p>
             <h4 className="text-xl font-heading font-bold uppercase mb-4 leading-none">
-              Session Pulse
+              Session Timeout
             </h4>
             <div className="space-y-4">
               <select
@@ -183,21 +183,20 @@ export const HardenedProtocolCard: React.FC<HardenedProtocolCardProps> = ({
                 className="w-full px-4 py-3 border border-background/20 rounded-sm focus:outline-none focus:ring-1 focus:ring-primary text-xs font-heading font-bold uppercase tracking-widest h-12 bg-background/5 text-background"
               >
                 <option value={30} className="text-foreground">
-                  30 CYCLE PULSE
+                  30 MINUTES
                 </option>
                 <option value={60} className="text-foreground">
-                  60 CYCLE PULSE
+                  1 HOUR
                 </option>
                 <option value={120} className="text-foreground">
-                  120 CYCLE PULSE
+                  2 HOURS
                 </option>
                 <option value={480} className="text-foreground">
-                  EXTENDED PULSE (8H)
+                  8 HOURS
                 </option>
               </select>
               <p className="text-[9px] text-muted-foreground uppercase font-bold tracking-widest">
-                Active sessions will be purged after the specified interval of
-                inactivity.
+                You will be logged out automatically after being inactive.
               </p>
             </div>
           </div>

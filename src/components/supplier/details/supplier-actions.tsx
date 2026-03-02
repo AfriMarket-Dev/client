@@ -80,7 +80,7 @@ export const SupplierActions: React.FC<SupplierActionsProps> = ({
 				onClick={onContactClick}
 			>
 				<RiMessage2Line size={16} className="mr-2" />
-				Initialize Inquiry
+				Send Inquiry
 			</Button>
 			
 			<div className="flex items-center gap-2">
@@ -109,7 +109,7 @@ export const SupplierActions: React.FC<SupplierActionsProps> = ({
 					variant="outline"
 					className="rounded-none h-12 font-heading font-black uppercase tracking-widest text-[10px] px-6 gap-2 border-border hover:bg-primary hover:text-white hover:border-primary transition-all duration-300"
 				>
-					<RiHeartLine size={16} /> Save Node
+					<RiHeartLine size={16} /> Save to Favorites
 				</Button>
 			</div>
 		</div>

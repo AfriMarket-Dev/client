@@ -85,12 +85,12 @@ const MessageCenter: React.FC<MessageCenterProps> = () => {
 			>
 				<div className="p-6 border-b-2 border-border bg-background">
 					<h2 className="text-xl font-heading font-bold uppercase tracking-widest text-foreground mb-4">
-						Transmission Hub
+						Message Hub
 					</h2>
 					<div className="relative">
 						<Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4" />
 						<Input
-							placeholder="SEARCH CHANNELS..."
+							placeholder="SEARCH CHATS..."
 							className="pl-10 h-11 bg-muted/20 border border-border uppercase text-[10px] font-bold tracking-widest shadow-none"
 						/>
 					</div>
@@ -103,7 +103,7 @@ const MessageCenter: React.FC<MessageCenterProps> = () => {
 						</div>
 					) : conversations?.length === 0 ? (
 						<div className="p-8 text-center text-muted-foreground uppercase text-[10px] font-bold tracking-widest">
-							No transmissions found
+							No messages found
 						</div>
 					) : (
 						conversations?.map((conv) => (
@@ -180,7 +180,7 @@ const MessageCenter: React.FC<MessageCenterProps> = () => {
 										</div>
 										<div className="flex items-center text-success text-[10px] font-black uppercase tracking-[0.2em]">
 											<div className="w-1.5 h-1.5 bg-success rounded-full mr-1.5 animate-pulse" />
-											Encrypted Link
+											Active Connection
 										</div>
 									</div>
 								</div>
@@ -278,7 +278,7 @@ const MessageCenter: React.FC<MessageCenterProps> = () => {
 									<Input
 										value={messageText}
 										onChange={(e) => setMessageText(e.target.value)}
-										placeholder="TYPE TRANSMISSION..."
+										placeholder="TYPE A MESSAGE..."
 										className="h-12 bg-muted/10 border border-border rounded-sm px-4 pr-12 font-bold uppercase text-xs tracking-wider shadow-none focus:bg-background"
 										disabled={isSending}
 									/>
@@ -310,10 +310,10 @@ const MessageCenter: React.FC<MessageCenterProps> = () => {
 							<MessageSquare className="w-10 h-10 text-muted-foreground/40" />
 						</div>
 						<h3 className="text-2xl font-heading font-bold text-foreground uppercase tracking-widest mb-2 relative z-10">
-							Transmission Standby
+							Messaging Standby
 						</h3>
 						<p className="text-muted-foreground text-xs font-black uppercase tracking-[0.2em] max-w-xs leading-loose relative z-10">
-							Select a secure node from the hub to initialize communication
+							Select a profile from the sidebar to start a conversation
 						</p>
 					</div>
 				)}

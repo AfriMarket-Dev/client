@@ -62,7 +62,7 @@ const SupplierDetails: React.FC<SupplierDetailsProps> = ({
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="animate-pulse text-muted-foreground uppercase text-[10px] font-bold tracking-[0.2em]">
-          Accessing Supply Node...
+          Loading Supplier Details...
         </div>
       </div>
     );
@@ -73,7 +73,7 @@ const SupplierDetails: React.FC<SupplierDetailsProps> = ({
       <div className="min-h-screen bg-muted/30 flex items-center justify-center">
         <div className="text-center">
           <h2 className="text-2xl font-bold text-foreground mb-4 uppercase tracking-tighter">
-            Node Offline: Supplier Not Found
+            Supplier Not Found
           </h2>
           <Button onClick={onBack} variant="outline" className="rounded-none">
             Back to Directory

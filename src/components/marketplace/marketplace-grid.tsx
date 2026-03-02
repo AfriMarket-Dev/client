@@ -154,34 +154,34 @@ const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({
               <div className="flex items-center gap-2">
                 <div className="h-[1px] w-6 bg-primary" />
                 <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-[0.3em]">
-                  Procurement Infrastructure
+                  Supply Chain Network
                 </p>
               </div>
             </div>
 
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-              <Tabs
-                value={filters.type}
+              <Tabs 
+                value={filters.type} 
                 onValueChange={(v) => patchFilters({ type: v as any, page: 1 })}
                 className="w-full sm:w-auto"
               >
                 <TabsList className="h-9 bg-muted/20 border border-border/10 p-0.5 rounded-none">
-                  <TabsTrigger
-                    value="all"
+                  <TabsTrigger 
+                    value="all" 
                     className="rounded-none px-4 text-[9px] font-bold uppercase tracking-widest data-[state=active]:bg-background data-[state=active]:text-primary data-[state=active]:shadow-none h-full"
                   >
                     <Layers className="w-3 h-3 mr-1.5" />
-                    All
+                    All Items
                   </TabsTrigger>
-                  <TabsTrigger
-                    value="PRODUCT"
+                  <TabsTrigger 
+                    value="PRODUCT" 
                     className="rounded-none px-4 text-[9px] font-bold uppercase tracking-widest data-[state=active]:bg-background data-[state=active]:text-primary data-[state=active]:shadow-none h-full"
                   >
                     <Package className="w-3 h-3 mr-1.5" />
                     Materials
                   </TabsTrigger>
-                  <TabsTrigger
-                    value="SERVICE"
+                  <TabsTrigger 
+                    value="SERVICE" 
                     className="rounded-none px-4 text-[9px] font-bold uppercase tracking-widest data-[state=active]:bg-background data-[state=active]:text-primary data-[state=active]:shadow-none h-full"
                   >
                     <Wrench className="w-3 h-3 mr-1.5" />
@@ -221,7 +221,7 @@ const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({
               <div className="flex items-center justify-between mb-6 pb-3 border-b border-border/50 pr-4">
                 <h2 className="text-[10px] font-display font-black uppercase tracking-[0.2em] flex items-center gap-2">
                   <SlidersHorizontal className="w-3.5 h-3.5 text-primary" />
-                  Filters
+                  Filter Search
                 </h2>
                 {hasActiveFilters ? (
                   <Button
@@ -230,7 +230,7 @@ const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({
                     className="h-5 px-0 text-[8px] uppercase font-black tracking-widest text-muted-foreground/60 hover:text-destructive hover:bg-transparent"
                     onClick={resetFilters}
                   >
-                    Reset
+                    Clear All
                   </Button>
                 ) : null}
               </div>
@@ -257,8 +257,7 @@ const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({
                   size="icon"
                   className={cn(
                     "hidden lg:flex shrink-0 rounded-none border-border/40 h-10 w-10",
-                    showFilters &&
-                      "bg-foreground text-background border-foreground hover:bg-foreground/90",
+                    showFilters && "bg-foreground text-background border-foreground hover:bg-foreground/90",
                   )}
                   onClick={() => setShowFilters(!showFilters)}
                 >
@@ -279,7 +278,7 @@ const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({
                     >
                       <span className="flex items-center gap-2">
                         <Filter className="w-3.5 h-3.5" />
-                        Params
+                        Filters
                         {hasActiveFilters ? (
                           <Badge
                             variant="secondary"
@@ -299,7 +298,7 @@ const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({
                     <CollapsibleContent className="mt-4 p-6 border rounded-none border-border bg-background space-y-8 animate-in fade-in slide-in-from-top-4 duration-300">
                       <div className="flex items-center justify-between">
                         <h3 className="font-display font-black uppercase text-xs tracking-[0.2em]">
-                          System Filters
+                          Search Filters
                         </h3>
                         {hasActiveFilters ? (
                           <Button
@@ -324,7 +323,7 @@ const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({
                         onClick={() => setIsMobileFiltersOpen(false)}
                         className="w-full rounded-none font-display font-black uppercase tracking-widest h-14"
                       >
-                        Apply Parameters
+                        Apply Filters
                       </Button>
                     </CollapsibleContent>
                   </Collapsible>
@@ -333,7 +332,7 @@ const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({
                 <div className="relative flex-1 group">
                   <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground/30 group-focus-within:text-primary transition-colors" />
                   <Input
-                    placeholder="Search..."
+                    placeholder="SEARCH MARKETPLACE..."
                     className="pl-11 bg-muted/10 border-border/40 rounded-none focus:ring-0 focus:border-primary/60 h-10 w-full font-display font-bold uppercase tracking-wider text-[10px] transition-all"
                     value={searchInput}
                     onChange={(e) => setSearchInput(e.target.value)}

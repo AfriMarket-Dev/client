@@ -101,7 +101,7 @@ export const ProductInfo: React.FC<ProductInfoProps> = ({
           className="h-14 flex-1 rounded-none bg-primary text-white hover:bg-primary/90 transition-all duration-300 font-heading font-black uppercase tracking-[0.2em] text-[11px] shadow-lg shadow-primary/20"
         >
           <RiChat3Line size={18} className="mr-2" />
-          Initialize Procurement Inquiry
+          Send Inquiry
         </Button>
       </div>
     </div>

@@ -84,7 +84,7 @@ const SupplierDashboard: React.FC<SupplierDashboardProps> = ({
 									{supplierData?.name || "Verified Supplier"}
 								</p>
 								<p className="text-[9px] font-mono text-muted-foreground mt-1">
-									PROVIDER NODE
+									SUPPLIER PROFILE
 								</p>
 							</div>
 							<div className="w-9 h-9 bg-muted rounded-none overflow-hidden border border-border/40">

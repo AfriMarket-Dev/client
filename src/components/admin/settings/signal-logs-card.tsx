@@ -6,34 +6,34 @@ import { Badge } from "@/components/ui/badge";
 export const SignalLogsCard: React.FC = () => {
   const activities = [
     {
-      action: "AUTH_ESTABLISHED",
-      device: "CHROME_WIN_NT_10.0",
-      time: "2.0 HOURS_AGO",
+      action: "LOGIN",
+      device: "Chrome / Windows 10",
+      time: "2 HOURS AGO",
     },
     {
-      action: "KEY_ROTATION",
-      device: "IOS_MOBILE_SAFARI",
-      time: "1.0 DAYS_AGO",
+      action: "PASSWORD_CHANGE",
+      device: "Safari / iPhone",
+      time: "1 DAY AGO",
     },
     {
-      action: "AUTH_ESTABLISHED",
-      device: "MACOS_FIREFOX_ENT",
-      time: "3.0 DAYS_AGO",
+      action: "LOGIN",
+      device: "Firefox / macOS",
+      time: "3 DAYS AGO",
     },
     {
-      action: "PARAMETER_SYNC",
-      device: "CHROME_WIN_NT_10.0",
-      time: "5.0 DAYS_AGO",
+      action: "PROFILE_UPDATE",
+      device: "Chrome / Windows 10",
+      time: "5 DAYS AGO",
     },
   ];
 
   return (
     <AdminCard
-      title="Signal Logs"
-      subtitle="Verified access audit stream"
+      title="Activity Logs"
+      subtitle="Recent account activity"
       headerActions={<RiPulseLine size={16} className="text-primary" />}
     >
-      <AdminTable headers={["Signal Type", "Terminal ID", "Temporal Marker"]}>
+      <AdminTable headers={["Action", "Device", "Time"]}>
         {activities.map((activity) => (
           <tr key={`${activity.action}-${activity.time}`} className="hover:bg-muted/50 transition-colors">
             <td className="px-4 py-4">

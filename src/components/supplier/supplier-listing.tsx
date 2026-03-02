@@ -219,7 +219,7 @@ const SupplierListing: React.FC<SupplierListingProps> = ({
                         onClick={() => setIsMobileFiltersOpen(false)}
                         className="w-full rounded-none font-display font-black uppercase tracking-widest h-14"
                       >
-                        Apply Parameters
+                        Apply Filters
                       </Button>
                     </CollapsibleContent>
                   </Collapsible>
@@ -341,7 +341,7 @@ const SupplierListing: React.FC<SupplierListingProps> = ({
                       onClick={handleClearFilters}
                       className="rounded-none px-8 h-12 font-bold uppercase tracking-widest"
                     >
-                      Reset Protocol
+                      Clear Filters
                     </Button>
                   </div>
                 ) : (

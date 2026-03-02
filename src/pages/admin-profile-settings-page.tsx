@@ -32,23 +32,24 @@ export default function AdminProfileSettingsPage() {
   } = useAdminProfile();
 
   if (isLoading) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
-        <Loader2 className="w-8 h-8 animate-spin text-primary" />
-        <p className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground">
-          Accessing Secure Parameters...
-        </p>
-      </div>
-    );
+  	return (
+  		<div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
+  			<Loader2 className="w-8 h-8 animate-spin text-primary" />
+  			<p className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground">
+  				Loading Settings...
+  			</p>
+  		</div>
+  	);
   }
 
   return (
-    <div className="space-y-6 pb-20">
-      <AdminPageHeader
-        title="Settings"
-        subtitle="Manage secure account parameters"
-        badge="Account Config"
-      />
+  	<div className="space-y-6 pb-20">
+  		<AdminPageHeader
+  			title="Account Settings"
+  			subtitle="Manage your profile and security"
+  			badge="Profile"
+  		/>
+
       <ProfileInfoCard
         isEditing={isEditing}
         isUpdating={isUpdating}

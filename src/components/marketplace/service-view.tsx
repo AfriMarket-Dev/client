@@ -141,10 +141,10 @@ export default function ServiceView({ service, onBack }: ServiceViewProps) {
             className="w-full"
           >
             <TabsList variant="line" className="justify-start mb-8">
-              <TabsTrigger value="overview" className="uppercase text-[10px] font-black tracking-[0.2em]">Service Intel</TabsTrigger>
-              <TabsTrigger value="products" className="uppercase text-[10px] font-black tracking-[0.2em]">Solutions</TabsTrigger>
-              <TabsTrigger value="reviews" className="uppercase text-[10px] font-black tracking-[0.2em]">Field Reports</TabsTrigger>
-              <TabsTrigger value="contact" className="uppercase text-[10px] font-black tracking-[0.2em]">Engagement</TabsTrigger>
+              <TabsTrigger value="overview" className="uppercase text-[10px] font-black tracking-[0.2em]">Service Info</TabsTrigger>
+              <TabsTrigger value="products" className="uppercase text-[10px] font-black tracking-[0.2em]">Related Items</TabsTrigger>
+              <TabsTrigger value="reviews" className="uppercase text-[10px] font-black tracking-[0.2em]">Customer Reviews</TabsTrigger>
+              <TabsTrigger value="contact" className="uppercase text-[10px] font-black tracking-[0.2em]">Contact Us</TabsTrigger>
             </TabsList>
 
             <div className="animate-in fade-in slide-in-from-bottom-2 duration-500">

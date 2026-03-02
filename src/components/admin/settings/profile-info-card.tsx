@@ -58,13 +58,13 @@ export const ProfileInfoCard: React.FC<ProfileInfoCardProps> = ({
                       variant="outline"
                       className="bg-primary/5 text-primary border-primary/20 font-heading font-bold text-[9px] uppercase tracking-widest px-2.5 py-1"
                     >
-                      Platform Root
+                      Administrator
                     </Badge>
                     <Badge
                       variant="outline"
                       className="bg-green-50 text-green-700 border-green-100 font-heading font-bold text-[9px] uppercase tracking-widest px-2.5 py-1"
                     >
-                      Stream Active
+                      Online
                     </Badge>
                   </div>
                 </div>
@@ -74,7 +74,7 @@ export const ProfileInfoCard: React.FC<ProfileInfoCardProps> = ({
                     onClick={onEdit}
                     className="rounded-sm h-11 px-8 font-heading font-bold uppercase text-xs tracking-widest shadow-xl shadow-primary/20"
                   >
-                    Modify Profile
+                    Edit Profile
                   </Button>
                 )}
               </div>
@@ -85,15 +85,15 @@ export const ProfileInfoCard: React.FC<ProfileInfoCardProps> = ({
 
       {/* Identity Stream Card */}
       <AdminCard
-        title="Identity Stream"
-        subtitle="Primary agent identifiers"
+        title="Personal Information"
+        subtitle="Basic account details"
         headerActions={<RiUserLine size={16} className="text-primary" />}
       >
         {isEditing ? (
           <div className="space-y-6">
             <div className="space-y-2">
               <label className="block text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground ml-1">
-                Full Identification
+                Full Name
               </label>
               <input
                 type="text"
@@ -106,7 +106,7 @@ export const ProfileInfoCard: React.FC<ProfileInfoCardProps> = ({
 
             <div className="space-y-2">
               <label className="block text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground ml-1">
-                Secure Email
+                Email Address
               </label>
               <input
                 type="email"
@@ -120,7 +120,7 @@ export const ProfileInfoCard: React.FC<ProfileInfoCardProps> = ({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
                 <label className="block text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground ml-1">
-                  Phone Link
+                  Phone Number
                 </label>
                 <input
                   type="tel"
@@ -133,7 +133,7 @@ export const ProfileInfoCard: React.FC<ProfileInfoCardProps> = ({
 
               <div className="space-y-2">
                 <label className="block text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground ml-1">
-                  Operational Grid
+                  Location
                 </label>
                 <input
                   type="text"
@@ -147,7 +147,7 @@ export const ProfileInfoCard: React.FC<ProfileInfoCardProps> = ({
 
             <div className="space-y-2">
               <label className="block text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground ml-1">
-                Agent Dossier
+                Bio
               </label>
               <textarea
                 name="bio"
@@ -165,7 +165,7 @@ export const ProfileInfoCard: React.FC<ProfileInfoCardProps> = ({
                 className="flex-1 rounded-sm h-12 font-heading font-bold uppercase text-xs tracking-widest shadow-xl shadow-primary/20"
               >
                 <RiSaveLine size={16} className="mr-2" />
-                {isUpdating ? "Synchronizing..." : "Synchronize"}
+                {isUpdating ? "Saving..." : "Save Changes"}
               </Button>
               <Button
                 variant="outline"
@@ -173,7 +173,7 @@ export const ProfileInfoCard: React.FC<ProfileInfoCardProps> = ({
                 className="flex-1 rounded-sm h-12 border border-border font-heading font-bold uppercase text-xs tracking-widest"
               >
                 <RiCloseLine size={16} className="mr-2" />
-                Abort
+                Cancel
               </Button>
             </div>
           </div>
@@ -181,7 +181,7 @@ export const ProfileInfoCard: React.FC<ProfileInfoCardProps> = ({
           <div className="space-y-8">
             <div className="border-b-2 border-border border-dashed pb-4">
               <p className="text-[10px] uppercase tracking-widest text-muted-foreground font-heading font-bold mb-2">
-                Full Identification
+                Full Name
               </p>
               <p className="text-foreground font-black text-sm uppercase tracking-tight">
                 {formData.fullName}
@@ -190,7 +190,7 @@ export const ProfileInfoCard: React.FC<ProfileInfoCardProps> = ({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 border-b-2 border-border border-dashed pb-4">
               <div>
                 <p className="text-[10px] uppercase tracking-widest text-muted-foreground font-heading font-bold mb-2">
-                  Secure Email
+                  Email Address
                 </p>
                 <p className="text-foreground font-bold text-xs font-mono">
                   {formData.email}
@@ -198,7 +198,7 @@ export const ProfileInfoCard: React.FC<ProfileInfoCardProps> = ({
               </div>
               <div>
                 <p className="text-[10px] uppercase tracking-widest text-muted-foreground font-heading font-bold mb-2">
-                  Phone Link
+                  Phone Number
                 </p>
                 <p className="text-foreground font-bold text-xs font-mono">
                   {formData.phone}
@@ -207,7 +207,7 @@ export const ProfileInfoCard: React.FC<ProfileInfoCardProps> = ({
             </div>
             <div className="border-b-2 border-border border-dashed pb-4">
               <p className="text-[10px] uppercase tracking-widest text-muted-foreground font-heading font-bold mb-2">
-                Operational Grid
+                Location
               </p>
               <p className="text-foreground font-bold text-sm uppercase tracking-wide">
                 {formData.location}
@@ -215,7 +215,7 @@ export const ProfileInfoCard: React.FC<ProfileInfoCardProps> = ({
             </div>
             <div>
               <p className="text-[10px] uppercase tracking-widest text-muted-foreground font-heading font-bold mb-2">
-                Agent Dossier
+                Bio
               </p>
               <p className="text-muted-foreground font-medium text-xs italic leading-relaxed border-l-4 border-primary/10 pl-4 py-2 bg-muted/5">
                 "{formData.bio}"

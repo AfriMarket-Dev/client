@@ -64,7 +64,7 @@ export const SupplierTabsContent: React.FC<SupplierTabsContentProps> = ({
 						{/* Services & Capabilities */}
 						<div>
 							<h3 className="font-heading font-bold uppercase text-xs tracking-[0.2em] mb-6 flex items-center gap-2 text-foreground/40">
-								<CheckCircle className="w-3.5 h-3.5 text-primary" /> Sector Node Capabilities
+								<CheckCircle className="w-3.5 h-3.5 text-primary" /> Our Capabilities
 							</h3>
 							<div className="grid sm:grid-cols-2 gap-4">
 								{[
@@ -91,7 +91,7 @@ export const SupplierTabsContent: React.FC<SupplierTabsContentProps> = ({
 						{/* Gallery */}
 						<div>
 							<h3 className="font-heading font-bold uppercase text-xs tracking-[0.2em] mb-6 text-foreground/40">
-								Visual Documentation
+								Photos
 							</h3>
 							<div className="grid grid-cols-3 gap-2">
 								{galleryImages.map((src, idx) => (
@@ -113,7 +113,7 @@ export const SupplierTabsContent: React.FC<SupplierTabsContentProps> = ({
 						<div>
 							<div className="flex items-center justify-between mb-6">
 								<h3 className="font-heading font-bold uppercase text-xs tracking-[0.2em] text-foreground/40">
-									Priority Inventory
+									Featured Products
 								</h3>
 								<Button
 									variant="link"
@@ -164,13 +164,14 @@ export const SupplierTabsContent: React.FC<SupplierTabsContentProps> = ({
 						{/* Logistics Configuration */}
 						<div className="border border-border p-6 bg-muted/5">
 							<h3 className="font-heading font-bold uppercase text-[10px] tracking-[0.2em] mb-6 flex items-center gap-2 text-foreground/40">
-								<Truck className="w-3.5 h-3.5 text-primary" /> Logistics Nodes
+								<Truck className="w-3.5 h-3.5 text-primary" /> Delivery Options
 							</h3>
+
 							<ul className="space-y-4">
 								{[
 									{ label: "Intra-City (Kigali)", desc: "24H Response" },
-									{ label: "Regional Transit", desc: "48-72H Node" },
-									{ label: "Bulk Transport", desc: "SLA Dependent" },
+									{ label: "Regional Transit", desc: "48-72H Lead Time" },
+									{ label: "Bulk Transport", desc: "Custom Quote" },
 								].map((opt) => (
 									<li
 										key={opt.label}
@@ -194,7 +195,7 @@ export const SupplierTabsContent: React.FC<SupplierTabsContentProps> = ({
 				<div className="space-y-6">
 					<div className="flex justify-between items-center">
 						<p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">
-							Network Data: {listings.length} Active Nodes
+							{listings.length} Active Listings
 						</p>
 						<Button
 							variant="outline"
@@ -280,7 +281,7 @@ export const SupplierTabsContent: React.FC<SupplierTabsContentProps> = ({
 					<div className="space-y-10 pt-4">
 						{company.reviewCount === 0 ? (
 							<div className="text-center py-12 text-muted-foreground uppercase text-[10px] font-bold tracking-widest">
-								No field reports logged for this node
+								No reviews yet
 							</div>
 						) : (
 							[1, 2].map((i) => (
@@ -320,22 +321,22 @@ export const SupplierTabsContent: React.FC<SupplierTabsContentProps> = ({
 				<div className="grid md:grid-cols-2 gap-12">
 					<div className="space-y-8">
 						<h3 className="font-heading font-black uppercase text-xs tracking-[0.2em] text-foreground/40 border-b border-border/40 pb-4">
-							Direct Transmission Channels
+							Contact Channels
 						</h3>
 						<div className="space-y-4">
 							{[
 								{
-									label: "Network Email",
-									value: company?.email || "ENCRYPTED@AFRIKAMARKET.COM",
+									label: "Business Email",
+									value: company?.email || "NOT PROVIDED",
 									icon: Mail,
 								},
 								{
-									label: "Direct Link",
-									value: company.phone || "NODE OFFLINE",
+									label: "Direct Phone",
+									value: company.phone || "NOT PROVIDED",
 									icon: Phone,
 								},
 								{
-									label: "Real-time Hub",
+									label: "Official Hub",
 									value: company.phone || "STANDBY",
 									icon: MessageCircle,
 								},
@@ -362,7 +363,7 @@ export const SupplierTabsContent: React.FC<SupplierTabsContentProps> = ({
 
 						<div className="pt-4">
 							<Button className="w-full h-14 font-heading font-black uppercase tracking-[0.2em] text-[10px] gap-3 rounded-none bg-foreground text-background hover:bg-foreground/90 shadow-xl transition-all">
-								<MessageCircle className="w-4 h-4" /> Initialize Secure Chat
+								<MessageCircle className="w-4 h-4" /> Start Chat
 							</Button>
 						</div>
 					</div>
@@ -375,7 +376,7 @@ export const SupplierTabsContent: React.FC<SupplierTabsContentProps> = ({
 							<div className="flex justify-between items-center pb-4 border-b border-border/20">
 								<div className="flex items-center gap-3">
 									<Calendar className="w-4 h-4 text-primary opacity-60" />
-									<span className="font-black uppercase text-[10px] tracking-widest text-foreground/80">Standard Business Week</span>
+									<span className="font-black uppercase text-[10px] tracking-widest text-foreground/80">Business Hours</span>
 								</div>
 								<span className="text-[10px] font-mono font-bold text-muted-foreground">
 									08:00 - 18:00 CAT

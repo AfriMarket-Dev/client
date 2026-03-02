@@ -14,30 +14,30 @@ export const BroadcastLogicCard: React.FC<BroadcastLogicCardProps> = ({
   const settings = [
     {
       key: "emailNotifications",
-      label: "Email Protocol",
-      description: "Primary outbound communication stream",
+      label: "Email Notifications",
+      description: "Receive updates via email",
     },
     {
       key: "orderAlerts",
-      label: "Supply Signal",
-      description: "Real-time verification of new inventory flow",
+      label: "Order Alerts",
+      description: "Get notified of new orders",
     },
     {
       key: "customerMessages",
-      label: "Inquiry Stream",
-      description: "Intercept buyer communication signals",
+      label: "New Messages",
+      description: "Alerts for new chat messages",
     },
     {
       key: "systemUpdates",
-      label: "Core Matrix",
-      description: "Critical platform infrastructure updates",
+      label: "System Updates",
+      description: "Platform and maintenance news",
     },
   ];
 
   return (
     <AdminCard
-      title="Broadcast Logic"
-      subtitle="Manage signal preferences"
+      title="Notification Settings"
+      subtitle="Manage your alerts and updates"
       headerActions={<RiNotification3Line size={16} className="text-primary" />}
     >
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

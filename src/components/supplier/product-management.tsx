@@ -342,7 +342,7 @@ const ProductManagement: React.FC = () => {
             <div className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-primary/20" />
             <DialogHeader>
               <DialogTitle className="text-lg font-heading font-bold uppercase tracking-wide">
-                Initialize Product
+                Add Product
               </DialogTitle>
             </DialogHeader>
           </div>

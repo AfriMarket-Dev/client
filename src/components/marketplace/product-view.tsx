@@ -193,9 +193,9 @@ export default function ProductView({
             className="w-full"
           >
             <TabsList variant="line" className="justify-start mb-8">
-              <TabsTrigger value="overview" className="uppercase text-[10px] font-black tracking-[0.2em]">Material Intel</TabsTrigger>
-              <TabsTrigger value="specs" className="uppercase text-[10px] font-black tracking-[0.2em]">Specifications</TabsTrigger>
-              <TabsTrigger value="reviews" className="uppercase text-[10px] font-black tracking-[0.2em]">Field Reports</TabsTrigger>
+              <TabsTrigger value="overview" className="uppercase text-[10px] font-black tracking-[0.2em]">General Info</TabsTrigger>
+              <TabsTrigger value="specs" className="uppercase text-[10px] font-black tracking-[0.2em]">Technical Specs</TabsTrigger>
+              <TabsTrigger value="reviews" className="uppercase text-[10px] font-black tracking-[0.2em]">Customer Reviews</TabsTrigger>
             </TabsList>
 
             <div className="animate-in fade-in slide-in-from-bottom-2 duration-500">

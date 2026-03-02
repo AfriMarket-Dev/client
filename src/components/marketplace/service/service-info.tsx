@@ -85,7 +85,7 @@ export const ServiceInfo: React.FC<ServiceInfoProps> = ({
           className="h-14 flex-1 rounded-none bg-foreground text-background hover:bg-foreground/90 transition-all duration-300 font-heading font-black uppercase tracking-[0.2em] text-[11px] shadow-xl"
         >
           <RiChat3Line size={18} className="mr-2" />
-          Initialize Service Engagement
+          Send Inquiry
         </Button>
       </div>
     </div>
