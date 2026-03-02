@@ -1,4 +1,4 @@
-import type { ColumnDef } from "@tanstack/react-table";
+import { useNavigate } from "@tanstack/react-router";
 import {
   RiDeleteBinLine,
   RiEditLine,
@@ -6,28 +6,26 @@ import {
   RiMoreLine,
   RiPagesLine,
 } from "@remixicon/react";
-import { useNavigate } from "@tanstack/react-router";
 import { useCallback, useMemo, useState } from "react";
-import { toast } from "sonner";
 import {
   useDeleteProductMutation,
   useGetProductsQuery,
 } from "@/app/api/products";
 import { AdminCard, AdminPageHeader } from "@/components/admin";
-import { ConfirmationModal } from "@/components/common/confirmation-modal";
 import { Badge } from "@/components/ui/badge";
+import { ActionModal } from "@/components/common/action-modal";
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
-import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import type { ColumnDef } from "@tanstack/react-table";
+import { toast } from "sonner";
 
 interface ProductRow {
   id: string;
@@ -64,6 +62,7 @@ export default function AdminProductsPage() {
     sortBy: "createdAt",
     sortOrder: "DESC",
   });
+
   const [deleteProduct, { isLoading: deleting }] = useDeleteProductMutation();
   const [deleteModal, setDeleteModal] = useState<{
     isOpen: boolean;
@@ -116,59 +115,51 @@ export default function AdminProductsPage() {
     () => [
       {
         accessorKey: "name",
-        header: ({ column }) => (
-          <DataTableColumnHeader column={column} title="Product" />
-        ),
+        header: "Product",
         cell: ({ row }) => (
           <div className="flex items-center gap-3">
-            <div className="rounded-sm border border-blue-100 bg-blue-50 p-2 shrink-0">
+            <div className="rounded-sm border border-blue-100 bg-blue-50 p-2">
               <RiPagesLine size={16} className="text-blue-600" />
             </div>
             <div>
-              <p className="font-heading font-bold text-sm text-foreground">
+              <p className="font-heading font-bold text-foreground">
                 {row.original.name}
               </p>
-              <p className="text-xs text-muted-foreground">{row.original.id}</p>
+              <p className="text-[10px] uppercase tracking-widest text-muted-foreground">
+                {row.original.category}
+              </p>
             </div>
           </div>
         ),
       },
       {
-        accessorKey: "category",
-        header: ({ column }) => (
-          <DataTableColumnHeader column={column} title="Category" />
-        ),
-      },
-      {
         accessorKey: "supplier",
-        header: ({ column }) => (
-          <DataTableColumnHeader column={column} title="Supplier" />
+        header: "Supplier",
+        cell: ({ row }) => (
+          <span className="text-xs font-semibold text-foreground">
+            {row.original.supplier}
+          </span>
         ),
       },
       {
         accessorKey: "status",
-        header: ({ column }) => (
-          <DataTableColumnHeader column={column} title="Status" />
-        ),
+        header: "Status",
         cell: ({ row }) => (
           <Badge
             variant={row.original.status === "active" ? "success" : "secondary"}
-            className="uppercase tracking-wider text-[10px]"
+            className="uppercase text-[10px] tracking-wider"
           >
             {row.original.status}
           </Badge>
         ),
       },
       {
-        accessorKey: "views",
-        header: ({ column }) => (
-          <DataTableColumnHeader column={column} title="Views" />
-        ),
-      },
-      {
         accessorKey: "createdDate",
-        header: ({ column }) => (
-          <DataTableColumnHeader column={column} title="Created" />
+        header: "Created",
+        cell: ({ row }) => (
+          <span className="text-xs text-muted-foreground">
+            {row.original.createdDate}
+          </span>
         ),
       },
       {
@@ -190,14 +181,22 @@ export default function AdminProductsPage() {
                   disabled={!row.original.supplierId}
                   onClick={() =>
                     navigate({
-                      to: `/admin/suppliers/${row.original.supplierId}/product/${row.original.id}` as any,
+                      to: `/suppliers/${row.original.supplierId}` as any,
+                    })
+                  }
+                >
+                  <RiEyeLine className="mr-2 h-4 w-4" /> View supplier
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() =>
+                    navigate({
+                      to: `/products/${row.original.id}` as any,
                     })
                   }
                 >
                   <RiEyeLine className="mr-2 h-4 w-4" /> View details
                 </DropdownMenuItem>
                 <DropdownMenuItem
-                  disabled={!row.original.supplierId}
                   onClick={() =>
                     navigate({
                       to: `/admin/suppliers/${row.original.supplierId}/product/${row.original.id}/edit` as any,
@@ -206,9 +205,8 @@ export default function AdminProductsPage() {
                 >
                   <RiEditLine className="mr-2 h-4 w-4" /> Edit
                 </DropdownMenuItem>
-                <DropdownMenuSeparator />
                 <DropdownMenuItem
-                  className="text-destructive"
+                  className="text-destructive focus:text-destructive"
                   onClick={() => openDeleteModal(row.original)}
                 >
                   <RiDeleteBinLine className="mr-2 h-4 w-4" /> Delete
@@ -224,22 +222,11 @@ export default function AdminProductsPage() {
 
   return (
     <div className="space-y-5 pb-10">
-      <AdminPageHeader
-        title="Products"
-        subtitle="All marketplace products, sourced from live API data"
-        actions={
-          <Button
-            onClick={() => navigate({ to: "/dashboard/listings/new" as any })}
-            className="h-11 rounded-sm px-6 font-heading font-bold uppercase text-xs tracking-wider"
-          >
-            Create Listing
-          </Button>
-        }
-      />
+      <AdminPageHeader title="Products" subtitle="Manage catalog materials" />
 
-      <AdminCard noPadding className="p-4">
+      <AdminCard>
         {isLoading ? (
-          <div className="p-8 text-sm text-muted-foreground">
+          <div className="p-8 text-sm text-muted-foreground text-center">
             Loading products...
           </div>
         ) : (
@@ -256,12 +243,10 @@ export default function AdminProductsPage() {
         )}
       </AdminCard>
 
-      <ConfirmationModal
+      <ActionModal
         isOpen={deleteModal.isOpen}
         title="Delete Product"
-        message={`Delete \"${deleteModal.productName}\"? This action cannot be undone.`}
-        confirmText="Delete"
-        cancelText="Cancel"
+        description={`Are you sure you want to delete "${deleteModal.productName}"? This action cannot be undone.`}
         type="delete"
         onConfirm={handleDelete}
         onCancel={closeDeleteModal}
