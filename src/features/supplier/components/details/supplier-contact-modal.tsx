@@ -1,13 +1,8 @@
 import { Mail, MessageSquare, Phone } from "lucide-react";
 import type React from "react";
 import { Button } from "@/components/ui/button";
-import {
-	Dialog,
-	DialogContent,
-	DialogHeader,
-	DialogTitle,
-} from "@/components/ui/dialog";
 import type { Company } from "@/types";
+import { ResponsiveModal } from "@/shared/components/responsive-modal";
 
 interface SupplierContactModalProps {
 	company: Company;
@@ -53,18 +48,15 @@ export const SupplierContactModal: React.FC<SupplierContactModalProps> = ({
 	];
 
 	return (
-		<Dialog open={isOpen} onOpenChange={onClose}>
-			<DialogContent className="max-w-md p-0 overflow-hidden border-none rounded-none">
-				<DialogHeader className="p-8 bg-slate-950 text-white">
-					<DialogTitle className="text-2xl font-black uppercase tracking-tight text-center">
-						Contact Supplier
-					</DialogTitle>
-					<span className="text-[10px] text-center font-bold uppercase tracking-[0.3em] opacity-50 block mt-2">
-						{company.name}
-					</span>
-				</DialogHeader>
-
-				<div className="p-8 space-y-4 bg-white">
+		<ResponsiveModal
+			open={isOpen}
+			onOpenChange={onClose}
+			title="Contact Supplier"
+			description={company.name}
+			className="p-0 overflow-hidden"
+		>
+			<div className="flex flex-col h-full max-h-[80vh]">
+				<div className="p-4 sm:p-8 space-y-4 bg-white overflow-y-auto">
 					{contactMethods.map((method, idx) => (
 						<div
 							key={idx}
@@ -97,7 +89,7 @@ export const SupplierContactModal: React.FC<SupplierContactModalProps> = ({
 					))}
 				</div>
 
-				<div className="px-8 pb-8 pt-0 bg-white space-y-3">
+				<div className="px-4 sm:px-8 pb-8 pt-4 bg-white space-y-3 mt-auto border-t border-border/10">
 					<textarea
 						value={message}
 						onChange={(e) => setMessage(e.target.value)}
@@ -119,7 +111,7 @@ export const SupplierContactModal: React.FC<SupplierContactModalProps> = ({
 						Close
 					</Button>
 				</div>
-			</DialogContent>
-		</Dialog>
+			</div>
+		</ResponsiveModal>
 	);
 };

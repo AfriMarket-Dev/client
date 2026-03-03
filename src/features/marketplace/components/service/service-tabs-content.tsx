@@ -145,7 +145,7 @@ export const ServiceTabsContent: React.FC<ServiceTabsContentProps> = ({
 	if (activeTab === "reviews") {
 		return (
 			<div className="space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-500">
-				<div className="flex justify-between items-center pb-6 border-b border-border/40">
+				<div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 pb-6 border-b border-border/40">
 					<div className="space-y-1">
 						<h3 className="font-heading font-black uppercase text-xs tracking-[0.4em] text-foreground/40">
 							Service Feedback
@@ -154,7 +154,9 @@ export const ServiceTabsContent: React.FC<ServiceTabsContentProps> = ({
 							Performance metrics from verified clients
 						</p>
 					</div>
-					<AddReviewDialog serviceId={service.id} />
+					<div className="w-full sm:w-auto">
+						<AddReviewDialog serviceId={service.id} />
+					</div>
 				</div>
 
 				<ReviewList serviceId={service.id} />

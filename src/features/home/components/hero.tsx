@@ -355,10 +355,10 @@ const Hero: React.FC = () => {
 	};
 
 	return (
-		<section className="relative py-4 md:py-8 bg-background industrial-grain">
+		<section className="relative py-2 md:py-3 bg-background industrial-grain">
 			<div className="max-w-[1600px] mx-auto px-4 sm:px-6">
 				{/* Unified Hero Container */}
-				<div className="relative rounded-none overflow-hidden border border-border/20 shadow-2xl mb-6 lg:mb-10 bg-slate-950 flex flex-col md:flex-row shadow-primary/5 min-h-[500px] md:min-h-[480px]">
+				<div className="relative rounded-none overflow-hidden border border-border/20 shadow-2xl mb-3 md:mb-4 bg-slate-950 flex flex-col md:flex-row shadow-primary/5 min-h-[400px] md:min-h-[400px]">
 					{/* Background Decorations */}
 					<div
 						className="absolute inset-0 blueprint-grid opacity-[0.03] pointer-events-none"
@@ -369,22 +369,22 @@ const Hero: React.FC = () => {
 					<div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_0%_0%,var(--color-primary)_0%,transparent_40%)] opacity-[0.08] pointer-events-none" />
 
 					{/* search panel */}
-					<div className="relative z-20 flex flex-col justify-center px-6 py-10 md:px-12 md:py-16 flex-1 md:max-w-[55%]">
-						<div className="flex items-center gap-4 mb-6 relative">
+					<div className="relative z-20 flex flex-col justify-center px-5 py-8 md:px-12 md:py-8 flex-1 md:max-w-[55%]">
+						<div className="flex items-center gap-4 mb-4 md:mb-4 relative">
 							<span className="inline-flex items-center gap-3 text-primary text-[9px] md:text-[10px] font-black uppercase tracking-[0.4em]">
 								<div className="w-8 md:w-12 h-px bg-primary" />
 								Industrial Marketplace
 							</span>
 						</div>
 
-						<h1 className="text-display font-black text-white leading-[0.9] mb-10 relative tracking-tighter">
-							<span className="block text-4xl sm:text-5xl md:text-5xl lg:text-7xl uppercase">
+						<h1 className="text-display font-black text-white leading-[0.9] mb-6 md:mb-6 relative tracking-tighter">
+							<span className="block text-2xl sm:text-4xl md:text-5xl lg:text-6xl uppercase">
 								FIND EVERY
 							</span>
-							<span className="block text-4xl sm:text-5xl md:text-5xl lg:text-7xl text-primary italic -skew-x-12 inline-block translate-x-2 sm:translate-x-6">
+							<span className="block text-2xl sm:text-4xl md:text-5xl lg:text-6xl text-primary italic -skew-x-12 inline-block translate-x-2 sm:translate-x-6">
 								MATERIAL & SERVICE
 							</span>
-							<span className="block text-4xl sm:text-5xl md:text-5xl lg:text-7xl uppercase">
+							<span className="block text-2xl sm:text-4xl md:text-5xl lg:text-6xl uppercase">
 								IN RWANDA.
 							</span>
 						</h1>
@@ -398,7 +398,7 @@ const Hero: React.FC = () => {
 										if (val) setActiveCategory(val);
 									}}
 								>
-									<SelectTrigger className="!h-auto px-5 md:px-8 py-5 sm:py-0 flex items-center gap-4 text-[10px] font-black text-white hover:text-primary uppercase tracking-[0.2em] border-none sm:border-r border-white/10 transition-all whitespace-nowrap bg-transparent rounded-none border-y-0 border-l-0 group/select min-w-[160px] hover:bg-white/[0.03] [&_svg]:opacity-30">
+									<SelectTrigger className="!h-auto px-5 md:px-8 py-4 sm:py-0 flex items-center gap-4 text-[10px] font-black text-white hover:text-primary uppercase tracking-[0.2em] border-none sm:border-r border-white/10 transition-all whitespace-nowrap bg-transparent rounded-none border-y-0 border-l-0 group/select min-w-[160px] hover:bg-white/[0.03] [&_svg]:opacity-30">
 										<SelectValue>
 											{activeCategory === DEFAULT_SEARCH_CATEGORY
 												? "All Categories"
@@ -433,11 +433,11 @@ const Hero: React.FC = () => {
 										value={query}
 										onChange={(e) => setQuery(e.target.value)}
 										placeholder="Search materials, tools, etc..."
-										className="w-full bg-transparent pl-12 pr-5 sm:pr-8 py-5 md:py-6 text-white text-sm md:text-base outline-none min-w-0 font-display font-medium tracking-tight"
+										className="w-full bg-transparent pl-12 pr-5 sm:pr-8 py-4 md:py-4 text-white text-sm md:text-base outline-none min-w-0 font-display font-medium tracking-tight"
 									/>
 									<button
 										type="submit"
-										className="shrink-0 bg-primary hover:bg-primary/90 active:scale-95 transition-all px-5 sm:px-6 md:px-10 flex items-center justify-center gap-3 text-white font-black text-[10px] uppercase tracking-[0.3em] group/btn-search min-h-[56px] sm:min-h-0"
+										className="shrink-0 bg-primary hover:bg-primary/90 active:scale-95 transition-all px-5 sm:px-6 md:px-10 flex items-center justify-center gap-3 text-white font-black text-[10px] uppercase tracking-[0.3em] group/btn-search min-h-[48px] sm:min-h-0"
 									>
 										<Search className="w-4 h-4 sm:hidden" />
 										<span className="hidden sm:inline">Search</span>
@@ -449,7 +449,7 @@ const Hero: React.FC = () => {
 								<div className="absolute bottom-0 left-0 h-[2px] bg-primary w-0 group-focus-within/search-bar:w-full transition-all duration-700 ease-in-out shadow-[0_0_15px_var(--color-primary)]" />
 							</div>
 
-							<div className="flex items-center gap-3 mt-6 flex-wrap">
+							<div className="flex items-center gap-2 mt-4 md:mt-4 flex-wrap">
 								<span className="text-[8px] text-white/20 font-black uppercase tracking-[0.5em]">
 									Trending:
 								</span>
@@ -457,7 +457,7 @@ const Hero: React.FC = () => {
 									<Badge
 										variant={"secondary"}
 										key={tag}
-										className="rounded-none bg-white/[0.03] border-white/10 text-white/40 text-[8px] font-black uppercase tracking-widest px-2.5 py-1 hover:bg-primary/20 hover:text-primary transition-all cursor-pointer hover:border-primary/30"
+										className="rounded-none bg-white/[0.03] border-white/10 text-white/40 text-[8px] font-black uppercase tracking-widest px-2.5 py-0.5 hover:bg-primary/20 hover:text-primary transition-all cursor-pointer hover:border-primary/30"
 									>
 										{tag}
 									</Badge>
@@ -467,7 +467,7 @@ const Hero: React.FC = () => {
 					</div>
 
 					{/* featured products carousel */}
-					<div className="relative md:w-[45%] min-h-[400px] md:min-h-0 shrink-0 overflow-hidden border-t md:border-t-0 md:border-l border-white/10 group/featured">
+					<div className="relative md:w-[45%] min-h-[300px] md:min-h-0 shrink-0 overflow-hidden border-t md:border-t-0 md:border-l border-white/10 group/featured">
 						{featuredProducts.map((product: HeroFeaturedProduct, i: number) => (
 							<FeaturedProductCard
 								key={product.id}
@@ -477,7 +477,7 @@ const Hero: React.FC = () => {
 						))}
 
 						{/* Carousel Indicators */}
-						<div className="absolute bottom-6 left-6 z-20 flex gap-2">
+						<div className="absolute bottom-4 left-6 z-20 flex gap-2">
 							{featuredProducts.map(
 								(product: HeroFeaturedProduct, i: number) => (
 									<button
@@ -497,7 +497,7 @@ const Hero: React.FC = () => {
 				</div>
 
 				{/* widgets grid */}
-				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 relative z-20">
+				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 relative z-20">
 					<HeroWidget
 						title="Top Manufacturers"
 						subtitle="Direct access"

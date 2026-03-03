@@ -82,7 +82,7 @@ export const ProductTabsContent: React.FC<ProductTabsContentProps> = ({
 			</TabsContent>
 
 			<TabsContent value="reviews" className="mt-12 space-y-12">
-				<div className="flex justify-between items-center pb-6 border-b border-border/40">
+				<div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 pb-6 border-b border-border/40">
 					<div className="space-y-1">
 						<h3 className="font-heading font-black uppercase text-xs tracking-[0.4em] text-foreground/40">
 							Industrial Feedback
@@ -91,9 +91,11 @@ export const ProductTabsContent: React.FC<ProductTabsContentProps> = ({
 							Performance metrics from verified partners
 						</p>
 					</div>
-					<AddReviewDialog
-						productId={keyFacts.find((f) => f.label === "ID")?.value || ""}
-					/>
+					<div className="w-full sm:w-auto">
+						<AddReviewDialog
+							productId={keyFacts.find((f) => f.label === "ID")?.value || ""}
+						/>
+					</div>
 				</div>
 
 				<ReviewList

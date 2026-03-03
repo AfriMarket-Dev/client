@@ -1,12 +1,7 @@
 import type React from "react";
 import { Button } from "@/components/ui/button";
-import {
-	Dialog,
-	DialogContent,
-	DialogHeader,
-	DialogTitle,
-} from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
+import { ResponsiveModal } from "@/shared/components/responsive-modal";
 
 interface ProductInquiryModalProps {
 	isOpen: boolean;
@@ -26,16 +21,15 @@ export const ProductInquiryModal: React.FC<ProductInquiryModalProps> = ({
 	onSubmit,
 }) => {
 	return (
-		<Dialog open={isOpen} onOpenChange={onOpenChange}>
-			<DialogContent className="sm:max-w-md rounded-none border-border">
-				<DialogHeader>
-					<DialogTitle className="font-heading uppercase tracking-[0.2em] text-xs font-black">
-						Material Inquiry
-					</DialogTitle>
-				</DialogHeader>
-				<p className="mb-6 text-sm text-muted-foreground leading-relaxed">
-					Initiate a professional inquiry regarding &quot;{productName}
-					&quot;. Technical responses are typically generated within 2 hours.
+		<ResponsiveModal
+			open={isOpen}
+			onOpenChange={onOpenChange}
+			title="Material Inquiry"
+			description={`Initiate a professional inquiry regarding "${productName}".`}
+		>
+			<div className="space-y-6">
+				<p className="text-sm text-muted-foreground leading-relaxed">
+					Technical responses are typically generated within 2 hours.
 				</p>
 				<Textarea
 					value={messageText}
@@ -43,23 +37,23 @@ export const ProductInquiryModal: React.FC<ProductInquiryModalProps> = ({
 					placeholder="Describe your requirements or volume needs..."
 					className="min-h-32 rounded-none border-border bg-muted/5 p-4 resize-none focus-visible:ring-1 focus-visible:ring-primary text-sm"
 				/>
-				<div className="mt-6 flex justify-end gap-3">
+				<div className="flex flex-col sm:flex-row justify-end gap-3">
 					<Button
 						variant="outline"
 						onClick={() => onOpenChange(false)}
-						className="rounded-none text-[10px] uppercase font-black tracking-widest h-11 px-6"
+						className="rounded-none text-[10px] uppercase font-black tracking-widest h-11 px-6 order-2 sm:order-1"
 					>
 						Cancel
 					</Button>
 					<Button
-						className="rounded-none text-[10px] uppercase font-black tracking-widest h-11 px-8 bg-primary text-white"
+						className="rounded-none text-[10px] uppercase font-black tracking-widest h-11 px-8 bg-primary text-white order-1 sm:order-2"
 						disabled={!messageText.trim()}
 						onClick={onSubmit}
 					>
 						Submit Inquiry
 					</Button>
 				</div>
-			</DialogContent>
-		</Dialog>
+			</div>
+		</ResponsiveModal>
 	);
 };
