@@ -81,27 +81,27 @@ const FeaturedServices: React.FC = () => {
 										</div>
 									</div>
 
-									<div className="p-6 flex flex-col flex-1">
+									<div className="p-4 sm:p-6 flex flex-col flex-1">
 										{company?.district && (
-											<div className="flex items-center gap-2 text-[8px] font-black text-primary uppercase tracking-[0.3em] mb-4">
-												<RiMapPinLine className="w-3 h-3" />
+											<div className="flex items-center gap-1.5 sm:gap-2 text-[7px] sm:text-[8px] font-black text-primary uppercase tracking-[0.2em] sm:tracking-[0.3em] mb-2 sm:mb-4">
+												<RiMapPinLine className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
 												{company.district}
 											</div>
 										)}
-										<h3 className="text-sm font-display font-black text-foreground mb-6 line-clamp-2 uppercase tracking-widest leading-relaxed group-hover:text-primary transition-colors min-h-[2.5rem]">
+										<h3 className="text-xs sm:text-sm font-display font-black text-foreground mb-4 sm:mb-6 line-clamp-2 uppercase tracking-widest leading-relaxed group-hover:text-primary transition-colors min-h-[2rem] sm:min-h-[2.5rem]">
 											{service.name}
 										</h3>
 
-										<div className="mt-auto pt-6 border-t border-border/10 flex flex-col gap-1">
-											<span className="text-muted-foreground/40 text-[8px] font-black uppercase tracking-[0.4em]">
+										<div className="mt-auto pt-4 sm:pt-6 border-t border-border/10 flex flex-col gap-1">
+											<span className="text-muted-foreground/40 text-[7px] sm:text-[8px] font-black uppercase tracking-[0.4em]">
 												Starting Price
 											</span>
-											<div className="flex items-baseline gap-2">
-												<span className="text-lg font-black text-foreground tracking-tighter">
+											<div className="flex items-baseline gap-1.5 sm:gap-2">
+												<span className="text-base sm:text-lg font-black text-foreground tracking-tighter">
 													RWF {price.toLocaleString()}
 												</span>
 												{service.discount && service.discount > 0 && (
-													<span className="text-[9px] font-black text-emerald-500 uppercase tracking-widest">
+													<span className="text-[8px] sm:text-[9px] font-black text-emerald-500 uppercase tracking-widest">
 														-{service.discount}%
 													</span>
 												)}

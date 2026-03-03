@@ -1,7 +1,5 @@
 import {
   Building2,
-  ChevronDown,
-  Filter,
   Grid,
   List,
   Search,
@@ -13,10 +11,12 @@ import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
 import { Input } from "@/components/ui/input";
 import { useSupplierFilters } from "@/hooks/use-supplier-filters";
 import { cn } from "@/lib/utils";
@@ -83,15 +83,15 @@ const SupplierListing: React.FC<SupplierListingProps> = ({
       {/* Header */}
       <div className="bg-background border-b border-border sticky top-0 z-30 py-4 md:py-5">
         <div className="max-w-[1600px] mx-auto px-4 md:px-6">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="flex flex-row items-center justify-between gap-4">
             <div className="space-y-0.5">
-              <h1 className="text-2xl md:text-3xl font-display font-black uppercase text-foreground tracking-tighter leading-none">
+              <h1 className="text-xl md:text-3xl font-display font-black uppercase text-foreground tracking-tighter leading-none">
                 Supplier Directory
               </h1>
-              <div className="flex items-center gap-2">
+              <div className="hidden xs:flex items-center gap-2">
                 <div className="h-px w-6 bg-primary" />
                 <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-[0.3em]">
-                  Verified Rwandan Providers
+                  Verified Providers
                 </p>
               </div>
             </div>
@@ -153,7 +153,7 @@ const SupplierListing: React.FC<SupplierListingProps> = ({
           <div className="flex-1 min-w-0">
             {/* Toolbar */}
             <div className="flex flex-col gap-4 mb-8">
-              <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center">
+              <div className="flex flex-row gap-3 items-center">
                 <Button
                   variant="outline"
                   size="icon"
@@ -168,69 +168,56 @@ const SupplierListing: React.FC<SupplierListingProps> = ({
                 </Button>
 
                 {/* Mobile Filter */}
-                <div className="lg:hidden w-full sm:w-auto">
-                  <Collapsible
-                    open={isMobileFiltersOpen}
-                    onOpenChange={setIsMobileFiltersOpen}
-                    className="w-full"
-                  >
-                    <CollapsibleTrigger
-                      className={cn(
-                        "inline-flex items-center justify-between whitespace-nowrap rounded-none text-[9px] font-display font-black uppercase tracking-widest ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-border/40 bg-background hover:bg-muted h-10 px-4 w-full sm:w-auto gap-3 shrink-0 sm:justify-center transition-all",
-                      )}
+                <Drawer open={isMobileFiltersOpen} onOpenChange={setIsMobileFiltersOpen} direction="right">
+                  <DrawerTrigger asChild>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="lg:hidden rounded-none border-border/40 h-10 font-black uppercase text-[10px] tracking-widest px-4 gap-2"
                     >
-                      <span className="flex items-center gap-2">
-                        <Filter className="w-3.5 h-3.5" />
-                        Params
-                        {hasActiveFilters && (
-                          <Badge
-                            variant="secondary"
-                            className="ml-1 h-4 px-1.5 text-[7px] font-black uppercase tracking-widest rounded-none bg-primary text-primary-foreground"
-                          >
-                            Set
-                          </Badge>
-                        )}
-                      </span>
-                      <ChevronDown
-                        className={cn(
-                          "w-3.5 h-3.5 transition-transform opacity-50",
-                          isMobileFiltersOpen && "rotate-180",
-                        )}
-                      />
-                    </CollapsibleTrigger>
-                    <CollapsibleContent className="mt-4 p-6 border rounded-none border-border bg-background space-y-8 animate-in fade-in slide-in-from-top-4 duration-300">
-                      <div className="flex items-center justify-between">
-                        <h3 className="font-display font-black uppercase text-xs tracking-[0.2em]">
-                          System Filters
-                        </h3>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={handleClearFilters}
-                          className="text-[10px] font-bold uppercase tracking-widest h-6"
-                        >
-                          Reset All
-                        </Button>
-                      </div>
+                      <SlidersHorizontal className="w-3.5 h-3.5" />
+                      Filters
+                      {hasActiveFilters && (
+                        <span className="w-1.5 h-1.5 rounded-full bg-primary" />
+                      )}
+                    </Button>
+                  </DrawerTrigger>
+                  <DrawerContent className="bg-background flex flex-col">
+                    <DrawerHeader className="p-6 border-b border-border/40 shrink-0 text-left">
+                      <DrawerTitle className="text-[10px] font-display font-black uppercase tracking-[0.2em] flex items-center gap-2">
+                        <SlidersHorizontal className="w-3.5 h-3.5 text-primary" />
+                        Supplier Filters
+                      </DrawerTitle>
+                    </DrawerHeader>
+                    <div className="p-6 flex-1 overflow-y-auto custom-scrollbar">
                       <SupplierFilterPanel
                         filters={filters}
                         categories={categories}
                         onFilterChange={handleFiltersChange}
                       />
-                      <Button
-                        onClick={() => setIsMobileFiltersOpen(false)}
-                        className="w-full rounded-none font-display font-black uppercase tracking-widest h-14"
-                      >
-                        Apply Filters
-                      </Button>
-                    </CollapsibleContent>
-                  </Collapsible>
-                </div>
+                    </div>
+                    {hasActiveFilters && (
+                      <div className="p-6 border-t border-border/40 shrink-0 bg-muted/5">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="w-full justify-center h-10 text-[9px] uppercase font-black tracking-[0.2em] border border-destructive/20 text-destructive hover:bg-destructive/5"
+                          onClick={() => {
+                            handleClearFilters();
+                            setIsMobileFiltersOpen(false);
+                          }}
+                        >
+                          Reset All
+                        </Button>
+                      </div>
+                    )}
+                  </DrawerContent>
+                </Drawer>
 
                 <div className="relative flex-1 group">
                   <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground/30 group-focus-within:text-primary transition-colors" />
                   <Input
-                    placeholder="Search suppliers..."
+                    placeholder="Search..."
                     className="pl-11 bg-muted/10 border-border/40 rounded-none focus:ring-0 focus:border-primary/60 h-10 w-full font-display font-bold uppercase tracking-wider text-[10px] transition-all"
                     value={filters.searchQuery}
                     onChange={(e) =>

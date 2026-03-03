@@ -12,7 +12,7 @@ import { useGetCompaniesQuery } from "@/services/api/companies";
 import { useGetProductsQuery } from "@/services/api/products";
 import { useGetServicesQuery } from "@/services/api/services";
 import { useGetMarketplaceStatsQuery } from "@/services/api/stats";
-import { PageContainer, StatsGrid } from "@/shared/components";
+import { PageContainer } from "@/shared/components";
 import { ROUTES } from "@/shared/constants/routes";
 import { formatDate } from "@/shared/utils/format";
 import { Card } from "./card";
@@ -95,109 +95,118 @@ export function AdminDashboard() {
 	return (
 		<PageContainer>
 			<PageHeader
-				title="Admin Dashboard"
-				subtitle="Live operational metrics and quick admin actions"
-				badge="Administrator"
+				title="Admin Panel"
+				subtitle="Marketplace operational hub"
+				badge="System Administrator"
 			/>
 
-			<StatsGrid>
+			<div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6 mb-8">
 				<StatCard
-					label="Verified Suppliers"
+					label="Suppliers"
 					value={compact(verifiedSuppliers)}
 					icon={RiShieldCheckLine}
 					bgColor="bg-emerald-50"
 					color="text-emerald-600"
 				/>
 				<StatCard
-					label="Active Listings"
+					label="Listings"
 					value={compact(activeListings)}
 					icon={RiApps2Line}
 					bgColor="bg-blue-50"
 					color="text-blue-600"
 				/>
 				<StatCard
-					label="Catalog Items"
+					label="Catalog"
 					value={compact(catalogItems)}
 					icon={RiFolder2Line}
 					bgColor="bg-violet-50"
 					color="text-violet-600"
 				/>
 				<StatCard
-					label="Needs Review"
+					label="Review"
 					value={compact(pendingReviewCount)}
 					icon={RiAlertLine}
 					bgColor="bg-amber-50"
 					color="text-amber-600"
 				/>
-			</StatsGrid>
+			</div>
 
 			<div className="grid grid-cols-1 gap-6 xl:grid-cols-3">
 				<Card
-					title="Quick Actions"
-					subtitle="Go directly to key admin sections"
+					title="Quick Operations"
+					subtitle="Management nodes"
 					className="xl:col-span-1"
 				>
-					<div className="space-y-3">
+					<div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-1 gap-3">
 						<Button
 							variant="outline"
-							className="w-full justify-start rounded-none uppercase text-[10px] font-black tracking-widest h-11"
+							className="w-full justify-start rounded-none uppercase text-[10px] font-black tracking-widest h-11 border-border/40 hover:bg-primary/5 hover:text-primary transition-all"
 							onClick={() => navigate({ to: ROUTES.ADMIN.SUPPLIERS.INDEX })}
 						>
-							<RiUserLine className="mr-2 h-4 w-4" /> Manage Suppliers
+							<RiUserLine className="mr-3 h-4 w-4" /> Manage Suppliers
 						</Button>
 						<Button
 							variant="outline"
-							className="w-full justify-start rounded-none uppercase text-[10px] font-black tracking-widest h-11"
+							className="w-full justify-start rounded-none uppercase text-[10px] font-black tracking-widest h-11 border-border/40 hover:bg-primary/5 hover:text-primary transition-all"
 							onClick={() => navigate({ to: ROUTES.ADMIN.PRODUCTS })}
 						>
-							<RiFolder2Line className="mr-2 h-4 w-4" /> Manage Products
+							<RiFolder2Line className="mr-3 h-4 w-4" /> Manage Products
 						</Button>
 						<Button
 							variant="outline"
-							className="w-full justify-start rounded-none uppercase text-[10px] font-black tracking-widest h-11"
+							className="w-full justify-start rounded-none uppercase text-[10px] font-black tracking-widest h-11 border-border/40 hover:bg-primary/5 hover:text-primary transition-all"
 							onClick={() => navigate({ to: ROUTES.ADMIN.SERVICES })}
 						>
-							<RiApps2Line className="mr-2 h-4 w-4" /> Review Services
+							<RiApps2Line className="mr-3 h-4 w-4" /> Review Services
 						</Button>
 						<Button
 							variant="outline"
-							className="w-full justify-start rounded-none uppercase text-[10px] font-black tracking-widest h-11"
+							className="w-full justify-start rounded-none uppercase text-[10px] font-black tracking-widest h-11 border-border/40 hover:bg-primary/5 hover:text-primary transition-all"
 							onClick={() => navigate({ to: ROUTES.ADMIN.CATEGORIES })}
 						>
-							<RiShieldCheckLine className="mr-2 h-4 w-4" /> Manage Categories
+							<RiShieldCheckLine className="mr-3 h-4 w-4" /> System Categories
 						</Button>
 					</div>
 				</Card>
 
 				<Card
-					title="Recent Activity"
-					subtitle="Latest suppliers and listings"
+					title="Network Activity"
+					subtitle="Latest sync logs"
 					className="xl:col-span-2"
+					noPadding
 				>
 					{recentActivity.length === 0 ? (
-						<div className="py-10 text-sm text-muted-foreground uppercase font-bold tracking-widest text-center border border-dashed border-border/40">
-							No recent activity yet.
+						<div className="py-16 text-center">
+							<p className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/40">
+								Protocol: No Activity Logged
+							</p>
 						</div>
 					) : (
-						<div className="space-y-3">
+						<div className="divide-y divide-border/40">
 							{recentActivity.map((item) => (
 								<div
 									key={`${item.type}-${item.id}`}
-									className="flex items-center justify-between rounded-none border border-border/40 px-4 py-3 hover:bg-muted/5 transition-colors"
+									className="flex items-center justify-between px-6 py-4 hover:bg-muted/30 transition-colors group cursor-pointer"
 								>
-									<div>
-										<p className="text-[8px] uppercase tracking-[0.3em] font-black text-primary">
-											{item.type}
-										</p>
-										<p className="font-display font-black text-foreground uppercase tracking-tight">
+									<div className="flex flex-col gap-0.5">
+										<div className="flex items-center gap-2">
+											<span className="text-[8px] font-black text-primary uppercase tracking-[0.3em]">
+												{item.type}
+											</span>
+											<span className="w-1 h-1 bg-border rounded-full" />
+											<span className="text-[9px] font-mono font-bold text-muted-foreground/40">
+												{item.id.substring(0, 8)}
+											</span>
+										</div>
+										<p className="font-display font-black text-sm uppercase tracking-tight text-foreground group-hover:text-primary transition-colors">
 											{item.name}
 										</p>
 									</div>
 									<div className="text-right">
-										<p className="text-[10px] font-bold text-foreground uppercase tracking-widest">
+										<p className="text-[10px] font-black text-foreground uppercase tracking-widest">
 											{item.status}
 										</p>
-										<p className="text-[9px] font-medium text-muted-foreground uppercase tracking-widest">
+										<p className="text-[9px] font-bold text-muted-foreground/40 uppercase tracking-widest">
 											{formatDate(item.date)}
 										</p>
 									</div>

@@ -48,7 +48,7 @@ export const HomeSection: React.FC<HomeSectionProps> = ({
 			<div className="absolute bottom-0 right-0 w-96 h-96 bg-primary/5 rounded-full translate-x-1/3 translate-y-1/3 blur-3xl pointer-events-none opacity-20" />
 			<div
 				className={cn(
-					"max-w-[1600px] mx-auto px-2.5 sm:px-4 lg:px-6 h-full relative z-10",
+					"max-w-[1600px] mx-auto px-4 sm:px-6 h-full relative z-10",
 					containerClassName,
 				)}
 			>

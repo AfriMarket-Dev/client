@@ -3,6 +3,13 @@ import type React from "react";
 import { useCallback, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { Button } from "@/components/ui/button";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
 import { useMarketplaceFilters } from "@/hooks/use-marketplace-filters";
 import { cn } from "@/lib/utils";
 import { useGetProductCategoriesQuery } from "@/services/api/product-categories";
@@ -45,6 +52,7 @@ const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({
 
   const [showFilters, setShowFilters] = useState(true);
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
 
   const { data: prodCat } = useGetProductCategoriesQuery(
     { limit: 100 },
@@ -144,12 +152,11 @@ const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="bg-background border-b border-border sticky top-0 z-30 py-4 md:py-5">
-        <div className="max-w-[1600px] mx-auto px-4 md:px-6">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+  <div className="min-h-screen bg-background">
+  <div className="bg-background border-b border-border sticky top-0 z-30 py-4 md:py-5">
+  <div className="max-w-[1600px] mx-auto px-4 sm:px-6">          <div className="flex flex-row items-center justify-between gap-4">
             <div className="space-y-0.5">
-              <h1 className="text-2xl md:text-3xl font-display font-black uppercase text-foreground tracking-tighter leading-none">
+              <h1 className="text-xl md:text-3xl font-display font-black uppercase text-foreground tracking-tighter leading-none">
                 Marketplace
               </h1>
               <div className="flex items-center gap-2">
@@ -160,12 +167,64 @@ const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({
               </div>
             </div>
 
-            <div className="hidden md:flex items-center gap-3">
+            <div className="flex items-center gap-2 md:gap-3">
+              {/* Mobile Filter Trigger */}
+              <Drawer open={isMobileFiltersOpen} onOpenChange={setIsMobileFiltersOpen}>
+                <DrawerTrigger asChild>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="lg:hidden rounded-none border-border/40 h-9 font-black uppercase text-[10px] tracking-widest"
+                  >
+                    <SlidersHorizontal className="w-3.5 h-3.5 mr-2" />
+                    Filters
+                    {hasActiveFilters && (
+                      <span className="ml-1.5 w-1.5 h-1.5 rounded-full bg-primary" />
+                    )}
+                  </Button>
+                </DrawerTrigger>
+                <DrawerContent className="bg-background flex flex-col">
+                  <DrawerHeader className="p-6 border-b border-border/40 shrink-0 text-left">
+                    <div className="flex items-center justify-between">
+                      <DrawerTitle className="text-[10px] font-display font-black uppercase tracking-[0.2em] flex items-center gap-2">
+                        <SlidersHorizontal className="w-3.5 h-3.5 text-primary" />
+                        Market Filters
+                      </DrawerTitle>
+                    </div>
+                  </DrawerHeader>
+                  <div className="p-6 flex-1 overflow-y-auto custom-scrollbar">
+                    <FilterPanel
+                      filters={filters}
+                      categories={categories}
+                      priceRange={priceRange}
+                      onPriceRangeChange={setPriceRange}
+                      onPriceCommit={commitPrice}
+                      onFilterChange={(p) => patchFilters(p)}
+                    />
+                  </div>
+                  {hasActiveFilters && (
+                    <div className="p-6 border-t border-border/40 shrink-0 bg-muted/5">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="w-full justify-center h-10 text-[9px] uppercase font-black tracking-[0.2em] border border-destructive/20 text-destructive hover:bg-destructive/5"
+                        onClick={() => {
+                          resetFilters();
+                          setIsMobileFiltersOpen(false);
+                        }}
+                      >
+                        Reset All Filters
+                      </Button>
+                    </div>
+                  )}
+                </DrawerContent>
+              </Drawer>
+
               <Button
                 variant="outline"
                 size="sm"
                 className={cn(
-                  "rounded-none border-border/40 h-9 font-black uppercase text-[10px] tracking-widest",
+                  "hidden lg:flex rounded-none border-border/40 h-9 font-black uppercase text-[10px] tracking-widest",
                   showFilters &&
                     "bg-foreground text-background border-foreground hover:bg-foreground/90",
                 )}

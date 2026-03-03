@@ -1,5 +1,6 @@
-import { ChevronLeft } from "lucide-react";
+import { RiArrowLeftLine } from "@remixicon/react";
 import type React from "react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useSupplierActions } from "@/hooks/use-supplier-actions";
@@ -61,7 +62,7 @@ const SupplierDetails: React.FC<SupplierDetailsProps> = ({
 		return (
 			<div className="min-h-screen bg-background flex items-center justify-center">
 				<div className="animate-pulse text-muted-foreground uppercase text-[10px] font-bold tracking-[0.2em]">
-					Loading Supplier Details...
+					Scanning Provider Node...
 				</div>
 			</div>
 		);
@@ -83,92 +84,130 @@ const SupplierDetails: React.FC<SupplierDetailsProps> = ({
 	}
 
 	return (
-		<div className="min-h-screen bg-background space-y-6 overflow-x-hidden industrial-grain">
+		<div className="min-h-screen bg-background space-y-0 overflow-x-hidden industrial-grain pb-24">
 			<SupplierActions
 				company={company}
 				isMobile
 				onContactClick={() => setShowContactModal(true)}
 			/>
 
-			<div className="max-w-[1400px] mx-auto p-4 md:p-8 space-y-8">
-				{/* Navigation */}
-				<div className="flex items-center gap-2 mb-8">
+			{/* Top sticky header with supplier name */}
+			<div className="bg-background/80 backdrop-blur-md border-b border-border/40 sticky top-[48px] z-30 py-3 md:py-4 px-4 md:px-8">
+				<div className="max-w-[1400px] mx-auto flex items-center justify-between gap-4">
+					<div className="flex items-center gap-3 overflow-hidden">
+						<Button
+							variant="ghost"
+							size="icon-sm"
+							onClick={onBack}
+							className="shrink-0"
+						>
+							<RiArrowLeftLine className="size-4" />
+						</Button>
+						<div className="h-4 w-px bg-border/60 shrink-0" />
+						<h1 className="font-display font-black uppercase text-xs md:text-sm tracking-widest truncate text-foreground">
+							{company.name}
+						</h1>
+					</div>
+					<Badge className="shrink-0 bg-primary/10 text-primary border-primary/20 text-[8px] font-black tracking-widest px-2 py-0.5 rounded-none uppercase hidden sm:block">
+						{company.type || "Supplier"}
+					</Badge>
+				</div>
+			</div>
+
+			<div className="max-w-[1400px] mx-auto p-4 md:p-8 space-y-12">
+				{/* Navigation - Hidden on mobile, redundant with sticky header */}
+				<div className="hidden md:flex items-center gap-2 mb-8 pt-4">
 					<Button
 						variant="ghost"
 						onClick={onBack}
 						className="pl-0 gap-2 text-muted-foreground hover:text-primary font-heading uppercase text-xs tracking-wider hover:bg-transparent"
 					>
-						<ChevronLeft className="w-4 h-4" /> Back to Network
+						<RiArrowLeftLine className="w-4 h-4" /> Back to Network
 					</Button>
 				</div>
 
-				{/* Profile Header */}
-				<SupplierHeader
-					company={company}
-					location={location}
-					rating={rating}
-					onContactClick={() => setShowContactModal(true)}
-				/>
+				<div className="grid md:grid-cols-[200px_1fr] gap-8 md:gap-12 items-start pt-4 md:pt-0">
+					{/* Placeholder for visual balance with header logo */}
+					<div className="hidden md:block" />
 
-				<div className="space-y-6 md:ml-[232px]">
-					{/* Tags */}
-					<div className="flex flex-wrap gap-2">
-						{tags.map((tag: string, i: number) => (
-							<div
-								key={i}
-								className="px-3 py-1 bg-muted/20 border border-border/40 rounded-sm text-[10px] font-bold uppercase tracking-wider text-muted-foreground"
-							>
-								{tag}
-							</div>
-						))}
-					</div>
+					<div className="space-y-10">
+						{/* Profile Info */}
+						<SupplierHeader
+							company={company}
+							location={location}
+							rating={rating}
+							onContactClick={() => setShowContactModal(true)}
+						/>
 
-					{/* Quick Stats Row */}
-					<div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-px bg-border/40 border border-border/40">
-						<div className="bg-background p-3">
-							<div className="text-[10px] uppercase font-bold text-muted-foreground tracking-wider mb-1">
-								Listings
+						<div className="space-y-8">
+							{/* Tags */}
+							<div className="flex flex-wrap gap-2">
+								{tags.map((tag: string, i: number) => (
+									<div
+										key={i}
+										className="px-3 py-1 bg-muted/20 border border-border/40 rounded-none text-[9px] font-black uppercase tracking-wider text-muted-foreground hover:bg-primary/5 hover:border-primary/20 transition-colors"
+									>
+										{tag}
+									</div>
+								))}
 							</div>
-							<div className="text-lg font-bold font-heading text-foreground">
-								{listings.length}
-							</div>
-						</div>
-						<div className="bg-background p-3">
-							<div className="text-[10px] uppercase font-bold text-muted-foreground tracking-wider mb-1">
-								Platform Vis.
-							</div>
-							<div className="text-lg font-bold font-heading text-foreground">
-								{company.visits || 0}
-							</div>
-						</div>
-						<div className="bg-background p-3">
-							<div className="text-[10px] uppercase font-bold text-muted-foreground tracking-wider mb-1">
-								Joined
-							</div>
-							<div className="text-lg font-bold font-heading text-foreground">
-								{joinedYear}
+
+							{/* Quick Stats Row - Tight and technical */}
+							<div className="grid grid-cols-2 xs:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-px bg-border/40 border border-border/40 shadow-sm">
+								<div className="bg-background p-4 flex flex-col gap-1 group hover:bg-muted/5 transition-colors">
+									<div className="text-[9px] uppercase font-black text-muted-foreground/60 tracking-[0.2em]">
+										Active Nodes
+									</div>
+									<div className="text-2xl font-black font-heading text-foreground tracking-tight group-hover:text-primary transition-colors">
+										{listings.length}
+									</div>
+								</div>
+								<div className="bg-background p-4 flex flex-col gap-1 group hover:bg-muted/5 transition-colors">
+									<div className="text-[9px] uppercase font-black text-muted-foreground/60 tracking-[0.2em]">
+										Sync Rate
+									</div>
+									<div className="text-2xl font-black font-heading text-foreground tracking-tight group-hover:text-primary transition-colors">
+										{company.visits || 0}
+									</div>
+								</div>
+								<div className="bg-background p-4 flex flex-col gap-1 group hover:bg-muted/5 transition-colors">
+									<div className="text-[9px] uppercase font-black text-muted-foreground/60 tracking-[0.2em]">
+										Node Age
+									</div>
+									<div className="text-2xl font-black font-heading text-foreground tracking-tight group-hover:text-primary transition-colors">
+										{joinedYear}
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 
 				{/* Tabs Section */}
-				<Tabs defaultValue="overview" className="w-full pt-8">
-					<TabsList variant="line">
-						{["overview", "products", "reviews", "contact"].map((tab) => (
-							<TabsTrigger key={tab} value={tab}>
-								{tab}
-							</TabsTrigger>
-						))}
-					</TabsList>
+				<div className="pt-8 border-t border-border/40">
+					<Tabs defaultValue="overview" className="w-full">
+						<TabsList variant="line" className="justify-start mb-8">
+							{["overview", "products", "reviews", "contact"].map((tab) => (
+								<TabsTrigger
+									key={tab}
+									value={tab}
+									className="uppercase text-[10px] font-black tracking-[0.2em]"
+								>
+									{tab === "overview" ? "Operational Overview" : tab}
+								</TabsTrigger>
+							))}
+						</TabsList>
 
-					<SupplierTabsContent
-						company={company}
-						listings={listings}
-						featuredListings={featuredListings}
-						onProductClick={onProductClick}
-					/>
-				</Tabs>
+						<div className="animate-in fade-in slide-in-from-bottom-2 duration-500">
+							<SupplierTabsContent
+								company={company}
+								listings={listings}
+								featuredListings={featuredListings}
+								onProductClick={onProductClick}
+							/>
+						</div>
+					</Tabs>
+				</div>
 
 				{showContactModal && (
 					<SupplierContactModal

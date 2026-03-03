@@ -42,28 +42,28 @@ export function MarketplaceSubNav() {
 	if (!isHomePage) return null;
 
 	return (
-		<div className="border-b border-border/40 bg-white sticky top-[48px] z-40 overflow-hidden hidden md:block">
+		<div className="border-b border-border/40 bg-white sticky top-[48px] z-40 overflow-hidden">
 			<div className="max-w-[1600px] mx-auto px-4 lg:px-6">
-				<div className="flex items-center gap-10 h-12 overflow-x-auto scrollbar-hide">
+				<div className="flex items-center gap-6 md:gap-10 h-10 md:h-12 overflow-x-auto scrollbar-hide no-scrollbar">
 					<div className="flex items-center gap-2 text-foreground/40 shrink-0">
-						<RiLayoutGridLine size={14} />
-						<span className="text-[9px] font-black uppercase tracking-[0.2em]">
+						<RiLayoutGridLine size={12} className="md:size-[14px]" />
+						<span className="text-[8px] md:text-[9px] font-black uppercase tracking-[0.2em]">
 							Quick Access
 						</span>
 					</div>
 
-					<div className="h-4 w-px bg-border/60" />
+					<div className="h-3 md:h-4 w-px bg-border/60 shrink-0" />
 
 					{anchorItems.map((item) => (
 						<a
 							key={item.label}
 							href={item.href}
 							onClick={(e) => scrollToSection(e, item.href)}
-							className="group flex items-center gap-2.5 text-[10px] font-black uppercase tracking-[0.15em] text-muted-foreground/60 hover:text-primary transition-all whitespace-nowrap h-full relative"
+							className="group flex items-center gap-2 md:gap-2.5 text-[9px] md:text-[10px] font-black uppercase tracking-[0.15em] text-muted-foreground/60 hover:text-primary transition-all whitespace-nowrap h-full relative"
 						>
 							<item.icon
-								size={14}
-								className="group-hover:scale-110 transition-transform"
+								size={12}
+								className="md:size-[14px] group-hover:scale-110 transition-transform"
 							/>
 							{item.label}
 							<span className="absolute bottom-0 left-0 w-full h-0.5 bg-primary scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />

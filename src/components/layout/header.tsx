@@ -1,4 +1,4 @@
-import { RiCloseLine, RiMenuLine } from "@remixicon/react";
+import { RiArrowRightLine, RiCloseLine, RiMenuLine } from "@remixicon/react";
 import { Link } from "@tanstack/react-router";
 import React from "react";
 import { useSelector } from "react-redux";
@@ -48,19 +48,20 @@ export function MobileNav() {
 						)}
 						data-slot={open ? "open" : "closed"}
 					>
-						<div className="grid gap-y-2">
+						<div className="grid gap-y-4 pt-4">
 							{navLinks.map((link) => (
 								<Link
-									className="justify-start text-base font-semibold px-4 py-2 hover:bg-muted"
+									className="flex items-center justify-between text-lg font-black uppercase tracking-[0.2em] px-4 py-3 hover:bg-muted transition-colors group"
 									key={link.label}
 									to={link.href as any}
 									onClick={() => setOpen(false)}
 									activeProps={{
 										className:
-											"text-primary border-l-2 border-primary bg-primary/5",
+											"text-primary bg-primary/5 border-l-4 border-primary",
 									}}
 								>
 									{link.label}
+									<RiArrowRightLine className="size-4 opacity-0 group-hover:opacity-100 transition-opacity" />
 								</Link>
 							))}
 						</div>
@@ -104,7 +105,7 @@ export const Header: React.FC = () => {
 				},
 			)}
 		>
-			<div className="mx-auto flex h-12 w-full max-w-[1600px] items-center justify-between px-4 sm:px-6 lg:px-8">
+			<div className="mx-auto flex h-12 w-full max-w-[1600px] items-center justify-between px-4 sm:px-6">
 				<HeaderLogo />
 
 				<div className="hidden items-center gap-1 md:flex">

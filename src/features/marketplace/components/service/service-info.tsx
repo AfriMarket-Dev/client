@@ -92,13 +92,13 @@ export const ServiceInfo: React.FC<ServiceInfoProps> = ({
 			</div>
 
 			{/* Primary Action */}
-			<div className="pt-4 flex flex-col sm:flex-row gap-4">
+			<div className="pt-6 flex flex-col sm:flex-row gap-4">
 				<Button
 					onClick={onInquire}
 					size="lg"
-					className="h-14 flex-1 rounded-none bg-foreground text-background hover:bg-foreground/90 transition-all duration-300 font-heading font-black uppercase tracking-[0.2em] text-[11px] shadow-xl"
+					className="h-12 flex-1 rounded-none bg-foreground text-background hover:bg-foreground/95 transition-all duration-300 font-heading font-black uppercase tracking-[0.2em] text-[10px] shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98]"
 				>
-					<RiChat3Line size={18} className="mr-2" />
+					<RiChat3Line size={16} className="mr-2" />
 					Send Inquiry
 				</Button>
 			</div>
