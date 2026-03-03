@@ -1,7 +1,6 @@
 import {
 	RiHeartLine,
 	RiMessage2Line,
-	RiMessage3Line,
 	RiPhoneLine,
 	RiShareForwardLine,
 	RiWhatsappLine,
@@ -33,50 +32,49 @@ export const SupplierActions: React.FC<SupplierActionsProps> = ({
 
 	if (isMobile) {
 		return (
-			<div className="md:hidden fixed bottom-0 left-0 right-0 bg-background border-t border-border px-3 py-2 z-50 flex items-center gap-1.5 safe-area-bottom shadow-[0_-4px_12px_rgba(0,0,0,0.05)]">
-				{phone && (
-					<button
-						type="button"
-						onClick={() => window.open(`tel:${phone}`, "_self")}
-						className="flex-none w-11 h-11 flex items-center justify-center rounded-sm bg-muted border border-border text-foreground active:bg-accent transition-colors"
+			<div className="md:hidden fixed bottom-0 left-0 right-0 bg-background/95 backdrop-blur-md border-t border-border px-4 py-2.5 z-50 flex flex-col gap-2 safe-area-bottom shadow-[0_-8px_30px_rgb(0,0,0,0.12)]">
+				<div className="flex items-center gap-2 w-full">
+					<div className="flex items-center gap-1.5 flex-1 overflow-hidden">
+						{phone && (
+							<button
+								type="button"
+								onClick={() => window.open(`tel:${phone}`, "_self")}
+								className="flex-none w-11 h-11 flex items-center justify-center rounded-none bg-muted border border-border text-foreground active:bg-accent transition-colors"
+							>
+								<RiPhoneLine size={18} />
+							</button>
+						)}
+						{phone && (
+							<button
+								type="button"
+								onClick={() =>
+									window.open(
+										`https://wa.me/${phone.replace(/\D/g, "")}`,
+										"_blank",
+									)
+								}
+								className="flex-none w-11 h-11 flex items-center justify-center rounded-none bg-emerald-500 text-white active:bg-emerald-600 transition-colors"
+							>
+								<RiWhatsappLine size={20} />
+							</button>
+						)}
+						<Button
+							variant="outline"
+							size="icon"
+							className="flex-none w-11 h-11 rounded-none border-border text-primary active:bg-primary/10 transition-colors"
+							onClick={handleShare}
+						>
+							<RiShareForwardLine size={18} />
+						</Button>
+					</div>
+					<Button
+						size="lg"
+						className="flex-none font-heading font-black uppercase tracking-widest text-[10px] h-11 px-6 rounded-none bg-primary text-white hover:bg-primary/90 shadow-md shadow-primary/20 transition-all duration-300"
+						onClick={onContactClick}
 					>
-						<RiPhoneLine size={18} />
-					</button>
-				)}
-				{phone && (
-					<button
-						type="button"
-						onClick={() =>
-							window.open(`https://wa.me/${phone.replace(/\D/g, "")}`, "_blank")
-						}
-						className="flex-none w-11 h-11 flex items-center justify-center rounded-sm bg-emerald-500 text-white active:bg-emerald-600 transition-colors"
-					>
-						<RiWhatsappLine size={20} />
-					</button>
-				)}
-				<Button
-					variant="outline"
-					size="icon"
-					className="flex-none w-11 h-11 rounded-sm border-primary/20 text-primary active:bg-primary/10 transition-colors"
-					onClick={handleShare}
-				>
-					<RiShareForwardLine size={18} />
-				</Button>
-				<Button
-					variant="outline"
-					size="lg"
-					className="flex-1 font-heading font-bold uppercase tracking-widest text-[10px] h-11 rounded-none border-primary text-primary hover:bg-primary hover:text-white transition-all duration-300"
-					onClick={onContactClick}
-				>
-					<RiMessage3Line className="w-3.5 h-3.5 mr-1.5" /> Message
-				</Button>
-				<Button
-					size="lg"
-					className="flex-[1.5] font-heading font-bold uppercase tracking-widest text-[10px] h-11 rounded-none bg-primary text-white hover:bg-primary/90 shadow-md shadow-primary/20 transition-all duration-300"
-					onClick={onContactClick}
-				>
-					Inquire
-				</Button>
+						Contact
+					</Button>
+				</div>
 			</div>
 		);
 	}

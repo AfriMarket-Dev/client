@@ -367,7 +367,7 @@ export const SupplierTabsContent: React.FC<SupplierTabsContentProps> = ({
 						</div>
 
 						<div className="pt-4">
-							<Button className="w-full h-14 font-heading font-black uppercase tracking-[0.2em] text-[10px] gap-3 rounded-none bg-foreground text-background hover:bg-foreground/90 shadow-xl transition-all">
+							<Button className="w-full h-12 font-heading font-black uppercase tracking-[0.2em] text-[10px] gap-3 rounded-none bg-foreground text-background hover:bg-foreground/90 shadow-xl transition-all">
 								<MessageCircle className="w-4 h-4" /> Start Chat
 							</Button>
 						</div>

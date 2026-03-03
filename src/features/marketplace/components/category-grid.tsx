@@ -22,9 +22,9 @@ const CategoryGrid: React.FC = () => {
 			withGrid
 			borderTop
 			borderBottom
-			className="py-16 lg:py-32"
+			className="py-10 sm:py-16 lg:py-32"
 		>
-			<div className="space-y-16">
+			<div className="space-y-12 sm:space-y-16">
 				<SectionHeader
 					title="Market Categories"
 					subtitle="Discover specialized materials and services organized by industry sector."
@@ -35,16 +35,16 @@ const CategoryGrid: React.FC = () => {
 				/>
 
 				{isLoading || categories.length === 0 ? (
-					<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+					<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
 						{Array.from({ length: 8 }).map((_, i) => (
 							<div
 								key={`category-skeleton-${i}`}
-								className="h-40 rounded-lg border border-border/40 bg-muted/20 animate-pulse"
+								className="h-32 sm:h-40 rounded-lg border border-border/40 bg-muted/20 animate-pulse"
 							/>
 						))}
 					</div>
 				) : (
-					<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+					<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
 						{categories.map((category: { id: string; name: string }) => (
 							<CompactCategoryCard
 								key={category.id}

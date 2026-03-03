@@ -1,10 +1,13 @@
 import {
+	RiArrowLeftLine,
 	RiBuilding4Line,
 	RiHistoryLine,
 	RiPriceTag3Line,
 } from "@remixicon/react";
 import { useRouter } from "@tanstack/react-router";
 import { useId, useMemo, useState } from "react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useServiceActions } from "@/hooks/use-service-actions";
 import { ImageWithFallback } from "@/shared/components/image-with-fallback";
@@ -46,7 +49,7 @@ export default function ServiceView({ service, onBack }: ServiceViewProps) {
 	}, [service]);
 
 	return (
-		<div className="min-h-screen bg-background space-y-6 overflow-x-hidden industrial-grain pb-24">
+		<div className="min-h-screen bg-background space-y-0 overflow-x-hidden industrial-grain pb-24">
 			<MobileActions
 				service={service}
 				isInWishlist={isInWishlist}
@@ -54,6 +57,29 @@ export default function ServiceView({ service, onBack }: ServiceViewProps) {
 				onContactClick={() => setShowContactModal(true)}
 				trackAndNavigate={trackAndNavigate}
 			/>
+
+			{/* Top sticky header with service name */}
+			<div className="bg-background/80 backdrop-blur-md border-b border-border/40 sticky top-[48px] z-30 py-3 md:py-4 px-4 md:px-8">
+				<div className="max-w-[1400px] mx-auto flex items-center justify-between gap-4">
+					<div className="flex items-center gap-3 overflow-hidden">
+						<Button
+							variant="ghost"
+							size="icon-sm"
+							onClick={backHandler}
+							className="shrink-0"
+						>
+							<RiArrowLeftLine className="size-4" />
+						</Button>
+						<div className="h-4 w-px bg-border/60 shrink-0" />
+						<h1 className="font-display font-black uppercase text-xs md:text-sm tracking-widest truncate text-foreground">
+							{service.name}
+						</h1>
+					</div>
+					<Badge className="shrink-0 bg-primary/10 text-primary border-primary/20 text-[8px] font-black tracking-widest px-2 py-0.5 rounded-none uppercase hidden sm:block">
+						{service.category?.name || "Service"}
+					</Badge>
+				</div>
+			</div>
 
 			<div className="max-w-[1400px] mx-auto p-4 md:p-8 space-y-12">
 				{/* Navigation */}
@@ -66,7 +92,7 @@ export default function ServiceView({ service, onBack }: ServiceViewProps) {
 				/>
 
 				{/* Standard Service Layout */}
-				<div className="grid lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+				<div className="grid lg:grid-cols-12 gap-12 lg:gap-16 items-start pt-4 md:pt-8">
 					{/* Left Column: Visuals */}
 					<div className="lg:col-span-6 xl:col-span-5">
 						<div className="aspect-[4/5] overflow-hidden border border-border bg-muted/5 relative group">

@@ -2,7 +2,6 @@ import {
 	RiAddLine,
 	RiDeleteBinLine,
 	RiEditLine,
-	RiMoreLine,
 	RiStore2Line,
 } from "@remixicon/react";
 import { useNavigate } from "@tanstack/react-router";
@@ -11,15 +10,6 @@ import { useCallback, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuGroup,
-	DropdownMenuItem,
-	DropdownMenuLabel,
-	DropdownMenuSeparator,
-	DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Card as AdminCard } from "@/features/admin/components/card";
 import { PageHeader as AdminPageHeader } from "@/features/admin/components/page-header";
 import { StatCard as AdminStatCard } from "@/features/admin/components/stat-card";
@@ -162,7 +152,7 @@ export default function ProviderDashboard() {
 				actions={
 					<Button
 						onClick={() => navigate({ to: "/dashboard/listings/new" })}
-						className="h-11 rounded-sm px-6 text-xs font-heading font-bold uppercase tracking-wider"
+						className="h-11 rounded-none px-6 text-[10px] font-heading font-black uppercase tracking-wider w-full sm:w-auto"
 					>
 						<RiAddLine size={18} className="mr-2" />
 						New Listing
@@ -170,16 +160,16 @@ export default function ProviderDashboard() {
 				}
 			/>
 
-			<div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+			<div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
 				<AdminStatCard
-					label="Total Listings"
+					label="Listings"
 					value={listings.length}
 					icon={Package}
 					bgColor="bg-primary/5"
 					color="text-primary"
 				/>
 				<AdminStatCard
-					label="Active Listings"
+					label="Active"
 					value={activeListings}
 					icon={RiStore2Line}
 					bgColor="bg-emerald-50"
@@ -201,7 +191,7 @@ export default function ProviderDashboard() {
 				/>
 			</div>
 
-			<AdminCard title="Listings" subtitle="Current inventory" noPadding>
+			<AdminCard title="Inventory" subtitle="Active marketplace nodes" noPadding>
 				{listLoading ? (
 					<div className="p-12 text-center">
 						<div className="mx-auto h-6 w-6 animate-spin rounded-full border-b-2 border-primary" />
@@ -209,125 +199,184 @@ export default function ProviderDashboard() {
 				) : listings.length === 0 ? (
 					<div className="border-t border-border p-16 text-center">
 						<Package className="mx-auto mb-4 h-12 w-12 text-muted-foreground/20" />
-						<p className="text-sm text-muted-foreground">
-							No listings created yet.
+						<p className="text-xs uppercase font-bold text-muted-foreground tracking-widest">
+							No listings found.
 						</p>
 						<Button
 							variant="ghost"
-							className="mt-4 text-primary"
+							className="mt-4 text-[10px] font-black uppercase tracking-[0.2em] text-primary"
 							onClick={() => navigate({ to: "/dashboard/listings/new" })}
 						>
 							Create first listing
 						</Button>
 					</div>
 				) : (
-					<div className="overflow-hidden border-t border-border">
-						<table className="w-full">
-							<thead>
-								<tr className="border-b border-border bg-muted/20 text-left text-[10px] uppercase tracking-widest text-muted-foreground">
-									<th className="px-6 py-4">Listing</th>
-									<th className="px-6 py-4">Category</th>
-									<th className="px-6 py-4">Status</th>
-									<th className="px-6 py-4 text-right">Action</th>
-								</tr>
-							</thead>
-							<tbody className="divide-y divide-border">
-								{listings.map((listing: any) => (
-									<tr
-										key={listing.id}
-										className="cursor-pointer transition-colors hover:bg-muted/30"
-										onClick={() =>
-											navigate({
-												to: `/dashboard/listings/${listing.id}/edit`,
-												search: { type: listing.itemType },
-											} as any)
-										}
-									>
-										<td className="px-6 py-4">
-											<p className="font-medium text-foreground">
-												{listing.name}
-											</p>
-											<p className="text-xs text-muted-foreground">
-												{listing.id}
-											</p>
-										</td>
-										<td className="px-6 py-4">
-											<Badge
-												variant="outline"
-												className="text-[10px] uppercase tracking-wider"
-											>
+					<div className="border-t border-border">
+						{/* mobile card view */}
+						<div className="block md:hidden divide-y divide-border/40">
+							{listings.map((listing: any) => (
+								<div
+									key={listing.id}
+									className="p-4 active:bg-muted/50 transition-colors"
+									onClick={() =>
+										navigate({
+											to: `/dashboard/listings/${listing.id}/edit`,
+											search: { type: listing.itemType },
+										} as any)
+									}
+								>
+									<div className="flex justify-between items-start mb-3">
+										<div>
+											<p className="text-[8px] font-black text-primary uppercase tracking-[0.3em] mb-1">
 												{listing.itemType}
-											</Badge>
-										</td>
-										<td className="px-6 py-4">
-											<div className="flex items-center gap-2">
-												<div
-													className={cn(
-														"h-2 w-2 rounded-full",
-														listing.isActive
-															? "bg-emerald-500"
-															: "bg-amber-500",
-													)}
-												/>
-												<span className="text-xs uppercase tracking-wider text-foreground">
-													{listing.isActive ? "Live" : "Inactive"}
-												</span>
-											</div>
-										</td>
-										<td
-											className="px-6 py-4 text-right"
-											onClick={(e) => e.stopPropagation()}
+											</p>
+											<h4 className="font-display font-black text-sm uppercase tracking-tight text-foreground">
+												{listing.name}
+											</h4>
+											<p className="text-[10px] font-mono font-bold text-muted-foreground/40 mt-0.5">
+												ID: {listing.id.substring(0, 8)}...
+											</p>
+										</div>
+										<div className="flex items-center gap-1.5">
+											<div
+												className={cn(
+													"h-1.5 w-1.5 rounded-full",
+													listing.isActive ? "bg-emerald-500" : "bg-amber-500",
+												)}
+											/>
+											<span className="text-[9px] font-black uppercase tracking-widest text-muted-foreground">
+												{listing.isActive ? "Live" : "Pending"}
+											</span>
+										</div>
+									</div>
+									<div className="flex items-center justify-end gap-2 mt-4 pt-3 border-t border-border/5">
+										<Button
+											variant="outline"
+											size="sm"
+											className="h-8 text-[9px] font-black uppercase tracking-widest rounded-none border-border/40"
+											onClick={(e) => {
+												e.stopPropagation();
+												navigate({
+													to: `/dashboard/listings/${listing.id}/edit`,
+													search: { type: listing.itemType },
+												} as any);
+											}}
 										>
-											<DropdownMenu>
-												<DropdownMenuTrigger
-													render={
-														<Button
-															variant="ghost"
-															className="h-8 w-8 p-0 rounded-sm"
-														>
-															<span className="sr-only">Open menu</span>
-															<RiMoreLine className="h-4 w-4" />
-														</Button>
-													}
-												/>
-												<DropdownMenuContent align="end" className="w-56">
-													<DropdownMenuGroup>
-														<DropdownMenuLabel>Actions</DropdownMenuLabel>
-														<DropdownMenuItem
-															onClick={(e) => {
-																e.stopPropagation();
-																navigate({
-																	to: `/dashboard/listings/${listing.id}/edit`,
-																	search: { type: listing.itemType },
-																} as any);
-															}}
-														>
-															<RiEditLine className="mr-2 h-4 w-4" /> Edit
-														</DropdownMenuItem>
-														<DropdownMenuSeparator />
-														<DropdownMenuItem
-															className="text-destructive"
-															onClick={(e) => {
-																e.stopPropagation();
-																setDeleteModal({
-																	isOpen: true,
-																	listingId: listing.id,
-																	listingName: listing.name,
-																	itemType: listing.itemType,
-																});
-															}}
-														>
-															<RiDeleteBinLine className="mr-2 h-4 w-4" />{" "}
-															Delete
-														</DropdownMenuItem>
-													</DropdownMenuGroup>
-												</DropdownMenuContent>
-											</DropdownMenu>
-										</td>
+											<RiEditLine className="mr-1.5 h-3 w-3" /> Edit
+										</Button>
+										<Button
+											variant="outline"
+											size="sm"
+											className="h-8 text-[9px] font-black uppercase tracking-widest rounded-none border-border/40 text-destructive hover:bg-destructive/5"
+											onClick={(e) => {
+												e.stopPropagation();
+												setDeleteModal({
+													isOpen: true,
+													listingId: listing.id,
+													listingName: listing.name,
+													itemType: listing.itemType,
+												});
+											}}
+										>
+											<RiDeleteBinLine className="mr-1.5 h-3 w-3" /> Delete
+										</Button>
+									</div>
+								</div>
+							))}
+						</div>
+
+						{/* desktop table view */}
+						<div className="hidden md:block overflow-x-auto">
+							<table className="w-full">
+								<thead>
+									<tr className="border-b border-border bg-muted/20 text-left text-[10px] uppercase tracking-widest text-muted-foreground">
+										<th className="px-6 py-4">Listing Node</th>
+										<th className="px-6 py-4">Category</th>
+										<th className="px-6 py-4">Status</th>
+										<th className="px-6 py-4 text-right">Operations</th>
 									</tr>
-								))}
-							</tbody>
-						</table>
+								</thead>
+								<tbody className="divide-y divide-border">
+									{listings.map((listing: any) => (
+										<tr
+											key={listing.id}
+											className="cursor-pointer transition-colors hover:bg-muted/30"
+											onClick={() =>
+												navigate({
+													to: `/dashboard/listings/${listing.id}/edit`,
+													search: { type: listing.itemType },
+												} as any)
+											}
+										>
+											<td className="px-6 py-4">
+												<p className="font-display font-black text-sm uppercase tracking-tight text-foreground">
+													{listing.name}
+												</p>
+												<p className="text-[10px] font-mono font-bold text-muted-foreground/40">
+													{listing.id}
+												</p>
+											</td>
+											<td className="px-6 py-4">
+												<Badge
+													variant="outline"
+													className="text-[9px] font-black uppercase tracking-[0.2em] rounded-none border-primary/20 bg-primary/5 text-primary"
+												>
+													{listing.itemType}
+												</Badge>
+											</td>
+											<td className="px-6 py-4">
+												<div className="flex items-center gap-2">
+													<div
+														className={cn(
+															"h-2 w-2 rounded-full",
+															listing.isActive ? "bg-emerald-500" : "bg-amber-500",
+														)}
+													/>
+													<span className="text-[10px] font-black uppercase tracking-widest text-foreground">
+														{listing.isActive ? "Live" : "Inactive"}
+													</span>
+												</div>
+											</td>
+											<td
+												className="px-6 py-4 text-right"
+												onClick={(e) => e.stopPropagation()}
+											>
+												<div className="flex items-center justify-end gap-2">
+													<Button
+														variant="ghost"
+														size="icon"
+														className="h-8 w-8 rounded-none hover:bg-primary/5 hover:text-primary"
+														onClick={() =>
+															navigate({
+																to: `/dashboard/listings/${listing.id}/edit`,
+																search: { type: listing.itemType },
+															} as any)
+														}
+													>
+														<RiEditLine className="h-4 w-4" />
+													</Button>
+													<Button
+														variant="ghost"
+														size="icon"
+														className="h-8 w-8 rounded-none hover:bg-destructive/5 hover:text-destructive"
+														onClick={() =>
+															setDeleteModal({
+																isOpen: true,
+																listingId: listing.id,
+																listingName: listing.name,
+																itemType: listing.itemType,
+															})
+														}
+													>
+														<RiDeleteBinLine className="h-4 w-4" />
+													</Button>
+												</div>
+											</td>
+										</tr>
+									))}
+								</tbody>
+							</table>
+						</div>
 					</div>
 				)}
 			</AdminCard>

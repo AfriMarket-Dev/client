@@ -68,7 +68,7 @@ export const HeroWidget: React.FC<HeroWidgetProps> = ({
 	return (
 		<div
 			className={cn(
-				"bg-background border border-border/20 p-6 flex flex-col h-full transition-all duration-300 relative group/widget rounded-none overflow-hidden hover:shadow-2xl hover:shadow-primary/5",
+				"bg-background border border-border/20 p-4 sm:p-6 flex flex-col h-full transition-all duration-300 relative group/widget rounded-none overflow-hidden hover:shadow-2xl hover:shadow-primary/5",
 				getVariantStyles(),
 				className,
 			)}

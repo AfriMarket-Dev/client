@@ -110,8 +110,8 @@ export function DataTable<TData, TValue>({
 
 	return (
 		<div className="space-y-4">
-			<div className="flex items-center justify-between">
-				<div className="flex flex-1 items-center space-x-2">
+			<div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
+				<div className="flex flex-1 items-center">
 					{filterColumn && (
 						<Input
 							placeholder={filterPlaceholder}
@@ -124,7 +124,7 @@ export function DataTable<TData, TValue>({
 									.getColumn(filterColumn)
 									?.setFilterValue(event.target.value)
 							}
-							className="h-8 w-[150px] lg:w-[250px]"
+							className="h-9 w-full sm:w-[250px] rounded-none border-border/40 text-[10px] font-bold uppercase tracking-widest"
 						/>
 					)}
 				</div>
@@ -134,10 +134,10 @@ export function DataTable<TData, TValue>({
 							<Button
 								variant="outline"
 								size="sm"
-								className="ml-auto hidden h-8 lg:flex"
+								className="hidden lg:flex h-9 rounded-none border-border/40 font-black uppercase text-[10px] tracking-widest"
 							>
 								<RiSettings2Line className="mr-2 h-4 w-4" />
-								View
+								Columns
 							</Button>
 						}
 					/>
@@ -170,125 +170,142 @@ export function DataTable<TData, TValue>({
 					</DropdownMenuContent>
 				</DropdownMenu>
 			</div>
-			<div className="rounded-md border">
-				<Table>
-					<TableHeader>
-						{table.getHeaderGroups().map((headerGroup) => (
-							<TableRow key={headerGroup.id}>
-								{headerGroup.headers.map((header) => {
-									return (
-										<TableHead key={header.id}>
-											{header.isPlaceholder
-												? null
-												: flexRender(
-														header.column.columnDef.header,
-														header.getContext(),
-													)}
-										</TableHead>
-									);
-								})}
-							</TableRow>
-						))}
-					</TableHeader>
-					<TableBody>
-						{table.getRowModel().rows?.length ? (
-							table.getRowModel().rows.map((row) => (
-								<TableRow
-									key={row.id}
-									data-state={row.getIsSelected() && "selected"}
-								>
-									{row.getVisibleCells().map((cell) => (
-										<TableCell key={cell.id}>
-											{flexRender(
-												cell.column.columnDef.cell,
-												cell.getContext(),
-											)}
-										</TableCell>
-									))}
+			<div className="rounded-none border border-border/40 overflow-hidden">
+				<div className="overflow-x-auto custom-scrollbar">
+					<Table>
+						<TableHeader>
+							{table.getHeaderGroups().map((headerGroup) => (
+								<TableRow key={headerGroup.id} className="bg-muted/20">
+									{headerGroup.headers.map((header) => {
+										return (
+											<TableHead
+												key={header.id}
+												className="text-[10px] font-black uppercase tracking-widest whitespace-nowrap py-4"
+											>
+												{header.isPlaceholder
+													? null
+													: flexRender(
+															header.column.columnDef.header,
+															header.getContext(),
+														)}
+											</TableHead>
+										);
+									})}
 								</TableRow>
-							))
-						) : (
-							<TableRow>
-								<TableCell
-									colSpan={columns.length}
-									className="h-24 text-center"
-								>
-									No results.
-								</TableCell>
-							</TableRow>
-						)}
-					</TableBody>
-				</Table>
-			</div>
-			<div className="flex items-center justify-between px-2">
-				<div className="flex-1 text-sm text-muted-foreground">
-					{table.getFilteredSelectedRowModel().rows.length} of{" "}
-					{table.getFilteredRowModel().rows.length} row(s) selected.
+							))}
+						</TableHeader>
+						<TableBody>
+							{table.getRowModel().rows?.length ? (
+								table.getRowModel().rows.map((row) => (
+									<TableRow
+										key={row.id}
+										data-state={row.getIsSelected() && "selected"}
+										className="hover:bg-muted/10 transition-colors"
+									>
+										{row.getVisibleCells().map((cell) => (
+											<TableCell
+												key={cell.id}
+												className="py-4 whitespace-nowrap"
+											>
+												{flexRender(
+													cell.column.columnDef.cell,
+													cell.getContext(),
+												)}
+											</TableCell>
+										))}
+									</TableRow>
+								))
+							) : (
+								<TableRow>
+									<TableCell
+										colSpan={columns.length}
+										className="h-24 text-center text-[10px] uppercase font-bold text-muted-foreground tracking-widest"
+									>
+										Protocol Error: No Data Found
+									</TableCell>
+								</TableRow>
+							)}
+						</TableBody>
+					</Table>
 				</div>
-				<div className="flex items-center space-x-6 lg:space-x-8">
+			</div>
+			<div className="flex flex-col sm:flex-row items-center justify-between gap-4 px-2">
+				<div className="hidden sm:block flex-1 text-[10px] font-black uppercase tracking-widest text-muted-foreground/40">
+					{table.getFilteredSelectedRowModel().rows.length} of{" "}
+					{table.getFilteredRowModel().rows.length} record(s) active
+				</div>
+				<div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 lg:gap-8 w-full sm:w-auto">
 					<div className="flex items-center space-x-2">
-						<p className="text-sm font-medium">Rows per page</p>
+						<p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">
+							Display:
+						</p>
 						<Select
 							value={`${table.getState().pagination.pageSize}`}
 							onValueChange={(value) => {
 								table.setPageSize(Number(value));
 							}}
 						>
-							<SelectTrigger className="h-8 w-[70px]">
+							<SelectTrigger className="h-8 w-[70px] rounded-none border-border/40 text-[10px] font-bold">
 								<SelectValue
 									placeholder={table.getState().pagination.pageSize}
 								/>
 							</SelectTrigger>
-							<SelectContent side="top">
+							<SelectContent side="top" className="rounded-none">
 								{[10, 20, 30, 40, 50].map((pageSize) => (
-									<SelectItem key={pageSize} value={`${pageSize}`}>
+									<SelectItem
+										key={pageSize}
+										value={`${pageSize}`}
+										className="text-[10px] uppercase font-bold"
+									>
 										{pageSize}
 									</SelectItem>
 								))}
 							</SelectContent>
 						</Select>
 					</div>
-					<div className="flex w-[100px] items-center justify-center text-sm font-medium">
-						Page {table.getState().pagination.pageIndex + 1} of{" "}
-						{table.getPageCount()}
-					</div>
-					<div className="flex items-center space-x-2">
-						<Button
-							variant="outline"
-							className="hidden h-8 w-8 p-0 lg:flex"
-							onClick={() => table.setPageIndex(0)}
-							disabled={!table.getCanPreviousPage()}
-						>
-							<span className="sr-only">Go to first page</span>
-							<RiArrowLeftDoubleLine className="h-4 w-4" />
-						</Button>
-						<Button
-							variant="outline"
-							className="h-8 w-8 p-0"
-							onClick={() => table.previousPage()}
-							disabled={!table.getCanPreviousPage()}
-						>
-							<span className="sr-only">Go to previous page</span>
-							<RiArrowLeftSLine className="h-4 w-4" />
-						</Button>
-						<Button
-							variant="outline"
-							className="h-8 w-8 p-0"
-							onClick={() => table.nextPage()}
-							disabled={!table.getCanNextPage()}
-						>
-							<span className="sr-only">Go to next page</span>
-							<RiArrowRightSLine className="h-4 w-4" />
-						</Button>
-						<Button
-							variant="outline"
-							className="hidden h-8 w-8 p-0 lg:flex"
-							onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-							disabled={!table.getCanNextPage()}
-						>
-							<span className="sr-only">Go to last page</span>
-							<RiArrowRightDoubleLine className="h-4 w-4" />
-						</Button>
+					<div className="flex items-center gap-4">
+						<div className="flex items-center justify-center text-[10px] font-black uppercase tracking-widest min-w-[80px]">
+							Node {table.getState().pagination.pageIndex + 1} /{" "}
+							{table.getPageCount()}
+						</div>
+						<div className="flex items-center space-x-1">
+							<Button
+								variant="outline"
+								className="hidden h-8 w-8 p-0 lg:flex rounded-none border-border/40"
+								onClick={() => table.setPageIndex(0)}
+								disabled={!table.getCanPreviousPage()}
+							>
+								<span className="sr-only">First</span>
+								<RiArrowLeftDoubleLine className="h-4 w-4" />
+							</Button>
+							<Button
+								variant="outline"
+								className="h-8 w-8 p-0 rounded-none border-border/40"
+								onClick={() => table.previousPage()}
+								disabled={!table.getCanPreviousPage()}
+							>
+								<span className="sr-only">Prev</span>
+								<RiArrowLeftSLine className="h-4 w-4" />
+							</Button>
+							<Button
+								variant="outline"
+								className="h-8 w-8 p-0 rounded-none border-border/40"
+								onClick={() => table.nextPage()}
+								disabled={!table.getCanNextPage()}
+							>
+								<span className="sr-only">Next</span>
+								<RiArrowRightSLine className="h-4 w-4" />
+							</Button>
+							<Button
+								variant="outline"
+								className="hidden h-8 w-8 p-0 lg:flex rounded-none border-border/40"
+								onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+								disabled={!table.getCanNextPage()}
+							>
+								<span className="sr-only">Last</span>
+								<RiArrowRightDoubleLine className="h-4 w-4" />
+							</Button>
+						</div>
 					</div>
 				</div>
 			</div>

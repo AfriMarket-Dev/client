@@ -67,7 +67,7 @@ export const Footer: React.FC<FooterProps> = ({
 			<div className="absolute top-0 right-0 w-[800px] h-[800px] bg-primary/[0.02] rounded-full translate-x-1/2 -translate-y-1/2 blur-3xl pointer-events-none" />
 			<div className="absolute bottom-0 left-0 w-64 h-64 bg-primary/[0.03] rounded-none -rotate-45 -translate-x-1/2 translate-y-1/2 pointer-events-none" />
 
-			<div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
+			<div className="max-w-[1600px] mx-auto px-4 sm:px-6">
 				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-16 lg:gap-24">
 					<div className="lg:col-span-5 space-y-10">
 						<div>

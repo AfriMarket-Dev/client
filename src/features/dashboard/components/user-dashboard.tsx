@@ -45,28 +45,28 @@ export default function UserDashboard() {
 	}, [conversations]);
 
 	return (
-		<div className="container mx-auto max-w-[1600px] px-4 md:px-6 lg:px-8 py-12">
+		<div className="container mx-auto max-w-[1600px] px-4 md:px-6 lg:px-8 py-8 md:py-12">
 			{/* Header Section */}
-			<div className="mb-12 flex flex-col justify-between gap-6 md:flex-row md:items-center border-b border-border/40 pb-10">
+			<div className="mb-8 md:mb-12 flex flex-col justify-between gap-6 md:flex-row md:items-center border-b border-border/40 pb-8 md:pb-10">
 				<div>
-					<div className="flex items-center gap-3 mb-4">
+					<div className="flex items-center gap-3 mb-3 md:mb-4">
 						<div className="w-8 h-px bg-primary" />
-						<span className="text-[10px] font-black uppercase tracking-[0.4em] text-primary">
+						<span className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.4em] text-primary">
 							Buyer Portal
 						</span>
 					</div>
-					<h1 className="text-4xl md:text-5xl font-display font-black text-foreground uppercase tracking-tighter leading-none">
+					<h1 className="text-3xl md:text-5xl font-display font-black text-foreground uppercase tracking-tighter leading-none">
 						Muraho, {user?.name?.split(" ")[0] || "Partner"}
 					</h1>
-					<p className="mt-3 text-[11px] font-bold text-muted-foreground uppercase tracking-widest">
+					<p className="mt-3 text-[10px] md:text-[11px] font-bold text-muted-foreground uppercase tracking-widest">
 						Identity node active · Tracking {wishlist.length} supply links
 					</p>
 				</div>
-				<div className="flex gap-3">
-					<Link to="/marketplace">
+				<div className="flex gap-2 sm:gap-3">
+					<Link to="/marketplace" className="flex-1 sm:flex-none">
 						<Button
 							size="lg"
-							className="h-14 rounded-none font-display font-black uppercase tracking-widest text-[10px] px-8 shadow-lg shadow-primary/20"
+							className="h-12 md:h-14 w-full sm:w-auto rounded-none font-display font-black uppercase tracking-widest text-[9px] md:text-[10px] px-6 md:px-8 shadow-lg shadow-primary/20"
 						>
 							<RiFileTextLine className="mr-2 h-4 w-4" /> Material Scan
 						</Button>
@@ -75,62 +75,62 @@ export default function UserDashboard() {
 						<Button
 							size="lg"
 							variant="outline"
-							className="h-14 w-14 rounded-none border border-border/40 p-0 hover:bg-muted/5 transition-colors"
+							className="h-12 w-12 md:h-14 md:w-14 rounded-none border border-border/40 p-0 hover:bg-muted/5 transition-colors"
 						>
-							<RiSettingsLine className="h-5 w-5" />
+							<RiSettingsLine className="h-4 w-4 md:h-5 md:w-5" />
 						</Button>
 					</Link>
 				</div>
 			</div>
 
 			{/* Stats Grid */}
-			<div className="mb-12 grid grid-cols-1 gap-px bg-border/40 border border-border/40 overflow-hidden shadow-sm md:grid-cols-3">
-				<div className="bg-background p-8 group hover:bg-muted/5 transition-colors">
-					<div className="flex items-center gap-2 mb-4">
+			<div className="mb-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-border/40 border border-border/40 overflow-hidden shadow-sm">
+				<div className="bg-background p-6 md:p-8 group hover:bg-muted/5 transition-colors">
+					<div className="flex items-center gap-2 mb-3 md:mb-4">
 						<RiHeartLine
-							size={16}
+							size={14}
 							className="text-primary opacity-40 group-hover:opacity-100 transition-opacity"
 						/>
-						<span className="text-[10px] uppercase font-black text-muted-foreground tracking-[0.3em]">
+						<span className="text-[9px] md:text-[10px] uppercase font-black text-muted-foreground tracking-[0.3em]">
 							Saved Nodes
 						</span>
 					</div>
-					<p className="text-5xl font-display font-black text-foreground tracking-tighter">
+					<p className="text-4xl md:text-5xl font-display font-black text-foreground tracking-tighter">
 						{wishlist.length}
 					</p>
 				</div>
-				<div className="bg-background p-8 group hover:bg-muted/5 transition-colors">
-					<div className="flex items-center gap-2 mb-4">
+				<div className="bg-background p-6 md:p-8 group hover:bg-muted/5 transition-colors">
+					<div className="flex items-center gap-2 mb-3 md:mb-4">
 						<RiMessage3Line
-							size={16}
+							size={14}
 							className="text-primary opacity-40 group-hover:opacity-100 transition-opacity"
 						/>
-						<span className="text-[10px] uppercase font-black text-muted-foreground tracking-[0.3em]">
+						<span className="text-[9px] md:text-[10px] uppercase font-black text-muted-foreground tracking-[0.3em]">
 							Active Links
 						</span>
 					</div>
-					<p className="text-5xl font-display font-black text-foreground tracking-tighter">
+					<p className="text-4xl md:text-5xl font-display font-black text-foreground tracking-tighter">
 						{conversations.length}
 					</p>
 				</div>
-				<div className="bg-background p-8 group hover:bg-muted/5 transition-colors">
-					<div className="flex items-center gap-2 mb-4">
-						<div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-						<span className="text-[10px] uppercase font-black text-muted-foreground tracking-[0.3em]">
+				<div className="bg-background p-6 md:p-8 group hover:bg-muted/5 transition-colors sm:col-span-2 lg:col-span-1">
+					<div className="flex items-center gap-2 mb-3 md:mb-4">
+						<div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+						<span className="text-[9px] md:text-[10px] uppercase font-black text-muted-foreground tracking-[0.3em]">
 							Unread Streams
 						</span>
 					</div>
-					<p className="text-5xl font-display font-black text-primary tracking-tighter">
+					<p className="text-4xl md:text-5xl font-display font-black text-primary tracking-tighter">
 						{unreadCount}
 					</p>
 				</div>
 			</div>
 
-			<div className="grid grid-cols-1 gap-12 lg:grid-cols-12">
+			<div className="grid grid-cols-1 gap-10 lg:grid-cols-12">
 				{/* Saved Listings */}
-				<div className="space-y-8 lg:col-span-8">
+				<div className="space-y-6 md:space-y-8 lg:col-span-8">
 					<div className="flex items-center gap-4">
-						<h2 className="text-xl font-display font-black text-foreground uppercase tracking-tight">
+						<h2 className="text-lg md:text-xl font-display font-black text-foreground uppercase tracking-tight">
 							Operational Inventory
 						</h2>
 						<div className="flex-1 h-px bg-border/40" />
@@ -161,29 +161,30 @@ export default function UserDashboard() {
 								return (
 									<div
 										key={listing.id}
-										className="rounded-none border border-border/40 bg-background hover:border-primary/20 transition-all p-6 group relative overflow-hidden"
+										className="rounded-none border border-border/40 bg-background hover:border-primary/20 transition-all p-5 md:p-6 group relative overflow-hidden"
 									>
 										<div className="absolute top-0 left-0 w-1 h-0 group-hover:h-full bg-primary transition-all duration-500" />
-										<div className="flex items-start justify-between gap-6">
+										<div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 md:gap-6">
 											<div className="min-w-0">
-												<p className="text-[9px] font-black uppercase tracking-[0.3em] text-primary/60 mb-2">
+												<p className="text-[8px] md:text-[9px] font-black uppercase tracking-[0.3em] text-primary/60 mb-1 md:mb-2">
 													{listing.category?.name ?? "General Material"}
 												</p>
-												<h3 className="text-lg font-display font-black text-foreground uppercase tracking-tight group-hover:text-primary transition-colors line-clamp-1">
+												<h3 className="text-base md:text-lg font-display font-black text-foreground uppercase tracking-tight group-hover:text-primary transition-colors line-clamp-1">
 													{listing.name}
 												</h3>
-												<div className="flex items-center gap-4 mt-3">
-													<p className="text-sm font-black tracking-tight text-foreground/80 font-mono">
+												<div className="flex items-center gap-3 md:gap-4 mt-2 md:mt-3">
+													<p className="text-[12px] md:text-sm font-black tracking-tight text-foreground/80 font-mono">
 														RWF {(Number(price) || 0).toLocaleString()}
 													</p>
 													<div className="w-1 h-1 rounded-full bg-border" />
-													<p className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest truncate">
+													<p className="text-[8px] md:text-[9px] font-bold text-muted-foreground uppercase tracking-widest truncate">
 														{listing.company?.name || "Verified Provider"}
 													</p>
 												</div>
 											</div>
-											<div className="flex gap-2">
+											<div className="flex gap-2 mt-2 sm:mt-0">
 												<Link
+													className="flex-1 sm:flex-none"
 													to={
 														(listing.type === "product"
 															? `/products/${listing.id}`
@@ -193,15 +194,15 @@ export default function UserDashboard() {
 													<Button
 														variant="outline"
 														size="sm"
-														className="h-9 rounded-none text-[9px] font-black uppercase tracking-widest border-border/40"
+														className="h-9 w-full rounded-none text-[9px] font-black uppercase tracking-widest border-border/40"
 													>
-														View Node
+														View
 													</Button>
 												</Link>
 												<Button
 													variant="outline"
 													size="sm"
-													className="h-9 rounded-none text-[9px] font-black uppercase tracking-widest border-border/40 hover:border-amber-500/40 hover:text-amber-600"
+													className="flex-1 sm:flex-none h-9 rounded-none text-[9px] font-black uppercase tracking-widest border-border/40 hover:border-amber-500/40 hover:text-amber-600"
 													onClick={() => {
 														setSelectedItem({
 															provider: listing.company?.name ?? "Supplier",
@@ -215,8 +216,7 @@ export default function UserDashboard() {
 														setReviewModalOpen(true);
 													}}
 												>
-													<RiStarLine className="mr-1.5 h-3.5 w-3.5" /> Log
-													Report
+													<RiStarLine className="mr-1.5 h-3 w-3" /> Report
 												</Button>
 											</div>
 										</div>

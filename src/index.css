@@ -125,6 +125,8 @@
 	--color-info: var(--info);
 	--color-destructive-foreground: var(--destructive-foreground);
 
+	--breakpoint-xs: 480px;
+
 	@keyframes skeleton {
 		to {
 			background-position: -200% 0;
@@ -188,5 +190,9 @@
 
 	.text-label {
 		@apply text-[10px] font-heading font-bold uppercase tracking-widest text-muted-foreground;
+	}
+
+	.safe-area-bottom {
+		padding-bottom: env(safe-area-inset-bottom, 0px);
 	}
 }
