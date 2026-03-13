@@ -1,5 +1,5 @@
 import { TanStackDevtools } from "@tanstack/react-devtools";
-import { createRootRoute, HeadContent, Outlet, ScrollRestoration } from "@tanstack/react-router";
+import { createRootRoute, HeadContent, Outlet } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import { NuqsAdapter } from "nuqs/adapters/tanstack-router";
 import { NotFound } from "@/shared/components/not-found";
@@ -17,7 +17,6 @@ function RootComponent() {
 		<>
 			<NuqsAdapter defaultOptions={{ clearOnDefault: true }}>
 				<HeadContent />
-				<ScrollRestoration />
 				<Outlet />
 			</NuqsAdapter>
 			<TanStackDevtools
