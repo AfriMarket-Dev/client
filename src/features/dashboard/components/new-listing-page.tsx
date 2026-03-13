@@ -43,14 +43,15 @@ export function ProviderListingFormPage() {
 				categoryId: values.categoryId,
 				companyId,
 				priceType: values.priceType || "FIXED",
-				images: values.imageUrls || [],
+				images: values.images || [],
+				specifications: values.specifications || {},
 				variants: [
 					{
 						name: "Default",
 						price: values.price ? Number(values.price) : 0,
 						stock: values.stock ? Number(values.stock) : 0,
 						unit: values.unit || "unit",
-						images: values.imageUrls || [],
+						images: values.images || [],
 					},
 				],
 			};
@@ -74,7 +75,8 @@ export function ProviderListingFormPage() {
 				discount: values.discount ? Number(values.discount) : 0,
 				categoryId: values.categoryId,
 				companyId,
-				images: values.imageUrls || [],
+				images: values.images || [],
+				specifications: values.specifications || {},
 			};
 
 			await createService(sanitizedValues).unwrap();
@@ -89,44 +91,57 @@ export function ProviderListingFormPage() {
 	const serverServiceError = getErrorFromRtkQuery(serviceError);
 
 	return (
-		<div className="p-8 max-w-2xl mx-auto">
-			<div className="mb-10 text-center">
-				<h1 className="text-3xl font-heading font-black uppercase tracking-tight text-foreground mb-2">
+		<div className="p-8 max-w-[1800px] mx-auto">
+			<div className="mb-10">
+				<h1 className="text-3xl font-heading font-black uppercase tracking-tight text-foreground mb-2 text-center">
 					New Listing
 				</h1>
-				<p className="text-muted-foreground text-sm font-medium">
+				<p className="text-muted-foreground text-sm font-medium text-center">
 					Showcase your inventory or expertise on Karibu.
 				</p>
 			</div>
 
-			<Tabs defaultValue="product" className="w-full">
-				<TabsList className="grid w-full grid-cols-2 mb-8">
-					<TabsTrigger value="product">Physical Product</TabsTrigger>
-					<TabsTrigger value="service">Professional Service</TabsTrigger>
-				</TabsList>
+			<div className="max-w-2xl mx-auto">
+				<Tabs defaultValue="product" className="w-full">
+					<TabsList className="!grid w-full grid-cols-2 mb-8 !h-12 !p-1 !bg-muted/20 !border !border-border/10 !rounded-none">
+						<TabsTrigger
+							value="product"
+							className="!rounded-none font-heading font-black uppercase text-[10px] tracking-[0.2em] data-active:!bg-background data-active:!text-primary data-active:!shadow-sm transition-all"
+						>
+							Physical Product
+						</TabsTrigger>
+						<TabsTrigger
+							value="service"
+							className="!rounded-none font-heading font-black uppercase text-[10px] tracking-[0.2em] data-active:!bg-background data-active:!text-primary data-active:!shadow-sm transition-all"
+						>
+							Professional Service
+						</TabsTrigger>
+					</TabsList>
 
-				<TabsContent value="product" className="mt-0 outline-none">
-					<div className="bg-card border border-border/50 p-6 rounded-sm shadow-sm">
-						<ProductForm
-							onSubmit={handleProductSubmit}
-							onCancel={() => navigate({ to: "/dashboard" })}
-							isLoading={isProductLoading}
-							serverError={serverProductError}
-						/>
-					</div>
-				</TabsContent>
+					<TabsContent value="product" className="mt-0 outline-none animate-in fade-in duration-500">
+						<div className="bg-card border border-border/50 p-8 shadow-sm rounded-none">
+							<ProductForm
+								onSubmit={handleProductSubmit}
+								onCancel={() => navigate({ to: "/dashboard" })}
+								isLoading={isProductLoading}
+								serverError={serverProductError}
+								showPricing
+							/>
+						</div>
+					</TabsContent>
 
-				<TabsContent value="service" className="mt-0 outline-none">
-					<div className="bg-card border border-border/50 p-6 rounded-sm shadow-sm">
-						<ServiceForm
-							onSubmit={handleServiceSubmit}
-							onCancel={() => navigate({ to: "/dashboard" })}
-							isLoading={isServiceLoading}
-							serverError={serverServiceError}
-						/>
-					</div>
-				</TabsContent>
-			</Tabs>
+					<TabsContent value="service" className="mt-0 outline-none animate-in fade-in duration-500">
+						<div className="bg-card border border-border/50 p-8 shadow-sm rounded-none">
+							<ServiceForm
+								onSubmit={handleServiceSubmit}
+								onCancel={() => navigate({ to: "/dashboard" })}
+								isLoading={isServiceLoading}
+								serverError={serverServiceError}
+							/>
+						</div>
+					</TabsContent>
+				</Tabs>
+			</div>
 		</div>
 	);
 }

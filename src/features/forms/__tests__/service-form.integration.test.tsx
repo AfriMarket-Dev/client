@@ -37,9 +37,7 @@ describe("ServiceForm Integration", () => {
 		const nameInput = screen.getByLabelText(/Service Name/i);
 		fireEvent.change(nameInput, { target: { value: "Site Survey" } });
 
-		const categoryTrigger = screen.getByRole("combobox", {
-			name: /Select Category/i,
-		});
+		const categoryTrigger = screen.getByLabelText(/Category/i);
 		fireEvent.click(categoryTrigger);
 		const categoryOption = await screen.findByText("Engineering");
 		fireEvent.click(categoryOption);
@@ -69,6 +67,8 @@ describe("ServiceForm Integration", () => {
 					price: "50000",
 					duration: "2 days",
 					description: "Professional site survey.",
+					images: [],
+					specifications: {},
 				}),
 			);
 		});

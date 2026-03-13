@@ -14,7 +14,7 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
 	return (
 		<div
 			className={cn(
-				"rounded-none p-4 sm:p-6 md:p-10 relative overflow-hidden border border-border/20 shadow-none transition-all duration-500 hover:border-primary/20 hover:shadow-2xl hover:shadow-primary/5",
+				"rounded-none p-4 sm:p-6 md:p-8 relative overflow-hidden border border-border/20 shadow-none transition-all duration-500 hover:border-primary/20 hover:shadow-2xl hover:shadow-primary/5",
 				dark ? "bg-foreground text-background" : "bg-card text-foreground",
 				className,
 			)}
@@ -26,11 +26,11 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
 			<div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
 				<div className="min-w-0">
 					{badge && (
-						<Badge className="bg-primary/10 text-primary hover:bg-primary/20 rounded-none border border-primary/20 mb-4 md:mb-6 font-display font-extrabold tracking-[0.3em] uppercase text-[8px] md:text-[10px] px-3 py-1">
+						<Badge className="bg-primary/10 text-primary hover:bg-primary/20 rounded-none border border-primary/20 mb-3 md:mb-4 font-display font-extrabold tracking-[0.3em] uppercase text-[8px] md:text-[9px] px-3 py-1">
 							{badge}
 						</Badge>
 					)}
-					<h1 className="text-xl sm:text-2xl md:text-5xl font-display font-black uppercase tracking-tighter leading-[0.9] mb-3 md:mb-4 truncate md:whitespace-normal">
+					<h1 className="text-xl sm:text-2xl md:text-4xl font-display font-black uppercase tracking-tighter leading-[0.9] mb-2 md:mb-3 truncate md:whitespace-normal">
 						{title}
 					</h1>
 					{subtitle && (

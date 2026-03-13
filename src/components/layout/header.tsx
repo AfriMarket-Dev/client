@@ -1,4 +1,10 @@
-import { RiArrowRightLine, RiCloseLine, RiMenuLine } from "@remixicon/react";
+import {
+	RiArrowRightLine,
+	RiCloseLine,
+	RiHeartLine,
+	RiMenuLine,
+	RiMessage3Line,
+} from "@remixicon/react";
 import { Link } from "@tanstack/react-router";
 import React from "react";
 import { useSelector } from "react-redux";
@@ -10,24 +16,35 @@ import { useScroll } from "@/shared/hooks/use-scroll";
 import type { RootState } from "@/store";
 import { HeaderLogo } from "./header/header-logo";
 import { HeaderUserNav } from "./header/header-user-nav";
+import { RefreshDataButton } from "@/shared/components/refresh-data-button";
 
 const navLinks = [
 	{ label: "Products", href: ROUTES.PUBLIC.PRODUCTS },
 	{ label: "Services", href: ROUTES.PUBLIC.SERVICES },
+	{ label: "Categories", href: ROUTES.PUBLIC.CATEGORIES },
 	{ label: "Auctions", href: ROUTES.PUBLIC.AUCTIONS },
-	{ label: "Suppliers", href: ROUTES.PUBLIC.SUPPLIERS },
+	{ label: "Providers", href: ROUTES.PUBLIC.SUPPLIERS },
 ];
 
 const secondaryLinks = [
 	{ label: "About Us", href: ROUTES.ABOUT },
 	{ label: "Help Center", href: ROUTES.HELP },
-	{ label: "Become a Supplier", href: ROUTES.AUTH.SIGNUP },
+	{ label: "Become a Provider", href: ROUTES.AUTH.SIGNUP },
 ];
 
 export function MobileNav() {
 	const [open, setOpen] = React.useState(false);
-	const { isAuthenticated } = useSelector((state: RootState) => state.auth);
+	const { isAuthenticated, user } = useSelector((state: RootState) => state.auth);
 	const mobileMenuId = React.useId();
+
+	const isProvider = user?.role === "provider" || user?.role === "admin" || user?.role === "agent";
+
+	const filteredSecondaryLinks = secondaryLinks.map(link => {
+		if (link.label === "Become a Provider" && isProvider) {
+			return { label: "Dashboard", href: ROUTES.DASHBOARD.INDEX };
+		}
+		return link;
+	});
 
 	return (
 		<div className="md:hidden">
@@ -52,7 +69,7 @@ export function MobileNav() {
 					<div
 						className={cn(
 							"data-[slot=open]:zoom-in-97 ease-out data-[slot=open]:animate-in",
-							"size-full p-6 bg-background border-t border-border/40 flex flex-col",
+							"size-full p-6 bg-background border-t border-border/40 flex flex-col overflow-y-auto",
 						)}
 						data-slot={open ? "open" : "closed"}
 					>
@@ -73,11 +90,35 @@ export function MobileNav() {
 							))}
 						</div>
 
+						{isAuthenticated && (
+							<div className="mt-8 flex flex-col gap-2">
+								<span className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/40 mb-2">
+									Account
+								</span>
+								<Link
+									className="flex items-center gap-3 text-base font-black uppercase tracking-[0.15em] py-3 border-b border-border/5 group"
+									to={ROUTES.PROTECTED.WISHLIST}
+									onClick={() => setOpen(false)}
+								>
+									<RiHeartLine className="size-5 text-primary" />
+									Wishlist
+								</Link>
+								<Link
+									className="flex items-center gap-3 text-base font-black uppercase tracking-[0.15em] py-3 border-b border-border/5 group"
+									to={ROUTES.PROTECTED.MESSAGES}
+									onClick={() => setOpen(false)}
+								>
+									<RiMessage3Line className="size-5 text-primary" />
+									Messages
+								</Link>
+							</div>
+						)}
+
 						<div className="mt-8 flex flex-col gap-2">
 							<span className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/40 mb-2">
 								Resources
 							</span>
-							{secondaryLinks.map((link) => (
+							{filteredSecondaryLinks.map((link) => (
 								<Link
 									className="text-sm font-bold text-muted-foreground hover:text-primary transition-colors py-2"
 									key={link.label}
@@ -90,7 +131,7 @@ export function MobileNav() {
 						</div>
 
 						{!isAuthenticated && (
-							<div className="mt-auto pt-8 flex flex-col gap-3">
+							<div className="mt-8 pt-8 flex flex-col gap-3 pb-10">
 								<Link to={ROUTES.AUTH.SIGNIN} onClick={() => setOpen(false)}>
 									<Button
 										className="w-full h-12 text-xs font-black uppercase tracking-widest rounded-none"
@@ -122,10 +163,11 @@ export const Header: React.FC = () => {
 	return (
 		<header
 			className={cn(
-				"sticky top-0 z-50 w-full border-transparent border-b transition-all duration-300",
+				"sticky top-0 z-50 w-full border-b transition-all duration-300 bg-background/95 backdrop-blur-md supports-[backdrop-filter]:bg-background/60",
+				"will-change-transform",
 				{
-					"border-border/40 bg-background/80 backdrop-blur-md supports-backdrop-filter:bg-background/50":
-						scrolled,
+					"border-border/40 shadow-none": scrolled,
+					"border-transparent": !scrolled,
 				},
 			)}
 		>
@@ -149,6 +191,24 @@ export const Header: React.FC = () => {
 									<span className="absolute bottom-1 left-2 right-2 sm:left-3 sm:right-3 h-0.5 bg-primary transform scale-x-0 group-hover:scale-x-100 group-[.active]:scale-x-100 transition-transform duration-300" />
 								</Link>
 							))}
+
+							{/* Desktop Only Links */}
+							<div className="hidden lg:flex items-center gap-0.5">
+								<Link
+									to={ROUTES.ABOUT}
+									className="font-heading font-black text-[10px] tracking-[0.15em] text-foreground/80 hover:text-primary px-3 py-1.5 uppercase transition-all relative group shrink-0"
+								>
+									About
+									<span className="absolute bottom-1 left-3 right-3 h-0.5 bg-primary transform scale-x-0 group-hover:scale-x-100 group-[.active]:scale-x-100 transition-transform duration-300" />
+								</Link>
+								<Link
+									to={ROUTES.HELP}
+									className="font-heading font-black text-[10px] tracking-[0.15em] text-foreground/80 hover:text-primary px-3 py-1.5 uppercase transition-all relative group shrink-0"
+								>
+									Help
+									<span className="absolute bottom-1 left-3 right-3 h-0.5 bg-primary transform scale-x-0 group-hover:scale-x-100 group-[.active]:scale-x-100 transition-transform duration-300" />
+								</Link>
+							</div>
 						</div>
 					</div>
 					{/* Swipe Indicator Gradient */}
@@ -178,14 +238,20 @@ export const Header: React.FC = () => {
 								</Link>
 							</>
 						) : (
-							<HeaderUserNav isAuthenticated={isAuthenticated} user={user} />
+							<div className="flex items-center gap-2">
+								<RefreshDataButton variant="ghost" className="h-9 w-9" />
+								<HeaderUserNav isAuthenticated={isAuthenticated} user={user} />
+							</div>
 						)}
 					</div>
 
 					{/* Mobile View - Actions and Menu */}
 					<div className="flex items-center gap-0 sm:hidden">
 						{isAuthenticated && (
-							<HeaderUserNav isAuthenticated={isAuthenticated} user={user} />
+							<div className="flex items-center gap-1">
+								<RefreshDataButton variant="ghost" className="h-8 w-8" />
+								<HeaderUserNav isAuthenticated={isAuthenticated} user={user} />
+							</div>
 						)}
 						<MobileNav />
 					</div>

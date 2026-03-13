@@ -38,7 +38,7 @@ export function AuthLayout() {
 						</span>
 					</h1>
 					<p className="text-lg text-muted-foreground leading-relaxed">
-						Join the largest network of verified suppliers and contractors.
+						Join the largest network of verified providers and contractors.
 						Simplify your buying and grow your business.
 					</p>
 

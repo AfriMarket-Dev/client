@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import type { Product, Supplier } from "@/types";
+import type { Product, Provider } from "@/types";
 
 interface WishlistItem {
 	id: string;
-	type: "product" | "supplier";
-	item: Product | Supplier;
+	type: "product" | "provider";
+	item: Product | Provider;
 	addedAt: string;
 }
 
@@ -29,8 +29,8 @@ export const useWishlist = () => {
 	}, [wishlistItems]);
 
 	const addToWishlist = (
-		item: Product | Supplier,
-		type: "product" | "supplier",
+		item: Product | Provider,
+		type: "product" | "provider",
 	) => {
 		const newItem: WishlistItem = {
 			id: item.id,
@@ -54,13 +54,13 @@ export const useWishlist = () => {
 		});
 	};
 
-	const removeFromWishlist = (id: string, type: "product" | "supplier") => {
+	const removeFromWishlist = (id: string, type: "product" | "provider") => {
 		setWishlistItems((prev) =>
 			prev.filter((item) => !(item.id === id && item.type === type)),
 		);
 	};
 
-	const isInWishlist = (id: string, type: "product" | "supplier") => {
+	const isInWishlist = (id: string, type: "product" | "provider") => {
 		return wishlistItems.some((item) => item.id === id && item.type === type);
 	};
 
@@ -70,10 +70,10 @@ export const useWishlist = () => {
 			.map((item) => item.item as Product);
 	};
 
-	const getWishlistSuppliers = () => {
+	const getWishlistProviders = () => {
 		return wishlistItems
-			.filter((item) => item.type === "supplier")
-			.map((item) => item.item as Supplier);
+			.filter((item) => item.type === "provider")
+			.map((item) => item.item as Provider);
 	};
 
 	const clearWishlist = () => {
@@ -86,7 +86,7 @@ export const useWishlist = () => {
 		removeFromWishlist,
 		isInWishlist,
 		getWishlistProducts,
-		getWishlistSuppliers,
+		getWishlistProviders,
 		clearWishlist,
 		wishlistCount: wishlistItems.length,
 	};

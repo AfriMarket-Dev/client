@@ -1,23 +1,39 @@
 import { formOptions } from "@tanstack/react-form";
 import { z } from "zod";
 
+const numericString = z
+	.union([z.string(), z.number()])
+	.transform((val) => String(val))
+	.refine((val) => !Number.isNaN(Number(val)) && Number(val) >= 0, {
+		message: "Must be a positive number",
+	});
+
+const discountString = z
+	.union([z.string(), z.number()])
+	.transform((val) => String(val))
+	.refine(
+		(val) =>
+			!Number.isNaN(Number(val)) && Number(val) >= 0 && Number(val) <= 100,
+		{
+			message: "Must be between 0 and 100",
+		},
+	);
+
+/**
+ * Product Schema
+ * Handles both Master info and optional initial variant info
+ */
 export const productSchema = z.object({
 	name: z.string().min(2, "Name must be at least 2 characters"),
 	categoryId: z.string().min(1, "Please select a category"),
 	description: z.string().catch(""),
-	price: z
-		.string()
-		.refine((val) => !Number.isNaN(Number(val)) && Number(val) >= 0, {
-			message: "Price must be a positive number",
-		}),
-	priceType: z.enum(["FIXED", "NEGOTIABLE", "STARTS_AT"]),
-	stock: z
-		.string()
-		.refine((val) => !Number.isNaN(Number(val)) && Number(val) >= 0, {
-			message: "Stock must be a non-negative number",
-		}),
-	unit: z.string().min(1, "Unit is required"),
-	imageUrls: z.array(z.string()).catch([]),
+	images: z.array(z.string()).catch([]),
+	specifications: z.record(z.string(), z.string()).catch({}),
+	// Optional fields for "Simple Mode" / Initial Variant
+	price: numericString.optional(),
+	priceType: z.enum(["FIXED", "NEGOTIABLE", "STARTS_AT"]).optional(),
+	stock: numericString.optional(),
+	unit: z.string().optional(),
 });
 
 export type ProductFormValues = z.infer<typeof productSchema>;
@@ -27,38 +43,54 @@ export const productOptions = formOptions({
 		name: "",
 		categoryId: "",
 		description: "",
+		images: [],
+		specifications: {},
 		price: "0",
 		priceType: "FIXED",
 		stock: "0",
 		unit: "unit",
-		imageUrls: [],
 	} as ProductFormValues,
-	validators: {
-		onChange: productSchema,
-	},
 });
 
+/**
+ * Product Variant Schema
+ * Specific pricing and inventory fields
+ */
+export const variantSchema = z.object({
+	name: z.string().min(1, "Name is required"),
+	sku: z.string().optional(),
+	price: numericString,
+	stock: numericString,
+	unit: z.string().min(1, "Unit is required"),
+	images: z.array(z.string()).catch([]),
+});
+
+export type VariantFormValues = z.infer<typeof variantSchema>;
+
+export const variantOptions = formOptions({
+	defaultValues: {
+		name: "",
+		sku: "",
+		price: "0",
+		stock: "0",
+		unit: "unit",
+		images: [],
+	} as VariantFormValues,
+});
+
+/**
+ * Service Schema
+ */
 export const serviceSchema = z.object({
 	name: z.string().min(2, "Service name must be at least 2 characters"),
 	categoryId: z.string().min(1, "Please select a category"),
 	description: z.string().min(10, "Description must be at least 10 characters"),
-	price: z
-		.string()
-		.refine((val) => !Number.isNaN(Number(val)) && Number(val) >= 0, {
-			message: "Rate must be a positive number",
-		}),
+	price: numericString,
 	priceType: z.enum(["FIXED", "NEGOTIABLE", "STARTS_AT"]),
 	duration: z.string().min(1, "Duration is required"),
-	discount: z
-		.string()
-		.refine(
-			(val) =>
-				!Number.isNaN(Number(val)) && Number(val) >= 0 && Number(val) <= 100,
-			{
-				message: "Discount must be between 0 and 100",
-			},
-		),
-	imageUrls: z.array(z.string()).catch([]),
+	discount: discountString,
+	images: z.array(z.string()).catch([]),
+	specifications: z.record(z.string(), z.string()).catch({}),
 });
 
 export type ServiceFormValues = z.infer<typeof serviceSchema>;
@@ -72,11 +104,9 @@ export const serviceOptions = formOptions({
 		priceType: "FIXED",
 		duration: "",
 		discount: "0",
-		imageUrls: [],
+		images: [],
+		specifications: {},
 	} as ServiceFormValues,
-	validators: {
-		onChange: serviceSchema,
-	},
 });
 
 export const auctionSchema = z
@@ -92,7 +122,8 @@ export const auctionSchema = z
 			}),
 		startDate: z.string().min(1, "Start date is required"),
 		endDate: z.string().min(1, "End date is required"),
-		imageUrls: z.array(z.string()).catch([]),
+		images: z.array(z.string()).catch([]),
+		specifications: z.record(z.string(), z.string()).catch({}),
 	})
 	.refine(
 		(data) => {
@@ -115,7 +146,8 @@ export const auctionOptions = formOptions({
 		startingPrice: "",
 		startDate: "",
 		endDate: "",
-		imageUrls: [],
+		images: [],
+		specifications: {},
 	} as AuctionFormValues,
 	validators: {
 		onChange: auctionSchema,
@@ -147,7 +179,7 @@ export const companySetupSchema = z.object({
 		.string()
 		.min(3, "Slug must be at least 3 characters")
 		.regex(
-			/^[a-z0-0-]+$/,
+			/^[a-z0-9-]+$/,
 			"Slug can only contain lowercase letters, numbers, and hyphens",
 		),
 	categoryId: z.string().min(1, "Please select a category"),
@@ -180,7 +212,7 @@ export const companySetupOptions = formOptions({
 	},
 });
 
-export const supplierProvisionSchema = z.object({
+export const providerProvisionSchema = z.object({
 	companyName: z.string().min(2, "Company name must be at least 2 characters"),
 	industry: z.string().min(1, "Please select an industry"),
 	registrationId: z.string().min(1, "Registration ID is required"),
@@ -196,9 +228,9 @@ export const supplierProvisionSchema = z.object({
 	nationalId: z.string().catch(""),
 });
 
-export type SupplierProvisionValues = z.infer<typeof supplierProvisionSchema>;
+export type ProviderProvisionValues = z.infer<typeof providerProvisionSchema>;
 
-export const supplierProvisionOptions = formOptions({
+export const providerProvisionOptions = formOptions({
 	defaultValues: {
 		companyName: "",
 		industry: "",
@@ -211,38 +243,9 @@ export const supplierProvisionOptions = formOptions({
 		phoneNumber: "",
 		position: "",
 		nationalId: "",
-	} as SupplierProvisionValues,
+	} as ProviderProvisionValues,
 	validators: {
-		onChange: supplierProvisionSchema,
-	},
-});
-
-export const variantSchema = z.object({
-	name: z.string().min(1, "Name is required"),
-	price: z
-		.string()
-		.refine((val) => !Number.isNaN(Number(val)) && Number(val) >= 0, {
-			message: "Price must be a positive number",
-		}),
-	stock: z
-		.string()
-		.refine((val) => !Number.isNaN(Number(val)) && Number(val) >= 0, {
-			message: "Stock must be a non-negative number",
-		}),
-	unit: z.string().catch(""),
-});
-
-export type VariantFormValues = z.infer<typeof variantSchema>;
-
-export const variantOptions = formOptions({
-	defaultValues: {
-		name: "",
-		price: "",
-		stock: "",
-		unit: "",
-	} as VariantFormValues,
-	validators: {
-		onChange: variantSchema,
+		onChange: providerProvisionSchema,
 	},
 });
 

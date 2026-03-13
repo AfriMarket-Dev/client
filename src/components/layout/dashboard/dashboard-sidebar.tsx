@@ -19,7 +19,7 @@ interface DashboardSidebarProps {
 const defaultInfo: NavHeaderInfo = {
 	name: "Karibu",
 	logo: RiStore2Line,
-	plan: "Supplier",
+	plan: "Provider",
 };
 
 const navMain = [
@@ -45,7 +45,7 @@ const navMain = [
 		icon: RiAuctionLine,
 	},
 	{
-		title: "Settings",
+		title: "Store Settings",
 		url: ROUTES.PROTECTED.PROFILE,
 		icon: RiSettings4Line,
 	},
@@ -55,9 +55,9 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ user }) => {
 	const { data: companyData } = useGetMyCompanyQuery();
 
 	const sidebarUser = {
-		name: user?.name || "Supplier",
-		email: user?.email || "supplier@karibu.com",
-		avatar: user?.avatar || "/avatars/supplier.jpg",
+		name: user?.name || "Provider",
+		email: user?.email || "provider@karibu.rw",
+		avatar: user?.avatar || "/avatars/provider.jpg",
 		role: user?.role,
 	};
 
@@ -65,7 +65,7 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ user }) => {
 		? {
 				name: companyData.name,
 				logoUrl: companyData.logoUrl,
-				plan: companyData.type || "Supplier",
+				plan: companyData.type?.replace(/_/g, " ") || "Provider",
 			}
 		: defaultInfo;
 

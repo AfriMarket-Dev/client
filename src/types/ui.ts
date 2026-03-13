@@ -1,7 +1,7 @@
 import type { RemixiconComponentType } from "@remixicon/react";
 import type { Product, Service } from "./models";
 
-export interface SupplierRow {
+export interface ProviderRow {
 	id: string;
 	name: string;
 	type: string;
@@ -15,8 +15,8 @@ export interface ProductRow {
 	id: string;
 	name: string;
 	category: string;
-	supplier: string;
-	supplierId: string;
+	provider: string;
+	providerId: string;
 	status: "active" | "inactive";
 	createdDate: string;
 	views: number;
@@ -26,8 +26,8 @@ export interface ServiceRow {
 	id: string;
 	name: string;
 	category: string;
-	supplier: string;
-	supplierId: string;
+	provider: string;
+	providerId: string;
 	status: "active" | "inactive";
 	createdDate: string;
 	views: number;
@@ -45,12 +45,12 @@ export interface CustomerRow {
 
 export interface AssignmentRow {
 	id: string;
-	supplier: string;
+	provider: string;
 	service: string;
 	assignedDate: string;
 	status: "active" | "inactive";
 	price: number;
-	supplierId: string;
+	providerId: string;
 }
 
 export type ListingType = "all" | "PRODUCT" | "SERVICE";
@@ -73,7 +73,7 @@ export interface CatalogFilters {
 	page: number;
 }
 
-export interface SupplierFiltersState {
+export interface ProviderFiltersState {
 	searchQuery: string;
 	categoryId: string;
 	district: string;
@@ -127,7 +127,7 @@ export interface HeroWidgetItem {
 	statDesc?: string;
 	subtext?: string;
 	rating?: number;
-	type?: "product" | "supplier" | "service" | "stat";
+	type?: "product" | "provider" | "service" | "stat";
 }
 
 export type FileMetadata = {

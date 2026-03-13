@@ -3,6 +3,7 @@ import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 
 interface FormFieldProps {
+	id?: string;
 	label?: string;
 	error?: string | string[];
 	isTouched?: boolean;
@@ -13,6 +14,7 @@ interface FormFieldProps {
 }
 
 export const FormField: React.FC<FormFieldProps> = ({
+	id,
 	label,
 	error,
 	isTouched = true,
@@ -33,7 +35,10 @@ export const FormField: React.FC<FormFieldProps> = ({
 		<div className={cn("space-y-2", className)}>
 			{label && (
 				<div className="flex items-center justify-between mb-1">
-					<Label className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-muted-foreground ml-1">
+					<Label
+						htmlFor={id}
+						className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-muted-foreground ml-1"
+					>
 						{label}
 						{required && <span className="text-destructive">*</span>}
 					</Label>

@@ -199,7 +199,7 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
 							Boost Your <br /> Visibility
 						</h3>
 						<p className="text-muted-foreground text-sm font-medium leading-relaxed mb-6 uppercase tracking-wider">
-							Suppliers who respond to inquiries within 1 hour get 3x more quote
+							Providers who respond to inquiries within 1 hour get 3x more quote
 							requests.
 						</p>
 					</div>

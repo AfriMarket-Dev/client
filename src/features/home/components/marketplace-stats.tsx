@@ -11,7 +11,10 @@ import { useGetMarketplaceStatsQuery } from "@/services/api/stats";
 export const MarketplaceStats: React.FC = () => {
 	const { data: stats } = useGetMarketplaceStatsQuery();
 
-	function formatNumber(val: number | string | undefined, appendPlus = true): string {
+	function formatNumber(
+		val: number | string | undefined,
+		appendPlus = true,
+	): string {
 		const num = Number(val);
 		if (val === undefined || Number.isNaN(num)) return "...";
 		if (num >= 1000) {
@@ -23,8 +26,8 @@ export const MarketplaceStats: React.FC = () => {
 	const STATS = [
 		{
 			icon: <RiBuilding2Line className="w-8 h-8" />,
-			value: formatNumber(stats?.verifiedSuppliers),
-			label: "Verified Suppliers",
+			value: formatNumber(stats?.verifiedProviders),
+			label: "Verified Providers",
 			description: "Industry leaders and manufacturers",
 		},
 		{

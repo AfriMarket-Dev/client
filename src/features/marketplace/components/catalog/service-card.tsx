@@ -8,7 +8,7 @@ import type { Service } from "@/types";
 interface ServiceCardProps {
 	service: Service;
 	viewMode?: "grid" | "list";
-	onSupplierClick?: (e: React.MouseEvent) => void;
+	onProviderClick?: (e: React.MouseEvent) => void;
 	onClick?: () => void;
 	isInWishlist?: boolean;
 	onToggleWishlist?: (e: React.MouseEvent) => void;
@@ -17,7 +17,7 @@ interface ServiceCardProps {
 export const ServiceCard: React.FC<ServiceCardProps> = ({
 	service,
 	viewMode = "grid",
-	onSupplierClick,
+	onProviderClick,
 	onClick,
 	isInWishlist,
 	onToggleWishlist,
@@ -55,9 +55,9 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
 				<div
 					className="flex items-center gap-2 group/comp cursor-pointer"
 					onClick={(e) => {
-						if (onSupplierClick) {
+						if (onProviderClick) {
 							e.stopPropagation();
-							onSupplierClick(e);
+							onProviderClick(e);
 						}
 					}}
 				>

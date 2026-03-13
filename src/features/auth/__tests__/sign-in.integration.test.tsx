@@ -72,6 +72,42 @@ describe("SignIn Integration", () => {
 		expect(fetchMock).toHaveBeenCalled();
 	});
 
+	it("redirects to onboarding if needsOnboarding is true", async () => {
+		installFetchMock(async (req) => {
+			if (req.url.endsWith("/auth/sign-in/email")) {
+				return jsonResponse({
+					data: {
+						user: {
+							id: "provider-1",
+							email: "provider@example.com",
+							name: "New Provider",
+							role: "provider",
+							needsOnboarding: true,
+						},
+						token: "fake-provider-token",
+					},
+				});
+			}
+			return jsonResponse({}, { status: 404 });
+		});
+
+		const { store } = renderWithProviders(<SignInPage />);
+
+		const emailInput = screen.getByPlaceholderText(/name@company.com/i);
+		const passwordInput = screen.getByPlaceholderText(/••••••••/i);
+		const submitButton = screen.getByRole("button", { name: /Sign In/i });
+
+		fireEvent.change(emailInput, { target: { value: "provider@example.com" } });
+		fireEvent.change(passwordInput, { target: { value: "password123" } });
+
+		fireEvent.click(submitButton);
+
+		await waitFor(() => {
+			const state = store.getState();
+			expect(state.auth.user?.needsOnboarding).toBe(true);
+		});
+	});
+
 	it("shows an error message when sign in fails", async () => {
 		installFetchMock(async () => {
 			return jsonResponse({ message: "Invalid credentials" }, { status: 401 });

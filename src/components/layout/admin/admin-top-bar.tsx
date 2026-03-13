@@ -23,7 +23,7 @@ interface AdminTopBarProps {
 
 const menuItems = [
 	{ label: "Dashboard", path: ROUTES.ADMIN.INDEX, icon: RiDashboardLine },
-	{ label: "Suppliers", path: ROUTES.ADMIN.SUPPLIERS.INDEX, icon: RiUserLine },
+	{ label: "Providers", path: ROUTES.ADMIN.SUPPLIERS.INDEX, icon: RiUserLine },
 	{
 		label: "Customers",
 		path: ROUTES.ADMIN.BUYERS,

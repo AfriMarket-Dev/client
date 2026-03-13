@@ -6,7 +6,7 @@ import {
 	productSchema,
 	reviewSchema,
 	serviceSchema,
-	supplierProvisionSchema,
+	providerProvisionSchema,
 } from "../business";
 
 describe("Business Schemas Comprehensive Tests", () => {
@@ -181,7 +181,7 @@ describe("Business Schemas Comprehensive Tests", () => {
 		});
 	});
 
-	describe("supplierProvisionSchema", () => {
+	describe("providerProvisionSchema", () => {
 		const validBase = {
 			companyName: "Tech Solutions",
 			industry: "IT",
@@ -195,12 +195,12 @@ describe("Business Schemas Comprehensive Tests", () => {
 		};
 
 		it("validates correct provision data", () => {
-			const result = supplierProvisionSchema.safeParse(validBase);
+			const result = providerProvisionSchema.safeParse(validBase);
 			expect(result.success).toBe(true);
 		});
 
 		it("fails on short phone number", () => {
-			const result = supplierProvisionSchema.safeParse({
+			const result = providerProvisionSchema.safeParse({
 				...validBase,
 				phoneNumber: "12345",
 			});

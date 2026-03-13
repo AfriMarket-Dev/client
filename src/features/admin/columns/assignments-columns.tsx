@@ -13,20 +13,20 @@ import {
 import type { AssignmentRow } from "@/types";
 
 interface AssignmentColumnsProps {
-	onViewSupplier: (supplierId: string) => void;
+	onViewProvider: (providerId: string) => void;
 	onViewService: (serviceId: string) => void;
 }
 
 export const getAssignmentColumns = ({
-	onViewSupplier,
+	onViewProvider,
 	onViewService,
 }: AssignmentColumnsProps): ColumnDef<AssignmentRow>[] => [
 	{
-		accessorKey: "supplier",
-		header: "Supplier",
+		accessorKey: "provider",
+		header: "Provider",
 		cell: ({ row }) => (
 			<p className="text-sm font-heading font-bold text-foreground">
-				{row.original.supplier}
+				{row.original.provider}
 			</p>
 		),
 	},
@@ -90,9 +90,9 @@ export const getAssignmentColumns = ({
 					<DropdownMenuGroup>
 						<DropdownMenuLabel>Actions</DropdownMenuLabel>
 						<DropdownMenuItem
-							onClick={() => onViewSupplier(row.original.supplierId)}
+							onClick={() => onViewProvider(row.original.providerId)}
 						>
-							<RiEyeLine className="mr-2 h-4 w-4" /> View supplier
+							<RiEyeLine className="mr-2 h-4 w-4" /> View provider
 						</DropdownMenuItem>
 						<DropdownMenuItem onClick={() => onViewService(row.original.id)}>
 							<RiEyeLine className="mr-2 h-4 w-4" /> View service

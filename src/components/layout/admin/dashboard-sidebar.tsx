@@ -37,7 +37,7 @@ interface DashboardSidebarProps {
 	onTabChange: (tab: DashboardTab) => void;
 	onClose: () => void;
 	onLogout: () => void;
-	supplierData: {
+	providerData: {
 		name?: string;
 		avatar?: string;
 	} | null;
@@ -49,7 +49,7 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
 	onTabChange,
 	onClose,
 	onLogout,
-	supplierData,
+	providerData,
 	isOpen,
 }) => (
 	<div
@@ -111,7 +111,7 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
 				<div className="flex items-center gap-3 px-4 py-3 bg-background/5 rounded-sm border border-background/10 mb-4 overflow-hidden">
 					<div className="relative shrink-0">
 						<img
-							src={supplierData?.avatar || "/logo.svg"}
+							src={providerData?.avatar || "/logo.svg"}
 							className="w-10 h-10 rounded-sm object-cover border border-background/20"
 							alt=""
 							onError={(e) => {
@@ -122,7 +122,7 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
 					</div>
 					<div className="flex-1 overflow-hidden min-w-0">
 						<p className="text-sm font-bold truncate text-background">
-							{supplierData?.name || "Supplier"}
+							{providerData?.name || "Provider"}
 						</p>
 						<div className="flex items-center gap-1 text-success text-[10px] font-black uppercase tracking-widest">
 							<RiBadgeLine size={12} /> Verified

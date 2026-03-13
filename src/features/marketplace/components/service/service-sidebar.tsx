@@ -45,7 +45,7 @@ export const ServiceSidebar: React.FC<ServiceSidebarProps> = ({
 								{service.company?.name ?? "Karibu Seller"}
 							</h4>
 							<p className="text-[10px] text-primary font-black uppercase tracking-[0.2em]">
-								{service.company?.district ?? "Regional Supplier"}
+								{service.company?.district ?? "Regional Provider"}
 							</p>
 						</div>
 					</div>

@@ -34,6 +34,7 @@ describe("api core behavior", () => {
 				email: "me@example.com",
 				name: "Me",
 				role: "user",
+				needsOnboarding: false,
 			},
 		});
 
@@ -66,7 +67,7 @@ describe("api core behavior", () => {
 			jsonResponse(
 				{
 					data: {
-						user: { id: "u1", email: "a@b.com", name: "A", role: "user" },
+						user: { id: "u1", email: "a@b.com", name: "A", role: "user", needsOnboarding: false },
 						token: "body-token",
 					},
 				},
@@ -97,6 +98,7 @@ describe("api core behavior", () => {
 						email: "new@example.com",
 						name: "New",
 						role: "provider",
+						needsOnboarding: false,
 					},
 					session: { token: "session-token" },
 				},
@@ -244,6 +246,7 @@ describe("api core behavior", () => {
 						name: "Name",
 						email: "name@example.com",
 						role: "user",
+						needsOnboarding: false,
 					},
 				});
 			}

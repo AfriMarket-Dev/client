@@ -26,8 +26,8 @@ export function AdminAssignmentsPage() {
 	const assignments: AssignmentRow[] = useMemo(() => {
 		return (servicesResult?.data ?? []).map((service) => ({
 			id: service.id,
-			supplier: service.company?.name ?? "Unknown supplier",
-			supplierId: service.company?.id ?? "",
+			provider: service.company?.name ?? "Unknown provider",
+			providerId: service.company?.id ?? "",
 			service: service.name,
 			assignedDate: formatDate(service.createdAt),
 			status: service.isActive ? "active" : "inactive",
@@ -38,10 +38,10 @@ export function AdminAssignmentsPage() {
 	const columns = useMemo(
 		() =>
 			getAssignmentColumns({
-				onViewSupplier: (id) =>
+				onViewProvider: (id) =>
 					navigate({
-						to: "/suppliers/$supplierId",
-						params: { supplierId: id },
+						to: "/providers/$providerId",
+						params: { providerId: id },
 					}),
 				onViewService: (id) =>
 					navigate({
@@ -56,7 +56,7 @@ export function AdminAssignmentsPage() {
 		<div className="space-y-5 pb-10">
 			<PageHeader
 				title="Assignments"
-				subtitle="Manage service-to-supplier assignments"
+				subtitle="Manage service-to-provider assignments"
 				badge="Recent Assignments"
 			/>
 

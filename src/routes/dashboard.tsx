@@ -23,13 +23,18 @@ export const Route = createFileRoute("/dashboard")({
 				to: ROUTES.AUTH.SIGNIN,
 			});
 		}
+
+		// REMOVED: needsOnboarding redirect. 
+		// We let the dashboard loader verify if a company actually exists.
+
 		if (!user?.role || !PROVIDER_ROLES.includes(user.role)) {
 			throw redirect({
 				to: ROUTES.HOME,
 			});
 		}
 	},
-	shouldReload: (ctx: any) => !ctx.prev || ctx.next.pathname !== ctx.prev.pathname,
+	shouldReload: (ctx: any) =>
+		!ctx.prev || ctx.next.pathname !== ctx.prev.pathname,
 	preload: false,
 	component: DashboardLayout,
 	pendingComponent: RouteLoading,
@@ -37,7 +42,7 @@ export const Route = createFileRoute("/dashboard")({
 	errorComponent: RouteError,
 	head: () => ({
 		meta: [
-			{ title: "Supplier Dashboard | Karibu" },
+			{ title: "Provider Dashboard | Karibu" },
 			{ name: "robots", content: "noindex, nofollow" },
 		],
 	}),

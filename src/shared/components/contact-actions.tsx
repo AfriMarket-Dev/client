@@ -1,7 +1,5 @@
 import { RiMailSendLine, RiPhoneLine, RiWhatsappLine } from "@remixicon/react";
-import { Button } from "@/components/ui/button";
-import { useLogInteractionMutation } from "@/services/api/interactions";
-import type { LogInteractionPayload } from "@/types";
+import { useProviderInteractions } from "@/features/provider/hooks/use-provider-interactions";
 
 interface ContactActionsProps {
 	phone?: string;
@@ -28,44 +26,33 @@ export function ContactActions({
 	className,
 	size = "default",
 }: ContactActionsProps) {
-	const [logInteraction] = useLogInteractionMutation();
+	const { callProvider, whatsappProvider, emailProvider } = useProviderInteractions();
 
-	const handleLog = (type: LogInteractionPayload["type"]) => {
-		logInteraction({
-			type,
-			companyId,
-			productId,
-			serviceId,
-			metadata: { auctionId },
-		}).catch(console.error);
+	const handleCall = async () => {
+		if (!phone || !companyId) return;
+		await callProvider(phone, { companyId, productId, serviceId });
 	};
 
-	const handleCall = () => {
-		if (!phone) return;
-		handleLog("CALL_CLICK");
-		window.location.href = `tel:${phone}`;
-	};
-
-	const handleWhatsApp = () => {
-		if (!whatsapp && !phone) return;
-		handleLog("WHATSAPP_CLICK");
+	const handleWhatsApp = async () => {
 		const targetPhone = whatsapp || phone;
-		// Clean phone number: remove non-numeric chars
-		const clnPhone = targetPhone?.replace(/\D/g, "");
+		if (!targetPhone || !companyId) return;
+		
 		const text = companyName
 			? `Hello ${companyName}, I found your profile on Karibu and I'm interested in your services.`
 			: "Hello, I found your profile on Karibu and I'm interested in your services.";
-		window.open(
-			`https://wa.me/${clnPhone}?text=${encodeURIComponent(text)}`,
-			"_blank",
-		);
+			
+		await whatsappProvider(targetPhone, text, { 
+			companyId, 
+			productId, 
+			serviceId,
+			// Pass auctionId in metadata if needed, though hook doesn't currently take it
+		});
 	};
 
-	const handleEmail = () => {
-		if (!email) return;
-		handleLog("EMAIL_CLICK");
-		const subject = "Inquiry from Karibu";
-		window.location.href = `mailto:${email}?subject=${encodeURIComponent(subject)}`;
+	const handleEmail = async () => {
+		if (!email || !companyId) return;
+		const subject = auctionId ? `Inquiry regarding Auction ${auctionId}` : "Inquiry from Karibu";
+		await emailProvider(email, subject, { companyId, productId, serviceId });
 	};
 
 	const isSmall = size === "sm";
@@ -74,48 +61,45 @@ export function ContactActions({
 		<div className={`flex flex-wrap items-center gap-2 ${className || ""}`}>
 			{(phone || whatsapp) && (
 				<>
-					<Button
-						variant="outline"
-						size={size}
-						className={`rounded-none border-success/30 text-success hover:bg-success/10 hover:text-success ${
+					<button
+						type="button"
+						className={`flex items-center justify-center rounded-none border border-success/30 text-success hover:bg-success/5 transition-all font-black uppercase tracking-widest ${
 							isSmall ? "h-8 px-3 text-[9px]" : "h-11 px-4 text-[10px]"
-						} font-black uppercase tracking-widest`}
+						}`}
 						onClick={handleWhatsApp}
 					>
 						<RiWhatsappLine
 							className={isSmall ? "mr-1.5 h-3.5 w-3.5" : "mr-2 h-4 w-4"}
 						/>
 						WhatsApp
-					</Button>
-					<Button
-						variant="outline"
-						size={size}
-						className={`rounded-none border-info/30 text-info hover:bg-info/10 hover:text-info ${
+					</button>
+					<button
+						type="button"
+						className={`flex items-center justify-center rounded-none border border-info/30 text-info hover:bg-info/5 transition-all font-black uppercase tracking-widest ${
 							isSmall ? "h-8 px-3 text-[9px]" : "h-11 px-4 text-[10px]"
-						} font-black uppercase tracking-widest`}
+						}`}
 						onClick={handleCall}
 					>
 						<RiPhoneLine
 							className={isSmall ? "mr-1.5 h-3.5 w-3.5" : "mr-2 h-4 w-4"}
 						/>
 						Call
-					</Button>
+					</button>
 				</>
 			)}
 			{email && (
-				<Button
-					variant="outline"
-					size={size}
-					className={`rounded-none border-warning/30 text-warning hover:bg-warning/10 hover:text-warning ${
+				<button
+					type="button"
+					className={`flex items-center justify-center rounded-none border border-warning/30 text-warning hover:bg-warning/5 transition-all font-black uppercase tracking-widest ${
 						isSmall ? "h-8 px-3 text-[9px]" : "h-11 px-4 text-[10px]"
-					} font-black uppercase tracking-widest`}
+					}`}
 					onClick={handleEmail}
 				>
 					<RiMailSendLine
 						className={isSmall ? "mr-1.5 h-3.5 w-3.5" : "mr-2 h-4 w-4"}
 					/>
 					Email
-				</Button>
+				</button>
 			)}
 		</div>
 	);

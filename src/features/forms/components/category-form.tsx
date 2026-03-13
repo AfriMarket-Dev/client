@@ -62,6 +62,7 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
 				name="name"
 				children={(field) => (
 					<FormField
+						id={field.name}
 						label="Category Name"
 						required
 						error={getFormFieldErrors(field.state.meta.errors)}
@@ -84,6 +85,7 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
 				name="description"
 				children={(field) => (
 					<FormField
+						id={field.name}
 						label="Description"
 						required
 						error={getFormFieldErrors(field.state.meta.errors)}
@@ -108,6 +110,7 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
 					name="icon"
 					children={(field) => (
 						<FormField
+							id={field.name}
 							label="Icon Reference"
 							error={getFormFieldErrors(field.state.meta.errors)}
 							isTouched={field.state.meta.isTouched}

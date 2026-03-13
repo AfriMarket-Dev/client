@@ -30,52 +30,52 @@ export function HelpPage() {
 		},
 		{
 			icon: RiFileTextLine,
-			title: "Orders & Shipping",
-			description: "Tracking, delivery times, and logistics",
+			title: "Finding Providers",
+			description: "How to search, filter, and discover verified partners",
 		},
 		{
 			icon: RiChat1Line,
-			title: "Supplier Relations",
-			description: "Communication, quotes, and negotiations",
+			title: "Communication",
+			description: "Direct messaging, RFQs, and building trade relations",
 		},
 		{
 			icon: RiLifebuoyLine,
-			title: "Dispute Resolution",
-			description: "Returns, refunds, and conflict management",
+			title: "Support & Safety",
+			description: "Platform guidelines and reporting concerns",
 		},
 	];
 
 	const faqs = [
 		{
-			question: "How do I verify my business account?",
+			question: "How do I contact a provider?",
 			answer:
-				"To verify your account, upload your business registration documents and tax ID in the 'Verification' section of your profile. Our team reviews all documents within 24-48 hours.",
+				"Once you find a product or provider you're interested in, you can use the 'Message' or 'Request Quote' buttons to start a direct conversation. All negotiations happen directly between you and the provider.",
 		},
 		{
-			question: "What are the payment methods supported?",
+			question: "Does Karibu handle payments or shipping?",
 			answer:
-				"We support various payment methods including bank transfers, mobile money (M-Pesa, MTN Mobile Money), and major credit/debit cards. All transactions are secured by our escrow system.",
+				"No. Karibu is a connection platform. We help you find and verify wholesale partners, but all financial transactions, logistics, and shipping arrangements are handled directly between the buyer and the provider.",
 		},
 		{
-			question: "How does the shipping process work?",
+			question: "How do I verify a provider's reliability?",
 			answer:
-				"Shipping is handled through our network of verified logistics partners. Once an order is confirmed, you can track its progress in real-time from your dashboard.",
+				"We mark providers as 'Verified' once they pass our initial business registration and tax ID checks. We also encourage you to check provider ratings and reviews from other businesses on the platform.",
 		},
 		{
-			question: "Can I negotiate prices with suppliers?",
+			question: "What should I do if a provider doesn't respond?",
 			answer:
-				"Yes, our platform supports direct negotiation. You can send quote requests (RFQ) to suppliers and discuss terms before finalizing any transaction.",
+				"If a provider is unresponsive, you can try reaching out to other verified providers in the same category. You can also report inactive profiles to our support team for review.",
 		},
 		{
-			question: "What happens if I receive damaged goods?",
+			question: "Is there a fee to use the platform?",
 			answer:
-				"If you receive damaged goods, report it immediately within 24 hours through the 'Orders' page. Our dispute resolution team will investigate and facilitate a refund or replacement if the claim is valid.",
+				"Searching for products and contacting providers is free for buyers. We aim to make wholesale trade across Africa as accessible as possible by removing discovery barriers.",
 		},
 	];
 
 	return (
 		<div className="min-h-screen bg-background p-4 md:p-8">
-			<div className="max-w-7xl mx-auto space-y-8">
+			<div className="max-w-[1800px] mx-auto space-y-8">
 				<div className="flex items-center justify-between">
 					<Link
 						to="/"
@@ -91,7 +91,7 @@ export function HelpPage() {
 
 				<PageHeader
 					title="Help Center"
-					subtitle="How can we help you today?"
+					subtitle="How can we help your business today?"
 					badge="Support"
 					showPattern
 				/>
@@ -104,19 +104,19 @@ export function HelpPage() {
 					<div className="max-w-3xl mx-auto px-4 text-center relative z-10">
 						<div className="inline-flex items-center px-4 py-1.5 bg-primary/10 text-primary rounded-none font-bold text-[10px] uppercase tracking-[0.3em] mb-8 border border-primary/30">
 							<RiQuestionLine className="w-3.5 h-3.5 mr-2" />
-							24/7 SUPPORT
+							GLOBAL SUPPORT
 						</div>
-						<h1 className="text-4xl md:text-5xl font-display font-extrabold uppercase text-white mb-8 leading-[0.9] tracking-tighter">
+						<h1 className="text-4xl md:text-6xl font-display font-black uppercase text-white mb-8 leading-[0.9] tracking-tighter">
 							HOW CAN WE SUPPORT <br />
 							<span className="text-primary italic -skew-x-12 inline-block">
-								YOUR BUSINESS?
+								YOUR SCALE?
 							</span>
 						</h1>
 						<div className="relative max-w-2xl mx-auto group">
 							<RiSearchLine className="absolute left-5 top-1/2 transform -translate-y-1/2 text-primary/40 group-focus-within:text-primary w-5 h-5 transition-colors" />
 							<Input
 								type="text"
-								placeholder="SEARCH FOR HELP..."
+								placeholder="SEARCH KNOWLEDGE BASE..."
 								value={searchQuery}
 								onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
 									setSearchQuery(e.target.value)
@@ -222,22 +222,22 @@ export function HelpPage() {
 							<div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 -mr-16 -mt-16 rounded-full pointer-events-none" />
 							<h3 className="text-lg font-display font-extrabold uppercase text-foreground mb-4 flex items-center tracking-tight">
 								<RiPhoneLine className="w-4 h-4 mr-2.5 text-primary" />
-								Contact Us
+								Global Contact
 							</h3>
 							<p className="text-xs text-muted-foreground/60 mb-8 leading-relaxed font-medium uppercase tracking-widest">
-								Our support team is standing by to help you.
+								Our support team is standing by across all time zones.
 							</p>
 							<div className="space-y-3">
 								<Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-display font-extrabold uppercase tracking-widest rounded-none justify-start px-6 h-14 border border-primary/20 shadow-none">
 									<RiPhoneLine className="w-4 h-4 mr-4" />
-									+254 700 000 000
+									+250 700 000 000
 								</Button>
 								<Button
 									variant="outline"
 									className="w-full border-border/40 bg-transparent hover:bg-foreground hover:text-background font-display font-extrabold uppercase tracking-widest rounded-none justify-start px-6 h-14 transition-all"
 								>
 									<RiMailLine className="w-4 h-4 mr-4" />
-									support@afriamarket.com
+									support@karibu-rep.vercel.app
 								</Button>
 							</div>
 						</div>
@@ -245,16 +245,16 @@ export function HelpPage() {
 						<div className="bg-card border border-border/20 p-8 relative overflow-hidden group rounded-none">
 							<div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 rounded-bl-[100%] -mr-12 -mt-12 pointer-events-none group-hover:scale-150 transition-transform duration-700"></div>
 							<h3 className="text-lg font-display font-extrabold uppercase text-foreground mb-4 tracking-tight">
-								Guides
+								Platform Guides
 							</h3>
 							<p className="text-xs text-muted-foreground/60 mb-8 leading-relaxed font-medium uppercase tracking-widest">
-								Helpful guides for using the platform.
+								Helpful guides for using the marketplace discovery tools.
 							</p>
 							<ul className="space-y-4">
 								{[
-									"Supplier Handbook",
-									"API Documentation",
-									"Trade Guidelines",
+									"Search & Filter Tips",
+									"Provider Verification Guide",
+									"RFQs & Messaging Basics",
 								].map((item) => (
 									<li
 										key={item}

@@ -1,7 +1,6 @@
+import { RiFileTextLine, RiInformationLine, RiShieldCheckLine } from "@remixicon/react";
 import type React from "react";
-import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { TabsContent } from "@/components/ui/tabs";
 import { AddReviewDialog } from "../reviews/add-review-dialog";
 import { ReviewList } from "../reviews/review-list";
 
@@ -15,46 +14,57 @@ interface ProductTabsContentProps {
 export const ProductTabsContent: React.FC<ProductTabsContentProps> = ({
 	description,
 	keyFacts,
-	variantName,
-	variantSku,
+	variantName: _variantName,
+	variantSku: _variantSku,
 }) => {
-	const productId = keyFacts.find((f) => f.label === "ID")?.value || "";
+	const productId = keyFacts.find((f) => f.label.includes("ID"))?.value || "";
 
 	return (
-		<>
-			<TabsContent value="overview" className="mt-12 space-y-12">
-				<div className="space-y-6">
-					<div className="flex flex-col gap-4">
-						<h3 className="font-heading font-black uppercase text-xs tracking-[0.4em] text-foreground/40">
-							Product Information
-						</h3>
-						<Separator className="bg-border/40" />
+		<div className="space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-700">
+			{/* Overview Section */}
+			<section className="space-y-8">
+				<div className="flex items-center gap-3">
+					<div className="w-8 h-8 rounded-none bg-muted flex items-center justify-center">
+						<RiInformationLine className="w-4 h-4 text-muted-foreground" />
 					</div>
-					<p className="text-xs leading-relaxed text-muted-foreground max-w-2xl">
-						{description ||
-							"Details and description for this product are currently being finalized."}
-					</p>
+					<h3 className="text-xs font-black uppercase tracking-[0.2em] text-foreground">
+						Product Narrative
+					</h3>
 				</div>
-
-				<div className="grid md:grid-cols-2 gap-16">
-					<div className="space-y-8">
-						<div className="flex flex-col gap-4">
-							<h3 className="font-heading font-bold uppercase text-xs tracking-[0.4em] text-foreground/40">
-								Product Details
-							</h3>
-							<Separator className="bg-border/40" />
+				
+				<div className="grid md:grid-cols-12 gap-12 items-start">
+					<div className="md:col-span-7 space-y-6">
+						<p className="text-xs md:text-sm leading-relaxed text-muted-foreground uppercase tracking-wider font-medium">
+							{description ||
+								"Comprehensive industrial resource documentation. This component has been verified for structural integrity and enterprise-grade performance. Detailed material safety data and technical whitepapers are available upon qualified request."}
+						</p>
+						
+						<div className="flex items-center gap-4 py-4 px-6 bg-primary/5 border border-primary/10">
+							<RiShieldCheckLine className="text-primary w-5 h-5" />
+							<p className="text-[10px] font-bold uppercase tracking-widest text-primary">
+								Compliance: All regional construction standards met.
+							</p>
 						</div>
-						<div className="grid gap-6">
+					</div>
+
+					<div className="md:col-span-5 space-y-6">
+						<div className="flex items-center gap-3 mb-4">
+							<RiFileTextLine className="w-4 h-4 text-muted-foreground" />
+							<h4 className="text-[10px] font-black uppercase tracking-widest text-foreground/60">
+								Reference Metadata
+							</h4>
+						</div>
+						<div className="grid gap-4">
 							{keyFacts.map((fact) => (
 								<div
 									key={fact.label}
 									className="flex justify-between items-end group"
 								>
-									<span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+									<span className="text-[9px] font-black uppercase tracking-widest text-muted-foreground">
 										{fact.label}
 									</span>
-									<div className="flex-1 border-b border-dashed border-border/60 mx-4 mb-1 group-hover:border-primary/40 transition-colors" />
-									<span className="text-xs font-bold font-heading whitespace-nowrap">
+									<div className="flex-1 border-b border-border/40 mx-4 mb-1 group-hover:border-primary/20 transition-colors" />
+									<span className="text-[10px] font-mono font-bold text-foreground">
 										{fact.value}
 									</span>
 								</div>
@@ -62,52 +72,28 @@ export const ProductTabsContent: React.FC<ProductTabsContentProps> = ({
 						</div>
 					</div>
 				</div>
-			</TabsContent>
+			</section>
 
-			<TabsContent value="specs" className="mt-12">
-				<div className="border border-border p-8 bg-muted/5">
-					<div className="flex justify-between items-start pb-6 relative mb-6">
-						<div>
-							<h4 className="font-display font-bold text-lg uppercase tracking-tighter">
-								{variantName || "Standard Variant"}
-							</h4>
-							<span className="text-[10px] text-primary font-bold uppercase tracking-[0.2em]">
-								{variantSku || "SKU: PENDING"}
-							</span>
-						</div>
-						<Badge
-							variant="outline"
-							className="rounded-none border-primary text-primary font-bold text-[9px] tracking-widest uppercase"
-						>
-							IN STOCK
-						</Badge>
-						<Separator className="absolute bottom-0 left-0 bg-border/40" />
-					</div>
-					<p className="text-xs text-muted-foreground leading-relaxed">
-						Specifications for this product are based on standard information.
-						For custom orders, please contact the supplier directly.
-					</p>
-				</div>
-			</TabsContent>
+			<Separator className="bg-border/40" />
 
-			<TabsContent value="reviews" className="mt-12 space-y-12">
-				<div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 pb-6 relative">
+			{/* Review Aggregation */}
+			<section className="space-y-8">
+				<div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6">
 					<div className="space-y-1">
-						<h3 className="font-heading font-black uppercase text-xs tracking-[0.4em] text-foreground/40">
-							Customer Reviews
+						<h3 className="text-xs font-black uppercase tracking-[0.2em] text-foreground">
+							Field Performance Reports
 						</h3>
-						<p className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest">
-							Feedback from verified customers
+						<p className="text-[9px] text-muted-foreground uppercase font-bold tracking-widest">
+							Verified feedback from technical deployments
 						</p>
 					</div>
 					<div className="w-full sm:w-auto">
 						<AddReviewDialog productId={productId} />
 					</div>
-					<Separator className="absolute bottom-0 left-0 bg-border/40" />
 				</div>
 
 				<ReviewList productId={productId} />
-			</TabsContent>
-		</>
+			</section>
+		</div>
 	);
 };

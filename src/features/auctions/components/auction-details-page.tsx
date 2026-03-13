@@ -20,6 +20,7 @@ import { useGetAuctionByIdQuery } from "@/services/api/auctions";
 import { ContactActions } from "@/shared/components/contact-actions";
 import { DetailsPageLayout } from "@/shared/components/layouts/details-page-layout";
 import { DetailPageSkeleton } from "@/shared/components/skeletons";
+import { SpecificationList } from "@/shared/components/specification-list";
 import { formatDateTime } from "@/shared/utils/format";
 import { PlaceBidModal } from "./place-bid-modal";
 
@@ -199,15 +200,17 @@ export function AuctionDetailsPage() {
 				</div>
 			}
 			tabs={
-				<div className="space-y-6">
-					<div className="space-y-3">
+				<div className="space-y-12">
+					<section className="space-y-4">
 						<h3 className="text-sm font-black uppercase tracking-widest border-b border-border/40 pb-2">
 							Description
 						</h3>
 						<p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-wrap">
 							{auction.description || "No description provided."}
 						</p>
-					</div>
+					</section>
+
+					<SpecificationList specifications={auction.specifications} />
 				</div>
 			}
 			sidebar={
@@ -245,8 +248,8 @@ export function AuctionDetailsPage() {
 									className="h-9 w-full rounded-none text-[10px] font-black uppercase tracking-widest border-border/40"
 									onClick={() =>
 										navigate({
-											to: "/suppliers/$supplierId",
-											params: { supplierId: auction.company.id },
+											to: "/providers/$providerId",
+											params: { providerId: auction.company.id },
 										})
 									}
 								>

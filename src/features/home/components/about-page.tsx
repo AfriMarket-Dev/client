@@ -17,7 +17,7 @@ export function AboutPage() {
 
 	return (
 		<div className="min-h-screen bg-background">
-			<div className="max-w-5xl mx-auto px-4 py-8 space-y-16">
+			<div className="max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-16">
 				<div className="flex items-center justify-between">
 					<Link
 						to="/"
@@ -39,17 +39,17 @@ export function AboutPage() {
 							About Karibu
 						</div>
 
-						<h1 className="text-5xl md:text-6xl font-display font-black text-white mb-8 leading-[0.9] tracking-tighter uppercase">
-							BUILDING RWANDA'S <br />
+						<h1 className="text-5xl md:text-7xl font-display font-black text-white mb-8 leading-[0.9] tracking-tighter uppercase">
+							AFRICA'S PREMIER <br />
 							<span className="text-primary italic -skew-x-12 inline-block">
-								CONSTRUCTION NETWORK
+								WHOLESALE HUB
 							</span>
 						</h1>
 
 						<p className="text-lg text-muted-foreground/80 max-w-3xl mx-auto leading-relaxed font-medium uppercase tracking-widest">
-							Karibu is the construction marketplace for Rwanda. We verify,
-							connect, and simplify the search for contractors and suppliers
-							through a trusted directory of verified providers.
+							Karibu is the leading B2B marketplace for African wholesale
+							commerce. We verify, connect, and simplify trade between trusted
+							providers, importers, and retailers across the continent.
 						</p>
 					</div>
 				</section>
@@ -63,15 +63,16 @@ export function AboutPage() {
 							Our Mission
 						</h2>
 						<p className="text-muted-foreground leading-relaxed font-medium">
-							To build a trusted and direct marketplace that connects buyers
-							with reliable suppliers in Rwanda's construction industry. We are
-							simplifying how professional projects find their materials.
+							To build a trusted and direct marketplace that connects African
+							businesses with reliable global and regional providers. We are
+							transforming how wholesale trade happens by removing barriers and
+							ensuring transparency.
 						</p>
 						<ul className="space-y-4 pt-2">
 							{[
-								"Verify every supplier for safety",
-								"Transparent pricing & quotes",
-								"Support local business growth",
+								"Verified provider network for safety",
+								"Transparent bulk pricing & RFQs",
+								"Supporting intra-African trade growth",
 							].map((item) => (
 								<li
 									key={item}
@@ -92,9 +93,10 @@ export function AboutPage() {
 							Our Vision
 						</h2>
 						<p className="text-muted-foreground leading-relaxed font-medium">
-							To become the primary network where every business—from
-							specialized contractors to large developers—connects through a
-							simple and efficient platform.
+							To become the primary infrastructure for African commerce—where
+							every business, from local retailers to large industrial
+							providers, connects through a unified and efficient digital
+							marketplace.
 						</p>
 					</div>
 				</section>
@@ -102,10 +104,10 @@ export function AboutPage() {
 				<section className="py-20">
 					<div className="text-center mb-20">
 						<h2 className="text-3xl font-display font-extrabold text-foreground uppercase tracking-tight mb-4">
-							How It Works
+							How Trade Happens
 						</h2>
 						<p className="text-[10px] font-bold text-muted-foreground/40 uppercase tracking-[0.3em] max-w-xl mx-auto">
-							Simple. Direct. Trusted.
+							Simple. Secure. Scalable.
 						</p>
 					</div>
 
@@ -115,18 +117,18 @@ export function AboutPage() {
 						{[
 							{
 								icon: RiSearchLine,
-								title: "1. DISCOVER",
-								desc: "Search for materials, services, and suppliers across Rwanda.",
+								title: "1. SOURCE",
+								desc: "Find quality products and verified providers across Africa and beyond.",
 							},
 							{
 								icon: RiChat1Line,
-								title: "2. CONNECT",
-								desc: "Message suppliers, request quotes, and compare offerings.",
+								title: "2. NEGOTIATE",
+								desc: "Communicate directly, request quotes, and finalize terms in real-time.",
 							},
 							{
 								icon: RiHandHeartLine,
-								title: "3. COLLABORATE",
-								desc: "Connect with suppliers directly to discuss projects and pricing.",
+								title: "3. SCALE",
+								desc: "Build lasting partnerships and grow your business through efficient supply chains.",
 							},
 						].map((step) => (
 							<div
@@ -150,9 +152,9 @@ export function AboutPage() {
 				<section className="py-32 text-center border-t border-border/20">
 					<RiBuildingLine className="w-16 h-16 text-muted-foreground/20 mx-auto mb-10" />
 					<h2 className="text-4xl md:text-5xl font-display font-black text-foreground mb-10 uppercase tracking-tighter">
-						READY TO START <br />
+						READY TO SCALE <br />
 						<span className="text-primary italic -skew-x-12 inline-block">
-							BUILDING?
+							YOUR BUSINESS?
 						</span>
 					</h2>
 					<div className="flex flex-col sm:flex-row justify-center gap-4 px-4">
@@ -161,7 +163,7 @@ export function AboutPage() {
 							onClick={() => navigate({ to: "/products" })}
 							className="bg-primary hover:bg-primary/90 text-primary-foreground font-display font-black uppercase tracking-[0.2em] px-10 h-16 rounded-none shadow-2xl shadow-primary/10 border-none"
 						>
-							Browse Marketplace
+							Browse Products
 						</Button>
 						<Link to="/auth/signup">
 							<Button
@@ -169,7 +171,7 @@ export function AboutPage() {
 								size="lg"
 								className="border-border/40 hover:bg-foreground hover:text-background font-display font-extrabold uppercase tracking-[0.2em] px-10 h-16 rounded-none transition-all"
 							>
-								Join as Supplier
+								Become a Provider
 							</Button>
 						</Link>
 					</div>

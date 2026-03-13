@@ -173,12 +173,14 @@
 	* {
 		@apply border-border outline-ring/50;
 	}
+	html {
+		@apply font-sans;
+		overscroll-behavior-y: none;
+		scroll-padding-top: 3.5rem;
+	}
 	body {
 		@apply font-sans bg-background text-foreground antialiased selection:bg-primary selection:text-white;
 		@apply font-sans bg-background text-foreground antialiased selection:bg-primary/80 selection:text-white;
-	}
-	html {
-		@apply font-sans;
 	}
 }
 

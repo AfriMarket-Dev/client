@@ -164,7 +164,7 @@ describe("comprehensive api get requests", () => {
 		installFetchMock(() =>
 			jsonResponse({
 				data: {
-					verifiedSuppliers: 10,
+					verifiedProviders: 10,
 					productsListed: 100,
 				},
 			}),
@@ -174,7 +174,7 @@ describe("comprehensive api get requests", () => {
 			.dispatch(statsApi.endpoints.getMarketplaceStats.initiate())
 			.unwrap();
 
-		expect(result.verifiedSuppliers).toBe(10);
+		expect(result.verifiedProviders).toBe(10);
 		expect(result.productsListed).toBe(100);
 		expect(result.districtsCovered).toBe(0); // default fallback
 	});

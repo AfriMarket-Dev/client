@@ -4,34 +4,52 @@ export interface CompanyCategoryRef {
 	description?: string;
 }
 
-export interface Company {
+export type ProviderType = 'MANUFACTURER_RWANDA' | 'SUPPLIER_WHOLESALER' | 'SUPPLIER_RETAILER' | 'SERVICE_PROVIDER';
+
+/**
+ * Standardized Provider Entity
+ * Backend: Company
+ */
+export interface Provider {
 	id: string;
 	name: string;
 	slug: string;
-	ownerId?: string;
-	user?: { id: string; name?: string; email?: string };
-	description?: string;
 	logoUrl?: string;
-	isActive: boolean;
-	isVerified: boolean;
-	averageRating: number;
-	reviewCount: number;
-	followersCount?: number;
-	visits: number;
+	description: string;
+	type: ProviderType;
+	
+	// Location Data
 	province: string;
 	district: string;
 	sector: string;
-	cell: string;
-	village: string;
-	type: string;
-	category: CompanyCategoryRef;
+	cell?: string;
+	village?: string;
+
+	// Contact & Interaction Info
+	phoneNumber: string;
+	whatsappNumber?: string;
+	email: string;
+	
+	// API Aliases (Legacy support for existing components)
 	phone?: string;
-	email?: string;
-	address?: string;
-	capabilities?: string[];
+	isActive: boolean;
+	isVerified: boolean;
+	visits: number;
+	category: CompanyCategoryRef;
+	followersCount?: number;
+
+	// Social Proof
+	averageRating: number;
+	reviewCount: number;
+	capabilities: string[];
+	
 	createdAt?: string;
 	updatedAt?: string;
+	ownerId?: string;
 }
+
+// Backward compatibility aliases
+export type Company = Provider;
 
 export interface ProductCategoryRef {
 	id: string;
@@ -59,17 +77,18 @@ export interface Product {
 	isFeatured?: boolean;
 	views: number;
 	category: ProductCategoryRef;
-	company: CompanyRef;
+	company: ProviderRef;
 	price?: number;
 	stock?: number;
 	unit?: string;
 	images?: string[];
+	specifications?: Record<string, string>;
 	variants?: ProductVariant[];
 	createdAt?: string;
 	updatedAt?: string;
 }
 
-export interface CompanyRef {
+export interface ProviderRef {
 	id: string;
 	name: string;
 	slug?: string;
@@ -89,6 +108,9 @@ export interface CompanyRef {
 	createdAt?: string;
 	updatedAt?: string;
 }
+
+// Backward compatibility alias
+export type CompanyRef = ProviderRef;
 
 export interface ProductCategory {
 	id: string;
@@ -110,8 +132,9 @@ export interface Service {
 	isFeatured?: boolean;
 	views?: number;
 	category: ProductCategoryRef;
-	company: CompanyRef;
+	company: ProviderRef;
 	images?: string[];
+	specifications?: Record<string, string>;
 	totalRequests?: number;
 	createdAt?: string;
 	updatedAt?: string;
@@ -130,12 +153,13 @@ export interface Auction {
 	description?: string;
 	startingPrice: number;
 	images?: string[];
+	specifications?: Record<string, string>;
 	status: AuctionStatus;
 	startDate: string;
 	endDate: string;
 	views?: number;
 	bidsCount?: number;
-	company: CompanyRef;
+	company: ProviderRef;
 	createdAt?: string;
 	updatedAt?: string;
 }
@@ -188,49 +212,19 @@ export interface CompanyCategory {
 }
 
 export interface MarketplaceStats {
-	verifiedSuppliers: number;
+	verifiedProviders: number;
+	verifiedSuppliers?: number; // Backward compatibility
 	productsListed: number;
 	districtsCovered: number;
 	activeContractors: number;
 }
 
-export interface Supplier {
-	id: string;
-	name: string;
-	description: string;
-	location: string;
-	country: string;
-	avatar: string;
-	coverImage: string;
-	gallery?: string[];
-	rating: number;
-	reviewCount: number;
-	verified: boolean;
-	specialties: string[];
-	contact: {
-		email: string;
-		phone: string;
-		whatsapp?: string;
-	};
-	services: {
-		shipping: string[];
-		paymentMethods: string[];
-		minimumOrder: string;
-		deliveryTime: string;
-	};
-	totalProducts: number;
-	joinedDate: string;
+export interface InteractionType {
+	type: 'VIEW' | 'WHATSAPP_CLICK' | 'CALL_CLICK' | 'EMAIL_CLICK' | 'SHARE';
 }
 
-export type InteractionType =
-	| "VIEW"
-	| "WHATSAPP_CLICK"
-	| "CALL_CLICK"
-	| "EMAIL_CLICK"
-	| "SHARE";
-
 export interface LogInteractionPayload {
-	type: InteractionType;
+	type: 'VIEW' | 'WHATSAPP_CLICK' | 'CALL_CLICK' | 'EMAIL_CLICK' | 'SHARE';
 	serviceId?: string;
 	productId?: string;
 	companyId?: string;
@@ -246,6 +240,7 @@ export interface UserProfile {
 	emailVerified?: boolean;
 	phoneNumber?: string;
 	company?: { id: string; name: string };
+	needsOnboarding?: boolean;
 	createdAt?: string;
 }
 

@@ -41,8 +41,8 @@ export function AdminProductsPage() {
 			id: product.id,
 			name: product.name,
 			category: product.category?.name ?? "Uncategorized",
-			supplier: product.company?.name ?? "Unknown supplier",
-			supplierId: product.company?.id ?? "",
+			provider: product.company?.name ?? "Unknown provider",
+			providerId: product.company?.id ?? "",
 			status: product.isActive ? "active" : "inactive",
 			createdDate: formatDate(product.createdAt),
 			views: Number(product.views) || 0,
@@ -64,20 +64,20 @@ export function AdminProductsPage() {
 	const columns = useMemo(
 		() =>
 			getProductColumns({
-				onViewSupplier: (id) =>
+				onViewProvider: (id) =>
 					navigate({
-						to: "/suppliers/$supplierId",
-						params: { supplierId: id },
+						to: "/providers/$providerId",
+						params: { providerId: id },
 					}),
 				onViewDetails: (id) =>
 					navigate({
 						to: "/products/$productId",
 						params: { productId: id },
 					}),
-				onEdit: (supplierId, productId) =>
+				onEdit: (providerId, productId) =>
 					navigate({
-						to: "/admin/suppliers/$supplierId/product/$productId/edit",
-						params: { supplierId, productId },
+						to: "/admin/providers/$providerId/product/$productId/edit",
+						params: { providerId, productId },
 					}),
 				onDelete: (p) =>
 					setDeleteModal({

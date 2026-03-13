@@ -85,7 +85,7 @@ export function SignUpPage() {
 					{step === "role"
 						? "Choose how you want to use Karibu."
 						: step === "details"
-							? `Completing registration as a ${role === "user" ? "Contractor / Customer" : "Supplier / Service Provider"}.`
+							? `Completing registration as a ${role === "user" ? "Contractor / Customer" : "Provider / Service Provider"}.`
 							: "We've sent a verification link to your email address."}
 				</p>
 			</div>
@@ -120,7 +120,7 @@ export function SignUpPage() {
 						</div>
 						<div>
 							<h3 className="text-lg font-heading font-bold uppercase mb-1">
-								Supplier / Provider
+								Provider / Provider
 							</h3>
 							<p className="text-sm text-muted-foreground">
 								I want to list materials or services for the construction

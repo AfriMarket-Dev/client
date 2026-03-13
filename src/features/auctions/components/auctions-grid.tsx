@@ -21,11 +21,11 @@ export const AuctionsGrid: React.FC = () => {
     page: filters.page,
     limit: 12,
     status: "APPROVED",
-    searchQuery: filters.q,
+    searchQuery: filters.searchQuery,
     minPrice: filters.minPrice ? Number(filters.minPrice) : undefined,
     maxPrice: filters.maxPrice ? Number(filters.maxPrice) : undefined,
     sortBy: filters.sortBy,
-    sortOrder: filters.sortOrder as any,
+    sortOrder: filters.sortOrder,
   });
   const auctions = auctionsResult?.data || [];
 
@@ -54,7 +54,7 @@ export const AuctionsGrid: React.FC = () => {
           </EmptyTitle>
           <EmptyDescription className="uppercase tracking-widest text-[10px]">
             There are currently no active auctions happening. Check back later
-            as our suppliers upload new properties and items!
+            as our providers upload new properties and items!
           </EmptyDescription>
         </EmptyHeader>
         <EmptyContent>

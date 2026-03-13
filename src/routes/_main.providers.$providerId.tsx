@@ -1,0 +1,50 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { ProviderDetailsPage } from "@/features/provider/components/provider-details-page";
+import { companiesApi } from "@/services/api/companies";
+import { NotFound } from "@/shared/components/not-found";
+import { RouteError } from "@/shared/components/route-error";
+import { RouteLoading } from "@/shared/components/route-loading";
+import { createSeoMeta } from "@/shared/utils/seo";
+import { store } from "@/store";
+
+export const Route = createFileRoute("/_main/providers/$providerId")({
+	staleTime: 120_000,
+	gcTime: 600_000,
+	component: ProviderDetailsPage,
+	pendingComponent: RouteLoading,
+	errorComponent: RouteError,
+	notFoundComponent: NotFound,
+	loader: async ({ params }) => {
+		const result = await store.dispatch(
+			companiesApi.endpoints.getCompanyById.initiate(params.providerId),
+		)
+		if (!result.data) throw new Error("Provider not found");
+		return result.data;
+	},
+	head: async ({ loaderData }) => {
+		const data = await loaderData;
+		if (!data) return createSeoMeta({ title: "Provider Details" });
+
+		return createSeoMeta({
+			title: data.name,
+			description:
+				data.description ||
+				`Connect with ${data.name} on Karibu. Verified wholesale provider of ${data.category?.name || "quality products"} in ${data.district || "Africa"}.`,
+			image: data.logoUrl || "/enhanced_gpt.png",
+			type: "profile",
+			jsonLd: {
+				"@context": "https://schema.org",
+				"@type": "LocalBusiness",
+				name: data.name,
+				description: data.description,
+				image: data.logoUrl,
+				address: {
+					"@type": "PostalAddress",
+					addressLocality: data.district,
+					addressRegion: data.province,
+					addressCountry: "RW",
+				},
+			},
+		})
+	},
+});

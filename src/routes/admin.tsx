@@ -23,13 +23,19 @@ export const Route = createFileRoute("/admin")({
 				to: ROUTES.AUTH.SIGNIN,
 			});
 		}
+
+		if (user?.needsOnboarding) {
+			throw redirect({ to: "/onboarding" });
+		}
+
 		if (!user?.role || !ALLOWED_ROLES.includes(user.role)) {
 			throw redirect({
 				to: ROUTES.HOME,
 			});
 		}
 	},
-	shouldReload: (ctx: any) => !ctx.prev || ctx.next.pathname !== ctx.prev.pathname,
+	shouldReload: (ctx: any) =>
+		!ctx.prev || ctx.next.pathname !== ctx.prev.pathname,
 	preload: false,
 	component: AdminLayout,
 	pendingComponent: RouteLoading,

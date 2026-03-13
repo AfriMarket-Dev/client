@@ -32,7 +32,7 @@ const CTASection: React.FC = () => {
 						</h2>
 
 						<p className="text-muted-foreground text-base md:text-xl leading-relaxed max-w-md font-medium mb-8 md:mb-12 border-l-2 border-primary/20 pl-4 md:pl-6">
-							Browse Rwanda's largest network of construction suppliers,
+							Browse Rwanda's largest network of construction providers,
 							materials, and services. Connect directly with verified providers.
 						</p>
 

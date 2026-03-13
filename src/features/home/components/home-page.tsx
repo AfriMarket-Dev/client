@@ -12,7 +12,7 @@ import ProductShowcase from "@/features/home/components/product-showcase";
 import PromoBanner from "@/features/home/components/promo-banner";
 import CategoryGrid from "@/features/marketplace/components/category-grid";
 import TrendingProducts from "@/features/marketplace/components/trending-products";
-import FeaturedSuppliers from "@/features/supplier/components/featured-suppliers";
+import FeaturedProviders from "@/features/provider/components/featured-providers";
 import { useGetProductCategoriesQuery } from "@/services/api/product-categories";
 import { ROUTES } from "@/shared/constants/routes";
 
@@ -62,9 +62,9 @@ export function HomePage() {
 
 							{index === 1 && (
 								<PromoBanner
-									title="Verified Suppliers"
+									title="Verified Providers"
 									subtitle="Connect directly with verified local and international manufacturers."
-									ctaText="Explore Suppliers"
+									ctaText="Explore Providers"
 									ctaLink={ROUTES.PUBLIC.SUPPLIERS}
 									variant="primary"
 								/>
@@ -82,7 +82,7 @@ export function HomePage() {
 
 			<PromoBanner
 				title="Heavy Equipment"
-				subtitle="Browse construction machinery and heavy equipment from verified suppliers."
+				subtitle="Browse construction machinery and heavy equipment from verified providers."
 				ctaText="Explore Machinery"
 				ctaLink={ROUTES.PUBLIC.PRODUCTS}
 				variant="dark"
@@ -94,7 +94,7 @@ export function HomePage() {
 
 			<CTASection />
 
-			<FeaturedSuppliers />
+			<FeaturedProviders />
 		</div>
 	);
 }

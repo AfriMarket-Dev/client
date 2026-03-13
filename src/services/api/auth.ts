@@ -24,22 +24,21 @@ export const authApi = apiSlice.injectEndpoints({
 				}
 
 				const res = (result.meta as { response?: Response })?.response;
-				type RawPayload = {
-					user?: SessionUser;
-					token?: string;
-					session?: { token?: string };
-				};
 				const envelope = result.data as Record<string, unknown>;
-				const payload = (envelope?.data ?? envelope) as RawPayload;
+				const payload = (envelope?.data ?? envelope) as any;
+				
 				const token =
 					res?.headers.get("set-auth-token") ??
 					payload?.token ??
 					payload?.session?.token ??
 					"";
 
+				const user = (payload?.user ?? payload) as SessionUser;
+				const needsOnboarding = payload?.needsOnboarding ?? user?.needsOnboarding ?? false;
+
 				return {
 					data: {
-						user: (payload?.user ?? payload) as SessionUser,
+						user: { ...user, needsOnboarding },
 						token: token ?? "",
 					},
 				};
@@ -60,22 +59,21 @@ export const authApi = apiSlice.injectEndpoints({
 				}
 
 				const res = (result.meta as { response?: Response })?.response;
-				type RawPayload = {
-					user?: SessionUser;
-					token?: string;
-					session?: { token?: string };
-				};
 				const envelope = result.data as Record<string, unknown>;
-				const payload = (envelope?.data ?? envelope) as RawPayload;
+				const payload = (envelope?.data ?? envelope) as any;
+				
 				const token =
 					res?.headers.get("set-auth-token") ??
 					payload?.token ??
 					payload?.session?.token ??
 					"";
 
+				const user = (payload?.user ?? payload) as SessionUser;
+				const needsOnboarding = payload?.needsOnboarding ?? user?.needsOnboarding ?? false;
+
 				return {
 					data: {
-						user: (payload?.user ?? payload) as SessionUser,
+						user: { ...user, needsOnboarding },
 						token: token ?? "",
 					},
 				};

@@ -1,100 +1,85 @@
-import { createFileRoute, defer } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { DashboardSwitcher } from "@/features/dashboard/components/dashboard-switcher";
 import { companiesApi } from "@/services/api/companies";
 import { companyCategoriesApi } from "@/services/api/company-categories";
-import { messagesApi } from "@/services/api/messages";
 import { productsApi } from "@/services/api/products";
 import { servicesApi } from "@/services/api/services";
 import { wishlistApi } from "@/services/api/wishlist";
+import { messagesApi } from "@/services/api/messages";
 import { store } from "@/store";
+import { loaderLogger } from "@/lib/logger";
+import { getFreshOrCached } from "@/services/api/utils";
+import type { 
+	Company, 
+	ProductCategory, 
+	Product, 
+	Service, 
+	WishlistItem, 
+	ConversationPartner 
+} from "@/types";
+
+export interface DashboardLoaderData {
+	isProvider: boolean;
+	company: Company | null;
+	categories: ProductCategory[];
+	products: Product[];
+	services: Service[];
+	wishlist: WishlistItem[];
+	conversations: ConversationPartner[];
+}
 
 export const Route = createFileRoute("/dashboard/")({
-  loader: async () => {
-    const { user } = store.getState().auth;
-    const isProvider = user?.role === "provider";
+	loader: async (): Promise<DashboardLoaderData> => {
+		const { user } = store.getState().auth;
+		const isProvider = ["provider", "admin", "agent"].includes(user?.role || "");
 
-    if (isProvider) {
-      // 1. Critical data for providers
-      const companyResult = await store.dispatch(
-        companiesApi.endpoints.getMyCompany.initiate(),
-      );
-      const company = companyResult.data;
+		loaderLogger.debug({ isProvider }, "Dashboard SWR Loader Initializing");
 
-      // 2. Non-critical deferred data for providers
-      const categoriesPromise = store
-        .dispatch(
-          companyCategoriesApi.endpoints.getCompanyCategories.initiate({
-            limit: 100,
-          }),
-        )
-        .then((res) => res.data);
+		const data: DashboardLoaderData = {
+			isProvider,
+			company: null,
+			categories: [],
+			products: [],
+			services: [],
+			wishlist: [],
+			conversations: [],
+		};
 
-      let productsPromise: Promise<unknown> = Promise.resolve({
-        data: [],
-        meta: {},
-      });
-      let servicesPromise: Promise<unknown> = Promise.resolve({
-        data: [],
-        meta: {},
-      });
+		try {
+			if (isProvider) {
+				// SWR fetch for company
+				data.company = await getFreshOrCached<Company>(
+					store, 
+					companiesApi.endpoints.getMyCompany
+				);
 
-      if (company?.id) {
-        productsPromise = store
-          .dispatch(
-            productsApi.endpoints.getProducts.initiate({
-              companyId: company.id,
-              limit: 100,
-            }),
-          )
-          .then((res) => res.data ?? { data: [], meta: {} });
+				const [catRes, prodRes, servRes] = await Promise.all([
+					getFreshOrCached<any>(store, companyCategoriesApi.endpoints.getCompanyCategories, { limit: 100 }),
+					data.company?.id 
+						? getFreshOrCached<any>(store, productsApi.endpoints.getProducts, { companyId: data.company.id, limit: 100 })
+						: Promise.resolve({ data: [] }),
+					data.company?.id
+						? getFreshOrCached<any>(store, servicesApi.endpoints.getServices, { companyId: data.company.id, limit: 100 })
+						: Promise.resolve({ data: [] })
+				]);
 
-        servicesPromise = store
-          .dispatch(
-            servicesApi.endpoints.getServices.initiate({
-              companyId: company.id,
-              limit: 100,
-            }),
-          )
-          .then((res) => res.data ?? { data: [], meta: {} });
-      }
+				data.categories = catRes.data || catRes || [];
+				data.products = prodRes.data || prodRes || [];
+				data.services = servRes.data || servRes || [];
+			} else {
+				const [wishRes, convRes] = await Promise.all([
+					getFreshOrCached<any>(store, wishlistApi.endpoints.getWishlist),
+					getFreshOrCached<any>(store, messagesApi.endpoints.getConversations)
+				]);
 
-      return {
-        isProvider: true,
-        company,
-        deferred: defer(
-          Promise.all([
-            categoriesPromise,
-            productsPromise,
-            servicesPromise,
-          ]).then(([categories, products, services]) => ({
-            categories,
-            products,
-            services,
-          })),
-        ),
-      };
-    }
+				data.wishlist = wishRes.data || wishRes || [];
+				data.conversations = convRes.data || convRes || [];
+			}
+		} catch (err) {
+			loaderLogger.error(err, "Dashboard SWR Loader encountered an error");
+		}
 
-    // Non-provider (User) dashboard
-    const wishlistPromise = store
-      .dispatch(wishlistApi.endpoints.getWishlist.initiate())
-      .then((res) => res.data ?? []);
-
-    const conversationsPromise = store
-      .dispatch(messagesApi.endpoints.getConversations.initiate())
-      .then((res) => res.data ?? []);
-
-    return {
-      isProvider: false,
-      deferred: defer(
-        Promise.all([wishlistPromise, conversationsPromise]).then(
-          ([wishlist, conversations]) => ({
-            wishlist,
-            conversations,
-          }),
-        ),
-      ),
-    };
-  },
-  component: DashboardSwitcher,
+		return data;
+	},
+	component: DashboardSwitcher,
 });

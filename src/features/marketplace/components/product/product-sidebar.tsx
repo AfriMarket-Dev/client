@@ -13,13 +13,13 @@ interface ProductSidebarProps {
 		email?: string;
 	};
 	productName?: string;
-	onSupplierClick: (id: string) => void;
+	onProviderClick: (id: string) => void;
 }
 
 export const ProductSidebar: React.FC<ProductSidebarProps> = ({
 	company,
 	productName,
-	onSupplierClick,
+	onProviderClick,
 }) => {
 	const handleShare = () => {
 		shareContent({
@@ -35,7 +35,7 @@ export const ProductSidebar: React.FC<ProductSidebarProps> = ({
 			<div className="border border-border bg-background rounded-none relative overflow-hidden group">
 				<div className="p-8">
 					<h3 className="text-[9px] font-heading font-black uppercase text-muted-foreground mb-8 tracking-[0.4em] flex justify-between items-center">
-						<span>Supplier Verification</span>
+						<span>Provider Verification</span>
 						<span className="text-primary flex items-center gap-1.5">
 							<div className="w-1 h-1 bg-primary rounded-full animate-pulse" />
 							LIVE
@@ -52,7 +52,7 @@ export const ProductSidebar: React.FC<ProductSidebarProps> = ({
 								{company?.name ?? "Karibu Seller"}
 							</h4>
 							<p className="text-[10px] text-primary font-black uppercase tracking-[0.2em]">
-								{company?.district ?? "Regional Supplier"}
+								{company?.district ?? "Regional Provider"}
 							</p>
 						</div>
 					</div>
@@ -76,14 +76,14 @@ export const ProductSidebar: React.FC<ProductSidebarProps> = ({
 					<Button
 						variant="outline"
 						className="w-full rounded-none border-border h-12 font-heading font-black uppercase tracking-[0.3em] text-[9px] hover:bg-foreground hover:text-background transition-colors mb-8"
-						onClick={() => company?.id && onSupplierClick(company.id)}
+						onClick={() => company?.id && onProviderClick(company.id)}
 					>
-						View Supplier Profile
+						View Provider Profile
 					</Button>
 
 					<div className="space-y-4">
 						<span className="block text-[8px] uppercase font-black text-muted-foreground tracking-[0.4em] mb-4">
-							Contact Supplier
+							Contact Provider
 						</span>
 						<div className="flex flex-col gap-3">
 							<ContactActions
