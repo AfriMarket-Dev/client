@@ -65,10 +65,10 @@ export function AdminAuctionsPage() {
 	const columns = useMemo(
 		() =>
 			getAuctionColumns({
-				onViewSupplier: (id) =>
+				onViewProvider: (id) =>
 					navigate({
-						to: "/admin/suppliers/$supplierId",
-						params: { supplierId: id },
+						to: "/admin/providers/$providerId",
+						params: { providerId: id },
 					}),
 				onApprove: (auction) =>
 					setStatusModal({
@@ -90,7 +90,7 @@ export function AdminAuctionsPage() {
 		<PageContainer isFluid className="space-y-6">
 			<PageHeader
 				title="Auctions"
-				subtitle="Review and moderate supplier auctions"
+				subtitle="Review and moderate provider auctions"
 			/>
 
 			<Card

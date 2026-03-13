@@ -92,7 +92,7 @@ export const FilterPanel = memo<FilterPanelProps>(
 				{/* Company Type */}
 				<div className="space-y-2">
 					<Label className="uppercase text-[10px] font-bold text-muted-foreground tracking-[0.2em] block">
-						Supplier Type
+						Provider Type
 					</Label>
 					<Select
 						value={filters.companyType}
@@ -117,7 +117,7 @@ export const FilterPanel = memo<FilterPanelProps>(
 							</SelectItem>
 							<SelectGroup>
 								<SelectLabel className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
-									Supplier
+									Provider
 								</SelectLabel>
 								<SelectItem
 									value="SUPPLIER_DEALER"

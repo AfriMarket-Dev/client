@@ -9,7 +9,7 @@ export interface HeroFeaturedProduct {
 	price: string;
 	originalPrice?: string;
 	discount?: string;
-	supplier: string;
+	provider: string;
 	rating: number;
 	reviews: number;
 	tag: string;
@@ -27,7 +27,7 @@ export const mapProductToHeroFeaturedProduct = (
 		discountPercent > 0
 			? Math.max(Math.round(basePrice * (1 - discountPercent / 100)), 0)
 			: basePrice;
-	const supplierRating = Number(product.company?.rating ?? 0);
+	const providerRating = Number(product.company?.rating ?? 0);
 
 	return {
 		id: product.id,
@@ -41,8 +41,8 @@ export const mapProductToHeroFeaturedProduct = (
 				: undefined,
 		discount:
 			discountPercent > 0 ? `-${Math.round(discountPercent)}%` : undefined,
-		supplier: product.company?.name || "Unknown Supplier",
-		rating: Number.isFinite(supplierRating) ? supplierRating : 0,
+		provider: product.company?.name || "Unknown Provider",
+		rating: Number.isFinite(providerRating) ? providerRating : 0,
 		reviews: Number(product.views ?? 0),
 		tag: product.isFeatured ? "FEATURED" : "LIVE",
 	};
@@ -50,10 +50,10 @@ export const mapProductToHeroFeaturedProduct = (
 
 export const mapCompanyToWidgetItem = (company: Company): HeroWidgetItem => ({
 	id: company.id,
-	type: "supplier",
+	type: "provider",
 	name: company.name,
 	image: company.logoUrl,
-	subtext: company.type || company.district || "Supplier",
+	subtext: company.type || company.district || "Provider",
 	rating: Number(company.averageRating || 0),
 	label: company.isVerified ? "VERIFIED" : "SUPPLIER",
 });

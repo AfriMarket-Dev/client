@@ -17,14 +17,15 @@ export const Route = createFileRoute("/auth")({
 				throw redirect({ to: "/onboarding" });
 			}
 			const isAdmin = user?.role === "admin" || user?.role === "agent";
-			const isProvider = user?.role === "provider" || user?.role === "supplier";
+			const isProvider = user?.role === "provider";
 
 			if (isAdmin) throw redirect({ to: "/admin" });
 			if (isProvider) throw redirect({ to: "/dashboard" });
 			throw redirect({ to: "/" });
 		}
 	},
-	shouldReload: (ctx: any) => !ctx.prev || ctx.next.pathname !== ctx.prev.pathname,
+	shouldReload: (ctx: any) =>
+		!ctx.prev || ctx.next.pathname !== ctx.prev.pathname,
 	component: AuthLayout,
 	pendingComponent: RouteLoading,
 	notFoundComponent: NotFound,

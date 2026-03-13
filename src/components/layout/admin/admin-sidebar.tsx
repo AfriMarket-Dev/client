@@ -38,7 +38,7 @@ const navMain = [
 		isActive: true,
 	},
 	{
-		title: "Suppliers",
+		title: "Providers",
 		url: ROUTES.ADMIN.SUPPLIERS.INDEX,
 		icon: RiTeamLine,
 	},

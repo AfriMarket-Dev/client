@@ -10,6 +10,7 @@ import {
 	SidebarRail,
 } from "@/components/ui/sidebar";
 import type { NavHeaderInfo, NavItem } from "@/types";
+import { RefreshDataButton } from "../refresh-data-button";
 
 interface BaseSidebarProps {
 	headerInfo: NavHeaderInfo;
@@ -35,7 +36,8 @@ export const BaseSidebar: React.FC<BaseSidebarProps> = ({
 			<SidebarContent>
 				<NavMain items={navItems} />
 			</SidebarContent>
-			<SidebarFooter>
+			<SidebarFooter className="gap-2 p-4">
+				<RefreshDataButton variant="ghost" className="w-full justify-start px-2 h-9" showLabel />
 				<NavUser user={user} />
 			</SidebarFooter>
 			<SidebarRail />

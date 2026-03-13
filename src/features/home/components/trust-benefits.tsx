@@ -11,7 +11,7 @@ const BENEFITS = [
 		icon: <RiShieldCheckLine className="w-6 h-6" />,
 		title: "Verified Quality",
 		description:
-			"Every supplier and product undergoes a rigorous verification process.",
+			"Every provider and product undergoes a rigorous verification process.",
 	},
 	{
 		icon: <RiCheckboxCircleLine className="w-6 h-6" />,

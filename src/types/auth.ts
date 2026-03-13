@@ -2,10 +2,13 @@ export interface AuthUser {
 	id: string;
 	email: string;
 	name: string;
-	role: string;
-	avatar?: string;
+	role: 'user' | 'provider' | 'agent' | 'admin';
+	phoneNumber?: string;
 	image?: string;
-	needsOnboarding?: boolean;
+	avatar?: string; // Legacy support
+	companyId?: string;
+	needsOnboarding: boolean;
+	company?: { id: string; name: string };
 }
 
 export interface AuthState {
@@ -25,18 +28,10 @@ export interface SignUpRequest {
 	name: string;
 	email: string;
 	password?: string;
-	role: "user" | "provider";
+	role: "user" | "provider" | "agent";
 }
 
-export interface SessionUser {
-	id: string;
-	email: string;
-	name: string;
-	role: string;
-	avatar?: string;
-	image?: string;
-	needsOnboarding?: boolean;
-}
+export interface SessionUser extends AuthUser {}
 
 export interface AuthResponse {
 	user: SessionUser;

@@ -12,21 +12,21 @@ export const statsApi = apiSlice.injectEndpoints({
 		getDashboardStats: builder.query<AdminDashboardStats, void>({
 			query: () => "/stats/dashboard",
 			transformResponse: (response: ApiResponse<AdminDashboardStats>) =>
-				unwrapResponse(response) as AdminDashboardStats,
+				unwrapResponse<AdminDashboardStats>(response) as AdminDashboardStats,
 			providesTags: ["Stats"],
 		}),
 		getProviderStats: builder.query<ProviderStats, void>({
 			query: () => "/stats/provider",
 			transformResponse: (response: ApiResponse<ProviderStats>) =>
-				unwrapResponse(response) as ProviderStats,
+				unwrapResponse<ProviderStats>(response) as ProviderStats,
 			providesTags: ["Stats"],
 		}),
 		getMarketplaceStats: builder.query<MarketplaceStats, void>({
 			query: () => "/stats/marketplace",
 			transformResponse: (response: ApiResponse<MarketplaceStats>) => {
-				const data = unwrapResponse(response);
+				const data = unwrapResponse<MarketplaceStats>(response);
 				return {
-					verifiedSuppliers: data?.verifiedSuppliers ?? 0,
+					verifiedProviders: data?.verifiedProviders ?? 0,
 					productsListed: data?.productsListed ?? 0,
 					districtsCovered: data?.districtsCovered ?? 0,
 					activeContractors: data?.activeContractors ?? 0,

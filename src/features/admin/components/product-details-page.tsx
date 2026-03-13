@@ -24,8 +24,8 @@ import { AdminPageSkeleton } from "@/shared/components/skeletons";
 import { formatDate } from "@/shared/utils/format";
 
 export function AdminProductDetailsPage() {
-	const { supplierId, productId } = useParams({
-		from: "/admin/suppliers/$supplierId/product/$productId/",
+	const { providerId, productId } = useParams({
+		from: "/admin/providers/$providerId/product/$productId/",
 	});
 	const navigate = useNavigate();
 	const [selectedImageIndex, setSelectedImageIndex] = useState(0);
@@ -33,11 +33,11 @@ export function AdminProductDetailsPage() {
 
 	const { data: product, isLoading: loadingProduct } =
 		useGetProductByIdQuery(productId);
-	const { data: supplier, isLoading: loadingSupplier } =
-		useGetCompanyByIdQuery(supplierId);
+	const { data: provider, isLoading: loadingProvider } =
+		useGetCompanyByIdQuery(providerId);
 	const [deleteProduct, { isLoading: deleting }] = useDeleteProductMutation();
 
-	const isLoading = loadingProduct || loadingSupplier;
+	const isLoading = loadingProduct || loadingProvider;
 
 	const images = useMemo(
 		() => product?.variants?.flatMap((variant) => variant.images ?? []) ?? [],
@@ -66,8 +66,8 @@ export function AdminProductDetailsPage() {
 		try {
 			await deleteProduct(product.id).unwrap();
 			navigate({
-				to: "/admin/suppliers/$supplierId",
-				params: { supplierId },
+				to: "/admin/providers/$providerId",
+				params: { providerId },
 			});
 		} catch (error) {
 			console.error(error);
@@ -78,7 +78,7 @@ export function AdminProductDetailsPage() {
 		return <AdminPageSkeleton />;
 	}
 
-	if (!product || !supplier) {
+	if (!product || !provider) {
 		return (
 			<div className="flex min-h-screen items-center justify-center bg-background">
 				<Card className="max-w-sm p-8 text-center">
@@ -88,13 +88,13 @@ export function AdminProductDetailsPage() {
 					<Button
 						onClick={() =>
 							navigate({
-								to: "/admin/suppliers/$supplierId",
-								params: { supplierId },
+								to: "/admin/providers/$providerId",
+								params: { providerId },
 							})
 						}
 						className="h-11 w-full rounded-sm font-heading font-bold uppercase text-xs tracking-wider"
 					>
-						Back to Supplier
+						Back to Provider
 					</Button>
 				</Card>
 			</div>
@@ -108,8 +108,8 @@ export function AdminProductDetailsPage() {
 					variant="ghost"
 					onClick={() =>
 						navigate({
-							to: "/admin/suppliers/$supplierId",
-							params: { supplierId },
+							to: "/admin/providers/$providerId",
+							params: { providerId },
 						})
 					}
 					className="group flex items-center gap-2 rounded-sm px-3 py-2 text-xs font-heading font-bold uppercase tracking-wider text-foreground hover:bg-muted"
@@ -118,13 +118,13 @@ export function AdminProductDetailsPage() {
 						size={16}
 						className="transition-transform group-hover:-translate-x-1"
 					/>
-					Back to Supplier
+					Back to Provider
 				</Button>
 			</div>
 
 			<PageHeader
 				title={product.name}
-				subtitle={`Product listing for ${supplier.name}`}
+				subtitle={`Product listing for ${provider.name}`}
 				badge="Product Detail"
 			/>
 
@@ -202,32 +202,32 @@ export function AdminProductDetailsPage() {
 
 				<div className="space-y-6">
 					<Card
-						title="Supplier"
+						title="Provider"
 						headerActions={
 							<RiBuilding2Line size={16} className="text-primary" />
 						}
 					>
 						<div className="space-y-3">
 							<p className="font-heading text-lg font-bold text-foreground">
-								{supplier.name}
+								{provider.name}
 							</p>
 							<p className="text-sm text-muted-foreground">
-								{[supplier.district, supplier.province]
+								{[provider.district, provider.province]
 									.filter(Boolean)
 									.join(", ") || "-"}
 							</p>
 							<div className="flex flex-wrap gap-2">
 								<Badge
-									variant={supplier.isVerified ? "success" : "warning"}
+									variant={provider.isVerified ? "success" : "warning"}
 									className="text-[10px] uppercase tracking-wider"
 								>
-									{supplier.isVerified ? "verified" : "pending"}
+									{provider.isVerified ? "verified" : "pending"}
 								</Badge>
 								<Badge
-									variant={supplier.isActive ? "default" : "secondary"}
+									variant={provider.isActive ? "default" : "secondary"}
 									className="text-[10px] uppercase tracking-wider"
 								>
-									{supplier.isActive ? "active" : "inactive"}
+									{provider.isActive ? "active" : "inactive"}
 								</Badge>
 							</div>
 						</div>
@@ -272,8 +272,8 @@ export function AdminProductDetailsPage() {
 						<Button
 							onClick={() =>
 								navigate({
-									to: "/admin/suppliers/$supplierId/product/$productId/edit",
-									params: { supplierId, productId },
+									to: "/admin/providers/$providerId/product/$productId/edit",
+									params: { providerId, productId },
 								})
 							}
 							className="h-12 w-full rounded-sm"

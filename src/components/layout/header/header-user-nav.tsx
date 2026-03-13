@@ -152,7 +152,7 @@ export const HeaderUserNav: React.FC<HeaderUserNavProps> = ({
 								>
 									<RiDashboardLine size={16} className="mr-3 opacity-70" />
 									<span className="font-bold uppercase text-[10px] tracking-[0.15em]">
-										Supplier Dashboard
+										Provider Dashboard
 									</span>
 								</DropdownMenuItem>
 							)}

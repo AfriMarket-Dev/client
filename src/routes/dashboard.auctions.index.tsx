@@ -23,10 +23,10 @@ import { StatCard } from "@/shared/components/admin/stat-card";
 import { ConfirmationModal } from "@/shared/components/confirmation-modal";
 
 export const Route = createFileRoute("/dashboard/auctions/")({
-	component: SupplierAuctionsPage,
+	component: ProviderAuctionsPage,
 });
 
-function SupplierAuctionsPage() {
+function ProviderAuctionsPage() {
 	const navigate = useNavigate();
 	const { data: company } = useGetMyCompanyQuery();
 	const { data: auctionsResult, isLoading } = useGetAuctionsQuery(

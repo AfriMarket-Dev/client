@@ -25,7 +25,7 @@ describe("ProductForm Integration", () => {
 		});
 
 		renderWithProviders(
-			<ProductForm onSubmit={onSubmit} onCancel={onCancel} />,
+			<ProductForm onSubmit={onSubmit} onCancel={onCancel} showPricing={true} />,
 		);
 
 		// Wait for categories to load
@@ -34,28 +34,23 @@ describe("ProductForm Integration", () => {
 		});
 
 		// Fill out the form
-		const nameInput = screen.getByPlaceholderText(/Enter product name/i);
+		const nameInput = screen.getByLabelText(/Product Name/i);
 		fireEvent.change(nameInput, { target: { value: "New Tractor" } });
 
-		// Select category (Radix Select needs special handling in tests usually,
-		// but let's see if we can find the trigger)
-		const categoryTrigger = screen.getByRole("combobox", {
-			name: /Select Category/i,
-		});
+		// Select category
+		const categoryTrigger = screen.getByLabelText(/Category/i);
 		fireEvent.click(categoryTrigger);
 
-		// In Radix Select, the options are usually rendered in a portal
-		// We might need to wait for them
 		const categoryOption = await screen.findByText("Machinery");
 		fireEvent.click(categoryOption);
 
-		const priceInput = screen.getByPlaceholderText("0.00");
+		const priceInput = screen.getByLabelText(/Price/i);
 		fireEvent.change(priceInput, { target: { value: "500000" } });
 
-		const stockInput = screen.getByPlaceholderText("0");
+		const stockInput = screen.getByLabelText(/Stock Quantity/i);
 		fireEvent.change(stockInput, { target: { value: "10" } });
 
-		const unitInput = screen.getByPlaceholderText(/piece, kg, box/i);
+		const unitInput = screen.getByLabelText(/Unit/i);
 		fireEvent.change(unitInput, { target: { value: "unit" } });
 
 		const submitButton = screen.getByRole("button", {
@@ -73,6 +68,8 @@ describe("ProductForm Integration", () => {
 					price: "500000",
 					stock: "10",
 					unit: "unit",
+					images: [],
+					specifications: {},
 				}),
 			);
 		});

@@ -1,32 +1,32 @@
 import { getRouteApi } from "@tanstack/react-router";
-import { useSelector } from "react-redux";
-import type { RootState } from "@/store";
-import type { Company, Product, Service, ProductCategory } from "@/types";
 import ProviderDashboard from "./provider-dashboard";
 import UserDashboard from "./user-dashboard";
+import type { DashboardLoaderData } from "@/routes/dashboard.index";
 
 const routeApi = getRouteApi("/dashboard/");
 
+/**
+ * Orchestrates between Provider and User dashboard views
+ * Receives fully unwrapped and validated data from the loader
+ */
 export function DashboardSwitcher() {
-  const { user } = useSelector((state: RootState) => state.auth);
-  const data = routeApi.useLoaderData() as {
-    company: Company;
-    deferred: Promise<{
-      categories: { data: ProductCategory[] };
-      products: { data: Product[]; meta: { totalPages: number } };
-      services: { data: Service[]; meta: { totalPages: number } };
-    }>;
-  };
-  const isProvider = user?.role === "provider";
+	const data = routeApi.useLoaderData() as DashboardLoaderData;
 
-  if (isProvider) {
-    return (
-      <ProviderDashboard
-        initialCompany={data.company}
-        deferred={data.deferred as never}
-      />
-    );
-  }
+	if (data.isProvider) {
+		return (
+			<ProviderDashboard
+				company={data.company ?? undefined}
+				categories={data.categories}
+				products={data.products}
+				services={data.services}
+			/>
+		);
+	}
 
-  return <UserDashboard deferred={data.deferred as never} />;
+	return (
+		<UserDashboard 
+			wishlist={data.wishlist}
+			conversations={data.conversations}
+		/>
+	);
 }

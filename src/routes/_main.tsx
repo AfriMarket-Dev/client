@@ -7,7 +7,9 @@ import { createSeoMeta } from "@/shared/utils/seo";
 
 export const Route = createFileRoute("/_main")({
 	component: MainLayout,
-	shouldReload: (ctx: any) => !ctx.prev || ctx.next.pathname !== ctx.prev.pathname,
+	// biome-ignore lint/suspicious/noExplicitAny: TanStack Router shouldReload context is complex to type manually
+	shouldReload: (ctx: any) =>
+		!ctx.prev || ctx.next.pathname !== ctx.prev.pathname,
 	pendingComponent: RouteLoading,
 	notFoundComponent: NotFound,
 	errorComponent: RouteError,
@@ -15,6 +17,6 @@ export const Route = createFileRoute("/_main")({
 		createSeoMeta({
 			title: "African Wholesale Hub",
 			description:
-				"Karibu - The leading B2B marketplace for African wholesale commerce. Connect with verified suppliers and retailers.",
+				"Karibu - The leading B2B marketplace for African wholesale commerce. Connect with verified providers and retailers.",
 		}),
 });

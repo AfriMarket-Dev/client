@@ -1,6 +1,7 @@
 import { useForm } from "@tanstack/react-form";
 import { AlertCircleIcon, ImageIcon, UploadIcon, XIcon } from "lucide-react";
 import type React from "react";
+import { toast } from "sonner";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,6 +10,8 @@ import { getFormFieldErrors } from "@/lib/utils";
 import { useUploadMediaMutation } from "@/services/api/media";
 import { FormField } from "@/shared/components/form-field";
 import { useFileUpload } from "@/shared/hooks/use-file-upload";
+import { FormGrid, FormSection } from "@/shared/components/forms/form-components";
+import { SpecificationManager } from "@/shared/components/forms/specification-manager";
 import {
 	type AuctionFormValues,
 	auctionOptions,
@@ -72,7 +75,8 @@ export const AuctionForm: React.FC<AuctionFormProps> = ({
 			startingPrice: initialValues?.startingPrice ?? "",
 			startDate: toDateTimeLocal(initialValues?.startDate),
 			endDate: toDateTimeLocal(initialValues?.endDate),
-			imageUrls: initialValues?.imageUrls ?? [],
+			images: initialValues?.images ?? [],
+			specifications: initialValues?.specifications ?? {},
 		},
 		onSubmit: async ({ value }) => {
 			let newUploadedUrls: string[] = [];
@@ -90,13 +94,14 @@ export const AuctionForm: React.FC<AuctionFormProps> = ({
 					newUploadedUrls = res.map((r) => r.url);
 				} catch (uploadErr) {
 					console.error("Upload failed", uploadErr);
+					toast.error("Failed to upload auction images.");
 					return;
 				}
 			}
 			onSubmit({
 				...value,
 				startingPrice: Number(value.startingPrice) || 0,
-				imageUrls: [...value.imageUrls, ...newUploadedUrls],
+				images: [...value.images, ...newUploadedUrls],
 			});
 		},
 	});
@@ -108,134 +113,150 @@ export const AuctionForm: React.FC<AuctionFormProps> = ({
 				e.stopPropagation();
 				form.handleSubmit();
 			}}
-			className="space-y-5"
+			className="space-y-8"
 		>
 			{serverError && (
-				<Alert
-					variant="destructive"
-					className="rounded-none border-destructive/20 bg-destructive/5"
-				>
+				<Alert variant="destructive" className="rounded-none border-destructive/20 bg-destructive/5">
 					<AlertDescription className="font-bold uppercase tracking-widest text-[10px]">
 						{serverError}
 					</AlertDescription>
 				</Alert>
 			)}
-			<form.Field
-				name="title"
-				children={(field) => (
-					<FormField
-						label="Auction Title"
-						required
-						error={getFormFieldErrors(field.state.meta.errors)}
-					>
-						<Input
-							id={field.name}
-							aria-label="Auction Title"
-							name={field.name}
-							value={field.state.value}
-							onBlur={field.handleBlur}
-							onChange={(e) => field.handleChange(e.target.value)}
-							className="h-11 text-sm bg-background rounded-none border-border/40 focus:border-primary/40 focus:ring-0"
-							placeholder="Enter auction title"
-						/>
-					</FormField>
-				)}
-			/>
 
-			<form.Field
-				name="startingPrice"
-				children={(field) => (
-					<FormField
-						label="Starting Price (RWF)"
-						required
-						error={getFormFieldErrors(field.state.meta.errors)}
-					>
-						<Input
-							id={field.name}
-							aria-label="Starting Price"
-							name={field.name}
-							value={field.state.value}
-							type="number"
-							min="0"
-							step="0.01"
-							onBlur={field.handleBlur}
-							onChange={(e) => field.handleChange(e.target.value)}
-							className="h-11 text-sm bg-background rounded-none border-border/40 focus:border-primary/40 focus:ring-0"
-							placeholder="0.00"
-						/>
-					</FormField>
-				)}
-			/>
-
-			<div className="grid grid-cols-2 gap-4">
+			<FormSection title="Auction Details" description="Define the scope and starting terms">
 				<form.Field
-					name="startDate"
+					name="title"
 					children={(field) => (
 						<FormField
-							label="Start Date & Time"
+							id={field.name}
+							label="Auction Title"
 							required
 							error={getFormFieldErrors(field.state.meta.errors)}
 						>
 							<Input
 								id={field.name}
-								aria-label="Start Date"
 								name={field.name}
 								value={field.state.value}
-								type="datetime-local"
 								onBlur={field.handleBlur}
 								onChange={(e) => field.handleChange(e.target.value)}
 								className="h-11 text-sm bg-background rounded-none border-border/40 focus:border-primary/40 focus:ring-0"
+								placeholder="Enter auction title"
 							/>
 						</FormField>
 					)}
 				/>
+
 				<form.Field
-					name="endDate"
+					name="startingPrice"
 					children={(field) => (
 						<FormField
-							label="End Date & Time"
+							id={field.name}
+							label="Starting Price (RWF)"
 							required
 							error={getFormFieldErrors(field.state.meta.errors)}
 						>
 							<Input
 								id={field.name}
-								aria-label="End Date"
 								name={field.name}
 								value={field.state.value}
-								type="datetime-local"
+								type="number"
+								min="0"
+								step="0.01"
 								onBlur={field.handleBlur}
 								onChange={(e) => field.handleChange(e.target.value)}
 								className="h-11 text-sm bg-background rounded-none border-border/40 focus:border-primary/40 focus:ring-0"
+								placeholder="0.00"
 							/>
 						</FormField>
 					)}
 				/>
-			</div>
+			</FormSection>
 
-			<form.Field
-				name="description"
-				children={(field) => (
-					<FormField
-						label="Description"
-						error={getFormFieldErrors(field.state.meta.errors)}
-					>
-						<Textarea
-							id={field.name}
-							name={field.name}
-							value={field.state.value}
-							onBlur={field.handleBlur}
-							onChange={(e) => field.handleChange(e.target.value)}
-							rows={4}
-							className="text-sm resize-none bg-background rounded-none border-border/40 focus:border-primary/40 focus:ring-0"
-							placeholder="Detail the item or property being auctioned..."
-						/>
-					</FormField>
-				)}
-			/>
+			<FormSection title="Schedule" description="When will the bidding happen?">
+				<FormGrid>
+					<form.Field
+						name="startDate"
+						children={(field) => (
+							<FormField
+								id={field.name}
+								label="Start Date & Time"
+								required
+								error={getFormFieldErrors(field.state.meta.errors)}
+							>
+								<Input
+									id={field.name}
+									name={field.name}
+									value={field.state.value}
+									type="datetime-local"
+									onBlur={field.handleBlur}
+									onChange={(e) => field.handleChange(e.target.value)}
+									className="h-11 text-sm bg-background rounded-none border-border/40 focus:border-primary/40 focus:ring-0"
+								/>
+							</FormField>
+						)}
+					/>
+					<form.Field
+						name="endDate"
+						children={(field) => (
+							<FormField
+								id={field.name}
+								label="End Date & Time"
+								required
+								error={getFormFieldErrors(field.state.meta.errors)}
+							>
+								<Input
+									id={field.name}
+									name={field.name}
+									value={field.state.value}
+									type="datetime-local"
+									onBlur={field.handleBlur}
+									onChange={(e) => field.handleChange(e.target.value)}
+									className="h-11 text-sm bg-background rounded-none border-border/40 focus:border-primary/40 focus:ring-0"
+								/>
+							</FormField>
+						)}
+					/>
+				</FormGrid>
+			</FormSection>
 
-			<div>
+			<FormSection title="Information" description="Additional context for bidders">
 				<form.Field
-					name="imageUrls"
+					name="description"
+					children={(field) => (
+						<FormField
+							id={field.name}
+							label="Description"
+							error={getFormFieldErrors(field.state.meta.errors)}
+						>
+							<Textarea
+								id={field.name}
+								name={field.name}
+								value={field.state.value}
+								onBlur={field.handleBlur}
+								onChange={(e) => field.handleChange(e.target.value)}
+								rows={4}
+								className="text-sm resize-none bg-background rounded-none border-border/40 focus:border-primary/40 focus:ring-0"
+								placeholder="Detail the item or property being auctioned..."
+							/>
+						</FormField>
+					)}
+				/>
+
+				<form.Field
+					name="specifications"
+					children={(field) => (
+						<SpecificationManager
+							value={field.state.value as Record<string, string>}
+							onChange={(val) => field.handleChange(val)}
+							label="Auction Specs"
+						/>
+					)}
+				/>
+			</FormSection>
+
+			<FormSection title="Media" description="High-quality images of the item">
+				<form.Field
+					name="images"
 					children={(field) => {
 						const existingImages = field.state.value || [];
 						const remainingSlots = MAX_IMAGES - existingImages.length;
@@ -247,7 +268,7 @@ export const AuctionForm: React.FC<AuctionFormProps> = ({
 										<label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground ml-1">
 											Existing Images ({existingImages.length})
 										</label>
-										<div className="grid grid-cols-4 sm:grid-cols-6 gap-2">
+										<div className="grid grid-cols-4 gap-2">
 											{existingImages.map((url: string, i: number) => (
 												<div
 													key={url}
@@ -281,7 +302,8 @@ export const AuctionForm: React.FC<AuctionFormProps> = ({
 								)}
 
 								<FormField
-									label={`New Auction Images (up to ${remainingSlots} more)`}
+									id="new-images"
+									label={`New Images (up to ${remainingSlots} more)`}
 									error={getFormFieldErrors(field.state.meta.errors)}
 								>
 									<div
@@ -295,7 +317,7 @@ export const AuctionForm: React.FC<AuctionFormProps> = ({
 									>
 										<input
 											{...getInputProps()}
-											aria-label="Upload auction images"
+											id="new-images"
 											className="sr-only"
 										/>
 										{files.length > 0 ? (
@@ -334,8 +356,7 @@ export const AuctionForm: React.FC<AuctionFormProps> = ({
 															/>
 															<Button
 																type="button"
-																aria-label="Remove image"
-																className="-top-1.5 -right-1.5 absolute size-5 rounded-none border border-background shadow-none focus-visible:border-background bg-background/80 backdrop-blur-md"
+																className="-top-1.5 -right-1.5 absolute size-5 rounded-none border border-background bg-background/80 backdrop-blur-md"
 																onClick={() => removeFile(file.id)}
 																size="icon"
 															>
@@ -352,9 +373,6 @@ export const AuctionForm: React.FC<AuctionFormProps> = ({
 												</div>
 												<p className="mb-1 font-black uppercase tracking-widest text-[10px]">
 													Drop images here
-												</p>
-												<p className="text-muted-foreground text-[9px] uppercase font-bold tracking-tighter">
-													PNG, JPG, or WebP (max {MAX_SIZE_MB}MB)
 												</p>
 												<Button
 													type="button"
@@ -374,17 +392,14 @@ export const AuctionForm: React.FC<AuctionFormProps> = ({
 					}}
 				/>
 				{uploadErrors.length > 0 && (
-					<div
-						className="flex items-center gap-1 text-destructive text-[10px] font-black uppercase tracking-widest mt-1.5"
-						role="alert"
-					>
+					<div className="flex items-center gap-1 text-destructive text-[10px] font-black uppercase tracking-widest mt-1.5">
 						<AlertCircleIcon className="size-3 shrink-0" />
 						<span>{uploadErrors[0]}</span>
 					</div>
 				)}
-			</div>
+			</FormSection>
 
-			<div className="flex gap-3 pt-2">
+			<div className="flex gap-3 pt-4">
 				<Button
 					type="button"
 					variant="outline"

@@ -121,12 +121,12 @@ const Hero: React.FC = () => {
 			{
 				id: "manufacturers-stat",
 				type: "stat",
-				stat: `${marketplaceStats?.verifiedSuppliers ?? 0}+`,
+				stat: `${marketplaceStats?.verifiedProviders ?? 0}+`,
 				statDesc: "Direct",
 			},
 			...companies.map(mapCompanyToWidgetItem),
 		];
-	}, [companiesResult?.data, marketplaceStats?.verifiedSuppliers]);
+	}, [companiesResult?.data, marketplaceStats?.verifiedProviders]);
 
 	const productItems = React.useMemo<HeroWidgetItem[]>(() => {
 		const products = featuredProductsResult?.data?.slice(0, 3) ?? [];
@@ -141,18 +141,18 @@ const Hero: React.FC = () => {
 		];
 	}, [featuredProductsResult?.data, marketplaceStats?.productsListed]);
 
-	const supplierItems = React.useMemo<HeroWidgetItem[]>(() => {
+	const providerItems = React.useMemo<HeroWidgetItem[]>(() => {
 		const companies = (companiesResult?.data ?? []).slice(3, 6);
 		return [
 			{
-				id: "suppliers-stat",
+				id: "providers-stat",
 				type: "stat",
-				stat: `${marketplaceStats?.verifiedSuppliers ?? 0}+`,
+				stat: `${marketplaceStats?.verifiedProviders ?? 0}+`,
 				statDesc: "Verified",
 			},
 			...companies.map(mapCompanyToWidgetItem),
 		];
-	}, [companiesResult?.data, marketplaceStats?.verifiedSuppliers]);
+	}, [companiesResult?.data, marketplaceStats?.verifiedProviders]);
 
 	const serviceItems = React.useMemo<HeroWidgetItem[]>(() => {
 		const services = servicesResult?.data?.slice(0, 3) ?? [];
@@ -337,7 +337,7 @@ const Hero: React.FC = () => {
 						title="Top Manufacturers"
 						subtitle="Direct access"
 						items={manufacturerItems}
-						href="/suppliers?type=manufacturer"
+						href="/providers?type=manufacturer"
 						variant="default"
 					/>
 					<HeroWidget
@@ -348,10 +348,10 @@ const Hero: React.FC = () => {
 						variant="blue"
 					/>
 					<HeroWidget
-						title="Top Suppliers"
+						title="Top Providers"
 						subtitle="Trusted partners"
-						items={supplierItems}
-						href="/suppliers"
+						items={providerItems}
+						href="/providers"
 						variant="emerald"
 					/>
 					<HeroWidget

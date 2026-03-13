@@ -19,13 +19,13 @@ import {
 import type { Auction } from "@/types";
 
 interface AuctionColumnsProps {
-	onViewSupplier: (supplierId: string) => void;
+	onViewProvider: (providerId: string) => void;
 	onApprove: (auction: Auction) => void;
 	onReject: (auction: Auction) => void;
 }
 
 export const getAuctionColumns = ({
-	onViewSupplier,
+	onViewProvider,
 	onApprove,
 	onReject,
 }: AuctionColumnsProps): ColumnDef<Auction>[] => [
@@ -50,7 +50,7 @@ export const getAuctionColumns = ({
 	},
 	{
 		accessorKey: "company",
-		header: "Supplier",
+		header: "Provider",
 		cell: ({ row }) => (
 			<span className="text-xs font-semibold text-foreground">
 				{row.original.company?.name || "Unknown"}
@@ -116,9 +116,9 @@ export const getAuctionColumns = ({
 							<DropdownMenuLabel>Actions</DropdownMenuLabel>
 							<DropdownMenuItem
 								disabled={!row.original.company?.id}
-								onClick={() => onViewSupplier(row.original.company.id)}
+								onClick={() => onViewProvider(row.original.company.id)}
 							>
-								<RiEyeLine className="mr-2 h-4 w-4" /> View supplier
+								<RiEyeLine className="mr-2 h-4 w-4" /> View provider
 							</DropdownMenuItem>
 
 							{isPending && (

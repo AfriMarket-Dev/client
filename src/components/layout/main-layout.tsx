@@ -26,7 +26,7 @@ export const MainLayout = () => {
 		navigate({ to: ROUTES.PUBLIC.SERVICES });
 	}, [navigate]);
 
-	const handleSuppliersClick = useCallback(() => {
+	const handleProvidersClick = useCallback(() => {
 		navigate({ to: ROUTES.PUBLIC.SUPPLIERS });
 	}, [navigate]);
 
@@ -48,7 +48,7 @@ export const MainLayout = () => {
 					onHelpClick={handleHelpClick}
 					onProductsClick={handleProductsClick}
 					onServicesClick={handleServicesClick}
-					onSuppliersClick={handleSuppliersClick}
+					onProvidersClick={handleProvidersClick}
 					onDashboardClick={handleDashboardClick}
 				/>
 			)}

@@ -4,6 +4,7 @@ import type {
 	ApiResponse,
 	CreateProductCategoryInput,
 	ProductCategoriesListResult,
+	ProductCategoriesQueryParams,
 	ProductCategory,
 } from "@/types";
 
@@ -11,12 +12,13 @@ export const productCategoriesApi = apiSlice.injectEndpoints({
 	endpoints: (builder) => ({
 		getProductCategories: builder.query<
 			ProductCategoriesListResult,
-			{ page?: number; limit?: number }
+			ProductCategoriesQueryParams
 		>({
 			query: (params = {}) => {
 				const sp = new URLSearchParams();
 				if (params?.page != null) sp.set("page", String(params.page));
 				if (params?.limit != null) sp.set("limit", String(params.limit));
+				if (params?.query) sp.set("query", params.query);
 				return `/product-categories?${sp.toString()}`;
 			},
 			transformResponse: (response: ApiResponse<ProductCategory[]>) =>

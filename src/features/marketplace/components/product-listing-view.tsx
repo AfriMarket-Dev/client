@@ -22,7 +22,7 @@ interface ProductListingViewProps {
   isAuthenticated: boolean;
   wishlistIds: Set<string>;
   onToggleWishlist: (e: React.MouseEvent, item: MarketplaceItem) => void;
-  onSupplierClick: (e: React.MouseEvent, companyId: string) => void;
+  onProviderClick: (e: React.MouseEvent, companyId: string) => void;
   onProductClick: (item: MarketplaceItem) => void;
 }
 
@@ -33,7 +33,7 @@ export const ProductListingView: React.FC<ProductListingViewProps> = ({
   isAuthenticated,
   wishlistIds,
   onToggleWishlist,
-  onSupplierClick,
+  onProviderClick,
   onProductClick,
 }) => {
   const { filters, patchFilters, resetFilters } = useMarketplaceFilters();
@@ -75,7 +75,7 @@ export const ProductListingView: React.FC<ProductListingViewProps> = ({
       <div
         className={cn(
           "grid grid-cols-2 gap-4 md:gap-6",
-          viewMode === "grid" ? "lg:grid-cols-2 xl:grid-cols-3" : "grid-cols-1",
+          viewMode === "grid" ? "lg:grid-cols-2 xl:grid-cols-4" : "grid-cols-1",
         )}
       >
         {Array.from({ length: 8 }).map((_, i) => (
@@ -120,7 +120,7 @@ export const ProductListingView: React.FC<ProductListingViewProps> = ({
           className={cn(
             "grid gap-4 md:gap-6",
             viewMode === "grid"
-              ? "grid-cols-2 lg:grid-cols-2 xl:grid-cols-3"
+              ? "grid-cols-2 lg:grid-cols-2 xl:grid-cols-4"
               : "grid-cols-1",
           )}
         >
@@ -131,7 +131,7 @@ export const ProductListingView: React.FC<ProductListingViewProps> = ({
               viewMode={viewMode}
               isInWishlist={isAuthenticated && wishlistIds.has(item.id)}
               onToggleWishlist={(e) => onToggleWishlist(e, item)}
-              onSupplierClick={(e) => onSupplierClick(e, item.company.id)}
+              onProviderClick={(e) => onProviderClick(e, item.company.id)}
               onClick={() => onProductClick(item)}
             />
           ))}

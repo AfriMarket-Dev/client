@@ -17,18 +17,18 @@ import { PageHeader } from "@/shared/components/admin/page-header";
 import { AdminPageSkeleton } from "@/shared/components/skeletons";
 
 export function AdminEditProductPage() {
-	const { supplierId, productId } = useParams({
-		from: "/admin/suppliers/$supplierId/product/$productId/edit",
+	const { providerId, productId } = useParams({
+		from: "/admin/providers/$providerId/product/$productId/edit",
 	});
 	const navigate = useNavigate();
 
 	const { data: product, isLoading: isProductLoading } =
 		useGetProductByIdQuery(productId);
-	const { data: supplier, isLoading: isSupplierLoading } =
-		useGetCompanyByIdQuery(supplierId);
+	const { data: provider, isLoading: isProviderLoading } =
+		useGetCompanyByIdQuery(providerId);
 	const [updateProduct, { isLoading: saving }] = useUpdateProductMutation();
 
-	const isLoadingData = isProductLoading || isSupplierLoading;
+	const isLoadingData = isProductLoading || isProviderLoading;
 
 	const [formData, setFormData] = useState({
 		name: "",
@@ -85,8 +85,8 @@ export function AdminEditProductPage() {
 				},
 			}).unwrap();
 			navigate({
-				to: "/admin/suppliers/$supplierId/product/$productId",
-				params: { supplierId, productId },
+				to: "/admin/providers/$providerId/product/$productId",
+				params: { providerId, productId },
 			});
 		} catch (error) {
 			console.error(error);
@@ -97,7 +97,7 @@ export function AdminEditProductPage() {
 		return <AdminPageSkeleton />;
 	}
 
-	if (!product || !supplier) {
+	if (!product || !provider) {
 		return (
 			<div className="flex min-h-screen items-center justify-center bg-background">
 				<Card className="max-w-sm p-8 text-center">
@@ -107,13 +107,13 @@ export function AdminEditProductPage() {
 					<Button
 						onClick={() =>
 							navigate({
-								to: "/admin/suppliers/$supplierId",
-								params: { supplierId },
+								to: "/admin/providers/$providerId",
+								params: { providerId },
 							})
 						}
 						className="h-11 w-full rounded-sm font-heading font-bold uppercase text-xs tracking-wider"
 					>
-						Return to Supplier
+						Return to Provider
 					</Button>
 				</Card>
 			</div>
@@ -127,8 +127,8 @@ export function AdminEditProductPage() {
 					variant="ghost"
 					onClick={() =>
 						navigate({
-							to: "/admin/suppliers/$supplierId/product/$productId",
-							params: { supplierId, productId },
+							to: "/admin/providers/$providerId/product/$productId",
+							params: { providerId, productId },
 						})
 					}
 					className="group flex items-center gap-2 rounded-sm px-3 py-2 text-xs font-heading font-bold uppercase tracking-wider text-foreground hover:bg-muted"

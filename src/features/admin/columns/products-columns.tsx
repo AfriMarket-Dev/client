@@ -19,14 +19,14 @@ import {
 import type { ProductRow } from "@/types";
 
 interface ProductColumnsProps {
-	onViewSupplier: (supplierId: string) => void;
+	onViewProvider: (providerId: string) => void;
 	onViewDetails: (productId: string) => void;
-	onEdit: (supplierId: string, productId: string) => void;
+	onEdit: (providerId: string, productId: string) => void;
 	onDelete: (product: ProductRow) => void;
 }
 
 export const getProductColumns = ({
-	onViewSupplier,
+	onViewProvider,
 	onViewDetails,
 	onEdit,
 	onDelete,
@@ -51,11 +51,11 @@ export const getProductColumns = ({
 		),
 	},
 	{
-		accessorKey: "supplier",
-		header: "Supplier",
+		accessorKey: "provider",
+		header: "Provider",
 		cell: ({ row }) => (
 			<span className="text-xs font-semibold text-foreground">
-				{row.original.supplier}
+				{row.original.provider}
 			</span>
 		),
 	},
@@ -96,16 +96,16 @@ export const getProductColumns = ({
 					<DropdownMenuGroup>
 						<DropdownMenuLabel>Actions</DropdownMenuLabel>
 						<DropdownMenuItem
-							disabled={!row.original.supplierId}
-							onClick={() => onViewSupplier(row.original.supplierId)}
+							disabled={!row.original.providerId}
+							onClick={() => onViewProvider(row.original.providerId)}
 						>
-							<RiEyeLine className="mr-2 h-4 w-4" /> View supplier
+							<RiEyeLine className="mr-2 h-4 w-4" /> View provider
 						</DropdownMenuItem>
 						<DropdownMenuItem onClick={() => onViewDetails(row.original.id)}>
 							<RiEyeLine className="mr-2 h-4 w-4" /> View details
 						</DropdownMenuItem>
 						<DropdownMenuItem
-							onClick={() => onEdit(row.original.supplierId, row.original.id)}
+							onClick={() => onEdit(row.original.providerId, row.original.id)}
 						>
 							<RiEditLine className="mr-2 h-4 w-4" /> Edit
 						</DropdownMenuItem>

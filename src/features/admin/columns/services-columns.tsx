@@ -20,8 +20,8 @@ import type { ServiceRow } from "@/types";
 
 interface ServiceColumnsProps {
 	onViewDetails: (serviceId: string) => void;
-	onViewProvider: (supplierId: string) => void;
-	onEdit: (supplierId: string) => void;
+	onViewProvider: (providerId: string) => void;
+	onEdit: (providerId: string) => void;
 	onDelete: (service: ServiceRow) => void;
 }
 
@@ -51,11 +51,11 @@ export const getServiceColumns = ({
 		),
 	},
 	{
-		accessorKey: "supplier",
+		accessorKey: "provider",
 		header: "Provider",
 		cell: ({ row }) => (
 			<span className="text-xs font-semibold text-foreground">
-				{row.original.supplier}
+				{row.original.provider}
 			</span>
 		),
 	},
@@ -99,11 +99,11 @@ export const getServiceColumns = ({
 							<RiEyeLine className="mr-2 h-4 w-4" /> View details
 						</DropdownMenuItem>
 						<DropdownMenuItem
-							onClick={() => onViewProvider(row.original.supplierId)}
+							onClick={() => onViewProvider(row.original.providerId)}
 						>
 							<RiEyeLine className="mr-2 h-4 w-4" /> View provider
 						</DropdownMenuItem>
-						<DropdownMenuItem onClick={() => onEdit(row.original.supplierId)}>
+						<DropdownMenuItem onClick={() => onEdit(row.original.providerId)}>
 							<RiEditLine className="mr-2 h-4 w-4" /> Edit
 						</DropdownMenuItem>
 						<DropdownMenuItem

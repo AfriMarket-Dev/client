@@ -11,7 +11,7 @@ interface FooterProps {
 	onHelpClick?: () => void;
 	onProductsClick?: () => void;
 	onServicesClick?: () => void;
-	onSuppliersClick?: () => void;
+	onProvidersClick?: () => void;
 	onDashboardClick?: () => void;
 }
 
@@ -20,24 +20,24 @@ export const Footer: React.FC<FooterProps> = ({
 	onHelpClick,
 	onProductsClick,
 	onServicesClick,
-	onSuppliersClick,
+	onProvidersClick,
 	onDashboardClick,
 }) => {
 	const footerSections = [
 		{
 			title: "Marketplace",
 			links: [
-				{ label: "Browse Suppliers", onClick: onSuppliersClick },
+				{ label: "Browse Providers", onClick: onProvidersClick },
 				{ label: "Construction Materials", onClick: onProductsClick },
 				{ label: "Heavy Equipment", onClick: onProductsClick },
 				{ label: "Labor Services", onClick: onServicesClick },
 			],
 		},
 		{
-			title: "For Suppliers",
+			title: "For Providers",
 			links: [
-				{ label: "Join as Supplier", onClick: onDashboardClick },
-				{ label: "Supplier Dashboard", onClick: onDashboardClick },
+				{ label: "Join as Provider", onClick: onDashboardClick },
+				{ label: "Provider Dashboard", onClick: onDashboardClick },
 				{ label: "List Products", onClick: onDashboardClick },
 				"Verify Identity",
 			],
@@ -87,7 +87,7 @@ export const Footer: React.FC<FooterProps> = ({
 							<div className="w-16 md:w-20 h-1 bg-primary mb-6 md:mb-8" />
 							<p className="text-muted-foreground text-base md:text-lg leading-relaxed max-w-md font-medium">
 								The premier construction marketplace for Rwanda. Connecting
-								contractors with verified suppliers and professional services.
+								contractors with verified providers and professional services.
 							</p>
 						</div>
 

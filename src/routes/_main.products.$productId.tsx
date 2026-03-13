@@ -29,7 +29,7 @@ export const Route = createFileRoute("/_main/products/$productId")({
 			title: data.name,
 			description:
 				data.description ||
-				`Buy ${data.name} wholesale at Karibu. High-quality products from trusted African suppliers.`,
+				`Buy ${data.name} wholesale at Karibu. High-quality products from trusted African providers.`,
 			image: data.images?.[0] || "/enhanced_gpt.png",
 			type: "product",
 			jsonLd: {

@@ -4,61 +4,65 @@ import { AuctionForm } from "@/features/forms/components/auction-form";
 import { getErrorFromRtkQuery } from "@/lib/utils";
 import { useCreateAuctionMutation } from "@/services/api/auctions";
 import { useGetMyCompanyQuery } from "@/services/api/companies";
-import { Card } from "@/shared/components/admin/card";
-import { PageHeader } from "@/shared/components/admin/page-header";
-import type { AuctionFormValues } from "@/shared/schemas/business";
+import { Button } from "@/components/ui/button";
+import { RiArrowLeftLine } from "@remixicon/react";
 
 export function NewAuctionPage() {
 	const navigate = useNavigate();
-	const [createAuction, { isLoading, error }] = useCreateAuctionMutation();
 	const { data: company } = useGetMyCompanyQuery();
+	const [createAuction, { isLoading, error }] = useCreateAuctionMutation();
 
-	const handleSubmit = async (
-		values: Omit<AuctionFormValues, "startingPrice"> & {
-			startingPrice: number;
-		},
-	) => {
+	const handleSubmit = async (values: any) => {
 		if (!company?.id) {
 			toast.error("Company not found. Ensure you are linked to a company.");
 			return;
 		}
 
 		try {
-			const { imageUrls, ...restValues } = values;
 			await createAuction({
-				...restValues,
+				...values,
 				companyId: company.id,
-				images: imageUrls,
 			}).unwrap();
 			toast.success(
 				"Auction created successfully and is pending admin approval.",
 			);
 			navigate({ to: "/dashboard/auctions" });
-		} catch (error) {
-			console.error(error);
+		} catch (err) {
+			console.error(err);
 		}
 	};
 
 	const serverError = getErrorFromRtkQuery(error);
 
 	return (
-		<div className="mx-auto max-w-5xl space-y-6 pb-14">
-			<PageHeader
-				title="List New Auction"
-				subtitle="Create a new auction for review and bidding"
-				badge="Supplier Dashboard"
-			/>
-
-			<Card noPadding>
-				<div className="p-6">
-					<AuctionForm
-						onSubmit={handleSubmit}
-						onCancel={() => navigate({ to: "/dashboard/auctions" })}
-						isLoading={isLoading}
-						serverError={serverError}
-					/>
+		<div className="p-8 max-w-[1800px] mx-auto">
+			<div className="mb-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+				<div>
+					<h1 className="text-3xl font-heading font-black uppercase tracking-tight text-foreground mb-2">
+						Create New Auction
+					</h1>
+					<p className="text-muted-foreground text-sm font-medium">
+						List a batch of goods for live bidding.
+					</p>
 				</div>
-			</Card>
+				<Button
+					variant="ghost"
+					onClick={() => navigate({ to: "/dashboard/auctions" })}
+					className="gap-2 font-heading font-black uppercase text-[10px] tracking-[0.2em] rounded-none hover:bg-muted/50 border border-border/20 h-11 px-6"
+				>
+					<RiArrowLeftLine className="size-4" />
+					Back to Auctions
+				</Button>
+			</div>
+
+			<div className="max-w-2xl bg-card border border-border/50 p-8 shadow-sm rounded-none mx-auto md:mx-0">
+				<AuctionForm
+					onSubmit={handleSubmit}
+					onCancel={() => navigate({ to: "/dashboard/auctions" })}
+					isLoading={isLoading}
+					serverError={serverError}
+				/>
+			</div>
 		</div>
 	);
 }

@@ -43,8 +43,8 @@ export function AdminServicesPage() {
 			id: service.id,
 			name: service.name,
 			category: service.category?.name ?? "General",
-			supplier: service.company?.name ?? "Unknown supplier",
-			supplierId: service.company?.id ?? "",
+			provider: service.company?.name ?? "Unknown provider",
+			providerId: service.company?.id ?? "",
 			status: service.isActive ? "active" : "inactive",
 			createdDate: formatDate(service.createdAt),
 			views: Number(service.views) || 0,
@@ -73,13 +73,13 @@ export function AdminServicesPage() {
 					}),
 				onViewProvider: (id) =>
 					navigate({
-						to: "/suppliers/$supplierId",
-						params: { supplierId: id },
+						to: "/providers/$providerId",
+						params: { providerId: id },
 					}),
 				onEdit: (id) =>
 					navigate({
-						to: "/admin/suppliers/$supplierId/edit",
-						params: { supplierId: id },
+						to: "/admin/providers/$providerId/edit",
+						params: { providerId: id },
 					}),
 				onDelete: (s) =>
 					setDeleteModal({

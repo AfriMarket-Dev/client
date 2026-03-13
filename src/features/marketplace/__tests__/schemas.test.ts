@@ -2,18 +2,19 @@ import { describe, expect, it } from "vitest";
 import {
 	auctionSearchSchema,
 	marketplaceSearchSchema,
-	suppliersSearchSchema,
+	providersSearchSchema,
 } from "../schemas";
 
 describe("Marketplace Search Schemas", () => {
 	describe("marketplaceSearchSchema", () => {
-		it("validates empty search with defaults", () => {
+		it("validates empty search without automatic defaults", () => {
 			const result = marketplaceSearchSchema.safeParse({});
 			expect(result.success).toBe(true);
 			if (result.success) {
-				expect(result.data.type).toBe("all");
-				expect(result.data.page).toBe(1);
-				expect(result.data.sortBy).toBe("createdAt");
+				// Defaults are now handled in hooks/loaders, not Zod schema
+				expect(result.data.type).toBeUndefined();
+				expect(result.data.page).toBeUndefined();
+				expect(result.data.sortBy).toBeUndefined();
 			}
 		});
 
@@ -39,36 +40,36 @@ describe("Marketplace Search Schemas", () => {
 	});
 
 	describe("auctionSearchSchema", () => {
-		it("validates with defaults", () => {
+		it("validates without automatic defaults", () => {
 			const result = auctionSearchSchema.safeParse({});
 			expect(result.success).toBe(true);
-			expect(result.data?.page).toBe(1);
-			expect(result.data?.q).toBe("");
+			expect(result.data?.page).toBeUndefined();
+			expect(result.data?.searchQuery).toBeUndefined();
 		});
 
-		it("accepts query string", () => {
-			const result = auctionSearchSchema.safeParse({ q: "tractor" });
+		it("accepts searchQuery string", () => {
+			const result = auctionSearchSchema.safeParse({ searchQuery: "tractor" });
 			expect(result.success).toBe(true);
-			expect(result.data?.q).toBe("tractor");
+			expect(result.data?.searchQuery).toBe("tractor");
 		});
 	});
 
-	describe("suppliersSearchSchema", () => {
-		it("validates with defaults", () => {
-			const result = suppliersSearchSchema.safeParse({});
+	describe("providersSearchSchema", () => {
+		it("validates without automatic defaults", () => {
+			const result = providersSearchSchema.safeParse({});
 			expect(result.success).toBe(true);
-			expect(result.data?.categoryId).toBe("all");
-			expect(result.data?.verified).toBe(false);
+			expect(result.data?.categoryId).toBeUndefined();
+			expect(result.data?.verified).toBeUndefined();
 		});
 
 		it("handles verified boolean", () => {
-			const result = suppliersSearchSchema.safeParse({ verified: true });
+			const result = providersSearchSchema.safeParse({ verified: true });
 			expect(result.success).toBe(true);
 			expect(result.data?.verified).toBe(true);
 		});
 
 		it("accepts minRating string", () => {
-			const result = suppliersSearchSchema.safeParse({ minRating: "4" });
+			const result = providersSearchSchema.safeParse({ minRating: "4" });
 			expect(result.success).toBe(true);
 			expect(result.data?.minRating).toBe("4");
 		});

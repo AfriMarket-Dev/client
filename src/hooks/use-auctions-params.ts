@@ -1,13 +1,20 @@
-import { parseAsInteger, parseAsString, useQueryStates } from "nuqs";
+import {
+	parseAsInteger,
+	parseAsString,
+	parseAsStringEnum,
+	useQueryStates,
+} from "nuqs";
 
 export function useAuctionsParams() {
 	return useQueryStates(
 		{
-			q: parseAsString.withDefault(""),
+			searchQuery: parseAsString.withDefault(""),
 			minPrice: parseAsString.withDefault(""),
 			maxPrice: parseAsString.withDefault(""),
 			sortBy: parseAsString.withDefault("createdAt"),
-			sortOrder: parseAsString.withDefault("DESC"),
+			sortOrder: parseAsStringEnum<"ASC" | "DESC">(["ASC", "DESC"]).withDefault(
+				"DESC",
+			),
 			page: parseAsInteger.withDefault(1),
 		},
 		{

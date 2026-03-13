@@ -123,7 +123,7 @@ describe("catalog api", () => {
 			.unwrap();
 
 		expect(requests[0].path).toContain("query=builder");
-		expect(requests[0].path).not.toContain("isVerified=");
+		expect(requests[0].path).toContain("isVerified=false");
 		expect(findRequest(requests, "/api/companies", "POST")).toBeTruthy();
 		expect(findRequest(requests, "/api/companies/co1", "PATCH")).toBeTruthy();
 		expect(findRequest(requests, "/api/companies/co1", "DELETE")).toBeTruthy();
@@ -263,7 +263,7 @@ describe("catalog api", () => {
 			.unwrap();
 
 		expect(stats).toEqual({
-			verifiedSuppliers: 0,
+			verifiedProviders: 0,
 			productsListed: 0,
 			districtsCovered: 0,
 			activeContractors: 0,

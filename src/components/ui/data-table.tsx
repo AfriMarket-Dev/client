@@ -54,7 +54,9 @@ import { cn } from "@/lib/utils";
 
 // --- Context ---
 
-const DataTableContext = React.createContext<TableInstance<unknown> | null>(null);
+const DataTableContext = React.createContext<TableInstance<unknown> | null>(
+	null,
+);
 
 export function useDataTable<TData = unknown>() {
 	const context = React.useContext(DataTableContext);
@@ -127,7 +129,9 @@ export function DataTableRoot<TData, TValue>({
 	});
 
 	return (
-		<DataTableContext.Provider value={table as unknown as TableInstance<unknown>}>
+		<DataTableContext.Provider
+			value={table as unknown as TableInstance<unknown>}
+		>
 			<div className={cn("space-y-4", className)}>{children}</div>
 		</DataTableContext.Provider>
 	);

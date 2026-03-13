@@ -32,10 +32,10 @@ export const ROUTES = {
 		INDEX: "/admin",
 		AUCTIONS: "/admin/auctions",
 		SUPPLIERS: {
-			INDEX: "/admin/suppliers",
-			NEW: "/admin/suppliers/new",
-			DETAILS: (id: string) => `/admin/suppliers/${id}` as const,
-			EDIT: (id: string) => `/admin/suppliers/${id}/edit` as const,
+			INDEX: "/admin/providers",
+			NEW: "/admin/providers/new",
+			DETAILS: (id: string) => `/admin/providers/${id}` as const,
+			EDIT: (id: string) => `/admin/providers/${id}/edit` as const,
 		},
 		PRODUCTS: "/admin/products",
 		SERVICES: "/admin/services",
@@ -47,11 +47,11 @@ export const ROUTES = {
 	PUBLIC: {
 		PRODUCTS: "/products",
 		SERVICES: "/services",
-		SUPPLIERS: "/suppliers",
+		SUPPLIERS: "/providers",
 		AUCTIONS: "/auctions",
 		CATEGORIES: "/categories",
 		PRODUCT: (id: string) => `/products/${id}` as const,
 		SERVICE: (id: string) => `/services/${id}` as const,
-		SUPPLIER: (id: string) => `/suppliers/${id}` as const,
+		SUPPLIER: (id: string) => `/providers/${id}` as const,
 	},
 } as const;

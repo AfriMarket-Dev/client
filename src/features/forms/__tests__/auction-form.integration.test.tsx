@@ -48,6 +48,8 @@ describe("AuctionForm Integration", () => {
 					title: "Rare Tractor",
 					startingPrice: 1000000,
 					description: "A very rare tractor.",
+					images: [],
+					specifications: {},
 				}),
 			);
 		});

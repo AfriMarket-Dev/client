@@ -8,49 +8,50 @@ import { createSeoMeta } from "@/shared/utils/seo";
 import { store } from "@/store";
 
 export const Route = createFileRoute("/_main/services/")({
-  validateSearch: marketplaceSearchSchema,
-  loaderDeps: ({ search }) => ({
-    page: search.page || 1,
-    categoryId: search.categoryId || search.category || "all",
-    searchQuery: search.searchQuery || "",
-    district: search.district || "",
-    minPrice: search.minPrice,
-    maxPrice: search.maxPrice,
-    sortBy: search.sortBy || "createdAt",
-    sortOrder: search.sortOrder || "DESC",
-  }),
-  shouldReload: (ctx: any) => !ctx.prev || ctx.next.pathname !== ctx.prev.pathname,
-  staleTime: 60_000,
-  gcTime: 300_000,
-  component: () => (
-    <MarketplacePage forcedType="SERVICE" from="/_main/services/" />
-  ),
-  errorComponent: RouteError,
-  notFoundComponent: NotFound,
-  head: () =>
-    createSeoMeta({
-      title: "Wholesale Services Marketplace",
-      description:
-        "Connect with professional services for your construction and wholesale business. Find electrical, plumbing, engineering, and logistics experts.",
-      keywords: [
-        "construction services Africa",
-        "wholesale business services",
-        "African engineering services",
-        "logistics services Africa",
-      ],
-    }),
-  loader: ({ deps }) => {
-    const params = {
-      page: deps.page,
-      limit: 30,
-      categoryId: deps.categoryId,
-      searchQuery: deps.searchQuery,
-      district: deps.district,
-      minPrice: deps.minPrice,
-      maxPrice: deps.maxPrice,
-      sortBy: deps.sortBy,
-      sortOrder: deps.sortOrder,
-    };
-    return store.dispatch(servicesApi.endpoints.getServices.initiate(params));
-  },
+	validateSearch: marketplaceSearchSchema,
+	loaderDeps: ({ search }) => ({
+		page: search.page || 1,
+		categoryId: search.categoryId || search.category || "all",
+		searchQuery: search.searchQuery || "",
+		district: search.district || "",
+		minPrice: search.minPrice,
+		maxPrice: search.maxPrice,
+		sortBy: search.sortBy || "createdAt",
+		sortOrder: search.sortOrder || "DESC",
+	}),
+	shouldReload: (ctx: any) =>
+		!ctx.prev || ctx.next.pathname !== ctx.prev.pathname,
+	staleTime: 60_000,
+	gcTime: 300_000,
+	component: () => (
+		<MarketplacePage forcedType="SERVICE" from="/_main/services/" />
+	),
+	errorComponent: RouteError,
+	notFoundComponent: NotFound,
+	head: () =>
+		createSeoMeta({
+			title: "Wholesale Services Marketplace",
+			description:
+				"Connect with professional services for your construction and wholesale business. Find electrical, plumbing, engineering, and logistics experts.",
+			keywords: [
+				"construction services Africa",
+				"wholesale business services",
+				"African engineering services",
+				"logistics services Africa",
+			],
+		}),
+	loader: ({ deps }) => {
+		const params = {
+			page: deps.page,
+			limit: 30,
+			categoryId: deps.categoryId,
+			searchQuery: deps.searchQuery,
+			district: deps.district,
+			minPrice: deps.minPrice,
+			maxPrice: deps.maxPrice,
+			sortBy: deps.sortBy,
+			sortOrder: deps.sortOrder,
+		};
+		return store.dispatch(servicesApi.endpoints.getServices.initiate(params));
+	},
 });

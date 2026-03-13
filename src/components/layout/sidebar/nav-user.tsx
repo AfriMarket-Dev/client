@@ -98,7 +98,7 @@ export function NavUser({
 									onClick={() => navigate({ to: "/dashboard" })}
 								>
 									<RiStore2Line />
-									Supplier Dashboard
+									Provider Dashboard
 								</DropdownMenuItem>
 							) : null}
 							<DropdownMenuItem onClick={() => navigate({ to: "/messages" })}>
@@ -126,10 +126,10 @@ export function NavUser({
 							</DropdownMenuItem>
 							{isAdmin ? (
 								<DropdownMenuItem
-									onClick={() => navigate({ to: "/admin/suppliers" })}
+									onClick={() => navigate({ to: "/admin/providers" })}
 								>
 									<RiTeamLine />
-									Suppliers
+									Providers
 								</DropdownMenuItem>
 							) : null}
 						</DropdownMenuGroup>
