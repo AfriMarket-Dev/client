@@ -17,6 +17,7 @@ export const Route = createFileRoute("/_main/_protected")({
 			});
 		}
 	},
+	shouldReload: (ctx: any) => !ctx.prev || ctx.next.pathname !== ctx.prev.pathname,
 	component: Outlet,
 	pendingComponent: RouteLoading,
 	notFoundComponent: NotFound,

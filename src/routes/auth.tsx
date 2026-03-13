@@ -24,6 +24,7 @@ export const Route = createFileRoute("/auth")({
 			throw redirect({ to: "/" });
 		}
 	},
+	shouldReload: (ctx: any) => !ctx.prev || ctx.next.pathname !== ctx.prev.pathname,
 	component: AuthLayout,
 	pendingComponent: RouteLoading,
 	notFoundComponent: NotFound,

@@ -4,18 +4,27 @@ import { marketplaceSearchSchema } from "@/features/marketplace/schemas";
 import { productsApi } from "@/services/api/products";
 import { NotFound } from "@/shared/components/not-found";
 import { RouteError } from "@/shared/components/route-error";
-import { RouteLoading } from "@/shared/components/route-loading";
 import { createSeoMeta } from "@/shared/utils/seo";
 import { store } from "@/store";
 
 export const Route = createFileRoute("/_main/products/")({
   validateSearch: marketplaceSearchSchema,
+  loaderDeps: ({ search }) => ({
+    page: search.page || 1,
+    categoryId: search.categoryId || search.category || "all",
+    searchQuery: search.searchQuery || "",
+    district: search.district || "",
+    minPrice: search.minPrice,
+    maxPrice: search.maxPrice,
+    sortBy: search.sortBy || "createdAt",
+    sortOrder: search.sortOrder || "DESC",
+  }),
+  shouldReload: (ctx: any) => !ctx.prev || ctx.next.pathname !== ctx.prev.pathname,
   staleTime: 60_000, // 1 minute
   gcTime: 300_000, // 5 minutes
   component: () => (
     <MarketplacePage forcedType="PRODUCT" from="/_main/products/" />
   ),
-  pendingComponent: RouteLoading,
   errorComponent: RouteError,
   notFoundComponent: NotFound,
   head: () =>
@@ -30,16 +39,6 @@ export const Route = createFileRoute("/_main/products/")({
         "wholesale food Africa",
       ],
     }),
-  loaderDeps: ({ search }) => ({
-    page: search.page,
-    categoryId: search.categoryId || search.category,
-    searchQuery: search.searchQuery,
-    district: search.district,
-    minPrice: search.minPrice,
-    maxPrice: search.maxPrice,
-    sortBy: search.sortBy,
-    sortOrder: search.sortOrder,
-  }),
   loader: ({ deps }) => {
     const params = {
       page: deps.page,

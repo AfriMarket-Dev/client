@@ -4,4 +4,4 @@ Disallow: /admin/
 Disallow: /dashboard/
 Disallow: /auth/
 
-Sitemap: https://afri-market-rep.vercel.app/sitemap.xml
+Sitemap: https://karibu-rep.vercel.app/sitemap.xml

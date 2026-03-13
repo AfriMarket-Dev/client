@@ -4,19 +4,25 @@ import { auctionSearchSchema } from "@/features/marketplace/schemas";
 import { auctionsApi } from "@/services/api/auctions";
 import { NotFound } from "@/shared/components/not-found";
 import { RouteError } from "@/shared/components/route-error";
-import { RouteLoading } from "@/shared/components/route-loading";
 import { createSeoMeta } from "@/shared/utils/seo";
 import { store } from "@/store";
 
 export const Route = createFileRoute("/_main/auctions/")({
   validateSearch: auctionSearchSchema,
+  loaderDeps: ({ search }) => ({
+    q: search.q || "",
+    minPrice: search.minPrice || "",
+    maxPrice: search.maxPrice || "",
+    sortBy: search.sortBy || "createdAt",
+    sortOrder: search.sortOrder || "DESC",
+    page: search.page || 1,
+  }),
+  shouldReload: (ctx: any) => !ctx.prev || ctx.next.pathname !== ctx.prev.pathname,
   staleTime: 30_000,
   gcTime: 300_000,
   component: AuctionsPage,
-  pendingComponent: RouteLoading,
   errorComponent: RouteError,
   notFoundComponent: NotFound,
-  loaderDeps: ({ search }) => search,
   loader: ({ deps }) => {
     const params = {
       page: deps.page,

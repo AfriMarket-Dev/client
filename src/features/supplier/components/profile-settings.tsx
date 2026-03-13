@@ -41,7 +41,7 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ supplierData }) => {
       (supplierData as unknown as { location?: string })?.location ||
       "Kigali, Rwanda",
     address: "123 Business District, Kigali, Rwanda",
-    website: "https://afri-market-rep.vercel.app",
+    website: "https://karibu-rep.vercel.app",
     coverImage:
       (supplierData as unknown as { coverImage?: string })?.coverImage ||
       "/logo.svg",

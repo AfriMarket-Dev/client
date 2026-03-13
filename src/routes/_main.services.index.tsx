@@ -4,18 +4,27 @@ import { marketplaceSearchSchema } from "@/features/marketplace/schemas";
 import { servicesApi } from "@/services/api/services";
 import { NotFound } from "@/shared/components/not-found";
 import { RouteError } from "@/shared/components/route-error";
-import { RouteLoading } from "@/shared/components/route-loading";
 import { createSeoMeta } from "@/shared/utils/seo";
 import { store } from "@/store";
 
 export const Route = createFileRoute("/_main/services/")({
   validateSearch: marketplaceSearchSchema,
+  loaderDeps: ({ search }) => ({
+    page: search.page || 1,
+    categoryId: search.categoryId || search.category || "all",
+    searchQuery: search.searchQuery || "",
+    district: search.district || "",
+    minPrice: search.minPrice,
+    maxPrice: search.maxPrice,
+    sortBy: search.sortBy || "createdAt",
+    sortOrder: search.sortOrder || "DESC",
+  }),
+  shouldReload: (ctx: any) => !ctx.prev || ctx.next.pathname !== ctx.prev.pathname,
   staleTime: 60_000,
   gcTime: 300_000,
   component: () => (
     <MarketplacePage forcedType="SERVICE" from="/_main/services/" />
   ),
-  pendingComponent: RouteLoading,
   errorComponent: RouteError,
   notFoundComponent: NotFound,
   head: () =>
@@ -30,16 +39,6 @@ export const Route = createFileRoute("/_main/services/")({
         "logistics services Africa",
       ],
     }),
-  loaderDeps: ({ search }) => ({
-    page: search.page,
-    categoryId: search.categoryId || search.category,
-    searchQuery: search.searchQuery,
-    district: search.district,
-    minPrice: search.minPrice,
-    maxPrice: search.maxPrice,
-    sortBy: search.sortBy,
-    sortOrder: search.sortOrder,
-  }),
   loader: ({ deps }) => {
     const params = {
       page: deps.page,

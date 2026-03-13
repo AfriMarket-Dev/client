@@ -17,7 +17,7 @@ import { AuctionCard } from "./auction-card";
 export const AuctionsGrid: React.FC = () => {
   const { filters, patchFilters } = useAuctionsFilters();
 
-  const { data: auctionsResult, isLoading } = useGetAuctionsQuery({
+  const { data: auctionsResult, isFetching } = useGetAuctionsQuery({
     page: filters.page,
     limit: 12,
     status: "APPROVED",
@@ -25,11 +25,11 @@ export const AuctionsGrid: React.FC = () => {
     minPrice: filters.minPrice ? Number(filters.minPrice) : undefined,
     maxPrice: filters.maxPrice ? Number(filters.maxPrice) : undefined,
     sortBy: filters.sortBy,
-    sortOrder: filters.sortOrder,
+    sortOrder: filters.sortOrder as any,
   });
   const auctions = auctionsResult?.data || [];
 
-  if (isLoading) {
+  if (isFetching && auctions.length === 0) {
     return (
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {Array.from({ length: 8 }).map((_, i) => (

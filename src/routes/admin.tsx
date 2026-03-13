@@ -29,6 +29,7 @@ export const Route = createFileRoute("/admin")({
 			});
 		}
 	},
+	shouldReload: (ctx: any) => !ctx.prev || ctx.next.pathname !== ctx.prev.pathname,
 	preload: false,
 	component: AdminLayout,
 	pendingComponent: RouteLoading,

@@ -49,7 +49,7 @@ const SupplierListing: React.FC<SupplierListingProps> = ({
 	const { filters, handleFiltersChange, handleClearFilters, isPending } =
 		useSupplierFilters();
 
-	const { data: listData, isLoading } = useGetCompaniesQuery({
+	const { data: listData, isFetching } = useGetCompaniesQuery({
 		page: filters.page,
 		limit: PAGE_SIZE,
 		query: filters.searchQuery || undefined,
@@ -149,7 +149,7 @@ const SupplierListing: React.FC<SupplierListingProps> = ({
 				/>
 			}
 			content={
-				isLoading ? (
+				isFetching && companies.length === 0 ? (
 					<div className="grid grid-cols-2 md:grid-cols-2 xl:grid-cols-4 gap-2 sm:gap-6">
 						{Array.from({ length: 12 }).map((_, i) => (
 							<Skeleton

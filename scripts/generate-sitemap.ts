@@ -1,8 +1,7 @@
 import fs from "fs";
 import path from "path";
 
-const BASE_URL =
-  process.env.VITE_APP_URL || "https://afri-market-rep.vercel.app";
+const BASE_URL = process.env.VITE_APP_URL || "https://karibu-rep.vercel.app";
 const API_URL = (process.env.VITE_API_URL || "http://localhost:3000") + "/api";
 console.log(API_URL);
 const STATIC_ROUTES = [
