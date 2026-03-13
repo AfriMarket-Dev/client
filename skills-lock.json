@@ -6,6 +6,11 @@
       "sourceType": "github",
       "computedHash": "063a0e6448123cd359ad0044cc46b0e490cc7964d45ef4bb9fd842bd2ffbca67"
     },
+    "nuqs": {
+      "source": "pproenca/dot-skills",
+      "sourceType": "github",
+      "computedHash": "573a1b8ab42c339b6efc8ab55e720faf75e4902071bdc2f65c006972accfd551"
+    },
     "tanstack-form": {
       "source": "tanstack-skills/tanstack-skills",
       "sourceType": "github",

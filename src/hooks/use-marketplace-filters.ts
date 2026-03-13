@@ -1,122 +1,95 @@
-import { useNavigate, useSearch } from "@tanstack/react-router";
-import { useCallback, useEffect, useRef, useState, useTransition } from "react";
+import { useCallback, useEffect, useMemo, useState, useTransition } from "react";
 import type { CatalogFilters, ListingType } from "@/types";
+import { useMarketplaceParams } from "./use-marketplace-params";
 
 const DEFAULT_PRICE_MAX = 1_000_000;
 
 export function useMarketplaceFilters(
-  _initialCategoryId = "all",
-  _initialType: ListingType = "all",
+  _from?: "/_main/products/" | "/_main/services/",
   onTypeChange?: (type: ListingType) => void,
 ) {
-  const search = useSearch({ strict: false });
-  const navigate = useNavigate();
+  const [params, setParams] = useMarketplaceParams();
   const [isPending, startTransition] = useTransition();
 
-  const [searchInput, setSearchInput] = useState(search.searchQuery || "");
+  // Local state for immediate UI feedback (e.g. while typing)
+  const [searchInput, setSearchInput] = useState(params.searchQuery);
   const [priceRange, setPriceRange] = useState<[number, number]>([
-    search.minPrice ? Number(search.minPrice) : 0,
-    search.maxPrice ? Number(search.maxPrice) : DEFAULT_PRICE_MAX,
+    params.minPrice ? Number(params.minPrice) : 0,
+    params.maxPrice ? Number(params.maxPrice) : DEFAULT_PRICE_MAX,
   ]);
 
-  // Sync state if filters change (e.g. from URL or reset)
+  // Sync local state with URL params
   useEffect(() => {
-    setSearchInput(search.searchQuery || "");
-  }, [search.searchQuery]);
+    setSearchInput(params.searchQuery);
+  }, [params.searchQuery]);
 
   useEffect(() => {
     setPriceRange([
-      search.minPrice ? Number(search.minPrice) : 0,
-      search.maxPrice ? Number(search.maxPrice) : DEFAULT_PRICE_MAX,
+      params.minPrice ? Number(params.minPrice) : 0,
+      params.maxPrice ? Number(params.maxPrice) : DEFAULT_PRICE_MAX,
     ]);
-  }, [search.minPrice, search.maxPrice]);
+  }, [params.minPrice, params.maxPrice]);
 
   const patchFilters = useCallback(
     (patch: Partial<CatalogFilters>) => {
       startTransition(() => {
-        navigate({
-          search: ((prev: Record<string, unknown>) => {
-            const next = { ...prev, ...patch };
-            if (patch.type != null && patch.type !== prev.type) {
-              onTypeChange?.(patch.type as ListingType);
-            }
-            return next;
-          }) as never,
-        });
+        setParams(patch as any);
+        if (patch.type && onTypeChange) {
+          onTypeChange(patch.type as ListingType);
+        }
       });
     },
-    [navigate, onTypeChange],
+    [setParams, onTypeChange],
   );
 
   const resetFilters = useCallback(() => {
     startTransition(() => {
-      navigate({
-        search: ((prev: Record<string, unknown>) => ({
-          ...prev,
-          searchQuery: "",
-          categoryId: "all",
-          type: "all",
-          district: "",
-          minPrice: undefined,
-          maxPrice: undefined,
-          onlyInStock: false,
-          companyType: "all",
-          sortBy: "createdAt",
-          sortOrder: "DESC",
-          page: 1,
-        })) as never,
-      });
-      onTypeChange?.("all");
+      setParams(null); // nuqs resets to defaults when null
+      setSearchInput("");
+      setPriceRange([0, DEFAULT_PRICE_MAX]);
+      if (onTypeChange) {
+        onTypeChange("all");
+      }
     });
-  }, [navigate, onTypeChange]);
-
-  const searchDebounce = useRef<ReturnType<typeof setTimeout>>(undefined);
-  useEffect(() => {
-    if (searchInput === (search.searchQuery || "")) return;
-
-    clearTimeout(searchDebounce.current);
-    searchDebounce.current = setTimeout(() => {
-      startTransition(() => {
-        navigate({
-          search: ((prev: Record<string, unknown>) => ({
-            ...prev,
-            searchQuery: searchInput,
-            page: 1,
-          })) as never,
-        });
-      });
-    }, 400);
-    return () => clearTimeout(searchDebounce.current);
-  }, [searchInput, search.searchQuery, navigate]);
+  }, [setParams, onTypeChange]);
 
   const commitPrice = useCallback(() => {
     startTransition(() => {
-      navigate({
-        search: ((prev: Record<string, unknown>) => ({
-          ...prev,
-          minPrice: priceRange[0],
-          maxPrice: priceRange[1],
-          page: 1,
-        })) as never,
+      setParams({
+        minPrice: String(priceRange[0]),
+        maxPrice: String(priceRange[1]),
+        page: 1,
       });
     });
-  }, [priceRange, navigate]);
+  }, [priceRange, setParams]);
 
-  const hasActiveFilters =
-    search.categoryId !== "all" ||
-    search.type !== "all" ||
-    search.companyType !== "all" ||
-    !!search.district ||
-    !!search.minPrice ||
-    !!search.maxPrice ||
-    search.onlyInStock;
+  // Handle search with transition
+  const handleSearchChange = useCallback((value: string) => {
+    setSearchInput(value);
+    startTransition(() => {
+      setParams({ searchQuery: value, page: 1 });
+    });
+  }, [setParams]);
+
+  const hasActiveFilters = useMemo(() => {
+    return (
+      params.categoryId !== "all" ||
+      params.type !== "all" ||
+      params.companyType !== "all" ||
+      !!params.district ||
+      !!params.minPrice ||
+      !!params.maxPrice ||
+      params.onlyInStock ||
+      !!params.searchQuery
+    );
+  }, [params]);
 
   return {
-    filters: search as CatalogFilters,
+    filters: params as unknown as CatalogFilters,
     patchFilters,
     resetFilters,
     searchInput,
-    setSearchInput,
+    setSearchInput: handleSearchChange,
     priceRange,
     setPriceRange,
     commitPrice,

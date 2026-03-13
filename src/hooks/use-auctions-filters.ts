@@ -1,102 +1,79 @@
-import { useNavigate, useSearch } from "@tanstack/react-router";
-import { useCallback, useEffect, useRef, useState, useTransition } from "react";
+import { useCallback, useEffect, useMemo, useState, useTransition } from "react";
+import { useAuctionsParams } from "./use-auctions-params";
 
 const DEFAULT_PRICE_MAX = 100_000_000;
 
 export function useAuctionsFilters() {
-  const search = useSearch({ strict: false });
-  const navigate = useNavigate();
+  const [params, setParams] = useAuctionsParams();
   const [isPending, startTransition] = useTransition();
 
-  const [searchInput, setSearchInput] = useState(search.q || "");
+  const [searchInput, setSearchInput] = useState(params.q);
   const [priceRange, setPriceRange] = useState<[number, number]>([
-    search.minPrice ? Number(search.minPrice) : 0,
-    search.maxPrice ? Number(search.maxPrice) : DEFAULT_PRICE_MAX,
+    params.minPrice ? Number(params.minPrice) : 0,
+    params.maxPrice ? Number(params.maxPrice) : DEFAULT_PRICE_MAX,
   ]);
 
-  // Sync state if filters change (e.g. from URL or reset)
+  // Sync local state with URL params
   useEffect(() => {
-    setSearchInput(search.q || "");
-  }, [search.q]);
+    setSearchInput(params.q);
+  }, [params.q]);
 
   useEffect(() => {
     setPriceRange([
-      search.minPrice ? Number(search.minPrice) : 0,
-      search.maxPrice ? Number(search.maxPrice) : DEFAULT_PRICE_MAX,
+      params.minPrice ? Number(params.minPrice) : 0,
+      params.maxPrice ? Number(params.maxPrice) : DEFAULT_PRICE_MAX,
     ]);
-  }, [search.minPrice, search.maxPrice]);
+  }, [params.minPrice, params.maxPrice]);
 
   const patchFilters = useCallback(
-    (patch: Record<string, unknown>) => {
+    (patch: Record<string, any>) => {
       startTransition(() => {
-        navigate({
-          search: (prev: Record<string, unknown>) => ({ ...prev, ...patch }),
-        } as never);
+        setParams(patch);
       });
     },
-    [navigate],
+    [setParams],
   );
 
   const resetFilters = useCallback(() => {
     startTransition(() => {
-      navigate({
-        search: ((prev: Record<string, unknown>) => ({
-          ...prev,
-          q: "",
-          minPrice: "",
-          maxPrice: "",
-          sortBy: "createdAt",
-          sortOrder: "DESC",
-          page: 1,
-        })) as never,
-      });
+      setParams(null);
+      setSearchInput("");
+      setPriceRange([0, DEFAULT_PRICE_MAX]);
     });
-  }, [navigate]);
-
-  const searchDebounce = useRef<ReturnType<typeof setTimeout>>(undefined);
-  useEffect(() => {
-    if (searchInput === (search.q || "")) return;
-
-    clearTimeout(searchDebounce.current);
-    searchDebounce.current = setTimeout(() => {
-      startTransition(() => {
-        navigate({
-          search: (prev: Record<string, unknown>) => ({
-            ...prev,
-            q: searchInput,
-            page: 1,
-          }),
-        } as never);
-      });
-    }, 400);
-    return () => clearTimeout(searchDebounce.current);
-  }, [searchInput, search.q, navigate]);
+  }, [setParams]);
 
   const commitPrice = useCallback(() => {
     startTransition(() => {
-      navigate({
-        search: ((prev: Record<string, unknown>) => ({
-          ...prev,
-          minPrice: priceRange[0].toString(),
-          maxPrice: priceRange[1].toString(),
-          page: 1,
-        })) as never,
+      setParams({
+        minPrice: String(priceRange[0]),
+        maxPrice: String(priceRange[1]),
+        page: 1,
       });
     });
-  }, [priceRange, navigate]);
+  }, [priceRange, setParams]);
 
-  const hasActiveFilters =
-    !!search.q ||
-    !!search.minPrice ||
-    !!search.maxPrice ||
-    search.sortBy !== "createdAt";
+  const handleSearchChange = useCallback((value: string) => {
+    setSearchInput(value);
+    startTransition(() => {
+      setParams({ q: value, page: 1 });
+    });
+  }, [setParams]);
+
+  const hasActiveFilters = useMemo(() => {
+    return (
+      !!params.q ||
+      !!params.minPrice ||
+      !!params.maxPrice ||
+      params.sortBy !== "createdAt"
+    );
+  }, [params]);
 
   return {
-    filters: search,
+    filters: params,
     patchFilters,
     resetFilters,
     searchInput,
-    setSearchInput,
+    setSearchInput: handleSearchChange,
     priceRange,
     setPriceRange,
     commitPrice,

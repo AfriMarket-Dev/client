@@ -7,6 +7,7 @@ import { createSeoMeta } from "@/shared/utils/seo";
 
 export const Route = createFileRoute("/_main")({
 	component: MainLayout,
+	shouldReload: (ctx: any) => !ctx.prev || ctx.next.pathname !== ctx.prev.pathname,
 	pendingComponent: RouteLoading,
 	notFoundComponent: NotFound,
 	errorComponent: RouteError,

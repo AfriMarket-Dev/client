@@ -29,6 +29,7 @@ export const Route = createFileRoute("/dashboard")({
 			});
 		}
 	},
+	shouldReload: (ctx: any) => !ctx.prev || ctx.next.pathname !== ctx.prev.pathname,
 	preload: false,
 	component: DashboardLayout,
 	pendingComponent: RouteLoading,

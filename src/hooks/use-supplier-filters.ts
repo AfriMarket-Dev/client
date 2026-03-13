@@ -1,46 +1,35 @@
-import { useNavigate, useSearch } from "@tanstack/react-router";
-import { useCallback, useTransition } from "react";
+import { useCallback, useMemo, useTransition } from "react";
 import type { SupplierFiltersState } from "@/types";
+import { useSuppliersParams } from "./use-suppliers-params";
 
 export function useSupplierFilters() {
-  const search = useSearch({ strict: false });
-  const navigate = useNavigate();
+  const [params, setParams] = useSuppliersParams();
   const [isPending, startTransition] = useTransition();
+
+  const filters = useMemo(() => ({
+    ...params,
+  }), [params]);
 
   const handleFiltersChange = useCallback(
     (updates: Partial<SupplierFiltersState>) => {
       startTransition(() => {
-        navigate({
-          search: ((prev: Record<string, unknown>) => ({
-            ...prev,
-            ...updates,
-            page: 1,
-          })) as never,
-        });
+        setParams({
+          ...updates,
+          page: 1,
+        } as any);
       });
     },
-    [navigate],
+    [setParams],
   );
 
   const handleClearFilters = useCallback(() => {
     startTransition(() => {
-      navigate({
-        search: ((prev: Record<string, unknown>) => ({
-          ...prev,
-          searchQuery: "",
-          categoryId: "all",
-          district: "",
-          type: "all",
-          minRating: "0",
-          verified: false,
-          page: 1,
-        })) as never,
-      });
+      setParams(null);
     });
-  }, [navigate]);
+  }, [setParams]);
 
   return {
-    filters: search as SupplierFiltersState,
+    filters: filters as SupplierFiltersState,
     handleFiltersChange,
     handleClearFilters,
     isPending,

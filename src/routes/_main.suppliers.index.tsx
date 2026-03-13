@@ -4,16 +4,23 @@ import { SuppliersPage } from "@/features/supplier/components/suppliers-page";
 import { companiesApi } from "@/services/api/companies";
 import { NotFound } from "@/shared/components/not-found";
 import { RouteError } from "@/shared/components/route-error";
-import { RouteLoading } from "@/shared/components/route-loading";
 import { createSeoMeta } from "@/shared/utils/seo";
 import { store } from "@/store";
 
 export const Route = createFileRoute("/_main/suppliers/")({
   validateSearch: suppliersSearchSchema,
+  loaderDeps: ({ search }) => ({
+    page: search.page || 1,
+    categoryId: search.categoryId || "all",
+    searchQuery: search.searchQuery || "",
+    district: search.district || "",
+    type: search.type || "all",
+    verified: search.verified || false,
+  }),
+  shouldReload: (ctx: any) => !ctx.prev || ctx.next.pathname !== ctx.prev.pathname,
   staleTime: 120_000, // suppliers are less volatile
   gcTime: 600_000,
   component: () => <SuppliersPage />,
-  pendingComponent: RouteLoading,
   errorComponent: RouteError,
   notFoundComponent: NotFound,
   head: () =>
@@ -28,7 +35,6 @@ export const Route = createFileRoute("/_main/suppliers/")({
         "verified suppliers Africa",
       ],
     }),
-  loaderDeps: ({ search }) => search,
   loader: ({ deps }) => {
     const params = {
       page: deps.page,
