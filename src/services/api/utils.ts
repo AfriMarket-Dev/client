@@ -51,17 +51,19 @@ export async function getFreshOrCached<T>(
 	const state = store.getState();
 	const cacheEntry = endpoint.select(args)(state);
 	
-	// Check if data exists and is within stale time
 	const now = Date.now();
 	const fulfilledStamp = cacheEntry?.fulfilledTimeStamp ?? 0;
 	const isFresh = now - fulfilledStamp < staleTimeMs;
 
-	if (cacheEntry?.data && isFresh) {
+	// FIX: If data is empty (null or empty array), don't trust the cache
+	const isEmpty = !cacheEntry?.data || (Array.isArray(cacheEntry.data) && cacheEntry.data.length === 0);
+
+	if (cacheEntry?.data && isFresh && !isEmpty) {
 		// Return cached data instantly, but trigger background refresh
 		store.dispatch(endpoint.initiate(args, { forceRefetch: false }));
 		return cacheEntry.data as T;
 	}
 
-	// Wait for fresh data if cache is empty or stale
+	// Wait for fresh data if cache is empty, stale, or suspect
 	return await store.dispatch(endpoint.initiate(args, { forceRefetch: true })).unwrap() as T;
 }
