@@ -13,6 +13,7 @@ interface MarketplaceToolbarProps {
 	showFilters?: boolean;
 	searchPlaceholder?: string;
 	hideFilterButton?: boolean;
+	hideViewMode?: boolean;
 	className?: string;
 	children?: React.ReactNode;
 }
@@ -26,6 +27,7 @@ export const MarketplaceToolbar: React.FC<MarketplaceToolbarProps> = ({
 	showFilters,
 	searchPlaceholder = "SEARCH...",
 	hideFilterButton = false,
+	hideViewMode = false,
 	className,
 	children,
 }) => {
@@ -76,24 +78,26 @@ export const MarketplaceToolbar: React.FC<MarketplaceToolbarProps> = ({
 						</Button>
 					)}
 
-					<div className="flex items-center bg-muted/20 border border-border/10 p-0.5 rounded-none hidden sm:flex h-10">
-						<Button
-							variant={viewMode === "grid" ? "secondary" : "ghost"}
-							size="icon"
-							className="rounded-none h-8 w-8"
-							onClick={() => onViewModeChange("grid")}
-						>
-							<LayoutGrid className="w-3.5 h-3.5" />
-						</Button>
-						<Button
-							variant={viewMode === "list" ? "secondary" : "ghost"}
-							size="icon"
-							className="rounded-none h-8 w-8"
-							onClick={() => onViewModeChange("list")}
-						>
-							<List className="w-3.5 h-3.5" />
-						</Button>
-					</div>
+					{!hideViewMode && (
+						<div className="flex items-center bg-muted/20 border border-border/10 p-0.5 rounded-none hidden sm:flex h-10">
+							<Button
+								variant={viewMode === "grid" ? "secondary" : "ghost"}
+								size="icon"
+								className="rounded-none h-8 w-8"
+								onClick={() => onViewModeChange("grid")}
+							>
+								<LayoutGrid className="w-3.5 h-3.5" />
+							</Button>
+							<Button
+								variant={viewMode === "list" ? "secondary" : "ghost"}
+								size="icon"
+								className="rounded-none h-8 w-8"
+								onClick={() => onViewModeChange("list")}
+							>
+								<List className="w-3.5 h-3.5" />
+							</Button>
+						</div>
+					)}
 				</div>
 			</div>
 		</div>
