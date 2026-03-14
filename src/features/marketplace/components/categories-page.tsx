@@ -66,6 +66,7 @@ const CategoriesPage: React.FC<CategoriesPageProps> = () => {
           onSearchChange={setSearchInput}
           searchPlaceholder="SEARCH CATEGORIES..."
           hideFilterButton
+          hideViewMode
         />
       }
       content={

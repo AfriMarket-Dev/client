@@ -117,52 +117,54 @@ export function MarketplaceLayout({
 								<div className="flex-1">{toolbar}</div>
 
 								{/* Mobile Filter Trigger (passed through Toolbar usually, but handled here for consistency) */}
-								<div className="lg:hidden">
-									<Drawer
-										open={isMobileFiltersOpen}
-										onOpenChange={setIsMobileFiltersOpen}
-									>
-										<DrawerTrigger asChild>
-											<Button
-												variant="outline"
-												size="sm"
-												className="rounded-none border-border/40 h-10 font-black uppercase text-[10px] tracking-widest px-4 gap-2"
-											>
-												<SlidersHorizontal className="w-3.5 h-3.5" />
-												Filters
-												{hasActiveFilters && (
-													<span className="w-1.5 h-1.5 rounded-full bg-primary" />
-												)}
-											</Button>
-										</DrawerTrigger>
-										<DrawerContent className="bg-background flex flex-col max-h-[85vh]">
-											<DrawerHeader className="p-6 border-b border-border/40 shrink-0 text-left">
-												<DrawerTitle className="text-[10px] font-display font-black uppercase tracking-[0.2em] flex items-center gap-2">
-													<SlidersHorizontal className="w-3.5 h-3.5 text-primary" />
-													{title} Filters
-												</DrawerTitle>
-											</DrawerHeader>
-											<div className="p-6 flex-1 overflow-y-auto custom-scrollbar">
-												{mobileFilters || sidebar}
-											</div>
-											{hasActiveFilters && (
-												<div className="p-6 border-t border-border/40 shrink-0 bg-muted/5">
-													<Button
-														variant="ghost"
-														size="sm"
-														className="w-full justify-center h-10 text-[9px] uppercase font-black tracking-[0.2em] border border-destructive/20 text-destructive hover:bg-destructive/5"
-														onClick={() => {
-															onResetFilters();
-															setIsMobileFiltersOpen(false);
-														}}
-													>
-														Reset All Filters
-													</Button>
+								{showFilters && (
+									<div className="lg:hidden">
+										<Drawer
+											open={isMobileFiltersOpen}
+											onOpenChange={setIsMobileFiltersOpen}
+										>
+											<DrawerTrigger asChild>
+												<Button
+													variant="outline"
+													size="sm"
+													className="rounded-none border-border/40 h-10 font-black uppercase text-[10px] tracking-widest px-4 gap-2"
+												>
+													<SlidersHorizontal className="w-3.5 h-3.5" />
+													Filters
+													{hasActiveFilters && (
+														<span className="w-1.5 h-1.5 rounded-full bg-primary" />
+													)}
+												</Button>
+											</DrawerTrigger>
+											<DrawerContent className="bg-background flex flex-col max-h-[85vh]">
+												<DrawerHeader className="p-6 border-b border-border/40 shrink-0 text-left">
+													<DrawerTitle className="text-[10px] font-display font-black uppercase tracking-[0.2em] flex items-center gap-2">
+														<SlidersHorizontal className="w-3.5 h-3.5 text-primary" />
+														{title} Filters
+													</DrawerTitle>
+												</DrawerHeader>
+												<div className="p-6 flex-1 overflow-y-auto custom-scrollbar">
+													{mobileFilters || sidebar}
 												</div>
-											)}
-										</DrawerContent>
-									</Drawer>
-								</div>
+												{hasActiveFilters && (
+													<div className="p-6 border-t border-border/40 shrink-0 bg-muted/5">
+														<Button
+															variant="ghost"
+															size="sm"
+															className="w-full justify-center h-10 text-[9px] uppercase font-black tracking-[0.2em] border border-destructive/20 text-destructive hover:bg-destructive/5"
+															onClick={() => {
+																onResetFilters();
+																setIsMobileFiltersOpen(false);
+															}}
+														>
+															Reset All Filters
+														</Button>
+													</div>
+												)}
+											</DrawerContent>
+										</Drawer>
+									</div>
+								)}
 							</div>
 
 							{/* Active Filter Badges */}

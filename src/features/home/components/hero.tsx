@@ -251,7 +251,7 @@ const Hero: React.FC = () => {
 													if (val) field.handleChange(val);
 												}}
 											>
-												<SelectTrigger className="h-full px-2 sm:px-4 py-0 text-[10px] font-black text-white uppercase tracking-[0.2em] border-0 bg-transparent rounded-none hover:bg-white/[0.05]">
+												<SelectTrigger className="h-full px-2 sm:px-4 py-0 text-[10px] font-black text-white uppercase tracking-[0.2em] border-0 bg-transparent rounded-none hover:bg-white/[0.05] max-w-[80px] sm:max-w-none">
 													<SelectValue />
 												</SelectTrigger>
 												<SelectContent className="bg-industrial/95 border-white/10 rounded-none shadow-2xl">

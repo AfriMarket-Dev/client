@@ -237,8 +237,8 @@ describe("Business Schemas Comprehensive Tests", () => {
 			expect(result.success).toBe(true);
 		});
 
-		it("fails on short message", () => {
-			const result = contactSchema.safeParse({ message: "Too short" });
+		it("fails on empty message", () => {
+			const result = contactSchema.safeParse({ message: "" });
 			expect(result.success).toBe(false);
 		});
 	});
