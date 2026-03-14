@@ -70,6 +70,7 @@ const Hero: React.FC = () => {
 	const [carouselIndex, setCarouselIndex] = React.useState(0);
 	const [carouselCount, setCarouselCount] = React.useState(0);
 	
+	// Data Fetching
 	const { data: featuredProductsResult } = useGetProductsQuery({
 		limit: 3,
 		isFeatured: true,
@@ -85,8 +86,21 @@ const Hero: React.FC = () => {
 		limit: 8,
 	});
 	const { data: marketplaceStats } = useGetMarketplaceStatsQuery();
-	const { data: companiesResult } = useGetCompaniesQuery({
-		limit: 6,
+	
+	// Real "Top" queries
+	const { data: manufacturersResult } = useGetCompaniesQuery({
+		limit: 3,
+		type: "MANUFACTURER_RWANDA",
+		sortBy: "averageRating",
+		sortOrder: "DESC",
+	});
+	const { data: topProductsResult } = useGetProductsQuery({
+		limit: 3,
+		sortBy: "views",
+		sortOrder: "DESC",
+	});
+	const { data: topProvidersResult } = useGetCompaniesQuery({
+		limit: 3,
 		isVerified: true,
 		sortBy: "averageRating",
 		sortOrder: "DESC",
@@ -115,56 +129,60 @@ const Hero: React.FC = () => {
 	);
 
 	const manufacturerItems = React.useMemo<HeroWidgetItem[]>(() => {
-		const companies = (companiesResult?.data ?? []).slice(0, 3);
+		// Access the data array from the NormalizedCompaniesResult
+		const companies = (manufacturersResult?.data ?? []).slice(0, 3);
 		return [
 			{
-				id: "manufacturers-stat",
+				id: "m-stat",
 				type: "stat",
 				stat: `${marketplaceStats?.verifiedProviders ?? 0}+`,
-				statDesc: "Direct",
+				statDesc: "Direct Plants",
 			},
 			...companies.map(mapCompanyToWidgetItem),
 		];
-	}, [companiesResult?.data, marketplaceStats?.verifiedProviders]);
+	}, [manufacturersResult, marketplaceStats?.verifiedProviders]);
 
 	const productItems = React.useMemo<HeroWidgetItem[]>(() => {
-		const products = featuredProductsResult?.data?.slice(0, 3) ?? [];
+		// Access the data array from the NormalizedProductsResult
+		const products = (topProductsResult?.data ?? []).slice(0, 3);
 		return [
 			{
-				id: "products-stat",
+				id: "p-stat",
 				type: "stat",
-				stat: `${marketplaceStats?.productsListed ?? 0}+`,
-				statDesc: "Available",
+				stat: "98%",
+				statDesc: "Order Fill Rate",
 			},
 			...products.map(mapProductToWidgetItem),
 		];
-	}, [featuredProductsResult?.data, marketplaceStats?.productsListed]);
+	}, [topProductsResult]);
 
 	const providerItems = React.useMemo<HeroWidgetItem[]>(() => {
-		const companies = (companiesResult?.data ?? []).slice(3, 6);
+		// Access the data array from the NormalizedCompaniesResult
+		const companies = (topProvidersResult?.data ?? []).slice(0, 3);
 		return [
 			{
-				id: "providers-stat",
+				id: "pr-stat",
 				type: "stat",
-				stat: `${marketplaceStats?.verifiedProviders ?? 0}+`,
-				statDesc: "Verified",
+				stat: `${marketplaceStats?.districtsCovered ?? 30}`,
+				statDesc: "Active Districts",
 			},
 			...companies.map(mapCompanyToWidgetItem),
 		];
-	}, [companiesResult?.data, marketplaceStats?.verifiedProviders]);
+	}, [topProvidersResult, marketplaceStats?.districtsCovered]);
 
 	const serviceItems = React.useMemo<HeroWidgetItem[]>(() => {
-		const services = servicesResult?.data?.slice(0, 3) ?? [];
+		// Access the data array from the NormalizedServicesResult
+		const services = (servicesResult?.data ?? []).slice(0, 3);
 		return [
 			{
-				id: "services-stat",
+				id: "s-stat",
 				type: "stat",
-				stat: `${marketplaceStats?.activeContractors ?? 0}+`,
-				statDesc: "Active",
+				stat: "Instant",
+				statDesc: "Service Quotes",
 			},
 			...services.map(mapServiceToWidgetItem),
 		];
-	}, [marketplaceStats?.activeContractors, servicesResult?.data]);
+	}, [servicesResult]);
 
 	React.useEffect(() => {
 		if (!carouselApi) return;
@@ -319,7 +337,7 @@ const Hero: React.FC = () => {
 				<div className="flex flex-nowrap md:grid md:grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4 px-3 md:px-0 overflow-x-auto no-scrollbar pb-4 md:pb-0">
 					<div className="min-w-[280px] md:min-w-0 flex-1">
 						<HeroWidget
-							title="Manufacturers"
+							title="Top Manufacturers"
 							subtitle="Direct Access"
 							items={manufacturerItems}
 							href="/providers?type=manufacturer"
@@ -327,8 +345,8 @@ const Hero: React.FC = () => {
 					</div>
 					<div className="min-w-[280px] md:min-w-0 flex-1">
 						<HeroWidget
-							title="Trending Items"
-							subtitle="Top Products"
+							title="Top Products"
+							subtitle="Trending Items"
 							items={productItems}
 							href="/products?sort=popular"
 							variant="blue"
@@ -336,8 +354,8 @@ const Hero: React.FC = () => {
 					</div>
 					<div className="min-w-[280px] md:min-w-0 flex-1">
 						<HeroWidget
-							title="Trusted Hubs"
-							subtitle="Verified Partners"
+							title="Top Suppliers"
+							subtitle="Verified Hubs"
 							items={providerItems}
 							href="/providers"
 							variant="emerald"
@@ -345,8 +363,8 @@ const Hero: React.FC = () => {
 					</div>
 					<div className="min-w-[280px] md:min-w-0 flex-1">
 						<HeroWidget
-							title="Expert Solutions"
-							subtitle="Field Services"
+							title="Top Services"
+							subtitle="Expert Solutions"
 							items={serviceItems}
 							href="/services"
 							variant="orange"
