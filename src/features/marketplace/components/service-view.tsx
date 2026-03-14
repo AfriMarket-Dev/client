@@ -47,7 +47,7 @@ export default function ServiceView({ service, onBack }: ServiceViewProps) {
 	return (
 		<DetailsPageLayout
 			title={service.name}
-			badgeText={service.category?.name || "Service"}
+			badgeText={service.category?.name || "Professional Service"}
 			onBack={backHandler}
 			mobileActions={
 				<MobileActions
@@ -76,14 +76,14 @@ export default function ServiceView({ service, onBack }: ServiceViewProps) {
 							className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
 						/>
 					) : (
-						<div className="flex h-full items-center justify-center text-[10px] uppercase font-black tracking-[0.3em] text-muted-foreground">
-							No Image Available
+						<div className="flex h-full items-center justify-center text-[10px] uppercase font-black tracking-[0.3em] text-muted-foreground text-center px-4">
+							No Reference Image Available
 						</div>
 					)}
 				</div>
 			}
 			info={
-				<div className="space-y-10">
+				<div className="space-y-8 md:space-y-10">
 					<ServiceHeader
 						service={service}
 						isInWishlist={isInWishlist}
@@ -95,29 +95,29 @@ export default function ServiceView({ service, onBack }: ServiceViewProps) {
 						onInquire={() => setShowContactModal(true)}
 					/>
 
-					<div className="grid grid-cols-2 md:grid-cols-3 gap-px bg-border/40 border border-border/40 overflow-hidden shadow-sm">
-						<div className="bg-background p-4 flex flex-col gap-1">
+					<div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 gap-px bg-border/40 border border-border/40 overflow-hidden shadow-sm">
+						<div className="bg-background p-4 flex flex-col gap-1 group hover:bg-muted/5 transition-colors">
 							<span className="text-[9px] font-black text-muted-foreground uppercase tracking-widest flex items-center gap-1.5">
-								<RiPriceTag3Line size={12} className="text-primary" />
-								Category
+								<RiPriceTag3Line size={12} className="text-primary opacity-40 group-hover:opacity-100 transition-opacity" />
+								Classification
 							</span>
 							<span className="text-[11px] font-bold uppercase truncate">
-								{service.category?.name || "Professional Service"}
+								{service.category?.name || "Professional"}
 							</span>
 						</div>
-						<div className="bg-background p-4 flex flex-col gap-1">
+						<div className="bg-background p-4 flex flex-col gap-1 group hover:bg-muted/5 transition-colors">
 							<span className="text-[9px] font-black text-muted-foreground uppercase tracking-widest flex items-center gap-1.5">
-								<RiHistoryLine size={12} className="text-primary" />
-								Activity
+								<RiHistoryLine size={12} className="text-primary opacity-40 group-hover:opacity-100 transition-opacity" />
+								Volume
 							</span>
-							<span className="text-[11px] font-bold uppercase">
-								{service.totalRequests || 0} Total Inquiries
+							<span className="text-[11px] font-bold uppercase truncate">
+								{service.totalRequests || 0} Inquiries
 							</span>
 						</div>
-						<div className="bg-background p-4 flex flex-col gap-1 col-span-2 md:col-span-1">
+						<div className="bg-background p-4 flex flex-col gap-1 group hover:bg-muted/5 transition-colors col-span-1 xs:col-span-2 md:col-span-1">
 							<span className="text-[9px] font-black text-muted-foreground uppercase tracking-widest flex items-center gap-1.5">
-								<RiBuilding4Line size={12} className="text-primary" />
-								Provider
+								<RiBuilding4Line size={12} className="text-primary opacity-40 group-hover:opacity-100 transition-opacity" />
+								Entity
 							</span>
 							<span className="text-[11px] font-bold uppercase truncate">
 								{service.company?.name || "Verified Provider"}
@@ -134,61 +134,59 @@ export default function ServiceView({ service, onBack }: ServiceViewProps) {
 					className="w-full"
 				>
 					<div className="relative mb-8">
-						<TabsList
-							variant="line"
-							className="w-full justify-start overflow-x-auto scrollbar-hide no-scrollbar flex-nowrap bg-muted/10 border border-border/40 rounded-none h-auto px-2 md:px-3 py-1 gap-4 sm:gap-6"
-						>
+						<TabsList className="!flex w-full justify-start !rounded-none !bg-transparent !border-b !border-border/40 !h-auto !p-0 !gap-6 md:gap-8 overflow-x-auto no-scrollbar whitespace-nowrap">
 							<TabsTrigger
 								value="overview"
-								className="uppercase text-[10px] font-semibold tracking-[0.2em] px-3 py-2 rounded-sm data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm"
+								className="data-[state=active]:!text-primary !rounded-none !border-b-2 !border-transparent data-[state=active]:!border-primary !pb-4 !px-0 !h-auto font-heading font-black uppercase text-[10px] tracking-[0.2em] !shadow-none !bg-transparent"
 							>
-								Service Info
+								Overview
 							</TabsTrigger>
 							<TabsTrigger
 								value="products"
-								className="uppercase text-[10px] font-semibold tracking-[0.2em] px-3 py-2 rounded-sm data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm"
+								className="data-[state=active]:!text-primary !rounded-none !border-b-2 !border-transparent data-[state=active]:!border-primary !pb-4 !px-0 !h-auto font-heading font-black uppercase text-[10px] tracking-[0.2em] !shadow-none !bg-transparent"
 							>
-								Related Items
+								Related
 							</TabsTrigger>
 							<TabsTrigger
 								value="reviews"
-								className="uppercase text-[10px] font-semibold tracking-[0.2em] px-3 py-2 rounded-sm data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm"
+								className="data-[state=active]:!text-primary !rounded-none !border-b-2 !border-transparent data-[state=active]:!border-primary !pb-4 !px-0 !h-auto font-heading font-black uppercase text-[10px] tracking-[0.2em] !shadow-none !bg-transparent"
 							>
-								Customer Reviews
+								Feedback
 							</TabsTrigger>
 							<TabsTrigger
 								value="contact"
-								className="uppercase text-[10px] font-semibold tracking-[0.2em] px-3 py-2 rounded-sm data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm"
+								className="data-[state=active]:!text-primary !rounded-none !border-b-2 !border-transparent data-[state=active]:!border-primary !pb-4 !px-0 !h-auto font-heading font-black uppercase text-[10px] tracking-[0.2em] !shadow-none !bg-transparent"
 							>
-								Contact Us
+								Consult
 							</TabsTrigger>
 						</TabsList>
-						<div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-background to-transparent pointer-events-none sm:hidden" />
+						{/* Swipe Indicator Overlay */}
+						<div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-background via-background/80 to-transparent pointer-events-none sm:hidden" />
 					</div>
 
-					<div className="animate-in fade-in slide-in-from-bottom-2 duration-500">
-						<TabsContent value="overview">
+					<div className="animate-in fade-in slide-in-from-bottom-2 duration-500 overflow-hidden">
+						<TabsContent value="overview" className="mt-0 outline-none">
 							<ServiceTabsContent
 								service={service}
 								activeTab="overview"
 								trackAndNavigate={trackAndNavigate as never}
 							/>
 						</TabsContent>
-						<TabsContent value="products">
+						<TabsContent value="products" className="mt-0 outline-none">
 							<ServiceTabsContent
 								service={service}
 								activeTab="products"
 								trackAndNavigate={trackAndNavigate as never}
 							/>
 						</TabsContent>
-						<TabsContent value="reviews">
+						<TabsContent value="reviews" className="mt-0 outline-none">
 							<ServiceTabsContent
 								service={service}
 								activeTab="reviews"
 								trackAndNavigate={trackAndNavigate as never}
 							/>
 						</TabsContent>
-						<TabsContent value="contact">
+						<TabsContent value="contact" className="mt-0 outline-none">
 							<ServiceTabsContent
 								service={service}
 								activeTab="contact"

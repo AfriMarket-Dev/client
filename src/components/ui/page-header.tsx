@@ -14,7 +14,7 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
 	return (
 		<div
 			className={cn(
-				"rounded-none p-4 sm:p-6 md:p-8 relative overflow-hidden border border-border/20 shadow-none transition-all duration-500 hover:border-primary/20 hover:shadow-2xl hover:shadow-primary/5",
+				"rounded-none p-3 sm:p-6 md:p-8 relative overflow-hidden border border-border/20 shadow-none transition-all duration-500 hover:border-primary/20 hover:shadow-2xl hover:shadow-primary/5",
 				dark ? "bg-foreground text-background" : "bg-card text-foreground",
 				className,
 			)}
@@ -30,7 +30,7 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
 							{badge}
 						</Badge>
 					)}
-					<h1 className="text-xl sm:text-2xl md:text-4xl font-display font-black uppercase tracking-tighter leading-[0.9] mb-2 md:mb-3 truncate md:whitespace-normal">
+					<h1 className="text-lg sm:text-2xl md:text-4xl font-display font-black uppercase tracking-tighter leading-[0.9] mb-2 md:mb-3 truncate md:whitespace-normal">
 						{title}
 					</h1>
 					{subtitle && (

@@ -1,7 +1,7 @@
 import { useForm } from "@tanstack/react-form";
 import { useNavigate } from "@tanstack/react-router";
 import type { UseEmblaCarouselType } from "embla-carousel-react";
-import { ArrowRight, Search } from "lucide-react";
+import { Search } from "lucide-react";
 import React from "react";
 import { z } from "zod";
 import {
@@ -18,9 +18,7 @@ import {
 import {
 	Select,
 	SelectContent,
-	SelectGroup,
 	SelectItem,
-	SelectLabel,
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
@@ -71,6 +69,7 @@ const Hero: React.FC = () => {
 		React.useState<UseEmblaCarouselType[1]>(undefined);
 	const [carouselIndex, setCarouselIndex] = React.useState(0);
 	const [carouselCount, setCarouselCount] = React.useState(0);
+	
 	const { data: featuredProductsResult } = useGetProductsQuery({
 		limit: 3,
 		isFeatured: true,
@@ -183,36 +182,38 @@ const Hero: React.FC = () => {
 	}, [carouselApi]);
 
 	return (
-		<section className="relative pt-2 md:pt-4 pb-4 md:pb-6 bg-background industrial-grain">
+		<section className="relative pt-0 md:pt-4 pb-4 md:pb-6 bg-background industrial-grain">
 			<div className="max-w-[1800px] mx-auto px-0 md:px-6">
-				<div className="relative overflow-hidden border-y md:border border-border/20 shadow-xl mb-2 md:mb-3 bg-industrial flex flex-col md:flex-row shadow-primary/5 min-h-[340px] md:min-h-[380px]">
+				{/* Main Hero Container - Longer on Mobile, Original 'Perfect' state on Desktop */}
+				<div className="relative overflow-hidden border-y md:border border-border/20 shadow-xl mb-2 md:mb-3 bg-industrial flex flex-col md:flex-row min-h-[500px] md:min-h-[380px]">
 					<div
 						className="absolute inset-0 blueprint-grid opacity-[0.03] pointer-events-none"
 						style={{
-							maskImage: "linear-gradient(to bottom right, black, transparent)",
+							maskImage: "linear-gradient(to bottom, black, transparent)",
 						}}
 					/>
-					<div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_0%_0%,var(--color-primary)_0%,transparent_40%)] opacity-[0.08] pointer-events-none" />
-
-					<div className="relative z-20 flex flex-col justify-center px-6 py-7 md:px-10 md:py-7 flex-1 md:max-w-[55%]">
-						<div className="flex items-center gap-4 mb-3 md:mb-4 relative">
-							<span className="inline-flex items-center gap-3 text-primary text-[9px] md:text-[10px] font-black uppercase tracking-[0.4em]">
+					
+					{/* Text & Search Side */}
+					<div className="relative z-20 flex flex-col justify-center px-6 py-10 md:px-10 md:py-7 flex-1">
+						<div className="flex items-center gap-4 mb-4 md:mb-4">
+							<span className="inline-flex items-center gap-3 text-primary text-[10px] font-black uppercase tracking-[0.4em]">
 								<div className="w-8 md:w-16 h-px bg-primary" />
-								Construction Marketplace
+								Build The Future
 							</span>
 						</div>
 
-						<h1 className="text-display font-black text-white leading-[0.9] mb-4 md:mb-5 relative tracking-tighter">
-							<span className="block text-2xl sm:text-3xl md:text-4xl lg:text-4xl uppercase">
-								FIND EVERY
+						<h1 className="text-display font-black text-white leading-[0.9] mb-8 md:mb-5 relative tracking-tighter">
+							<span className="block text-2xl sm:text-3xl md:text-4xl uppercase">
+								SOURCE EVERY
 							</span>
-							<span className="block text-2xl sm:text-3xl md:text-4xl lg:text-4xl text-primary italic -skew-x-12 inline-block translate-x-1 sm:translate-x-6">
+							<span className="block text-2xl sm:text-3xl md:text-4xl text-primary italic -skew-x-12 inline-block translate-x-2 sm:translate-x-6">
 								MATERIAL & SERVICE
 							</span>
-							<span className="block text-2xl sm:text-3xl md:text-4xl lg:text-4xl uppercase">
+							<span className="block text-2xl sm:text-3xl md:text-4xl uppercase">
 								IN RWANDA.
 							</span>
 						</h1>
+
 						<form
 							onSubmit={(e) => {
 								e.preventDefault();
@@ -221,8 +222,8 @@ const Hero: React.FC = () => {
 							}}
 							className="relative max-w-2xl w-full"
 						>
-							<InputGroup className="h-14 sm:h-13 md:h-12 lg:h-11 rounded-none border-white/10 bg-white/5 backdrop-blur-md shadow-2xl shadow-black/40">
-								<InputGroupAddon align="inline-start" className="pl-1 pr-0">
+							<InputGroup className="h-12 sm:h-13 md:h-12 lg:h-11 rounded-none border-white/10 bg-white/5 backdrop-blur-md shadow-2xl">
+								<InputGroupAddon align="inline-start" className="pl-1">
 									<form.Field
 										name="activeCategory"
 										children={(field) => (
@@ -232,35 +233,19 @@ const Hero: React.FC = () => {
 													if (val) field.handleChange(val);
 												}}
 											>
-												<SelectTrigger className="h-full px-2 sm:px-4 py-0 text-[10px] font-black text-white uppercase tracking-[0.2em] border-0 bg-transparent rounded-none hover:bg-white/[0.03] [&_svg]:opacity-40">
-													<span className="sm:hidden">
-														{field.state.value === DEFAULT_SEARCH_CATEGORY
-															? "A"
-															: field.state.value.charAt(0).toUpperCase()}
-													</span>
-													<span className="hidden sm:block">
-														<SelectValue>
-															{field.state.value === DEFAULT_SEARCH_CATEGORY
-																? "All Categories"
-																: field.state.value}
-														</SelectValue>
-													</span>
+												<SelectTrigger className="h-full px-2 sm:px-4 py-0 text-[10px] font-black text-white uppercase tracking-[0.2em] border-0 bg-transparent rounded-none hover:bg-white/[0.05]">
+													<SelectValue />
 												</SelectTrigger>
-												<SelectContent className="bg-industrial/95 backdrop-blur-xl border border-white/10 rounded-none shadow-2xl p-1 min-w-[200px] sm:min-w-[240px]">
-													<SelectGroup>
-														<SelectLabel className="text-[9px] font-black uppercase tracking-[0.4em] text-white/30 px-3 py-4 border-b border-white/5 mb-2">
-															Market Categories
-														</SelectLabel>
-														{searchCategories.map((cat) => (
-															<SelectItem
-																key={cat}
-																value={cat}
-																className="text-[10px] font-black uppercase tracking-widest text-white/60 focus:bg-primary focus:text-white rounded-none transition-all py-3 px-4 mb-1 h-auto"
-															>
-																{cat}
-															</SelectItem>
-														))}
-													</SelectGroup>
+												<SelectContent className="bg-industrial/95 border-white/10 rounded-none shadow-2xl">
+													{searchCategories.map((cat) => (
+														<SelectItem
+															key={cat}
+															value={cat}
+															className="text-[10px] font-black uppercase tracking-widest text-white/60 focus:bg-primary focus:text-white rounded-none py-3"
+														>
+															{cat}
+														</SelectItem>
+													))}
 												</SelectContent>
 											</Select>
 										)}
@@ -276,26 +261,25 @@ const Hero: React.FC = () => {
 											value={field.state.value}
 											onBlur={field.handleBlur}
 											onChange={(e) => field.handleChange(e.target.value)}
-											placeholder="Search materials, equipment, services..."
-											className="py-0 text-white placeholder:text-white/40 text-sm sm:text-base md:text-sm"
+											placeholder="Search Catalog..."
+											className="py-0 text-white placeholder:text-white/30 text-sm"
 										/>
 									)}
 								/>
 
 								<InputGroupButton
 									type="submit"
-									variant="default"
 									size="sm"
-									className="h-full rounded-none bg-primary text-white hover:bg-primary/90 px-3 sm:px-4"
+									className="h-full rounded-none bg-primary text-white hover:bg-primary/90 px-6"
 								>
 									<Search className="size-4" />
-									<span className="hidden sm:inline">Search</span>
-									<ArrowRight className="size-4 hidden md:inline" />
 								</InputGroupButton>
 							</InputGroup>
 						</form>
 					</div>
-					<div className="relative md:w-[45%] min-h-[240px] md:min-h-0 shrink-0 overflow-hidden border-t md:border-t-0 md:border-l border-white/10 group/featured">
+
+					{/* Carousel Side - Respecting desktop size */}
+					<div className="relative w-full md:w-[45%] min-h-[300px] md:min-h-0 shrink-0 overflow-hidden border-t md:border-t-0 md:border-l border-white/10 group/featured">
 						<Carousel
 							setApi={setCarouselApi}
 							opts={{ loop: true }}
@@ -304,7 +288,7 @@ const Hero: React.FC = () => {
 							<CarouselContent className="ml-0 h-full">
 								{featuredProducts.map((product: HeroFeaturedProduct) => (
 									<CarouselItem key={product.id} className="pl-0 h-full">
-										<div className="relative h-full min-h-[240px] md:min-h-[360px]">
+										<div className="relative h-full min-h-[300px] md:min-h-0">
 											<FeaturedProductCard product={product} isActive />
 										</div>
 									</CarouselItem>
@@ -313,7 +297,7 @@ const Hero: React.FC = () => {
 						</Carousel>
 
 						{carouselCount > 1 && (
-							<div className="absolute bottom-4 left-6 z-20 flex gap-2 rounded-full bg-black/40 px-3 py-1.5 backdrop-blur-sm border border-white/10">
+							<div className="absolute bottom-6 left-6 z-20 flex gap-2 rounded-full bg-black/40 px-3 py-1.5 backdrop-blur-sm border border-white/10">
 								{Array.from({ length: carouselCount }).map((_, i) => (
 									<button
 										type="button"
@@ -322,9 +306,8 @@ const Hero: React.FC = () => {
 										className={`h-1.5 transition-all duration-500 rounded-full ${
 											i === carouselIndex
 												? "w-10 bg-primary"
-												: "w-3 bg-white/30 hover:bg-white/50"
+												: "w-3 bg-white/30"
 										}`}
-										aria-label={`Show featured item ${i + 1}`}
 									/>
 								))}
 							</div>
@@ -332,35 +315,43 @@ const Hero: React.FC = () => {
 					</div>
 				</div>
 
-				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4 px-4 md:px-0 relative z-20 pb-3 md:pb-0">
-					<HeroWidget
-						title="Top Manufacturers"
-						subtitle="Direct access"
-						items={manufacturerItems}
-						href="/providers?type=manufacturer"
-						variant="default"
-					/>
-					<HeroWidget
-						title="Top Products"
-						subtitle="Trending now"
-						items={productItems}
-						href="/products?sort=popular"
-						variant="blue"
-					/>
-					<HeroWidget
-						title="Top Providers"
-						subtitle="Trusted partners"
-						items={providerItems}
-						href="/providers"
-						variant="emerald"
-					/>
-					<HeroWidget
-						title="Top Services"
-						subtitle="Expert solutions"
-						items={serviceItems}
-						href="/services"
-						variant="orange"
-					/>
+				{/* Widgets - Scrollable on mobile */}
+				<div className="flex flex-nowrap md:grid md:grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4 px-3 md:px-0 overflow-x-auto no-scrollbar pb-4 md:pb-0">
+					<div className="min-w-[280px] md:min-w-0 flex-1">
+						<HeroWidget
+							title="Manufacturers"
+							subtitle="Direct Access"
+							items={manufacturerItems}
+							href="/providers?type=manufacturer"
+						/>
+					</div>
+					<div className="min-w-[280px] md:min-w-0 flex-1">
+						<HeroWidget
+							title="Trending Items"
+							subtitle="Top Products"
+							items={productItems}
+							href="/products?sort=popular"
+							variant="blue"
+						/>
+					</div>
+					<div className="min-w-[280px] md:min-w-0 flex-1">
+						<HeroWidget
+							title="Trusted Hubs"
+							subtitle="Verified Partners"
+							items={providerItems}
+							href="/providers"
+							variant="emerald"
+						/>
+					</div>
+					<div className="min-w-[280px] md:min-w-0 flex-1">
+						<HeroWidget
+							title="Expert Solutions"
+							subtitle="Field Services"
+							items={serviceItems}
+							href="/services"
+							variant="orange"
+						/>
+					</div>
 				</div>
 			</div>
 		</section>

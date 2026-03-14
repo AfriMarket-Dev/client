@@ -40,12 +40,12 @@ export const SpecificationList: React.FC<SpecificationListProps> = ({
 				{Object.entries(specifications).map(([key, value]) => (
 					<div
 						key={key}
-						className="bg-background p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2"
+						className="bg-background p-4 flex flex-col justify-center gap-1.5"
 					>
-						<span className="text-[9px] font-black text-muted-foreground uppercase tracking-widest shrink-0">
+						<span className="text-[8px] sm:text-[9px] font-black text-muted-foreground uppercase tracking-widest shrink-0">
 							{key}
 						</span>
-						<span className="text-[11px] font-bold uppercase text-foreground text-right break-all">
+						<span className="text-[10px] sm:text-[11px] font-bold uppercase text-foreground break-words">
 							{value}
 						</span>
 					</div>

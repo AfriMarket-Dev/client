@@ -63,7 +63,7 @@ const FeaturedProducts: React.FC = () => {
 			variant="background"
 			className="py-10 lg:py-16"
 		>
-			<div className="max-w-[1600px] mx-auto px-4 lg:px-6">
+			<div className="max-w-[1600px] mx-auto px-0 sm:px-6">
 				<SectionHeader
 					title="Featured Products"
 					subtitle="High-quality construction materials and specialized tools for your next project."
