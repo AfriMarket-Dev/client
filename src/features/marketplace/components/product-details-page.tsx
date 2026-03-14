@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from "@tanstack/react-router";
-import ProductView from "@/features/marketplace/components/product-view";
+import ProductView from "./product-view";
 
 export function ProductDetailsPage() {
 	const navigate = useNavigate();
@@ -7,11 +7,16 @@ export function ProductDetailsPage() {
 
 	return (
 		<ProductView
-			productId={productId || ""}
-			onBack={() => navigate({ to: "/products" })}
-			onProviderClick={(providerId: string) =>
-				navigate({ to: "/providers/$providerId", params: { providerId } })
-			}
+			productId={productId}
+			onBack={async () => {
+				navigate({ to: "/products" });
+			}}
+			onProviderClick={async (providerId: string) => {
+				navigate({
+					to: "/providers/$providerId",
+					params: { providerId },
+				});
+			}}
 		/>
 	);
 }

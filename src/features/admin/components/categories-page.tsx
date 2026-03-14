@@ -118,10 +118,10 @@ export function AdminCategoriesPage() {
 				</div>
 			</Card>
 
-			<div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
+			<div className="grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-2 xl:grid-cols-3">
 				{isLoading ? (
 					Array.from({ length: 6 }).map((_, i) => (
-						<Skeleton key={i} className="h-48 w-full rounded-none" />
+						<Skeleton key={i} className="h-40 sm:h-48 w-full rounded-none" />
 					))
 				) : filteredCategories.length === 0 ? (
 					<div className="col-span-full py-12">

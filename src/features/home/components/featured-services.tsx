@@ -25,7 +25,7 @@ const FeaturedServices: React.FC = () => {
 			borderBottom
 			className="py-10 lg:py-16"
 		>
-			<div className="max-w-[1600px] mx-auto px-4 lg:px-6">
+			<div className="max-w-[1600px] mx-auto px-0 sm:px-6">
 				<SectionHeader
 					title="Services & Rentals"
 					subtitle="Professional services available from verified providers."

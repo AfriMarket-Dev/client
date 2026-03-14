@@ -41,7 +41,6 @@ export default function ProductView({
 	const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 	const [selectedVariantId, setSelectedVariantId] = useState<string | null>(null);
 
-	// Implement SWR: Destructure isFetching to show background sync status
 	const { data: product, isLoading, isFetching } = useGetProductByIdQuery(productId);
 
 	const {
@@ -98,7 +97,6 @@ export default function ProductView({
 
 	const backHandler = onBack || handleBack;
 
-	// SWR: Only show main skeleton if we have literally NO data
 	if (isLoading && !product) {
 		return <DetailPageSkeleton />;
 	}
@@ -128,14 +126,12 @@ export default function ProductView({
 			</Empty>
 		);
 
-	// Safety check for TS
 	if (!product) return null;
 
 	return (
 		<DetailsPageLayout
 			title={product.name}
-			// SWR Indicator in the badge area
-			badgeText={isFetching && product ? "Synchronizing..." : (product.category?.name || "Standardized Item")}
+			badgeText={isFetching && product ? "Syncing..." : (product.category?.name || "Standardized Item")}
 			onBack={backHandler}
 			mobileActions={
 				<MobileActions
@@ -162,7 +158,7 @@ export default function ProductView({
 				</div>
 			}
 			gallery={
-				<div className="space-y-8">
+				<div className="space-y-6 md:space-y-8">
 					<ProductGallery
 						images={images}
 						name={product.name}
@@ -171,7 +167,7 @@ export default function ProductView({
 					/>
 					
 					{/* Integrated Trust Signals */}
-					<div className="hidden md:grid grid-cols-2 gap-4">
+					<div className="grid grid-cols-1 xs:grid-cols-2 gap-3 md:gap-4">
 						<div className="p-4 border border-border/40 bg-muted/5 flex items-center gap-4">
 							<div className="w-1 h-8 bg-primary/20" />
 							<div className="space-y-1">
@@ -205,7 +201,7 @@ export default function ProductView({
 
 					{/* Variant Selector Interface */}
 					{variants.length > 1 && (
-						<div className="p-6 border border-border/40 bg-background relative group">
+						<div className="p-5 md:p-6 border border-border/40 bg-background relative group">
 							<div className="absolute top-0 left-0 w-1 h-0 bg-primary group-hover:h-full transition-all duration-500" />
 							<div className="space-y-6">
 								<div className="flex items-center justify-between">
@@ -225,7 +221,7 @@ export default function ProductView({
 												type="button"
 												onClick={() => handleVariantSelect(v.id)}
 												className={cn(
-													"flex-1 min-w-[120px] px-4 py-3 text-[9px] font-black uppercase tracking-widest border transition-all duration-300 rounded-none text-center",
+													"flex-1 min-w-[110px] px-3 py-3 text-[9px] font-black uppercase tracking-widest border transition-all duration-300 rounded-none text-center",
 													isActive
 														? "border-primary bg-primary text-primary-foreground shadow-lg shadow-primary/20"
 														: "border-border/60 text-muted-foreground hover:border-primary/40 hover:bg-muted/5"
@@ -242,9 +238,9 @@ export default function ProductView({
 				</div>
 			}
 			tabs={
-				<div className="space-y-10">
+				<div className="space-y-8 md:space-y-10">
 					<div className="flex items-center gap-4">
-						<h2 className="text-2xl font-display font-black text-foreground uppercase tracking-tighter">
+						<h2 className="text-xl md:text-2xl font-display font-black text-foreground uppercase tracking-tighter">
 							Technical Documentation
 						</h2>
 						<div className="flex-1 h-px bg-border/40" />
@@ -255,29 +251,33 @@ export default function ProductView({
 						onValueChange={setActiveTab}
 						className="w-full"
 					>
-						<TabsList className="w-full justify-start rounded-none bg-muted/10 border border-border/40 h-auto p-1 gap-2 overflow-x-auto no-scrollbar">
-							<TabsTrigger
-								value="overview"
-								className="rounded-none data-[state=active]:bg-background data-[state=active]:text-primary data-[state=active]:shadow-sm px-6 py-3 text-[10px] font-black uppercase tracking-[0.2em] transition-all"
-							>
-								Overview
-							</TabsTrigger>
-							<TabsTrigger
-								value="specifications"
-								className="rounded-none data-[state=active]:bg-background data-[state=active]:text-primary data-[state=active]:shadow-sm px-6 py-3 text-[10px] font-black uppercase tracking-[0.2em] transition-all"
-							>
-								Technical Data
-							</TabsTrigger>
-							<TabsTrigger
-								value="reviews"
-								className="rounded-none data-[state=active]:bg-background data-[state=active]:text-primary data-[state=active]:shadow-sm px-6 py-3 text-[10px] font-black uppercase tracking-[0.2em] transition-all"
-							>
-								Field Reports
-							</TabsTrigger>
-						</TabsList>
+						<div className="relative mb-8">
+							<TabsList className="!flex w-full justify-start !rounded-none !bg-transparent !border-b !border-border/40 !h-auto !p-0 !gap-6 md:gap-8 overflow-x-auto no-scrollbar whitespace-nowrap">
+								<TabsTrigger
+									value="overview"
+									className="data-[state=active]:!text-primary !rounded-none !border-b-2 !border-transparent data-[state=active]:!border-primary !pb-4 !px-0 !h-auto font-heading font-black uppercase text-[10px] tracking-[0.2em] !shadow-none !bg-transparent"
+								>
+									Overview
+								</TabsTrigger>
+								<TabsTrigger
+									value="specifications"
+									className="data-[state=active]:!text-primary !rounded-none !border-b-2 !border-transparent data-[state=active]:!border-primary !pb-4 !px-0 !h-auto font-heading font-black uppercase text-[10px] tracking-[0.2em] !shadow-none !bg-transparent"
+								>
+									Specifications
+								</TabsTrigger>
+								<TabsTrigger
+									value="reviews"
+									className="data-[state=active]:!text-primary !rounded-none !border-b-2 !border-transparent data-[state=active]:!border-primary !pb-4 !px-0 !h-auto font-heading font-black uppercase text-[10px] tracking-[0.2em] !shadow-none !bg-transparent"
+								>
+									Reviews
+								</TabsTrigger>
+							</TabsList>
+							{/* Swipe Indicator Overlay */}
+							<div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-background via-background/80 to-transparent pointer-events-none sm:hidden" />
+						</div>
 						
-						<div className="mt-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
-							<TabsContent value="overview" className="mt-0">
+						<div className="mt-8 md:mt-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
+							<TabsContent value="overview" className="mt-0 outline-none">
 								<ProductTabsContent
 									description={product.description || ""}
 									keyFacts={keyFacts}
@@ -285,13 +285,13 @@ export default function ProductView({
 									variantSku={selectedVariant?.sku}
 								/>
 							</TabsContent>
-							<TabsContent value="specifications" className="mt-0">
+							<TabsContent value="specifications" className="mt-0 outline-none">
 								<SpecificationList 
 									specifications={product.specifications} 
 									title="Material Specifications"
 								/>
 							</TabsContent>
-							<TabsContent value="reviews" className="mt-0">
+							<TabsContent value="reviews" className="mt-0 outline-none">
 								<div className="py-24 text-center border border-dashed border-border/40 bg-muted/5 relative overflow-hidden">
 									<div className="absolute inset-0 blueprint-grid opacity-[0.02] pointer-events-none" />
 									<div className="relative z-10 space-y-2">
@@ -317,7 +317,7 @@ export default function ProductView({
 					/>
 					
 					{/* Additional Sidebar Context */}
-					<div className="p-8 border border-border/40 bg-muted/10 relative overflow-hidden">
+					<div className="p-6 md:p-8 border border-border/40 bg-muted/10 relative overflow-hidden">
 						<div className="absolute inset-0 blueprint-grid opacity-5 pointer-events-none" />
 						<div className="relative z-10 space-y-4">
 							<h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-foreground">

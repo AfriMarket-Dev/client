@@ -212,7 +212,7 @@ export const Header: React.FC = () => {
 						</div>
 					</div>
 					{/* Swipe Indicator Gradient */}
-					<div className="absolute right-0 top-0 bottom-0 w-6 bg-gradient-to-l from-background to-transparent pointer-events-none md:hidden" />
+					<div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-background via-background/80 to-transparent pointer-events-none md:hidden" />
 				</nav>
 
 				<div className="flex items-center gap-0.5 sm:gap-3 shrink-0">

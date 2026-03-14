@@ -14,7 +14,7 @@ export function InventoryStats({ listings }: InventoryStatsProps) {
 	const activeListings = listings.filter((l) => l.isActive).length;
 
 	return (
-		<StatsGrid columns={4}>
+		<StatsGrid columns={1} className="md:grid-cols-4">
 			<AdminStatCard
 				label="Listings"
 				value={listings.length}

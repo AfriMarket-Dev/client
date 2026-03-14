@@ -117,7 +117,7 @@ export function AdminDashboard() {
 
 						return (
 							<>
-								<StatsGrid columns={4}>
+								<StatsGrid columns={1} className="md:grid-cols-4">
 									<StatCard
 										label="Providers"
 										value={compact(verifiedProviders)}
@@ -154,7 +154,7 @@ export function AdminDashboard() {
 										subtitle="Manage sections"
 										className="xl:col-span-1"
 									>
-										<div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-1 gap-3">
+										<div className="flex flex-col gap-3">
 											<Button
 												variant="outline"
 												className="w-full justify-start rounded-none uppercase text-[10px] font-black tracking-widest h-11 border-border/40 hover:bg-primary/5 hover:text-primary transition-all"

@@ -39,7 +39,7 @@ const ProductShowcase: React.FC<ProductShowcaseProps> = ({
 
 	return (
 		<HomeSection variant={variant} withGrid={withGrid} className={className}>
-			<div className="max-w-[1800px] mx-auto px-4 lg:px-6">
+			<div className="max-w-[1800px] mx-auto px-0 sm:px-6">
 				<SectionHeader
 					title={title}
 					subtitle={subtitle}

@@ -87,7 +87,7 @@ export const ProductInfo: React.FC<ProductInfoProps> = ({
 			</div>
 
 			{/* Price Configuration */}
-			<div className="p-8 bg-muted/10 border border-border/40 relative overflow-hidden">
+			<div className="p-5 sm:p-8 bg-muted/10 border border-border/40 relative overflow-hidden">
 				<div className="absolute inset-0 blueprint-grid opacity-[0.03] pointer-events-none" />
 				<div className="relative z-10 space-y-4">
 					<div className="flex flex-col gap-1">
@@ -149,11 +149,11 @@ export const ProductInfo: React.FC<ProductInfoProps> = ({
 			</div>
 
 			{/* Primary Action Sequence */}
-			<div className="pt-4 flex flex-col sm:flex-row gap-4">
+			<div className="pt-4 flex flex-col sm:flex-row gap-4 py-2">
 				<Button
 					onClick={onInquire}
 					size="lg"
-					className="h-16 flex-1 rounded-none bg-primary text-primary-foreground hover:bg-primary/95 transition-all duration-500 font-heading font-black uppercase tracking-[0.3em] text-[11px] shadow-xl shadow-primary/20 hover:-translate-y-1 active:translate-y-0 active:scale-[0.98]"
+					className="h-16 flex-1 rounded-none bg-primary text-primary-foreground hover:bg-primary/95 transition-all duration-500 font-heading font-black uppercase tracking-[0.3em] text-[11px] shadow-xl shadow-primary/20 hover:-translate-y-1 active:translate-y-0 active:scale-[0.98] py-4"
 				>
 					<RiChat3Line size={18} className="mr-3" />
 					Initiate Inquiry
