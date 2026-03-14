@@ -216,6 +216,10 @@ export const Header: React.FC = () => {
 				</nav>
 
 				<div className="flex items-center gap-0.5 sm:gap-3 shrink-0">
+					<div className="flex items-center gap-2 pr-2 sm:pr-0">
+						<RefreshDataButton variant="ghost" className="h-9 w-9 sm:h-9 sm:w-9" />
+					</div>
+
 					<div className="hidden sm:flex items-center gap-2 pl-4 border-l border-border/40">
 						{!isAuthenticated ? (
 							<>
@@ -239,7 +243,6 @@ export const Header: React.FC = () => {
 							</>
 						) : (
 							<div className="flex items-center gap-2">
-								<RefreshDataButton variant="ghost" className="h-9 w-9" />
 								<HeaderUserNav isAuthenticated={isAuthenticated} user={user} />
 							</div>
 						)}
@@ -249,7 +252,6 @@ export const Header: React.FC = () => {
 					<div className="flex items-center gap-0 sm:hidden">
 						{isAuthenticated && (
 							<div className="flex items-center gap-1">
-								<RefreshDataButton variant="ghost" className="h-8 w-8" />
 								<HeaderUserNav isAuthenticated={isAuthenticated} user={user} />
 							</div>
 						)}
