@@ -24,9 +24,10 @@ export const statsApi = apiSlice.injectEndpoints({
 		getMarketplaceStats: builder.query<MarketplaceStats, void>({
 			query: () => "/stats/marketplace",
 			transformResponse: (response: ApiResponse<MarketplaceStats>) => {
-				const data = unwrapResponse<MarketplaceStats>(response);
+				const data = unwrapResponse<any>(response);
+				console.log("API: Marketplace Stats raw data:", data);
 				return {
-					verifiedProviders: data?.verifiedProviders ?? 0,
+					verifiedProviders: data?.verifiedProviders ?? data?.verifiedSuppliers ?? 0,
 					productsListed: data?.productsListed ?? 0,
 					districtsCovered: data?.districtsCovered ?? 0,
 					activeContractors: data?.activeContractors ?? 0,
