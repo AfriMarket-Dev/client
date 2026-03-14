@@ -267,7 +267,7 @@ export const reviewOptions = formOptions({
 });
 
 export const contactSchema = z.object({
-	message: z.string().min(10, "Please enter at least 10 characters"),
+	message: z.string().min(1, "Please enter a message"),
 });
 
 export type ContactFormValues = z.infer<typeof contactSchema>;
