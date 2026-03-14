@@ -43,7 +43,7 @@ export const FeaturedProductCard: React.FC<{
 			</div>
 
 			{/* Bottom Content Area */}
-			<div className="absolute bottom-0 left-0 right-0 z-10 p-6 md:p-8 pt-10 md:pt-20 pb-12 bg-gradient-to-t from-industrial to-transparent">
+			<div className="absolute bottom-0 left-0 right-0 z-10 p-6 md:p-8 pt-10 md:pt-20 pb-36 md:pb-32 bg-gradient-to-t from-industrial to-transparent pointer-events-none">
 				<div className="flex items-center gap-3 mb-3">
 					<div className="w-6 h-px bg-primary" />
 					<p className="text-[9px] font-black text-primary uppercase tracking-[0.3em]">
@@ -73,26 +73,27 @@ export const FeaturedProductCard: React.FC<{
 						VIEWS
 					</span>
 				</div>
+			</div>
 
-				<div className="flex items-center justify-between gap-4 pt-4">
-					<div className="inline-flex flex-col gap-0.5 border border-white/10 bg-black/40 px-3 py-2 backdrop-blur-sm">
-						<span className="text-white font-black text-xl md:text-2xl tracking-tighter">
-							{product.price}
+			{/* Action Bar - Price & View Button - Positioned above indicators (bottom-6) */}
+			<div className="absolute bottom-16 left-6 right-6 md:left-8 md:right-8 z-30 flex items-end justify-between gap-4 pointer-events-auto">
+				<div className="inline-flex flex-col gap-0.5 border border-white/10 bg-black/40 px-3 py-2 backdrop-blur-sm">
+					<span className="text-white font-black text-lg md:text-2xl tracking-tighter">
+						{product.price}
+					</span>
+					{product.originalPrice && (
+						<span className="text-white/60 text-[9px] line-through font-bold">
+							{product.originalPrice}
 						</span>
-						{product.originalPrice && (
-							<span className="text-white/60 text-[9px] line-through font-bold">
-								{product.originalPrice}
-							</span>
-						)}
-					</div>
-					<Button
-						onClick={() => navigate({ to: "/products" })}
-						className="bg-background hover:bg-muted text-foreground rounded-none h-10 px-6 text-[9px] font-black tracking-[0.2em] uppercase gap-2 group border-none"
-					>
-						VIEW{" "}
-						<ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-					</Button>
+					)}
 				</div>
+				<Button
+					onClick={() => navigate({ to: "/products" })}
+					className="bg-background hover:bg-muted text-foreground rounded-none h-10 px-6 text-[9px] font-black tracking-[0.2em] uppercase gap-2 group border-none shadow-xl"
+				>
+					VIEW{" "}
+					<ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+				</Button>
 			</div>
 		</div>
 	);

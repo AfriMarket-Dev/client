@@ -69,7 +69,7 @@ const Hero: React.FC = () => {
 		React.useState<UseEmblaCarouselType[1]>(undefined);
 	const [carouselIndex, setCarouselIndex] = React.useState(0);
 	const [carouselCount, setCarouselCount] = React.useState(0);
-	
+
 	// Data Fetching
 	const { data: featuredProductsResult } = useGetProductsQuery({
 		limit: 3,
@@ -86,7 +86,7 @@ const Hero: React.FC = () => {
 		limit: 8,
 	});
 	const { data: marketplaceStats } = useGetMarketplaceStatsQuery();
-	
+
 	// Real "Top" queries
 	const { data: manufacturersResult } = useGetCompaniesQuery({
 		limit: 3,
@@ -210,7 +210,7 @@ const Hero: React.FC = () => {
 							maskImage: "linear-gradient(to bottom, black, transparent)",
 						}}
 					/>
-					
+
 					{/* Text & Search Side */}
 					<div className="relative z-20 flex flex-col justify-center px-6 py-10 md:px-10 md:py-7 flex-1">
 						<div className="flex items-center gap-4 mb-4 md:mb-4">
@@ -297,20 +297,25 @@ const Hero: React.FC = () => {
 					</div>
 
 					{/* Carousel Side - Respecting desktop size */}
-					<div className="relative w-full md:w-[45%] min-h-[300px] md:min-h-0 shrink-0 overflow-hidden border-t md:border-t-0 md:border-l border-white/10 group/featured">
+					<div className="relative w-full md:w-[45%] h-[400px] md:h-[380px] shrink-0 overflow-hidden border-t md:border-t-0 md:border-l border-white/10 group/featured">
 						<Carousel
 							setApi={setCarouselApi}
 							opts={{ loop: true }}
 							className="h-full"
 						>
 							<CarouselContent className="ml-0 h-full">
-								{featuredProducts.map((product: HeroFeaturedProduct) => (
-									<CarouselItem key={product.id} className="pl-0 h-full">
-										<div className="relative h-full min-h-[300px] md:min-h-0">
-											<FeaturedProductCard product={product} isActive />
-										</div>
-									</CarouselItem>
-								))}
+								{featuredProducts.map(
+									(product: HeroFeaturedProduct, index: number) => (
+										<CarouselItem key={product.id} className="pl-0 h-full">
+											<div className="relative h-full">
+												<FeaturedProductCard
+													product={product}
+													isActive={index === carouselIndex}
+												/>
+											</div>
+										</CarouselItem>
+									),
+								)}
 							</CarouselContent>
 						</Carousel>
 
