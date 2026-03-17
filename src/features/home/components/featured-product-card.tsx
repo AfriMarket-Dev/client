@@ -43,19 +43,19 @@ export const FeaturedProductCard: React.FC<{
 			</div>
 
 			{/* Bottom Content Area */}
-			<div className="absolute bottom-0 left-0 right-0 z-10 p-6 md:p-8 pt-10 md:pt-20 pb-36 md:pb-32 bg-gradient-to-t from-industrial to-transparent pointer-events-none">
-				<div className="flex items-center gap-3 mb-3">
-					<div className="w-6 h-px bg-primary" />
-					<p className="text-[9px] font-black text-primary uppercase tracking-[0.3em]">
+			<div className="absolute bottom-0 left-0 right-0 z-10 p-4 md:p-6 pt-6 md:pt-10 pb-20 md:pb-16 bg-gradient-to-t from-industrial to-transparent pointer-events-none">
+				<div className="flex items-center gap-3 mb-2">
+					<div className="w-4 h-px bg-primary" />
+					<p className="text-[8px] font-black text-primary uppercase tracking-[0.3em]">
 						{product.category}
 					</p>
 				</div>
 
-				<h3 className="text-white font-black text-xl md:text-3xl lg:text-4xl leading-tight mb-3 uppercase tracking-tighter">
+				<h3 className="text-white font-black text-lg md:text-xl lg:text-2xl leading-tight mb-2 uppercase tracking-tighter">
 					{product.name}
 				</h3>
 
-				<div className="flex items-center gap-1.5 mb-5 opacity-70">
+				<div className="flex items-center gap-1.5 mb-2 opacity-70">
 					<div className="flex items-center gap-0.5">
 						{[1, 2, 3, 4, 5].map((star) => (
 							<Star
@@ -68,7 +68,7 @@ export const FeaturedProductCard: React.FC<{
 							/>
 						))}
 					</div>
-					<span className="text-white text-[8px] font-black uppercase tracking-widest">
+					<span className="text-white text-[7px] font-black uppercase tracking-widest">
 						{product.rating > 0 ? product.rating : "N/A"} · {product.reviews}{" "}
 						VIEWS
 					</span>
@@ -76,23 +76,18 @@ export const FeaturedProductCard: React.FC<{
 			</div>
 
 			{/* Action Bar - Price & View Button - Positioned above indicators (bottom-6) */}
-			<div className="absolute bottom-16 left-6 right-6 md:left-8 md:right-8 z-30 flex items-end justify-between gap-4 pointer-events-auto">
-				<div className="inline-flex flex-col gap-0.5 border border-white/10 bg-black/40 px-3 py-2 backdrop-blur-sm">
-					<span className="text-white font-black text-lg md:text-2xl tracking-tighter">
+			<div className="absolute bottom-10 md:bottom-12 left-4 right-4 md:left-6 md:right-6 z-30 flex items-end justify-between gap-4 pointer-events-auto">
+				<div className="inline-flex flex-col gap-0.5 border border-white/10 bg-black/40 px-2 py-1 backdrop-blur-sm">
+					<span className="text-white font-black text-sm md:text-lg tracking-tighter">
 						{product.price}
 					</span>
-					{product.originalPrice && (
-						<span className="text-white/60 text-[9px] line-through font-bold">
-							{product.originalPrice}
-						</span>
-					)}
 				</div>
 				<Button
 					onClick={() => navigate({ to: "/products" })}
-					className="bg-background hover:bg-muted text-foreground rounded-none h-10 px-6 text-[9px] font-black tracking-[0.2em] uppercase gap-2 group border-none shadow-xl"
+					className="bg-background hover:bg-muted text-foreground rounded-none h-9 px-4 text-[8px] font-black tracking-[0.2em] uppercase gap-2 group border-none shadow-xl"
 				>
 					VIEW{" "}
-					<ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+					<ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
 				</Button>
 			</div>
 		</div>

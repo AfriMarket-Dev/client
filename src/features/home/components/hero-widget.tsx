@@ -1,6 +1,6 @@
 import { RiArrowRightLine, RiStarLine } from "@remixicon/react";
 import { Link } from "@tanstack/react-router";
-import type React from "react";
+import React from "react";
 import { cn } from "@/lib/utils";
 import { ImageWithFallback } from "@/shared/components/image-with-fallback";
 import type { HeroWidgetItem } from "@/types";
@@ -25,6 +25,18 @@ export const HeroWidget: React.FC<HeroWidgetProps> = ({
 	const maxItems = 4;
 	const displayItems = items.length > 0 ? items.slice(0, maxItems) : [];
 	const ordinals = ["01", "02", "03", "04"];
+
+	// Track screen height to collapse widgets on very short screens
+	const [isShortScreen, setIsShortScreen] = React.useState(false);
+
+	React.useEffect(() => {
+		const checkHeight = () => {
+			setIsShortScreen(window.innerHeight < 750);
+		};
+		checkHeight();
+		window.addEventListener("resize", checkHeight);
+		return () => window.removeEventListener("resize", checkHeight);
+	}, []);
 
 	const getVariantStyles = () => {
 		switch (variant) {
@@ -69,7 +81,7 @@ export const HeroWidget: React.FC<HeroWidgetProps> = ({
 		<div
 			className={cn(
 				"bg-background border border-border/20 flex flex-col h-full transition-all duration-300 relative group/widget rounded-none overflow-hidden hover:shadow-2xl hover:shadow-primary/5",
-				"p-4 sm:p-6",
+				isShortScreen ? "p-3 sm:p-4" : "p-4 sm:p-6",
 				getVariantStyles(),
 				className,
 			)}
@@ -83,12 +95,22 @@ export const HeroWidget: React.FC<HeroWidgetProps> = ({
 				)}
 			/>
 
-			<div className="flex items-start justify-between mb-4 relative z-10">
+			<div
+				className={cn(
+					"flex items-start justify-between relative z-10",
+					isShortScreen ? "mb-0" : "mb-4",
+				)}
+			>
 				<div>
-					<h3 className="font-display font-extrabold text-lg text-foreground tracking-tight flex items-center gap-2 uppercase leading-none">
+					<h3
+						className={cn(
+							"font-display font-extrabold text-foreground tracking-tight flex items-center gap-2 uppercase leading-none",
+							isShortScreen ? "text-base" : "text-lg",
+						)}
+					>
 						{title}
 					</h3>
-					{subtitle && (
+					{subtitle && !isShortScreen && (
 						<p className="text-[8px] text-muted-foreground/50 font-bold uppercase tracking-[0.2em] mt-1 flex items-center gap-2">
 							<span className="w-3 h-px bg-primary/20" />
 							{subtitle}
@@ -103,8 +125,9 @@ export const HeroWidget: React.FC<HeroWidgetProps> = ({
 				</Link>
 			</div>
 
-			<div className="space-y-1.5 flex-1 overflow-y-auto pr-1 custom-scrollbar">
-				{displayItems.map((item, idx) => {
+			{!isShortScreen && (
+				<div className="space-y-1.5 flex-1 overflow-y-auto pr-1 custom-scrollbar">
+					{displayItems.map((item, idx) => {
 					if (!item) {
 						return (
 							<div
@@ -257,6 +280,7 @@ export const HeroWidget: React.FC<HeroWidgetProps> = ({
 					);
 				})}
 			</div>
+			)}
 		</div>
 	);
 };
