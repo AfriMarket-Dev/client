@@ -9,20 +9,23 @@ import {
 	REGISTER,
 	REHYDRATE,
 } from "redux-persist";
-import storage from "redux-persist/lib/storage";
+import storage from "redux-persist/es/storage";
 
 import { apiSlice } from "@/services/api/api-entry";
 import authReducer from "@/store/slices/auth-slice";
 
+// Safely handle the storage object for Vite/ESM compatibility
+const storageEngine = (storage as any).default || storage;
+
 const authPersistConfig = {
 	key: "auth",
-	storage,
+	storage: storageEngine,
 	whitelist: ["isAuthenticated", "user", "token"],
 };
 
 const apiPersistConfig = {
 	key: "api",
-	storage,
+	storage: storageEngine,
 };
 
 export const persistedAuthReducer = persistReducer(
