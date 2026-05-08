@@ -23,90 +23,86 @@ export const ProductSidebar: React.FC<ProductSidebarProps> = ({
 }) => {
 	const handleShare = () => {
 		shareContent({
-			title: productName || "Construction Material",
+			title: productName || "Product",
 			text: `Check out this product: ${productName}`,
 			url: window.location.href,
 		});
 	};
 
 	return (
-		<div className="lg:col-span-4 space-y-8 sticky top-24">
-			{/* Provider ID Card */}
-			<div className="border border-border bg-background rounded-none relative overflow-hidden group">
-				<div className="p-8">
-					<h3 className="text-[9px] font-heading font-black uppercase text-muted-foreground mb-8 tracking-[0.4em] flex justify-between items-center">
-						<span>Provider Verification</span>
-						<span className="text-primary flex items-center gap-1.5">
-							<div className="w-1 h-1 bg-primary rounded-full animate-pulse" />
-							LIVE
-						</span>
-					</h3>
+		<div className="space-y-6">
+			{/* Seller Card — bordered card with subtle tint */}
+			<div className="border border-border bg-muted/5 p-6 space-y-5">
+				<div className="flex items-center justify-between pb-3 border-b border-border">
+					<span className="text-sm font-semibold text-foreground">
+						Seller
+					</span>
+					<span className="text-emerald-600 dark:text-emerald-500 flex items-center gap-1.5 text-xs font-medium">
+						<div className="w-1.5 h-1.5 bg-emerald-500 rounded-full" />
+						Active
+					</span>
+				</div>
 
-					<div className="flex items-center gap-6 mb-10">
-						<div className="w-20 h-20 bg-muted border border-border rounded-none flex items-center justify-center text-3xl font-display font-black text-foreground relative group-hover:scale-105 transition-transform duration-500">
-							<div className="absolute inset-0 border border-primary opacity-0 group-hover:opacity-100 transition-opacity translate-x-1 translate-y-1" />
-							{company?.name?.charAt(0) ?? "S"}
-						</div>
-						<div className="space-y-1">
-							<h4 className="font-display font-black text-lg uppercase tracking-tighter text-foreground leading-[0.85]">
-								{company?.name ?? "Karibu Seller"}
-							</h4>
-							<p className="text-[10px] text-primary font-black uppercase tracking-[0.2em]">
-								{company?.district ?? "Regional Provider"}
-							</p>
-						</div>
+				<div className="flex items-start gap-4">
+					<div className="w-12 h-12 rounded-none bg-muted text-foreground flex items-center justify-center text-lg font-bold shrink-0">
+						{company?.name?.charAt(0) ?? "S"}
 					</div>
-
-					<div className="grid grid-cols-1 gap-px bg-border mb-8">
-						<div className="bg-background p-4">
-							<span className="block text-[8px] uppercase font-black text-muted-foreground tracking-[0.3em] mb-2">
-								Verification Status
-							</span>
-							<span
-								className={cn(
-									"block text-sm font-bold font-heading",
-									company?.isVerified ? "text-success" : "text-warning",
-								)}
-							>
-								{company?.isVerified ? "OFFICIALLY VERIFIED" : "PENDING REVIEW"}
-							</span>
-						</div>
-					</div>
-
-					<Button
-						variant="outline"
-						className="w-full rounded-none border-border h-12 font-heading font-black uppercase tracking-[0.3em] text-[9px] hover:bg-foreground hover:text-background transition-colors mb-8"
-						onClick={() => company?.id && onProviderClick(company.id)}
-					>
-						View Provider Profile
-					</Button>
-
-					<div className="space-y-4">
-						<span className="block text-[8px] uppercase font-black text-muted-foreground tracking-[0.4em] mb-4">
-							Contact Provider
-						</span>
-						<div className="flex flex-col gap-3">
-							<ContactActions
-								phone={company?.phone}
-								whatsapp={company?.phone}
-								email={company?.email}
-								companyName={company?.name}
-								companyId={company?.id}
-								className="w-full flex-col [&>button]:w-full"
-							/>
-							<Button
-								variant="outline"
-								className="w-full rounded-none border-border h-11 flex items-center justify-center gap-2 hover:border-primary hover:text-primary transition-colors"
-								onClick={handleShare}
-							>
-								<RiShareForwardLine className="w-4 h-4" />
-								<span className="text-[9px] font-black uppercase tracking-widest">
-									Share
-								</span>
-							</Button>
-						</div>
+					<div className="space-y-0.5 min-w-0">
+						<h4 className="font-semibold text-base text-foreground tracking-tight truncate">
+							{company?.name ?? "Seller"}
+						</h4>
+						<p className="text-xs text-muted-foreground">
+							{company?.district ?? "Regional Provider"}
+						</p>
 					</div>
 				</div>
+
+				<div className="flex items-center justify-between py-3 border-y border-border">
+					<span className="text-xs font-medium text-muted-foreground">
+						Verification
+					</span>
+					<span
+						className={cn(
+							"text-xs font-semibold",
+							company?.isVerified ? "text-emerald-600 dark:text-emerald-500" : "text-amber-500",
+						)}
+					>
+						{company?.isVerified ? "Verified" : "Pending"}
+					</span>
+				</div>
+
+				<Button
+					variant="outline"
+					className="w-full rounded-none border-border h-10 text-sm font-medium shadow-none"
+					onClick={() => company?.id && onProviderClick(company.id)}
+				>
+					View Provider
+				</Button>
+			</div>
+
+			{/* Contact & Share */}
+			<div className="border border-border p-6 space-y-4">
+				<span className="text-sm font-semibold text-foreground block">
+					Contact
+				</span>
+				<ContactActions
+					phone={company?.phone}
+					whatsapp={company?.phone}
+					email={company?.email}
+					companyName={company?.name}
+					companyId={company?.id}
+					className="w-full flex-col [&>button]:w-full [&>button]:rounded-none [&>button]:h-10 [&>button]:font-medium [&>button]:shadow-none"
+				/>
+				<Button
+					variant="ghost"
+					className="w-full rounded-none h-10 flex items-center justify-center gap-2 hover:bg-muted/50 transition-colors shadow-none text-muted-foreground"
+					onClick={handleShare}
+				>
+					<RiShareForwardLine className="w-4 h-4" />
+					<span className="text-sm font-medium">
+						Share
+					</span>
+				</Button>
 			</div>
 		</div>
 	);

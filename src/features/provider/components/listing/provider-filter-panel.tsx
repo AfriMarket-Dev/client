@@ -49,7 +49,7 @@ export const ProviderFilterPanel: React.FC<ProviderFilterPanelProps> = ({
 					value={filters.categoryId}
 					onValueChange={(val) => onFilterChange({ categoryId: val as string })}
 				>
-					<SelectTrigger className="w-full bg-background rounded-none border-border/20 font-display font-medium uppercase tracking-widest text-[10px] h-10">
+					<SelectTrigger className="w-full bg-background rounded-none border-border font-display font-medium uppercase tracking-widest text-[10px] h-10">
 						<SelectValue placeholder="All Categories">
 							{filters.categoryId === "all" || !filters.categoryId
 								? "All Categories"
@@ -58,7 +58,7 @@ export const ProviderFilterPanel: React.FC<ProviderFilterPanelProps> = ({
 									)?.name || filters.categoryId}
 						</SelectValue>
 					</SelectTrigger>
-					<SelectContent className="rounded-none border-border/20">
+					<SelectContent className="rounded-none border-border">
 						<SelectItem value="all" className="rounded-none">
 							All Categories
 						</SelectItem>
@@ -82,14 +82,14 @@ export const ProviderFilterPanel: React.FC<ProviderFilterPanelProps> = ({
 					value={filters.type}
 					onValueChange={(val) => onFilterChange({ type: val as string })}
 				>
-					<SelectTrigger className="w-full bg-background rounded-none border-border/20 font-display font-medium uppercase tracking-widest text-[10px] h-10">
+					<SelectTrigger className="w-full bg-background rounded-none border-border font-display font-medium uppercase tracking-widest text-[10px] h-10">
 						<SelectValue placeholder="All Types">
 							{filters.type === "all" || !filters.type
 								? "All Types"
 								: COMPANY_TYPE_LABELS[filters.type] || filters.type}
 						</SelectValue>
 					</SelectTrigger>
-					<SelectContent className="rounded-none border-border/20">
+					<SelectContent className="rounded-none border-border">
 						<SelectItem
 							value="all"
 							className="rounded-none text-[10px] uppercase tracking-widest"
@@ -162,7 +162,7 @@ export const ProviderFilterPanel: React.FC<ProviderFilterPanelProps> = ({
 					placeholder="e.g. Gasabo, Kicukiro"
 					value={filters.district}
 					onChange={(e) => onFilterChange({ district: e.target.value })}
-					className="bg-background rounded-none border-border/20 font-display font-medium uppercase tracking-widest text-[10px] h-10 placeholder:text-muted-foreground/30"
+					className="bg-background rounded-none border-border font-display font-medium uppercase tracking-widest text-[10px] h-10 placeholder:text-muted-foreground/30"
 				/>
 			</div>
 
@@ -177,7 +177,7 @@ export const ProviderFilterPanel: React.FC<ProviderFilterPanelProps> = ({
 					value={filters.minRating}
 					onValueChange={(val) => onFilterChange({ minRating: val as string })}
 				>
-					<SelectTrigger className="w-full bg-background rounded-none border-border/20 font-display font-medium uppercase tracking-widest text-[10px] h-10">
+					<SelectTrigger className="w-full bg-background rounded-none border-border font-display font-medium uppercase tracking-widest text-[10px] h-10">
 						<SelectValue placeholder="Any Rating">
 							{filters.minRating === "0" || !filters.minRating
 								? "Any Rating"
@@ -186,7 +186,7 @@ export const ProviderFilterPanel: React.FC<ProviderFilterPanelProps> = ({
 									: `${filters.minRating}+ Stars`}
 						</SelectValue>
 					</SelectTrigger>
-					<SelectContent className="rounded-none border-border/20">
+					<SelectContent className="rounded-none border-border">
 						<SelectItem value="0" className="rounded-none">
 							Any Rating
 						</SelectItem>
@@ -206,7 +206,7 @@ export const ProviderFilterPanel: React.FC<ProviderFilterPanelProps> = ({
 			<Separator />
 
 			{/* Verified Only */}
-			<div className="flex items-center justify-between space-x-2 border p-4 rounded-none border-border/20 bg-muted/5">
+			<div className="flex items-center justify-between space-x-2 border p-4 rounded-none border-border bg-muted/5">
 				<Label
 					htmlFor={verifiedId}
 					className="text-[10px] font-bold uppercase tracking-widest cursor-pointer flex items-center gap-2 text-foreground/70"

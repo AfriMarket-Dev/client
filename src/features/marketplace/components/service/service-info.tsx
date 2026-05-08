@@ -14,89 +14,77 @@ export const ServiceInfo: React.FC<ServiceInfoProps> = ({
   onInquire,
 }) => {
   return (
-    <div className="space-y-6">
-      {/* Title & Badges */}
-      <div className="space-y-4">
-        <div className="flex flex-wrap items-center gap-3">
-          <div className="flex items-center gap-1.5 bg-muted/30 px-2 py-0.5 border border-border/10">
+    <div className="space-y-0">
+      {/* Badges + Title */}
+      <div className="pb-6">
+        <div className="flex flex-wrap items-center gap-2 mb-3">
+          <div className="flex items-center gap-1.5 bg-muted/30 px-2 py-0.5 border border-border">
             <Eye className="w-3 h-3 text-muted-foreground" />
-            <span className="text-[10px] font-semibold text-muted-foreground uppercase tracking-[0.18em]">
+            <span className="text-xs font-medium text-muted-foreground">
               {service.views || 0} Views
             </span>
           </div>
           <div className="flex items-center gap-1.5 bg-primary/5 px-2 py-0.5 border border-primary/10">
             <History className="w-3 h-3 text-primary" />
-            <span className="text-[10px] font-semibold text-primary uppercase tracking-[0.18em]">
+            <span className="text-xs font-medium text-primary">
               {service.totalRequests || 0} Requests
             </span>
           </div>
           {service.company?.isVerified && (
-            <div className="flex items-center gap-1.5 bg-success/5 px-2 py-0.5 border border-success/10">
-              <ShieldCheck className="w-3 h-3 text-success" />
-              <span className="text-[10px] font-semibold text-success uppercase tracking-[0.18em]">
+            <div className="flex items-center gap-1.5 bg-emerald-500/5 px-2 py-0.5 border border-emerald-500/10">
+              <ShieldCheck className="w-3 h-3 text-emerald-600" />
+              <span className="text-xs font-medium text-emerald-600">
                 Certified
               </span>
             </div>
           )}
         </div>
-
-        <h1 className="text-2xl md:text-3xl lg:text-4xl font-display font-black text-foreground tracking-tight leading-[1.05]">
+        <h1 className="text-2xl md:text-3xl font-bold text-foreground tracking-tight leading-tight">
           {service.name}
         </h1>
       </div>
 
-      {/* Price Section - Prominent & Simple */}
-      <div className="py-6 border-y border-border/40">
-        <div className="flex flex-col gap-1">
-          <span className="text-[11px] font-semibold text-muted-foreground uppercase tracking-[0.2em]">
-            {service.priceType === "NEGOTIABLE"
-              ? "Service Quotation"
-              : "Active Engagement Rate"}
-          </span>
-          <div className="flex items-baseline gap-2">
-            <span className="text-3xl md:text-4xl font-heading font-black text-foreground">
-              {service.priceType === "NEGOTIABLE" ? (
-                "Price Negotiable"
-              ) : (
-                <>
-                  {service.priceType === "STARTS_AT" && (
-                    <span className="text-xs uppercase mr-1 text-muted-foreground font-bold tracking-widest">
-                      From
-                    </span>
-                  )}
-                  RWF {Number(service.price || 0).toLocaleString()}
-                </>
-              )}
-            </span>
-            {service.priceType !== "NEGOTIABLE" && service.duration && (
-              <span className="text-xs text-muted-foreground font-semibold uppercase tracking-[0.2em]">
-                / {service.duration}
-              </span>
+      {/* Price — visually anchored in a tinted card */}
+      <div className="py-5 px-5 bg-muted/30 border border-border mb-6">
+        <span className="text-xs font-medium text-muted-foreground block mb-1">
+          Price
+        </span>
+        <div className="flex items-baseline gap-2">
+          <span className="text-2xl font-bold text-foreground tracking-tight">
+            {service.priceType === "NEGOTIABLE" ? (
+              "Negotiable"
+            ) : (
+              <>
+                {service.priceType === "STARTS_AT" && (
+                  <span className="text-sm text-muted-foreground font-medium mr-1">
+                    From
+                  </span>
+                )}
+                RWF {Number(service.price || 0).toLocaleString()}
+              </>
             )}
-          </div>
+          </span>
+          {service.priceType !== "NEGOTIABLE" && service.duration && (
+            <span className="text-sm text-muted-foreground font-medium">
+              / {service.duration}
+            </span>
+          )}
         </div>
       </div>
 
       {/* Description */}
-      <div className="space-y-4">
-        <div className="flex items-center gap-2 text-muted-foreground">
-          <div className="w-6 h-px bg-border" />
-          <span className="text-[10px] font-semibold uppercase tracking-[0.2em]">
-            Professional Brief
-          </span>
-        </div>
-        <p className="text-sm md:text-base text-muted-foreground font-medium leading-relaxed max-w-2xl">
-          {service.description ||
-            "Professional industry service calibrated for enterprise requirements and reliability. Full capability details and service level agreements are outlined below."}
+      <div className="py-6 border-t border-border">
+        <p className="text-sm text-muted-foreground leading-relaxed">
+          {service.description || "No description provided."}
         </p>
       </div>
 
       {/* Primary Action */}
-      <div className="pt-6 pb-2 flex flex-col sm:flex-row gap-4">
+      <div className="pt-2">
         <Button
           onClick={onInquire}
           size="lg"
-          className="h-14 flex-1 rounded-none transition-all duration-300 font-heading font-black uppercase tracking-[0.2em] text-[10px] shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] py-4"
+          className="h-11 w-full rounded-none text-sm font-semibold shadow-none"
         >
           <RiChat3Line size={16} className="mr-2" />
           Send Inquiry

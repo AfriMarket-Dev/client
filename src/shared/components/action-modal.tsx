@@ -108,7 +108,7 @@ export function ActionModal({
 
 				<div className="space-y-4 py-2">
 					{message && (
-						<div className={`border rounded-lg p-4 text-sm ${config.warning}`}>
+						<div className={`border rounded-md p-4 text-sm ${config.warning}`}>
 							{message}
 						</div>
 					)}

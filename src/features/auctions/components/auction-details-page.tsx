@@ -7,6 +7,7 @@ import {
 } from "@remixicon/react";
 import { useNavigate, useParams } from "@tanstack/react-router";
 import { useState } from "react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
 	Empty,
@@ -16,6 +17,7 @@ import {
 	EmptyMedia,
 	EmptyTitle,
 } from "@/components/ui/empty";
+import { cn } from "@/lib/utils";
 import { useGetAuctionByIdQuery } from "@/services/api/auctions";
 import { ContactActions } from "@/shared/components/contact-actions";
 import { DetailsPageLayout } from "@/shared/components/layouts/details-page-layout";
@@ -38,25 +40,24 @@ export function AuctionDetailsPage() {
 	if (!auction) {
 		return (
 			<div className="flex min-h-[60vh] items-center justify-center p-6">
-				<Empty className="max-w-md w-full">
+				<Empty className="max-w-md w-full border-y border-border rounded-none shadow-none py-12">
 					<EmptyHeader>
 						<EmptyMedia variant="icon">
-							<RiAuctionLine className="w-4 h-4 text-primary" />
+							<RiAuctionLine className="w-8 h-8 text-muted-foreground" />
 						</EmptyMedia>
-						<EmptyTitle className="text-xl font-display font-black uppercase">
-							Auction Not Found
+						<EmptyTitle className="text-xl font-semibold tracking-tight">
+							Auction Offline
 						</EmptyTitle>
-						<EmptyDescription className="uppercase tracking-widest text-[10px]">
-							The auction you are looking for may have ended, been removed, or
-							does not exist.
+						<EmptyDescription className="text-sm text-muted-foreground">
+							The requested auction terminal is currently unavailable or archived.
 						</EmptyDescription>
 					</EmptyHeader>
 					<EmptyContent>
 						<Button
 							onClick={() => navigate({ to: "/auctions" })}
-							className="rounded-none h-11 px-8 font-black uppercase text-[10px] tracking-widest"
+							className="rounded-none h-12 px-8 font-medium shadow-none transition-all duration-300"
 						>
-							Back to Auctions
+							Return to Index
 						</Button>
 					</EmptyContent>
 				</Empty>
@@ -72,8 +73,9 @@ export function AuctionDetailsPage() {
 			badgeText={statusLabel}
 			onBack={() => navigate({ to: "/auctions" })}
 			gallery={
-				<div className="space-y-4">
-					<div className="aspect-4/5 relative bg-muted/30 border border-border/40 flex items-center justify-center overflow-hidden w-full group">
+				<div className="flex flex-col md:flex-row gap-8 h-full">
+					{/* Main Image Stage */}
+					<div className="flex-1 aspect-square md:aspect-auto relative bg-muted/5 flex items-center justify-center overflow-hidden group">
 						{auction.images && auction.images.length > 0 ? (
 							<img
 								src={auction.images[currentImageIdx] || auction.images[0]}
@@ -86,21 +88,33 @@ export function AuctionDetailsPage() {
 						) : (
 							<RiAuctionLine className="h-24 w-24 text-muted-foreground/20" />
 						)}
+						
+						{/* Image Counter Badge */}
+						<div className="absolute top-4 left-4">
+							<Badge className="bg-background/80 backdrop-blur-sm text-foreground border-none rounded-none px-3 py-1 text-xs font-medium shadow-none">
+								{currentImageIdx + 1} / {auction.images?.length || 1}
+							</Badge>
+						</div>
 					</div>
 
 					{auction.images && auction.images.length > 1 && (
-						<div className="grid grid-cols-4 sm:grid-cols-5 gap-2 sm:gap-4">
+						<div className="w-full md:w-28 flex md:flex-col gap-4 overflow-x-auto md:overflow-y-auto no-scrollbar">
 							{auction.images.map((img: string, idx: number) => (
 								<button
 									key={idx}
 									type="button"
 									onClick={() => setCurrentImageIdx(idx)}
-									className="aspect-square bg-muted border border-border/40 cursor-pointer overflow-hidden hover:border-primary/40 transition-colors p-0 focus:outline-none"
+									className={cn(
+										"flex-1 md:flex-none aspect-square w-20 md:w-full shrink-0 overflow-hidden rounded-none border transition-all duration-200 p-0 shadow-none",
+										currentImageIdx === idx
+											? "border-foreground bg-background opacity-100"
+											: "border-transparent opacity-60 hover:opacity-100 hover:border-border"
+									)}
 								>
 									<img
 										src={img}
 										alt={`${auction.title} ${idx + 1}`}
-										className={`size-full object-cover hover:opacity-80 transition-opacity ${currentImageIdx === idx ? "opacity-100 ring-2 ring-primary ring-inset" : "opacity-60"}`}
+										className="size-full object-cover"
 										onError={(e) => {
 											e.currentTarget.src = "/image-fallback.svg";
 										}}
@@ -112,128 +126,131 @@ export function AuctionDetailsPage() {
 				</div>
 			}
 			info={
-				<div className="space-y-8">
-					<div className="space-y-4 border-b border-border/40 pb-6 text-foreground">
-						<div className="flex flex-wrap gap-2 items-center">
-							<span className="text-xs text-muted-foreground font-mono">
-								ID: {auction.id.slice(0, 8)}...
-							</span>
-							<div className="h-1 w-1 rounded-full bg-border/60" />
-							<span className="text-xs text-muted-foreground font-mono">
-								{auction.company?.district || "RW"}
+				<div className="space-y-12">
+					{/* Header Info */}
+					<div className="space-y-6">
+						<div className="flex items-center gap-3">
+							<div className="w-8 h-[2px] bg-primary/60" />
+							<span className="text-xs font-medium text-muted-foreground">
+								Auction
 							</span>
 						</div>
-						<h1 className="text-3xl sm:text-4xl md:text-5xl font-heading font-black uppercase tracking-tight leading-[1.1]">
+						<h1 className="text-2xl md:text-3xl font-bold text-foreground tracking-tight leading-tight">
 							{auction.title}
 						</h1>
+						<div className="flex items-center gap-4 text-sm font-medium text-muted-foreground">
+							<span>Terminal ID: {auction.id.slice(0, 8)}</span>
+							<div className="w-1 h-1 rounded-full bg-foreground/20" />
+							<span>Location: {auction.company?.district || "Kigali, RW"}</span>
+						</div>
 					</div>
 
-					<div className="bg-muted/10 p-6 border border-border/40 space-y-4">
-						<div className="flex flex-col">
-							<span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground mb-1">
-								Current / Starting Bid
+					{/* Bid Section */}
+					<div className="py-8 space-y-8 border-y border-border">
+						<div className="relative z-10 flex flex-col gap-2">
+							<span className="text-xs font-medium text-muted-foreground">
+								Current Bid
 							</span>
-							<p className="text-3xl font-mono font-black text-primary">
-								{auction.startingPrice.toLocaleString()} RWF
-							</p>
+							<div className="flex items-baseline gap-2">
+								<p className="text-2xl md:text-3xl font-bold text-foreground tracking-tight leading-none">
+									{auction.startingPrice.toLocaleString()}
+								</p>
+								<span className="text-sm font-medium text-muted-foreground">RWF</span>
+							</div>
 						</div>
 
-						<div className="grid grid-cols-2 gap-4 pt-4 border-t border-border/20">
-							<div className="flex flex-col gap-1">
-								<span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground flex items-center">
-									<RiCalendarEventLine className="w-3 h-3 mr-1" /> Starts
-								</span>
-								<span className="text-sm font-medium">
+						<div className="grid grid-cols-1 sm:grid-cols-2 gap-8 pt-6 border-t border-border">
+							<div className="space-y-2">
+								<div className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
+									<RiCalendarEventLine className="w-4 h-4" />
+									<span>Opening Date</span>
+								</div>
+								<p className="text-sm font-semibold text-foreground">
 									{formatDateTime(auction.startDate)}
-								</span>
+								</p>
 							</div>
-							<div className="flex flex-col gap-1">
-								<span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground flex items-center">
-									<RiCalendarEventLine className="w-3 h-3 mr-1 text-destructive/70" />{" "}
-									Ends
-								</span>
-								<span className="text-sm font-medium">
+							<div className="space-y-2">
+								<div className="flex items-center gap-2 text-sm font-medium text-destructive">
+									<RiCalendarEventLine className="w-4 h-4" />
+									<span>Closes</span>
+								</div>
+								<p className="text-sm font-semibold text-foreground">
 									{formatDateTime(auction.endDate)}
-								</span>
+								</p>
 							</div>
 						</div>
 					</div>
 
-					<div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-border/40 border border-border/40 shadow-sm">
-						<div className="bg-background p-4 flex flex-col gap-1">
-							<span className="text-[9px] font-black text-muted-foreground uppercase tracking-widest flex items-center gap-1.5">
-								<RiCalendarEventLine size={12} className="text-primary" />
-								Starts
-							</span>
-							<span className="text-[11px] font-bold uppercase truncate">
-								{formatDateTime(auction.startDate)}
-							</span>
-						</div>
-						<div className="bg-background p-4 flex flex-col gap-1">
-							<span className="text-[9px] font-black text-muted-foreground uppercase tracking-widest flex items-center gap-1.5">
-								<RiCalendarEventLine size={12} className="text-primary" />
-								Ends
-							</span>
-							<span className="text-[11px] font-bold uppercase truncate">
-								{formatDateTime(auction.endDate)}
-							</span>
-						</div>
-						<div className="bg-background p-4 flex flex-col gap-1">
-							<span className="text-[9px] font-black text-muted-foreground uppercase tracking-widest flex items-center gap-1.5">
-								<RiAuctionLine size={12} className="text-primary" />
+					{/* Stats Grid */}
+					<div className="grid grid-cols-2 gap-8 pt-4">
+						<div className="flex flex-col gap-2">
+							<span className="text-xs font-medium text-muted-foreground flex items-center gap-2">
+								<RiAuctionLine size={14} className="text-primary/70" />
 								Active Bids
 							</span>
-							<span className="text-[11px] font-bold uppercase">
-								{auction.bidsCount || 0}
+							<span className="text-sm font-semibold text-foreground">
+								{auction.bidsCount || 0} Entries
 							</span>
 						</div>
-						<div className="bg-background p-4 flex flex-col gap-1">
-							<span className="text-[9px] font-black text-muted-foreground uppercase tracking-widest flex items-center gap-1.5">
-								<RiHistoryLine size={12} className="text-primary" />
+						<div className="flex flex-col gap-2">
+							<span className="text-xs font-medium text-muted-foreground flex items-center gap-2">
+								<RiHistoryLine size={14} className="text-primary/70" />
 								Views
 							</span>
-							<span className="text-[11px] font-bold uppercase">
-								{auction.views || 0}
+							<span className="text-sm font-semibold text-foreground">
+								{auction.views || 0} Accesses
 							</span>
 						</div>
+					</div>
+
+					{/* Description */}
+					<div className="space-y-4 pt-8">
+						<h3 className="text-lg font-semibold text-foreground">
+							Description
+						</h3>
+						<p className="text-base text-muted-foreground leading-relaxed whitespace-pre-wrap">
+							{auction.description || "Comprehensive documentation of the asset and its current condition within the industrial context."}
+						</p>
 					</div>
 				</div>
 			}
 			tabs={
-				<div className="space-y-12">
-					<section className="space-y-4">
-						<h3 className="text-sm font-black uppercase tracking-widest border-b border-border/40 pb-2">
-							Description
-						</h3>
-						<p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-wrap">
-							{auction.description || "No description provided."}
-						</p>
-					</section>
-
+				<div className="space-y-8">
+					<div className="flex items-center gap-6">
+						<h2 className="text-2xl md:text-3xl font-semibold text-foreground tracking-tight">
+							Specifications
+						</h2>
+						<div className="flex-1 h-px bg-border/30" />
+					</div>
 					<SpecificationList specifications={auction.specifications} />
 				</div>
 			}
 			sidebar={
-				<div className="space-y-8">
+				<div className="space-y-12">
 					{auction.company && (
-						<div className="space-y-3">
-							<h3 className="text-sm font-black uppercase tracking-widest border-b border-border/40 pb-2">
-								Listed By
-							</h3>
-							<div className="flex flex-col gap-4 bg-muted/20 p-4 border border-border/40">
-								<div className="flex items-center gap-4">
-									<div className="h-12 w-12 rounded-none bg-primary/10 flex items-center justify-center border border-primary/20 shrink-0">
-										<RiStore2Line className="h-6 w-6 text-primary" />
-									</div>
-									<div className="flex-1 min-w-0">
-										<p className="text-sm font-bold uppercase truncate">
-											{auction.company.name}
-										</p>
-										<p className="text-xs text-muted-foreground">
-											Vendor • {auction.company.district || "RW"}
-										</p>
-									</div>
+						<div className="space-y-6">
+							<div className="flex items-center justify-between border-b border-border pb-4">
+								<span className="text-sm font-semibold text-foreground">
+									Seller
+								</span>
+							</div>
+							
+							<div className="flex items-start gap-5">
+								<div className="w-16 h-16 rounded-none bg-muted text-foreground flex items-center justify-center text-2xl font-bold border-none">
+									<RiStore2Line className="h-6 w-6" />
 								</div>
+								<div className="space-y-1.5 pt-1 flex-1">
+									<p className="text-xl font-semibold text-foreground tracking-tight">
+										{auction.company.name}
+									</p>
+									<p className="text-sm font-medium text-muted-foreground flex items-center gap-2">
+										<div className="w-1.5 h-1.5 rounded-none bg-primary/70" />
+										{auction.company.district || "Regional Vendor"}
+									</p>
+								</div>
+							</div>
+
+							<div className="space-y-4 pt-4">
 								<ContactActions
 									phone={auction.company.phone}
 									whatsapp={auction.company.phone}
@@ -242,10 +259,11 @@ export function AuctionDetailsPage() {
 									companyId={auction.company.id}
 									auctionId={auction.id}
 									size="sm"
+									className="w-full flex-col [&>button]:w-full [&>button]:rounded-none [&>button]:h-11 [&>button]:font-medium [&>button]:shadow-none"
 								/>
 								<Button
 									variant="outline"
-									className="h-9 w-full rounded-none text-[10px] font-black uppercase tracking-widest border-border/40"
+									className="w-full h-11 rounded-none font-medium shadow-none transition-all duration-300"
 									onClick={() =>
 										navigate({
 											to: "/providers/$providerId",
@@ -253,18 +271,18 @@ export function AuctionDetailsPage() {
 										})
 									}
 								>
-									View Profile
+									View Provider
 								</Button>
 							</div>
 						</div>
 					)}
 
-					<div className="pt-6 border-t border-border/40">
+					<div className="pt-6 border-t border-border">
 						<Button
 							onClick={() => setIsBidModalOpen(true)}
-							className="w-full h-14 rounded-none text-xs font-black uppercase tracking-widest shadow-lg shadow-primary/20"
+							className="w-full h-14 rounded-none font-semibold text-base shadow-none transition-all duration-300"
 						>
-							<RiMoneyDollarCircleLine className="mr-2 h-5 w-5" />
+							<RiMoneyDollarCircleLine className="mr-3 h-5 w-5" />
 							Place Bid
 						</Button>
 					</div>

@@ -103,24 +103,24 @@ export default function ProductView({
 
 	if (!product && !isFetching)
 		return (
-			<Empty className="max-w-md w-full">
+			<Empty className="max-w-md w-full border-y border-border rounded-none shadow-none py-12">
 				<EmptyHeader>
 					<EmptyMedia variant="icon">
-						<Building2 className="w-4 h-4 text-primary" />
+						<Building2 className="w-8 h-8 text-muted-foreground" />
 					</EmptyMedia>
-					<EmptyTitle className="text-xl font-display font-black uppercase">
-						Product Missing
+					<EmptyTitle className="text-xl font-semibold tracking-tight">
+						Resource Missing
 					</EmptyTitle>
-					<EmptyDescription className="uppercase tracking-widest text-[10px]">
-						The requested resource is unavailable or has been archived.
+					<EmptyDescription className="text-sm text-muted-foreground">
+						The requested item is currently offline or archived.
 					</EmptyDescription>
 				</EmptyHeader>
 				<EmptyContent>
 					<Button
 						onClick={backHandler}
-						className="rounded-none h-11 px-8 font-black uppercase text-[10px] tracking-widest"
+						className="h-12 px-8 font-medium rounded-none shadow-none"
 					>
-						Return to Catalog
+						Return to Index
 					</Button>
 				</EmptyContent>
 			</Empty>
@@ -131,7 +131,7 @@ export default function ProductView({
 	return (
 		<DetailsPageLayout
 			title={product.name}
-			badgeText={isFetching && product ? "Syncing..." : (product.category?.name || "Standardized Item")}
+			badgeText={isFetching && product ? "Synchronizing..." : (product.category?.name || "Standardized Item")}
 			onBack={backHandler}
 			mobileActions={
 				<MobileActions
@@ -144,49 +144,29 @@ export default function ProductView({
 				/>
 			}
 			headerAction={
-				<div className="flex items-center gap-4">
+				<div className="flex items-center gap-6">
 					<div className="hidden lg:flex flex-col items-end">
-						<span className="text-[8px] font-black uppercase tracking-widest text-muted-foreground">Listing Status</span>
-						<span className="text-[10px] font-bold text-success uppercase">Active & Verified</span>
+						<span className="text-xs font-medium text-muted-foreground">Verification Status</span>
+						<span className="text-sm font-semibold text-emerald-600 dark:text-emerald-500">Active & Authenticated</span>
 					</div>
 					<Button
 						onClick={() => setShowContactModal(true)}
-						className="hidden md:inline-flex h-10 px-6 rounded-none text-[10px] font-black uppercase tracking-[0.3em] shadow-lg shadow-primary/20"
+						className="hidden md:inline-flex h-11 px-8 rounded-none font-medium shadow-none transition-all duration-300"
 					>
-						Direct Inquiry
+						Submit Inquiry
 					</Button>
 				</div>
 			}
 			gallery={
-				<div className="space-y-6 md:space-y-8">
-					<ProductGallery
-						images={images}
-						name={product.name}
-						selectedImageIndex={selectedImageIndex}
-						onImageSelect={setSelectedImageIndex}
-					/>
-					
-					{/* Integrated Trust Signals */}
-					<div className="grid grid-cols-1 xs:grid-cols-2 gap-3 md:gap-4">
-						<div className="p-4 border border-border/40 bg-muted/5 flex items-center gap-4">
-							<div className="w-1 h-8 bg-primary/20" />
-							<div className="space-y-1">
-								<p className="text-[9px] font-black uppercase tracking-widest text-foreground">QC Verified</p>
-								<p className="text-[8px] font-medium uppercase text-muted-foreground">Certified quality standards</p>
-							</div>
-						</div>
-						<div className="p-4 border border-border/40 bg-muted/5 flex items-center gap-4">
-							<div className="w-1 h-8 bg-primary/20" />
-							<div className="space-y-1">
-								<p className="text-[9px] font-black uppercase tracking-widest text-foreground">Bulk Available</p>
-								<p className="text-[8px] font-medium uppercase text-muted-foreground">Enterprise volume support</p>
-							</div>
-						</div>
-					</div>
-				</div>
+				<ProductGallery
+					images={images}
+					name={product.name}
+					selectedImageIndex={selectedImageIndex}
+					onImageSelect={setSelectedImageIndex}
+				/>
 			}
 			info={
-				<div className="space-y-10">
+				<div className="space-y-16">
 					<ProductInfo
 						name={product.name}
 						description={product.description}
@@ -199,51 +179,46 @@ export default function ProductView({
 						onInquire={() => setShowContactModal(true)}
 					/>
 
-					{/* Variant Selector Interface */}
+					{/* Variant Selection */}
 					{variants.length > 1 && (
-						<div className="p-5 md:p-6 border border-border/40 bg-background relative group">
-							<div className="absolute top-0 left-0 w-1 h-0 bg-primary group-hover:h-full transition-all duration-500" />
-							<div className="space-y-6">
-								<div className="flex items-center justify-between">
-									<span className="text-[10px] font-black uppercase tracking-[0.3em] text-foreground">
-										Configuration Selection
-									</span>
-									<span className="text-[9px] font-bold text-primary uppercase tracking-widest">
-										{variants.length} Options
-									</span>
-								</div>
-								<div className="flex flex-wrap gap-2">
-									{variants.map((v) => {
-										const isActive = selectedVariantId === v.id || (!selectedVariantId && v === variants[0]);
-										return (
-											<button
-												key={v.id}
-												type="button"
-												onClick={() => handleVariantSelect(v.id)}
-												className={cn(
-													"flex-1 min-w-[110px] px-3 py-3 text-[9px] font-black uppercase tracking-widest border transition-all duration-300 rounded-none text-center",
-													isActive
-														? "border-primary bg-primary text-primary-foreground shadow-lg shadow-primary/20"
-														: "border-border/60 text-muted-foreground hover:border-primary/40 hover:bg-muted/5"
-												)}
-											>
-												{v.name}
-											</button>
-										);
-									})}
-								</div>
+						<div className="space-y-5">
+							<div className="flex items-center gap-4">
+								<h3 className="text-sm font-semibold text-foreground">
+									Configuration Options
+								</h3>
+								<div className="flex-1 h-px bg-border/30" />
+							</div>
+							<div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+								{variants.map((v) => {
+									const isActive = selectedVariantId === v.id || (!selectedVariantId && v === variants[0]);
+									return (
+										<button
+											key={v.id}
+											type="button"
+											onClick={() => handleVariantSelect(v.id)}
+											className={cn(
+												"px-4 py-3 text-sm font-medium rounded-none transition-all duration-300 text-center border shadow-none",
+												isActive
+													? "bg-primary/5 border-primary text-primary"
+													: "bg-background border-border text-foreground hover:bg-muted/50"
+											)}
+										>
+											{v.name}
+										</button>
+									);
+								})}
 							</div>
 						</div>
 					)}
 				</div>
 			}
 			tabs={
-				<div className="space-y-8 md:space-y-10">
-					<div className="flex items-center gap-4">
-						<h2 className="text-xl md:text-2xl font-display font-black text-foreground uppercase tracking-tighter">
-							Technical Documentation
+				<div className="space-y-8">
+					<div className="flex items-center gap-6">
+						<h2 className="text-2xl md:text-3xl font-semibold text-foreground tracking-tight">
+							Details
 						</h2>
-						<div className="flex-1 h-px bg-border/40" />
+						<div className="flex-1 h-px bg-border/30" />
 					</div>
 
 					<Tabs
@@ -252,33 +227,32 @@ export default function ProductView({
 						className="w-full"
 					>
 						<div className="relative mb-8">
-							<TabsList className="!flex w-full justify-start !rounded-none !bg-transparent !border-b !border-border/40 !h-auto !p-0 !gap-6 md:gap-8 overflow-x-auto no-scrollbar whitespace-nowrap">
+							<TabsList className="!flex w-full justify-start !rounded-none !bg-transparent border-b border-border !h-auto !p-0 gap-8 overflow-x-auto no-scrollbar whitespace-nowrap">
 								<TabsTrigger
 									value="overview"
-									className="data-[state=active]:!text-primary !rounded-none !border-b-2 !border-transparent data-[state=active]:!border-primary !pb-4 !px-0 !h-auto font-heading font-black uppercase text-[10px] tracking-[0.2em] !shadow-none !bg-transparent"
+									className="data-[state=active]:border-primary data-[state=active]:text-primary data-[state=active]:bg-transparent !rounded-none border-b-2 border-transparent py-3 px-1 !h-auto font-medium text-sm text-muted-foreground hover:text-foreground !shadow-none transition-colors"
 								>
 									Overview
 								</TabsTrigger>
 								<TabsTrigger
 									value="specifications"
-									className="data-[state=active]:!text-primary !rounded-none !border-b-2 !border-transparent data-[state=active]:!border-primary !pb-4 !px-0 !h-auto font-heading font-black uppercase text-[10px] tracking-[0.2em] !shadow-none !bg-transparent"
+									className="data-[state=active]:border-primary data-[state=active]:text-primary data-[state=active]:bg-transparent !rounded-none border-b-2 border-transparent py-3 px-1 !h-auto font-medium text-sm text-muted-foreground hover:text-foreground !shadow-none transition-colors"
 								>
 									Specifications
 								</TabsTrigger>
 								<TabsTrigger
 									value="reviews"
-									className="data-[state=active]:!text-primary !rounded-none !border-b-2 !border-transparent data-[state=active]:!border-primary !pb-4 !px-0 !h-auto font-heading font-black uppercase text-[10px] tracking-[0.2em] !shadow-none !bg-transparent"
+									className="data-[state=active]:border-primary data-[state=active]:text-primary data-[state=active]:bg-transparent !rounded-none border-b-2 border-transparent py-3 px-1 !h-auto font-medium text-sm text-muted-foreground hover:text-foreground !shadow-none transition-colors"
 								>
 									Reviews
 								</TabsTrigger>
 							</TabsList>
-							{/* Swipe Indicator Overlay */}
-							<div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-background via-background/80 to-transparent pointer-events-none sm:hidden" />
 						</div>
 						
-						<div className="mt-8 md:mt-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
+						<div className="animate-in fade-in duration-500">
 							<TabsContent value="overview" className="mt-0 outline-none">
 								<ProductTabsContent
+									productId={product.id}
 									description={product.description || ""}
 									keyFacts={keyFacts}
 									variantName={selectedVariant?.name}
@@ -288,18 +262,17 @@ export default function ProductView({
 							<TabsContent value="specifications" className="mt-0 outline-none">
 								<SpecificationList 
 									specifications={product.specifications} 
-									title="Material Specifications"
+									title="Material Properties"
 								/>
 							</TabsContent>
 							<TabsContent value="reviews" className="mt-0 outline-none">
-								<div className="py-24 text-center border border-dashed border-border/40 bg-muted/5 relative overflow-hidden">
-									<div className="absolute inset-0 blueprint-grid opacity-[0.02] pointer-events-none" />
-									<div className="relative z-10 space-y-2">
-										<p className="text-[11px] font-black uppercase tracking-[0.4em] text-foreground/40">
-											Verification Pending
+								<div className="py-20 text-center border-y border-border bg-muted/5 relative overflow-hidden">
+									<div className="relative z-10 space-y-3 px-4">
+										<p className="text-base font-semibold text-foreground">
+											Status: Aggregating Data
 										</p>
-										<p className="text-[9px] font-bold uppercase text-muted-foreground tracking-widest">
-											User reports are being aggregated for this listing
+										<p className="text-sm text-muted-foreground">
+											Feedback and performance metrics are currently under verification.
 										</p>
 									</div>
 								</div>
@@ -309,35 +282,12 @@ export default function ProductView({
 				</div>
 			}
 			sidebar={
-				<div className="space-y-8">
+				<div className="space-y-16">
 					<ProductSidebar
 						company={product.company}
 						productName={product.name}
 						onProviderClick={onProviderClick || (() => {})}
 					/>
-					
-					{/* Additional Sidebar Context */}
-					<div className="p-6 md:p-8 border border-border/40 bg-muted/10 relative overflow-hidden">
-						<div className="absolute inset-0 blueprint-grid opacity-5 pointer-events-none" />
-						<div className="relative z-10 space-y-4">
-							<h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-foreground">
-								Procurement Logistics
-							</h4>
-							<ul className="space-y-3">
-								{[
-									"Direct site delivery",
-									"Standard lead time: 48h",
-									"Bulk order discounts",
-									"Technical consultancy"
-								].map((item, i) => (
-									<li key={i} className="flex items-center gap-3">
-										<div className="w-1 h-1 bg-primary/40 rotate-45" />
-										<span className="text-[9px] font-bold uppercase tracking-wider text-muted-foreground">{item}</span>
-									</li>
-								))}
-							</ul>
-						</div>
-					</div>
 				</div>
 			}
 			modals={

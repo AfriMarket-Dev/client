@@ -48,7 +48,7 @@ export const ProviderContactBar: React.FC<ProviderContactBarProps> = ({
 					</div>
 					<Button
 						size="lg"
-						className="flex-none font-heading font-black uppercase tracking-widest text-[10px] h-11 px-6 rounded-none bg-primary text-primary-foreground hover:bg-primary/90 shadow-md shadow-primary/20 transition-all duration-300"
+						className="flex-none font-semibold h-11 px-6 rounded-none shadow-none transition-all duration-300"
 						onClick={onContactClick}
 					>
 						Contact
@@ -62,7 +62,7 @@ export const ProviderContactBar: React.FC<ProviderContactBarProps> = ({
 		<div className="items-center gap-3 pt-2 hidden md:flex">
 			<Button
 				size="lg"
-				className="rounded-none h-12 font-heading font-black uppercase tracking-widest text-[10px] px-8 bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg shadow-primary/20 transition-all duration-300"
+				className="rounded-none h-12 font-semibold px-8 shadow-none transition-all duration-300"
 				onClick={onContactClick}
 			>
 				<RiMessage2Line size={16} className="mr-2" />

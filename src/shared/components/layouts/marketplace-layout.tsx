@@ -32,6 +32,7 @@ interface MarketplaceLayoutProps {
 	title: string;
 	subtitle?: string;
 	className?: string;
+	isPending?: boolean;
 }
 
 export function MarketplaceLayout({
@@ -51,7 +52,7 @@ export function MarketplaceLayout({
 	subtitle,
 	className,
 	isPending,
-}: MarketplaceLayoutProps & { isPending?: boolean }) {
+}: MarketplaceLayoutProps) {
 	return (
 		<div className={cn("min-h-screen bg-background relative", className)}>
 			{/* Top Progress Bar for Transitions */}
@@ -62,21 +63,18 @@ export function MarketplaceLayout({
 			)}
 
 			{/* Header Section */}
-			<div className="bg-background border-b border-border sticky top-[56px] z-30 py-3 md:py-5">
-				<div className="max-w-[1800px] mx-auto px-2 md:px-6">
+			<div className="bg-background border-b border-border sticky top-[56px] z-30 py-4 md:py-6">
+				<div className="max-w-[1800px] mx-auto px-4 md:px-8">
 					{header || (
 						<div className="flex flex-row items-center justify-between gap-4">
-							<div className="space-y-0.5">
-								<h1 className="text-xl md:text-3xl font-display font-black uppercase text-foreground tracking-tighter leading-none">
+							<div className="space-y-1">
+								<h1 className="text-2xl md:text-3xl font-bold text-foreground tracking-tight leading-none">
 									{title}
 								</h1>
 								{subtitle && (
-									<div className="hidden xs:flex items-center gap-2">
-										<div className="h-px w-6 bg-primary" />
-										<p className="text-[9px] font-bold text-muted-foreground uppercase tracking-[0.3em]">
-											{subtitle}
-										</p>
-									</div>
+									<p className="text-sm font-medium text-muted-foreground mt-1">
+										{subtitle}
+									</p>
 								)}
 							</div>
 						</div>
@@ -84,21 +82,21 @@ export function MarketplaceLayout({
 				</div>
 			</div>
 
-			<div className="max-w-[1800px] mx-auto px-1 md:px-6 py-6 md:py-8">
-				<div className="flex flex-col lg:flex-row gap-8 items-start">
+			<div className="max-w-[1800px] mx-auto px-4 md:px-8 py-8 md:py-10">
+				<div className="flex flex-col lg:flex-row gap-10 items-start">
 					{/* Desktop Sidebar Filters */}
 					{showFilters && sidebar && (
-						<aside className="hidden lg:block w-64 shrink-0 sticky top-24">
-							<div className="flex items-center justify-between mb-6 pb-3 border-b border-border/50 pr-4">
-								<h2 className="text-[10px] font-display font-black uppercase tracking-[0.2em] flex items-center gap-2">
-									<SlidersHorizontal className="w-3.5 h-3.5 text-primary" />
+						<aside className="hidden lg:block w-64 shrink-0 sticky top-32">
+							<div className="flex items-center justify-between mb-6 pb-4 border-b border-border/50 pr-4">
+								<h2 className="text-sm font-semibold flex items-center gap-2">
+									<SlidersHorizontal className="w-4 h-4 text-primary" />
 									Filters
 								</h2>
 								{hasActiveFilters && (
 									<Button
 										variant="ghost"
 										size="sm"
-										className="h-5 px-0 text-[8px] uppercase font-black tracking-widest text-muted-foreground/60 hover:text-destructive hover:bg-transparent"
+										className="h-8 px-2 text-xs font-medium text-muted-foreground hover:text-destructive hover:bg-transparent"
 										onClick={onResetFilters}
 									>
 										Reset
@@ -111,12 +109,12 @@ export function MarketplaceLayout({
 
 					{/* Main Content Area */}
 					<div className="flex-1 min-w-0">
-						<div className="flex flex-col gap-4 mb-8">
+						<div className="flex flex-col gap-6 mb-8">
 							{/* Toolbar with integrated mobile filter trigger */}
-							<div className="flex items-start gap-2 ">
+							<div className="flex items-start gap-4">
 								<div className="flex-1">{toolbar}</div>
 
-								{/* Mobile Filter Trigger (passed through Toolbar usually, but handled here for consistency) */}
+								{/* Mobile Filter Trigger */}
 								{showFilters && (
 									<div className="lg:hidden">
 										<Drawer
@@ -127,19 +125,19 @@ export function MarketplaceLayout({
 												<Button
 													variant="outline"
 													size="sm"
-													className="rounded-none border-border/40 h-10 font-black uppercase text-[10px] tracking-widest px-4 gap-2"
+													className="h-10 font-medium px-4 gap-2"
 												>
-													<SlidersHorizontal className="w-3.5 h-3.5" />
+													<SlidersHorizontal className="w-4 h-4" />
 													Filters
 													{hasActiveFilters && (
-														<span className="w-1.5 h-1.5 rounded-full bg-primary" />
+														<span className="w-2 h-2 rounded-full bg-primary" />
 													)}
 												</Button>
 											</DrawerTrigger>
 											<DrawerContent className="bg-background flex flex-col max-h-[85vh]">
-												<DrawerHeader className="p-6 border-b border-border/40 shrink-0 text-left">
-													<DrawerTitle className="text-[10px] font-display font-black uppercase tracking-[0.2em] flex items-center gap-2">
-														<SlidersHorizontal className="w-3.5 h-3.5 text-primary" />
+												<DrawerHeader className="p-6 border-b border-border shrink-0 text-left">
+													<DrawerTitle className="text-lg font-semibold flex items-center gap-2">
+														<SlidersHorizontal className="w-5 h-5 text-primary" />
 														{title} Filters
 													</DrawerTitle>
 												</DrawerHeader>
@@ -147,11 +145,10 @@ export function MarketplaceLayout({
 													{mobileFilters || sidebar}
 												</div>
 												{hasActiveFilters && (
-													<div className="p-6 border-t border-border/40 shrink-0 bg-muted/5">
+													<div className="p-6 border-t border-border shrink-0 bg-muted/20">
 														<Button
-															variant="ghost"
-															size="sm"
-															className="w-full justify-center h-10 text-[9px] uppercase font-black tracking-[0.2em] border border-destructive/20 text-destructive hover:bg-destructive/5"
+															variant="outline"
+															className="w-full text-destructive border-destructive/30 hover:bg-destructive/5 hover:text-destructive"
 															onClick={() => {
 																onResetFilters();
 																setIsMobileFiltersOpen(false);
@@ -168,7 +165,9 @@ export function MarketplaceLayout({
 							</div>
 
 							{/* Active Filter Badges */}
-							{activeFilters}
+							{activeFilters && (
+								<div className="pt-2">{activeFilters}</div>
+							)}
 						</div>
 
 						{/* Results Content */}

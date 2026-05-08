@@ -122,7 +122,7 @@ export const ProviderContactModal: React.FC<ProviderContactModalProps> = ({
 						e.stopPropagation();
 						form.handleSubmit();
 					}}
-					className="px-4 sm:px-8 pb-8 pt-4 bg-background space-y-3 mt-auto border-t border-border/10"
+					className="px-4 sm:px-8 pb-8 pt-4 bg-background space-y-3 mt-auto border-t border-border"
 				>
 					<form.Field
 						name="message"

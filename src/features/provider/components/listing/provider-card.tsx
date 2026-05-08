@@ -20,7 +20,7 @@ export const ProviderCard = memo(
 						onViewProfile();
 					}
 				}}
-				className="group block bg-background border border-border/40 hover:border-primary/20 transition-all duration-500 overflow-hidden rounded-none h-full"
+				className="group block bg-background border border-border hover:border-primary/20 transition-all duration-500 overflow-hidden rounded-none h-full"
 			>
 				<div className="relative h-20 sm:h-24 overflow-hidden bg-muted">
 					<div className="absolute inset-0 blueprint-grid opacity-[0.05] z-10" />
@@ -83,11 +83,11 @@ export const ProviderCard = memo(
 						</div>
 					</div>
 
-					<div className="mt-auto pt-2 sm:pt-3 border-t border-border/40 flex items-center justify-between">
+					<div className="mt-auto pt-2 sm:pt-3 border-t border-border flex items-center justify-between">
 						<span className="text-[7px] sm:text-[8px] font-black uppercase tracking-[0.25em] text-muted-foreground group-hover:text-primary transition-colors">
 							View Directory
 						</span>
-						<div className="w-4 h-4 sm:w-5 sm:h-5 border border-border/40 flex items-center justify-center group-hover:bg-primary group-hover:border-primary transition-all duration-500">
+						<div className="w-4 h-4 sm:w-5 sm:h-5 border border-border flex items-center justify-center group-hover:bg-primary group-hover:border-primary transition-all duration-500">
 							<div className="w-0.5 h-0.5 sm:w-1 sm:h-1 border-t border-r border-border group-hover:border-white transform rotate-45 -ml-0.5" />
 						</div>
 					</div>

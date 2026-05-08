@@ -86,16 +86,20 @@ export function AdminProviderDetailsPage() {
 					actions={
 						<Button
 							onClick={() => navigate({ to: "/admin/providers/new" })}
-							className="h-11 rounded-sm px-6 font-heading font-bold uppercase text-xs tracking-wider"
+							className="h-10 rounded-none px-6 font-bold uppercase text-[10px] tracking-widest shadow-none"
 						>
 							<RiAddLine size={18} className="mr-2" />
 							Add Provider
 						</Button>
 					}
 				/>
-				<div className="space-y-4 py-20 text-center">
-					<p className="text-sm text-muted-foreground">Provider not found.</p>
-					<Button onClick={() => navigate({ to: "/admin/providers" })}>
+				<div className="space-y-4 py-20 text-center border border-dashed border-border rounded-none bg-muted/5">
+					<p className="text-sm font-medium text-muted-foreground">Provider not found.</p>
+					<Button 
+						variant="outline"
+						className="rounded-none font-bold uppercase text-[10px] tracking-widest shadow-none h-10 px-6"
+						onClick={() => navigate({ to: "/admin/providers" })}
+					>
 						Back to list
 					</Button>
 				</div>
@@ -109,7 +113,7 @@ export function AdminProviderDetailsPage() {
 				<Button
 					variant="ghost"
 					onClick={() => navigate({ to: "/admin/providers" })}
-					className="group flex items-center gap-2 rounded-sm px-3 py-2 text-xs font-heading font-bold uppercase tracking-wider text-foreground hover:bg-muted"
+					className="group flex items-center gap-2 rounded-none px-3 h-9 text-[10px] font-bold uppercase tracking-widest text-muted-foreground hover:text-foreground hover:bg-muted"
 				>
 					<ChevronLeft
 						size={16}
@@ -129,25 +133,31 @@ export function AdminProviderDetailsPage() {
 
 			<Card noPadding>
 				<Tabs defaultValue="products" className="w-full">
-					<div className="border-b border-border px-4 pt-4">
-						<TabsList>
-							<TabsTrigger value="products">
+					<div className="border-b border-border px-4 pt-4 bg-muted/5">
+						<TabsList className="bg-transparent border-none">
+							<TabsTrigger 
+								value="products"
+								className="data-[state=active]:bg-background rounded-none px-6 font-bold uppercase text-[10px] tracking-widest border border-transparent data-[state=active]:border-border data-[state=active]:border-b-transparent -mb-[1px]"
+							>
 								Products ({products.length})
 							</TabsTrigger>
-							<TabsTrigger value="services">
+							<TabsTrigger 
+								value="services"
+								className="data-[state=active]:bg-background rounded-none px-6 font-bold uppercase text-[10px] tracking-widest border border-transparent data-[state=active]:border-border data-[state=active]:border-b-transparent -mb-[1px]"
+							>
 								Services ({services.length})
 							</TabsTrigger>
 						</TabsList>
 					</div>
 
-					<TabsContent value="products" className="m-0 p-4">
+					<TabsContent value="products" className="m-0 p-6">
 						<ProviderProductsTable
 							products={products}
 							providerId={providerId}
 						/>
 					</TabsContent>
 
-					<TabsContent value="services" className="m-0 p-4">
+					<TabsContent value="services" className="m-0 p-6">
 						<ProviderServicesTable services={services} />
 					</TabsContent>
 				</Tabs>

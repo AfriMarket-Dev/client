@@ -40,7 +40,7 @@ export const PerformanceTrendsCard: React.FC<PerformanceTrendsCardProps> = ({
 							type="button"
 							key={chart.id}
 							onClick={() => onActiveChartChange(chart.id)}
-							className={`flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+							className={`flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors ${
 								activeChart === chart.id
 									? "bg-primary text-primary-foreground"
 									: "bg-muted text-muted-foreground hover:bg-muted/20"

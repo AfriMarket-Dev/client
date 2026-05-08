@@ -33,14 +33,14 @@ const SortSelect = ({
 	<Select value={sortValue} onValueChange={onSortChange}>
 		<SelectTrigger
 			className={cn(
-				"h-10 rounded-none border-border/40 bg-muted/10 font-bold uppercase tracking-wider text-[10px] gap-2 px-3",
+				"h-10 rounded-none border-border bg-muted/10 font-bold uppercase tracking-wider text-[10px] gap-2 px-3",
 				className,
 			)}
 		>
 			<SlidersHorizontal className="w-3.5 h-3.5 text-muted-foreground/40 group-focus-within:text-primary transition-colors" />
 			<SelectValue placeholder="Sort by" />
 		</SelectTrigger>
-		<SelectContent className="rounded-none border-border/40 shadow-xl">
+		<SelectContent className="rounded-none border-border shadow-xl">
 			{options.map((opt) => (
 				<SelectItem
 					key={opt.value}

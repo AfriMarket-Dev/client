@@ -79,7 +79,7 @@ const ProviderDashboard: React.FC<ProviderDashboardProps> = ({
 							</Button>
 						</Link>
 
-						<div className="flex items-center gap-3 pl-4 md:pl-8 border-l border-border/40">
+						<div className="flex items-center gap-3 pl-4 md:pl-8 border-l border-border">
 							<div className="text-right hidden md:block">
 								<p className="text-[10px] font-bold uppercase text-foreground leading-none">
 									{providerData?.name || "Verified Provider"}
@@ -88,7 +88,7 @@ const ProviderDashboard: React.FC<ProviderDashboardProps> = ({
 									SUPPLIER PROFILE
 								</p>
 							</div>
-							<div className="w-9 h-9 bg-muted rounded-none overflow-hidden border border-border/40">
+							<div className="w-9 h-9 bg-muted rounded-none overflow-hidden border border-border">
 								<img
 									// biome-ignore lint/suspicious/noExplicitAny: bypass generic property
 									src={(providerData as any)?.avatar || "/logo.svg"}
@@ -119,7 +119,7 @@ const ProviderDashboard: React.FC<ProviderDashboardProps> = ({
 						) : null}
 						{activeTab === "products" ? <ProductManagement /> : null}
 						{activeTab === "messages" || activeTab === "inquiries" ? (
-							<MessageCenter role="provider" />
+							<MessageCenter />
 						) : null}
 						{activeTab === "analytics" ? <AnalyticsDashboard /> : null}
 						{activeTab === "settings" ? (

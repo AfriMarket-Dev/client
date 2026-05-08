@@ -159,13 +159,13 @@ const AnalyticsDashboard: React.FC = () => {
 	if (isLoading) {
 		return (
 			<div className="space-y-8 animate-pulse">
-				<div className="h-12 w-64 bg-muted rounded-xl" />
+				<div className="h-10 w-64 bg-muted rounded-md" />
 				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
 					{[1, 2, 3, 4].map((i) => (
-						<div key={i} className="h-32 bg-muted rounded-2xl" />
+						<div key={i} className="h-32 bg-muted rounded-xl" />
 					))}
 				</div>
-				<div className="h-96 bg-muted rounded-2xl" />
+				<div className="h-96 bg-muted rounded-xl" />
 			</div>
 		);
 	}
@@ -173,12 +173,12 @@ const AnalyticsDashboard: React.FC = () => {
 	return (
 		<div className="space-y-8">
 			{/* Header */}
-			<div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+			<div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 border-b border-border pb-6">
 				<div>
-					<h2 className="text-3xl font-display font-black uppercase text-foreground tracking-tight leading-tight">
+					<h2 className="text-2xl font-bold text-foreground tracking-tight leading-tight">
 						Analytics Dashboard
 					</h2>
-					<p className="text-muted-foreground font-medium uppercase text-xs tracking-widest mt-1">
+					<p className="text-muted-foreground font-medium text-sm mt-1">
 						Direct performance stats and business info
 					</p>
 				</div>
@@ -186,14 +186,14 @@ const AnalyticsDashboard: React.FC = () => {
 					<select
 						value={timeRange}
 						onChange={(e) => setTimeRange(e.target.value)}
-						className="px-4 py-2 border border-border/40 rounded-none focus:ring-1 focus:ring-primary outline-none bg-background text-[10px] font-black uppercase tracking-widest"
+						className="px-4 py-2 border border-border rounded-md focus:ring-1 focus:ring-primary outline-none bg-background text-sm font-medium"
 					>
 						<option value="7d">Last 7 days</option>
 						<option value="30d">Last 30 days</option>
 						<option value="90d">Last 90 days</option>
 						<option value="1y">Last year</option>
 					</select>
-					<div className="flex items-center bg-muted/20 border border-border/40 p-2 rounded-none">
+					<div className="flex items-center bg-muted/50 border border-border p-2 rounded-md">
 						<Calendar className="w-4 h-4 text-primary" />
 					</div>
 				</div>

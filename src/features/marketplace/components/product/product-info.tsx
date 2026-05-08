@@ -1,4 +1,4 @@
-import { RiChat3Line, RiShieldCheckLine, RiEyeLine, RiInboxLine, RiBuilding4Line, RiHistoryLine } from "@remixicon/react";
+import { RiChat3Line, RiEyeLine, RiInboxLine } from "@remixicon/react";
 import type React from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -26,137 +26,83 @@ export const ProductInfo: React.FC<ProductInfoProps> = ({
 	views = 0,
 	onInquire,
 	categoryName,
-	brandName,
+	// brandName is accepted but unused for now
 }) => {
 	return (
-		<div className="space-y-10">
-			{/* Title & Technical ID */}
-			<div className="space-y-4">
-				<div className="flex items-center gap-3">
-					<div className="w-10 h-px bg-primary" />
-					<span className="text-[10px] font-black uppercase tracking-[0.4em] text-primary">
-						Industrial Component
-					</span>
-				</div>
-				<h1 className="text-3xl md:text-4xl lg:text-5xl font-display font-black text-foreground uppercase tracking-tighter leading-[0.95]">
+		<div className="space-y-0">
+			{/* Category & Title */}
+			<div className="pb-6">
+				<span className="text-xs font-medium text-muted-foreground mb-2 block">
+					{categoryName || "Product"}
+				</span>
+				<h1 className="text-2xl md:text-3xl font-bold text-foreground tracking-tight leading-tight">
 					{name}
 				</h1>
 			</div>
 
-			{/* High-Density Stats Grid */}
-			<div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-border/40 border border-border/40 overflow-hidden shadow-sm">
-				<div className="bg-background p-4 flex flex-col gap-1.5 group hover:bg-muted/5 transition-colors">
-					<span className="text-[9px] font-black text-muted-foreground uppercase tracking-widest flex items-center gap-1.5">
-						<RiBuilding4Line size={12} className="text-primary opacity-40 group-hover:opacity-100 transition-opacity" />
-						Industry
-					</span>
-					<span className="text-[11px] font-bold uppercase truncate">
-						{categoryName || "General Material"}
-					</span>
-				</div>
-				<div className="bg-background p-4 flex flex-col gap-1.5 group hover:bg-muted/5 transition-colors">
-					<span className="text-[9px] font-black text-muted-foreground uppercase tracking-widest flex items-center gap-1.5">
-						<RiHistoryLine size={12} className="text-primary opacity-40 group-hover:opacity-100 transition-opacity" />
-						Brand
-					</span>
-					<span className="text-[11px] font-bold uppercase truncate">
-						{brandName || "Verified OEM"}
-					</span>
-				</div>
-				<div className="bg-background p-4 flex flex-col gap-1.5 group hover:bg-muted/5 transition-colors">
-					<span className="text-[9px] font-black text-muted-foreground uppercase tracking-widest flex items-center gap-1.5">
-						<RiInboxLine size={12} className="text-primary opacity-40 group-hover:opacity-100 transition-opacity" />
-						Stock
-					</span>
-					<span className={cn(
-						"text-[11px] font-bold uppercase truncate",
-						stock > 0 ? "text-success" : "text-destructive"
-					)}>
-						{stock > 0 ? `${stock} units` : "Out of stock"}
-					</span>
-				</div>
-				<div className="bg-background p-4 flex flex-col gap-1.5 group hover:bg-muted/5 transition-colors">
-					<span className="text-[9px] font-black text-muted-foreground uppercase tracking-widest flex items-center gap-1.5">
-						<RiEyeLine size={12} className="text-primary opacity-40 group-hover:opacity-100 transition-opacity" />
-						Views
-					</span>
-					<span className="text-[11px] font-bold uppercase">
-						{views.toLocaleString()}
-					</span>
-				</div>
-			</div>
-
-			{/* Price Configuration */}
-			<div className="p-5 sm:p-8 bg-muted/10 border border-border/40 relative overflow-hidden">
-				<div className="absolute inset-0 blueprint-grid opacity-[0.03] pointer-events-none" />
-				<div className="relative z-10 space-y-4">
-					<div className="flex flex-col gap-1">
-						<span className="text-[10px] font-black text-primary uppercase tracking-[0.3em]">
-							Commercial Terms
-						</span>
-						<div className="flex items-baseline gap-2 pt-2">
-							<span className="text-4xl md:text-5xl font-heading font-black text-foreground tracking-tighter">
-								{priceType === "NEGOTIABLE" ? (
-									"PRICE NEGOTIABLE"
-								) : (
-									<>
-										{priceType === "STARTS_AT" && (
-											<span className="text-sm uppercase mr-2 text-muted-foreground font-bold tracking-widest">
-												From
-											</span>
-										)}
-										<span className="text-foreground">RWF {price.toLocaleString()}</span>
-									</>
+			{/* Price — the most important piece, visually anchored */}
+			<div className="py-5 px-5 bg-muted/30 border border-border mb-6">
+				<span className="text-xs font-medium text-muted-foreground block mb-1">
+					Price
+				</span>
+				<div className="flex items-baseline gap-2">
+					<span className="text-2xl font-bold text-foreground tracking-tight">
+						{priceType === "NEGOTIABLE" ? (
+							"Negotiable"
+						) : (
+							<>
+								{priceType === "STARTS_AT" && (
+									<span className="text-sm text-muted-foreground font-medium mr-1">From</span>
 								)}
-							</span>
-							{priceType !== "NEGOTIABLE" && (
-								<span className="text-xs text-muted-foreground font-black uppercase tracking-[0.2em]">
-									/ {unit ?? "UNIT"}
-								</span>
-							)}
-						</div>
-					</div>
-					
-					<div className="pt-4 border-t border-border/20 flex items-center gap-6">
-						<div className="flex items-center gap-2">
-							<RiShieldCheckLine size={14} className="text-success" />
-							<span className="text-[9px] font-black uppercase tracking-widest text-muted-foreground">
-								Verified Listing
-							</span>
-						</div>
-						<div className="flex items-center gap-2">
-							<RiHistoryLine size={14} className="text-primary" />
-							<span className="text-[9px] font-black uppercase tracking-widest text-muted-foreground">
-								Fast Fulfillment
-							</span>
-						</div>
-					</div>
+								RWF {price.toLocaleString()}
+							</>
+						)}
+					</span>
+					{priceType !== "NEGOTIABLE" && (
+						<span className="text-sm text-muted-foreground font-medium">
+							/ {unit ?? "unit"}
+						</span>
+					)}
 				</div>
 			</div>
 
-			{/* Technical Abstract */}
-			<div className="space-y-4">
-				<div className="flex items-center gap-2">
-					<span className="text-[10px] font-black uppercase tracking-[0.4em] text-muted-foreground/40">
-						Product Abstract
-					</span>
-					<div className="h-px flex-1 bg-border/20" />
-				</div>
-				<p className="text-xs md:text-sm text-muted-foreground font-medium uppercase leading-relaxed tracking-wider max-w-2xl">
-					{description ||
-						"Professional industrial-grade resource optimized for enterprise deployment and high-volume operations. Engineered for durability and peak performance within technical environments."}
+			{/* Quick Stats — compact horizontal row */}
+			<div className="grid grid-cols-3 divide-x divide-border border border-border mb-6">
+				{[
+					{ label: "Category", value: categoryName || "—", icon: RiInboxLine },
+					{ label: "Stock", value: stock > 0 ? `${stock.toLocaleString()}` : "Out of stock", icon: RiInboxLine, highlight: stock === 0 },
+					{ label: "Views", value: views.toLocaleString(), icon: RiEyeLine },
+				].map((stat, i) => (
+					<div key={i} className="py-3 px-4 flex flex-col gap-0.5">
+						<span className="text-[11px] font-medium text-muted-foreground">
+							{stat.label}
+						</span>
+						<span className={cn(
+							"text-sm font-semibold truncate",
+							stat.highlight && "text-destructive"
+						)}>
+							{stat.value}
+						</span>
+					</div>
+				))}
+			</div>
+
+			{/* Description */}
+			<div className="py-6 border-t border-border">
+				<p className="text-sm text-muted-foreground leading-relaxed">
+					{description || "No description provided."}
 				</p>
 			</div>
 
-			{/* Primary Action Sequence */}
-			<div className="pt-4 flex flex-col sm:flex-row gap-4 py-2">
+			{/* Primary Action */}
+			<div className="pt-2">
 				<Button
 					onClick={onInquire}
 					size="lg"
-					className="h-16 flex-1 rounded-none bg-primary text-primary-foreground hover:bg-primary/95 transition-all duration-500 font-heading font-black uppercase tracking-[0.3em] text-[11px] shadow-xl shadow-primary/20 hover:-translate-y-1 active:translate-y-0 active:scale-[0.98] py-4"
+					className="h-11 w-full rounded-none text-sm font-semibold shadow-none"
 				>
-					<RiChat3Line size={18} className="mr-3" />
-					Initiate Inquiry
+					<RiChat3Line size={16} className="mr-2" />
+					Send Inquiry
 				</Button>
 			</div>
 		</div>

@@ -45,21 +45,20 @@ export function CompanyInfoSection({ provider }: CompanyInfoSectionProps) {
 	return (
 		<div className="space-y-12">
 			{/* Brand Header */}
-			<div className="relative h-48 bg-muted border border-border group overflow-hidden">
-				<div className="absolute inset-0 blueprint-grid opacity-[0.05] pointer-events-none" />
+			<div className="relative h-48 bg-muted border border-border rounded-none group overflow-hidden shadow-none">
 				{provider.logoUrl ? (
 					<img src={provider.logoUrl} alt="Logo" className="w-full h-full object-cover opacity-40" />
 				) : (
-					<div className="w-full h-full flex items-center justify-center text-foreground/10 text-6xl font-display font-black">
+					<div className="w-full h-full flex items-center justify-center text-foreground/10 text-6xl font-bold">
 						{provider.name?.charAt(0) || "B"}
 					</div>
 				)}
-				<div className="absolute inset-0 flex items-center justify-center bg-background/20 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-all duration-500">
+				<div className="absolute inset-0 flex items-center justify-center bg-background/20 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-all duration-300">
 					<Button
 						variant="outline"
-						className="bg-background border-border font-heading font-black uppercase text-[9px] tracking-[0.2em] h-11 px-6 rounded-none shadow-xl"
+						className="bg-background border-border font-bold uppercase text-[10px] tracking-widest h-10 px-6 rounded-none shadow-none"
 					>
-						<Upload className="w-3.5 h-3.5 mr-2" /> Change Brand Assets
+						<Upload className="w-4 h-4 mr-2" /> Change Brand Assets
 					</Button>
 				</div>
 			</div>
@@ -76,7 +75,7 @@ export function CompanyInfoSection({ provider }: CompanyInfoSectionProps) {
 				<div className="space-y-6">
 					<div className="flex items-center gap-3">
 						<RiBuilding4Line className="text-primary w-4 h-4" />
-						<h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-foreground">
+						<h3 className="text-sm font-bold text-foreground uppercase tracking-tight">
 							Entity Definition
 						</h3>
 					</div>
@@ -90,7 +89,7 @@ export function CompanyInfoSection({ provider }: CompanyInfoSectionProps) {
 										value={field.state.value}
 										onBlur={field.handleBlur}
 										onChange={(e) => field.handleChange(e.target.value)}
-										className="h-12 bg-background font-bold uppercase tracking-wider rounded-none border-border/40 focus:border-primary/40 focus:ring-0"
+										className="h-11 bg-background font-medium rounded-none border-border focus:ring-1 focus:ring-primary/20 shadow-none"
 									/>
 								</FormField>
 							)}
@@ -105,7 +104,7 @@ export function CompanyInfoSection({ provider }: CompanyInfoSectionProps) {
 										onBlur={field.handleBlur}
 										onChange={(e) => field.handleChange(e.target.value)}
 										rows={4}
-										className="bg-background font-medium text-xs leading-relaxed rounded-none border-border/40 focus:border-primary/40 focus:ring-0 resize-none uppercase tracking-wide"
+										className="bg-background font-medium text-sm leading-relaxed rounded-none border-border focus:ring-1 focus:ring-primary/20 resize-none shadow-none"
 										placeholder="Describe your business operations..."
 									/>
 								</FormField>
@@ -118,7 +117,7 @@ export function CompanyInfoSection({ provider }: CompanyInfoSectionProps) {
 				<div className="space-y-6">
 					<div className="flex items-center gap-3">
 						<RiGlobeLine className="text-primary w-4 h-4" />
-						<h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-foreground">
+						<h3 className="text-sm font-bold text-foreground uppercase tracking-tight">
 							Engagement Channels
 						</h3>
 					</div>
@@ -134,7 +133,7 @@ export function CompanyInfoSection({ provider }: CompanyInfoSectionProps) {
 											value={field.state.value}
 											onBlur={field.handleBlur}
 											onChange={(e) => field.handleChange(e.target.value)}
-											className="h-12 pl-10 bg-background font-mono text-xs font-bold rounded-none border-border/40 focus:border-primary/40 focus:ring-0"
+											className="h-11 pl-10 bg-background font-medium text-sm rounded-none border-border focus:ring-1 focus:ring-primary/20 shadow-none"
 											placeholder="+250..."
 										/>
 									</div>
@@ -152,7 +151,7 @@ export function CompanyInfoSection({ provider }: CompanyInfoSectionProps) {
 											value={field.state.value}
 											onBlur={field.handleBlur}
 											onChange={(e) => field.handleChange(e.target.value)}
-											className="h-12 pl-10 bg-background font-mono text-xs font-bold rounded-none border-border/40 focus:border-primary/40 focus:ring-0"
+											className="h-11 pl-10 bg-background font-medium text-sm rounded-none border-border focus:ring-1 focus:ring-primary/20 shadow-none"
 											placeholder="+250..."
 										/>
 									</div>
@@ -170,7 +169,7 @@ export function CompanyInfoSection({ provider }: CompanyInfoSectionProps) {
 											value={field.state.value}
 											onBlur={field.handleBlur}
 											onChange={(e) => field.handleChange(e.target.value)}
-											className="h-12 pl-10 bg-background font-mono text-xs font-bold rounded-none border-border/40 focus:border-primary/40 focus:ring-0"
+											className="h-11 pl-10 bg-background font-medium text-sm rounded-none border-border focus:ring-1 focus:ring-primary/20 shadow-none"
 											placeholder="office@business.rw"
 										/>
 									</div>
@@ -180,14 +179,14 @@ export function CompanyInfoSection({ provider }: CompanyInfoSectionProps) {
 					</div>
 				</div>
 
-				<div className="pt-6 border-t border-border/20">
+				<div className="pt-6 border-t border-border">
 					<form.Subscribe
 						selector={(state) => [state.canSubmit, state.isSubmitting]}
 						children={([canSubmit, isSubmitting]) => (
 							<Button
 								type="submit"
 								disabled={!canSubmit || isSubmitting || isLoading}
-								className="w-full h-14 rounded-none font-heading font-black uppercase tracking-[0.3em] text-[11px] shadow-xl shadow-primary/20 transition-all active:scale-[0.98]"
+								className="w-full h-12 rounded-none font-bold uppercase text-xs tracking-widest shadow-none transition-all active:scale-[0.98]"
 							>
 								{isSubmitting || isLoading ? "Committing Updates..." : "Save Business Profile"}
 							</Button>

@@ -153,7 +153,7 @@ export function AdminProvidersPage() {
 			subtitle="Manage verified provider entities"
 			headerActions={
 				<Button
-					className="h-11 rounded-sm px-6 font-heading font-bold uppercase text-xs tracking-wider"
+					className="h-11 rounded-md px-6 font-semibold text-sm shadow-sm"
 					onClick={() => navigate({ to: "/admin/providers/new" })}
 				>
 					<RiAddLine className="mr-2 h-4 w-4" /> Add Provider

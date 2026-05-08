@@ -62,7 +62,7 @@ export const HeaderUserNav: React.FC<HeaderUserNavProps> = ({
 					<Button
 						variant="ghost"
 						size="icon"
-						className="relative h-9 w-9 text-muted-foreground/80 hover:text-primary hover:bg-primary/5 rounded-lg transition-all"
+						className="relative h-9 w-9 text-muted-foreground/80 hover:text-primary hover:bg-primary/5 rounded-md transition-all"
 						onClick={() => navigate({ to: ROUTES.PROTECTED.WISHLIST })}
 					>
 						<RiHeartLine size={18} />
@@ -75,7 +75,7 @@ export const HeaderUserNav: React.FC<HeaderUserNavProps> = ({
 					<Button
 						variant="ghost"
 						size="icon"
-						className="h-9 w-9 text-muted-foreground/80 hover:text-primary hover:bg-primary/5 rounded-lg transition-all"
+						className="h-9 w-9 text-muted-foreground/80 hover:text-primary hover:bg-primary/5 rounded-md transition-all"
 						onClick={() => navigate({ to: ROUTES.PROTECTED.MESSAGES })}
 					>
 						<RiChat1Line size={18} />
@@ -105,7 +105,7 @@ export const HeaderUserNav: React.FC<HeaderUserNavProps> = ({
 						}
 					/>
 					<DropdownMenuContent
-						className="w-72 align-end border border-border/40 rounded-lg shadow-[0_20px_50px] shadow-foreground/10 p-1.5 bg-background/95 backdrop-blur-md animate-in fade-in slide-in-from-top-2 duration-300"
+						className="w-72 align-end border border-border/40 rounded-md shadow-[0_20px_50px] shadow-foreground/10 p-1.5 bg-background/95 backdrop-blur-md animate-in fade-in slide-in-from-top-2 duration-300"
 						align="end"
 					>
 						<DropdownMenuGroup>
@@ -183,13 +183,13 @@ export const HeaderUserNav: React.FC<HeaderUserNavProps> = ({
 					<Link to={ROUTES.AUTH.SIGNIN}>
 						<Button
 							variant="ghost"
-							className="font-heading font-bold uppercase tracking-[0.15em] hover:text-primary hover:bg-primary/5 text-[11px] h-10 px-5 rounded-lg transition-all"
+							className="font-heading font-bold uppercase tracking-[0.15em] hover:text-primary hover:bg-primary/5 text-[11px] h-10 px-5 rounded-md transition-all"
 						>
 							Sign In
 						</Button>
 					</Link>
 					<Link to={ROUTES.AUTH.SIGNUP}>
-						<Button className="font-heading font-bold text-[11px] uppercase tracking-[0.15em] h-10 px-6 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg shadow-primary/20 transition-all active:scale-95">
+						<Button className="font-heading font-bold text-[11px] uppercase tracking-[0.15em] h-10 px-6 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg shadow-primary/20 transition-all active:scale-95">
 							Join Free
 						</Button>
 					</Link>

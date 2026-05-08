@@ -15,7 +15,7 @@ export const CategoryPerformanceCard: React.FC<
 	CategoryPerformanceCardProps
 > = ({ categories }) => {
 	return (
-		<div className="bg-card rounded-none border border-border/40 p-6 shadow-sm">
+		<div className="bg-card rounded-none border border-border p-6 shadow-sm">
 			<h3 className="text-xl font-display font-black uppercase tracking-tight text-foreground mb-6">
 				Category Performance
 			</h3>

@@ -36,24 +36,24 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
 	const company = service.company;
 
 	const badges = service.priceType && (
-		<div className="bg-background/90 backdrop-blur-md border border-border/20 text-[9px] font-black uppercase tracking-widest px-2 py-1 shadow-2xl">
+		<div className="bg-background/90 text-foreground text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-none border border-border">
 			{service.priceType.replace("_", " ")}
 		</div>
 	);
 
 	const footer = (
-		<div className="flex items-center justify-between">
-			<div className="flex flex-col">
-				<span className="text-[9px] block uppercase font-bold text-muted-foreground tracking-tighter mb-0.5 text-left">
+		<div className="flex items-center justify-between gap-4">
+			<div className="flex flex-col min-w-0">
+				<span className="text-[10px] text-muted-foreground uppercase font-medium tracking-wider mb-0.5 text-left">
 					Rate from
 				</span>
-				<span className="text-xs font-black text-foreground">
+				<span className="text-base font-bold text-foreground truncate">
 					{service.price ? formatCurrency(service.price, "RWF") : "Contact"}
 				</span>
 			</div>
 			{company && (
 				<div
-					className="flex items-center gap-2 group/comp cursor-pointer"
+					className="flex items-center gap-2 group/comp cursor-pointer shrink-0"
 					onClick={(e) => {
 						if (onProviderClick) {
 							e.stopPropagation();
@@ -61,8 +61,8 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
 						}
 					}}
 				>
-					<div className="w-6 h-6 rounded-none border border-border/40 flex items-center justify-center group-hover/comp:bg-primary group-hover/comp:border-primary transition-all duration-500">
-						<span className="text-[10px] font-bold group-hover/comp:text-primary-foreground">
+					<div className="w-8 h-8 rounded-none border border-border flex items-center justify-center bg-muted group-hover/comp:bg-primary group-hover/comp:border-primary transition-all duration-300">
+						<span className="text-xs font-semibold text-foreground group-hover/comp:text-primary-foreground">
 							{company.name?.charAt(0)}
 						</span>
 					</div>
@@ -83,12 +83,19 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
 			onToggleWishlist={onToggleWishlist}
 			badges={badges}
 			footer={footer}
+			imageClassName="aspect-video"
 		>
 			<div className="flex flex-col gap-2">
 				{viewMode === "grid" && (
-					<div className="flex items-center justify-end mb-1">
-						<div className="flex items-center gap-1 opacity-60">
-							<RiStarFill className="w-3 h-3 text-warning" />
+					<div className="flex items-center justify-between mb-1">
+						<div className="flex items-center gap-1.5 text-muted-foreground text-left">
+							<RiMapPinLine className="w-3.5 h-3.5" />
+							<span className="text-xs font-medium">
+								Kigali
+							</span>
+						</div>
+						<div className="flex items-center gap-1.5 text-muted-foreground">
+							<RiStarFill className="w-3 h-3 text-amber-500" />
 							<span className="text-[10px] font-bold">
 								{company?.rating || 5.0}
 							</span>
@@ -96,15 +103,17 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
 					</div>
 				)}
 
-				<div className="flex items-center gap-1.5 text-muted-foreground text-left">
-					<RiMapPinLine className="w-3 h-3" />
-					<span className="text-[10px] font-medium uppercase tracking-tight">
-						Kigali, Rwanda
-					</span>
-				</div>
+				{viewMode === "list" && (
+					<div className="flex items-center gap-1.5 text-muted-foreground text-left">
+						<RiMapPinLine className="w-4 h-4" />
+						<span className="text-xs font-medium">
+							Kigali, Rwanda
+						</span>
+					</div>
+				)}
 
 				{viewMode === "list" && (
-					<p className="text-sm text-muted-foreground/70 line-clamp-2 mt-2 max-w-3xl leading-relaxed text-left">
+					<p className="text-sm text-muted-foreground line-clamp-2 mt-2 leading-relaxed text-left">
 						{service.description}
 					</p>
 				)}

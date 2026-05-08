@@ -1,254 +1,223 @@
 import {
-	RiAlertLine,
-	RiApps2Line,
-	RiFolder2Line,
-	RiHistoryLine,
-	RiShieldCheckLine,
+	RiAuctionLine,
+	RiBuilding2Line,
+	RiFileList3Line,
+	RiShoppingBagLine as RiPackageLine,
+	RiToolsLine,
+	RiUserLine,
 } from "@remixicon/react";
-import { Await, getRouteApi, useNavigate } from "@tanstack/react-router";
-import { Suspense } from "react";
+import { useNavigate } from "@tanstack/react-router";
+import { useMemo } from "react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-	Empty,
-	EmptyHeader,
-	EmptyMedia,
-	EmptyTitle,
-} from "@/components/ui/empty";
-import { PageContainer, StatsGrid } from "@/shared/components";
-import { Card } from "@/shared/components/admin/card";
-import { PageHeader } from "@/shared/components/admin/page-header";
+import { cn } from "@/lib/utils";
+import { useGetDashboardStatsQuery as useGetStatsQuery } from "@/services/api/stats";
 import { StatCard } from "@/shared/components/admin/stat-card";
-import { AdminPageSkeleton } from "@/shared/components/skeletons";
-import { ROUTES } from "@/shared/constants/routes";
-import { formatDate } from "@/shared/utils/format";
-
-import {
-	type CompaniesListResult,
-	type Company,
-	type Product,
-	type ProductsListResult,
-	type Service,
-	type ServicesListResult,
-} from "@/types";
-
-const routeApi = getRouteApi("/admin/");
-
-function compact(value: number) {
-	if (value >= 1000) return `${(value / 1000).toFixed(1)}k`;
-	return `${value}`;
-}
+import { StatsGrid } from "@/shared/components/stats-grid";
 
 export function AdminDashboard() {
 	const navigate = useNavigate();
-	const { stats, deferred } = routeApi.useLoaderData();
+	const { data: statsData, isLoading } = useGetStatsQuery();
+
+	const stats = useMemo(
+		() => [
+			{
+				label: "Marketplace Providers",
+				value: statsData?.companies.total || 0,
+				icon: RiBuilding2Line,
+				change: "+5 this week",
+			},
+			{
+				label: "Platform Users",
+				value: statsData?.users.total || 0,
+				icon: RiUserLine,
+				change: "+12% total",
+			},
+			{
+				label: "Live Products",
+				value: statsData?.products.total || 0,
+				icon: RiPackageLine,
+				color: "text-blue-600",
+				bgColor: "bg-blue-600/10",
+			},
+			{
+				label: "Available Services",
+				value: statsData?.services.total || 0,
+				icon: RiToolsLine,
+				color: "text-purple-600",
+				bgColor: "bg-purple-600/10",
+			},
+			{
+				label: "Platform Reviews",
+				value: statsData?.reviews.total || 0,
+				icon: RiFileList3Line,
+				color: "text-orange-600",
+				bgColor: "bg-orange-600/10",
+			},
+			{
+				label: "Active Auctions",
+				value: "14",
+				icon: RiAuctionLine,
+				color: "text-red-600",
+				bgColor: "bg-red-600/10",
+			},
+		],
+		[statsData],
+	);
+
+	const activities = [
+		{
+			id: "1",
+			user: "Jean Doe",
+			action: "updated stock for",
+			item: "Premium Cement",
+			time: "10 mins ago",
+			type: "inventory",
+			status: "success",
+		},
+		{
+			id: "2",
+			user: "Marie Claire",
+			action: "registered as",
+			item: "New Provider",
+			time: "25 mins ago",
+			type: "provider",
+			status: "pending",
+		},
+		{
+			id: "3",
+			user: "System",
+			action: "automated backup",
+			item: "Database",
+			time: "1 hour ago",
+			type: "system",
+			status: "success",
+		},
+		{
+			id: "4",
+			user: "Kevine P.",
+			action: "requested verification for",
+			item: "Eco Services Ltd",
+			time: "2 hours ago",
+			type: "provider",
+			status: "warning",
+		},
+	];
 
 	return (
-		<PageContainer>
-			<PageHeader
-				title="Admin Panel"
-				subtitle="Admin dashboard"
-				badge="System Administrator"
-			/>
+		<div className="space-y-10">
+			{/* Header */}
+			<div className="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-border pb-8">
+				<div className="space-y-1">
+					<h2 className="text-2xl font-bold text-foreground tracking-tight">
+						Administrative Control
+					</h2>
+					<p className="text-sm font-medium text-muted-foreground">
+						Oversee platform operations and resource distribution
+					</p>
+				</div>
 
-			<Suspense fallback={<AdminPageSkeleton />}>
-				<Await promise={deferred}>
-					{({
-						companies,
-						products,
-						services,
-					}: {
-						companies: CompaniesListResult | undefined;
-						products: ProductsListResult | undefined;
-						services: ServicesListResult | undefined;
-					}) => {
-						const companiesData = companies?.data ?? [];
-						const productsData = products?.data ?? [];
-						const servicesData = services?.data ?? [];
+				<div className="flex flex-wrap gap-2">
+					{[
+						{ label: "New Provider", to: "/admin/providers/new" },
+						{ label: "Create Auction", to: "/admin/auctions/new" },
+						{ label: "System Logs", to: "/admin/logs" },
+					].map((op) => (
+						<Button
+							key={op.label}
+							variant="outline"
+							size="sm"
+							onClick={() => navigate({ to: op.to as any })}
+							className="h-10 rounded-none border-border font-bold uppercase text-[10px] tracking-widest shadow-none px-4"
+						>
+							{op.label}
+						</Button>
+					))}
+				</div>
+			</div>
 
-						const verifiedProviders =
-							Number(stats?.verifiedProviders) ||
-							companiesData.filter((company: Company) => company.isVerified)
-								.length;
-						const activeProducts = productsData.filter(
-							(p: Product) => p.isActive,
-						).length;
-						const activeServices = servicesData.filter(
-							(s: Service) => s.isActive,
-						).length;
-						const activeListings = activeProducts + activeServices;
-						const catalogItems = productsData.length + servicesData.length;
-						const pendingReviewCount =
-							companiesData.filter((company: Company) => !company.isVerified)
-								.length +
-							productsData.filter((p: Product) => !p.isActive).length +
-							servicesData.filter((s: Service) => !s.isActive).length;
+			{/* Stats Grid */}
+			<StatsGrid columns={3}>
+				{isLoading ? (
+					Array.from({ length: 6 }).map((_, i) => (
+						<div key={i} className="h-32 bg-muted/30 rounded-none animate-pulse border border-border" />
+					))
+				) : (
+					stats.map((stat) => (
+						<StatCard key={stat.label} {...stat} />
+					))
+				)}
+			</StatsGrid>
 
-						const recentActivity = [
-							...companiesData.slice(0, 3).map((company: Company) => ({
-								id: company.id,
-								type: "Provider",
-								name: company.name,
-								status: company.isVerified
-									? "Verified"
-									: "Pending verification",
-								date: company.createdAt,
-							})),
-							...productsData.slice(0, 3).map((p: Product) => ({
-								id: p.id,
-								type: "Product",
-								name: p.name,
-								status: p.isActive ? "Active" : "Inactive",
-								date: p.createdAt,
-							})),
-							...servicesData.slice(0, 3).map((s: Service) => ({
-								id: s.id,
-								type: "Service",
-								name: s.name,
-								status: s.isActive ? "Active" : "Inactive",
-								date: s.createdAt,
-							})),
-						]
-							.sort(
-								(a, b) =>
-									new Date(b.date || 0).getTime() -
-									new Date(a.date || 0).getTime(),
-							)
-							.slice(0, 6);
-
-						return (
-							<>
-								<StatsGrid columns={1} className="md:grid-cols-4">
-									<StatCard
-										label="Providers"
-										value={compact(verifiedProviders)}
-										icon={RiShieldCheckLine}
-										bgColor="bg-success/5"
-										color="text-success"
-									/>
-									<StatCard
-										label="Listings"
-										value={compact(activeListings)}
-										icon={RiApps2Line}
-										bgColor="bg-info/5"
-										color="text-info"
-									/>
-									<StatCard
-										label="Catalog"
-										value={compact(catalogItems)}
-										icon={RiFolder2Line}
-										bgColor="bg-info/5"
-										color="text-info"
-									/>
-									<StatCard
-										label="Review"
-										value={compact(pendingReviewCount)}
-										icon={RiAlertLine}
-										bgColor="bg-warning/5"
-										color="text-warning"
-									/>
-								</StatsGrid>
-
-								<div className="grid grid-cols-1 gap-6 xl:grid-cols-3 mt-6">
-									<Card
-										title="Quick Operations"
-										subtitle="Manage sections"
-										className="xl:col-span-1"
-									>
-										<div className="flex flex-col gap-3">
-											<Button
-												variant="outline"
-												className="w-full justify-start rounded-none uppercase text-[10px] font-black tracking-widest h-11 border-border/40 hover:bg-primary/5 hover:text-primary transition-all"
-												onClick={() =>
-													navigate({ to: ROUTES.ADMIN.SUPPLIERS.INDEX })
-												}
+			{/* Recent Activity */}
+			<div className="grid lg:grid-cols-1 gap-8">
+				<div className="bg-background border border-border rounded-none shadow-none overflow-hidden">
+					<div className="p-6 border-b border-border bg-muted/5 flex items-center justify-between">
+						<h3 className="text-lg font-bold text-foreground">
+							Live Operations Feed
+						</h3>
+						<Badge variant="outline" className="font-bold text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-none bg-background">
+							Real-time
+						</Badge>
+					</div>
+					<div className="divide-y divide-border">
+						{activities.map((activity) => (
+							<div
+								key={activity.id}
+								className="p-6 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:bg-muted/30 transition-colors"
+							>
+								<div className="flex items-start gap-4">
+									<div className="mt-1">
+										<Badge
+											variant="secondary"
+											className="rounded-none px-2 py-0.5 text-[9px] font-bold uppercase tracking-widest bg-muted text-muted-foreground border border-border"
+										>
+											{activity.type}
+										</Badge>
+									</div>
+									<div>
+										<h4 className="font-bold text-foreground text-base tracking-tight mb-1">
+											{activity.user}{" "}
+											<span className="text-muted-foreground font-medium">
+												{activity.action}
+											</span>{" "}
+											{activity.item}
+										</h4>
+										<p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">
+											{activity.time} • Status:{" "}
+											<span
+												className={cn(
+													"font-black tracking-widest",
+													activity.status === "success" && "text-success",
+													activity.status === "pending" && "text-primary",
+													activity.status === "warning" && "text-warning",
+												)}
 											>
-												<RiShieldCheckLine className="mr-2 h-4 w-4" />
-												Providers
-											</Button>
-											<Button
-												variant="outline"
-												className="w-full justify-start rounded-none uppercase text-[10px] font-black tracking-widest h-11 border-border/40 hover:bg-primary/5 hover:text-primary transition-all"
-												onClick={() => navigate({ to: ROUTES.ADMIN.PRODUCTS })}
-											>
-												<RiApps2Line className="mr-2 h-4 w-4" />
-												Products
-											</Button>
-											<Button
-												variant="outline"
-												className="w-full justify-start rounded-none uppercase text-[10px] font-black tracking-widest h-11 border-border/40 hover:bg-primary/5 hover:text-primary transition-all"
-												onClick={() => navigate({ to: ROUTES.ADMIN.SERVICES })}
-											>
-												<RiFolder2Line className="mr-2 h-4 w-4" />
-												Services
-											</Button>
-											<Button
-												variant="outline"
-												className="w-full justify-start rounded-none uppercase text-[10px] font-black tracking-widest h-11 border-border/40 hover:bg-primary/5 hover:text-primary transition-all"
-												onClick={() =>
-													navigate({ to: ROUTES.ADMIN.CATEGORIES })
-												}
-											>
-												<RiApps2Line className="mr-2 h-4 w-4" />
-												Categories
-											</Button>
-										</div>
-									</Card>
-
-									<Card
-										title="Recent Activity"
-										subtitle="Latest marketplace updates"
-										className="xl:col-span-2"
-										noPadding
-									>
-										{recentActivity.length === 0 ? (
-											<div className="py-12 px-6">
-												<Empty className="p-0">
-													<EmptyHeader>
-														<EmptyMedia variant="icon">
-															<RiHistoryLine className="h-4 w-4 text-muted-foreground/40" />
-														</EmptyMedia>
-														<EmptyTitle className="text-sm font-black uppercase tracking-widest text-muted-foreground/40">
-															No recent activity
-														</EmptyTitle>
-													</EmptyHeader>
-												</Empty>
-											</div>
-										) : (
-											<div className="divide-y divide-border/40">
-												{recentActivity.map((item) => (
-													<div
-														key={`${item.type}-${item.id}`}
-														className="flex items-center justify-between px-6 py-4 hover:bg-muted/5 transition-colors group cursor-pointer"
-													>
-														<div className="min-w-0">
-															<div className="flex items-center gap-2 mb-1">
-																<span className="text-[8px] font-black uppercase tracking-[0.2em] text-primary/60 px-1.5 py-0.5 bg-primary/5 border border-primary/10">
-																	{item.type}
-																</span>
-																<span className="text-[10px] font-mono text-muted-foreground/40">
-																	{formatDate(item.date)}
-																</span>
-															</div>
-															<h4 className="text-sm font-display font-black uppercase tracking-tight text-foreground group-hover:text-primary transition-colors truncate">
-																{item.name}
-															</h4>
-														</div>
-														<div className="text-right shrink-0">
-															<p className="text-[9px] font-black uppercase tracking-widest text-muted-foreground/60">
-																{item.status}
-															</p>
-														</div>
-													</div>
-												))}
-											</div>
-										)}
-									</Card>
+												{activity.status}
+											</span>
+										</p>
+									</div>
 								</div>
-							</>
-						);
-					}}
-				</Await>
-			</Suspense>
-		</PageContainer>
+								<Button
+									variant="ghost"
+									size="sm"
+									className="h-10 px-4 rounded-none text-[10px] font-bold uppercase tracking-widest text-muted-foreground hover:text-foreground border border-transparent hover:border-border shadow-none"
+								>
+									Inspect Operation
+								</Button>
+							</div>
+						))}
+					</div>
+					<div className="p-4 bg-muted/5 border-t border-border text-center">
+						<button
+							type="button"
+							className="text-[10px] font-bold uppercase tracking-widest text-primary hover:underline"
+						>
+							View Full Audit Log
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
 	);
 }

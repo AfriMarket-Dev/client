@@ -48,14 +48,14 @@ export function NewAuctionPage() {
 				<Button
 					variant="ghost"
 					onClick={() => navigate({ to: "/dashboard/auctions" })}
-					className="gap-2 font-heading font-black uppercase text-[10px] tracking-[0.2em] rounded-none hover:bg-muted/50 border border-border/20 h-11 px-6"
+					className="gap-2 font-heading font-black uppercase text-[10px] tracking-[0.2em] rounded-none hover:bg-muted/50 border border-border h-11 px-6"
 				>
 					<RiArrowLeftLine className="size-4" />
 					Back to Auctions
 				</Button>
 			</div>
 
-			<div className="max-w-2xl bg-card border border-border/50 p-8 shadow-sm rounded-none mx-auto md:mx-0">
+			<div className="max-w-2xl bg-card border border-border p-8 shadow-sm rounded-none mx-auto md:mx-0">
 				<AuctionForm
 					onSubmit={handleSubmit}
 					onCancel={() => navigate({ to: "/dashboard/auctions" })}

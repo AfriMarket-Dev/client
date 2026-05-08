@@ -60,10 +60,10 @@ export const ProviderTabsContent: React.FC<ProviderTabsContentProps> = ({
           <div className="md:col-span-2 space-y-12">
             {/* Description Section */}
             <section className="space-y-4">
-              <h3 className="text-xs font-black uppercase tracking-[0.2em] text-foreground/40 border-b border-border/40 pb-2">
+              <h3 className="text-lg font-semibold text-foreground border-b border-border pb-2">
                 About the Company
               </h3>
-              <p className="text-xs text-muted-foreground leading-relaxed">
+              <p className="text-sm text-muted-foreground leading-relaxed">
                 {company.description || "No detailed description available for this provider."}
               </p>
             </section>
@@ -73,20 +73,20 @@ export const ProviderTabsContent: React.FC<ProviderTabsContentProps> = ({
               {(company?.capabilities ?? []).length > 0 && (
                 <>
                   <div className="flex flex-col gap-4 mb-6">
-                    <h3 className="font-heading font-bold uppercase text-xs tracking-[0.2em] flex items-center gap-2 text-foreground/40">
-                      <CheckCircle className="w-3.5 h-3.5 text-primary" /> Our
+                    <h3 className="text-lg font-semibold text-foreground flex items-center gap-2">
+                      <CheckCircle className="w-4 h-4 text-emerald-600" />
                       Capabilities
                     </h3>
-                    <Separator className="bg-border/40" />
+                    <Separator className="bg-border/30" />
                   </div>
                   <div className="grid sm:grid-cols-2 gap-4">
                     {(company?.capabilities ?? []).map((item: string) => (
                       <div
                         key={item}
-                        className="flex items-center gap-3 p-3 border border-border/40 bg-muted/5"
+                        className="flex items-center gap-3 p-3 border border-border bg-muted/5"
                       >
-                        <div className="w-1 h-1 bg-primary/40 rotate-45" />
-                        <span className="text-[11px] font-black uppercase tracking-tight text-foreground/70">
+                        <div className="w-1.5 h-1.5 bg-primary/40 rounded-none" />
+                        <span className="text-sm font-medium text-foreground/70">
                           {item}
                         </span>
                       </div>
@@ -98,7 +98,7 @@ export const ProviderTabsContent: React.FC<ProviderTabsContentProps> = ({
 
             {/* Business Specifications */}
             <SpecificationList 
-              title="Business Information" 
+              title="Business Details" 
               specifications={{
                 "Business Type": company.type?.replace(/_/g, ' ') || "Provider",
                 "Operating Since": company.createdAt ? new Date(company.createdAt).getFullYear().toString() : "2024",
@@ -112,16 +112,16 @@ export const ProviderTabsContent: React.FC<ProviderTabsContentProps> = ({
             {/* Gallery */}
             <div>
               <div className="flex flex-col gap-4 mb-6">
-                <h3 className="font-heading font-bold uppercase text-xs tracking-[0.2em] text-foreground/40">
+                <h3 className="text-lg font-semibold text-foreground">
                   Gallery
                 </h3>
-                <Separator className="bg-border/40" />
+                <Separator className="bg-border/30" />
               </div>
               <div className="grid grid-cols-3 gap-2">
                 {galleryImages.map((src, idx) => (
                   <div
                     key={`${src}-${idx}`}
-                    className="aspect-video bg-muted relative group overflow-hidden border border-border/40"
+                    className="aspect-video bg-muted relative group overflow-hidden border border-border"
                   >
                     <ImageWithFallback
                       src={src}
@@ -136,14 +136,14 @@ export const ProviderTabsContent: React.FC<ProviderTabsContentProps> = ({
             {/* Featured Products */}
             <div>
               <div className="flex items-center justify-between mb-2">
-                <h3 className="font-heading font-bold uppercase text-xs tracking-[0.2em] text-foreground/40">
+                <h3 className="text-lg font-semibold text-foreground">
                   Featured Products
                 </h3>
                 <Button
                   variant="link"
-                  className="text-primary text-[10px] font-black uppercase tracking-widest p-0 h-auto"
+                  className="text-primary text-xs font-semibold p-0 h-auto"
                 >
-                  Open Catalog
+                  View All
                 </Button>
               </div>
               <Separator className="bg-border/40 mb-6" />
@@ -168,13 +168,13 @@ export const ProviderTabsContent: React.FC<ProviderTabsContentProps> = ({
                         )}
                       </div>
                       <div className="flex flex-col justify-center">
-                        <h4 className="font-heading font-black text-xs uppercase leading-tight mb-1 group-hover:text-primary transition-colors line-clamp-2">
+                        <h4 className="text-sm font-semibold text-foreground leading-tight mb-1 group-hover:text-primary transition-colors line-clamp-2">
                           {product.name}
                         </h4>
-                        <div className="text-[9px] text-muted-foreground uppercase font-bold tracking-wider mb-2">
-                          {product.category?.name || "General Material"}
+                        <div className="text-xs text-muted-foreground mb-2">
+                          {product.category?.name || "Product"}
                         </div>
-                        <div className="font-black text-xs text-foreground uppercase tracking-tight">
+                        <div className="font-bold text-sm text-foreground">
                           RWF {price.toLocaleString()}
                         </div>
                       </div>
@@ -190,7 +190,7 @@ export const ProviderTabsContent: React.FC<ProviderTabsContentProps> = ({
       <TabsContent value="products" className="mt-8">
         <div className="space-y-6">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-            <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">
+            <p className="text-sm font-medium text-muted-foreground">
               {listings.length} Active Listings
             </p>
           </div>
@@ -221,10 +221,10 @@ export const ProviderTabsContent: React.FC<ProviderTabsContentProps> = ({
                     <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                   </div>
                   <div className="p-4 space-y-2">
-                    <h4 className="font-heading font-black text-[11px] uppercase leading-tight line-clamp-2 group-hover:text-primary transition-colors tracking-tight">
+                    <h4 className="text-sm font-semibold text-foreground leading-tight line-clamp-2 group-hover:text-primary transition-colors">
                       {product.name}
                     </h4>
-                    <div className="font-black text-xs uppercase tracking-tight text-foreground/80">
+                    <div className="font-bold text-sm text-foreground">
                       RWF {price.toLocaleString()}
                     </div>
                   </div>
@@ -239,7 +239,7 @@ export const ProviderTabsContent: React.FC<ProviderTabsContentProps> = ({
         <div className="border border-border p-8 bg-muted/5 space-y-8">
           <div className="flex flex-col sm:flex-row items-center gap-8 pb-8 relative">
             <div className="text-center">
-              <div className="text-5xl font-black font-display text-foreground tracking-tighter">
+              <div className="text-4xl font-bold text-foreground">
                 {Number(company.averageRating || 0).toFixed(1)}
               </div>
               <div className="flex gap-0.5 justify-center my-3 text-primary">
@@ -247,7 +247,7 @@ export const ProviderTabsContent: React.FC<ProviderTabsContentProps> = ({
                   <Star key={star} className="w-3.5 h-3.5 fill-primary" />
                 ))}
               </div>{" "}
-              <div className="text-[10px] uppercase font-black tracking-[0.2em] text-muted-foreground/60">
+              <div className="text-xs font-medium text-muted-foreground">
                 {company.reviewCount || 0} Reviews
               </div>
             </div>
@@ -255,7 +255,7 @@ export const ProviderTabsContent: React.FC<ProviderTabsContentProps> = ({
               {[5, 4, 3, 2, 1].map((rating, i) => (
                 <div
                   key={rating}
-                  className="flex items-center gap-4 text-[10px] font-black uppercase tracking-widest text-muted-foreground/40"
+                  className="flex items-center gap-4 text-xs font-medium text-muted-foreground"
                 >
                   <span className="w-2">{rating}</span>
                   <div className="flex-1 h-1.5 bg-muted rounded-none overflow-hidden">
@@ -293,10 +293,10 @@ export const ProviderTabsContent: React.FC<ProviderTabsContentProps> = ({
         <div className="grid md:grid-cols-2 gap-12">
           <div className="space-y-8">
             <div className="flex flex-col gap-4">
-              <h3 className="font-heading font-black uppercase text-xs tracking-[0.2em] text-foreground/40">
+              <h3 className="text-lg font-semibold text-foreground">
                 Contact Channels
               </h3>
-              <Separator className="bg-border/40" />
+              <Separator className="bg-border/30" />
             </div>
             <div className="space-y-4">
               {[
@@ -319,16 +319,16 @@ export const ProviderTabsContent: React.FC<ProviderTabsContentProps> = ({
                 <a
                   key={contact.label}
                   href="#"
-                  className="flex items-center gap-4 p-5 border border-border/40 bg-background hover:border-primary/40 transition-all group rounded-none shadow-sm"
+                  className="flex items-center gap-4 p-5 border border-border bg-background hover:border-primary/40 transition-all group rounded-none shadow-sm"
                 >
                   <div className="w-10 h-10 bg-primary/5 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors border border-primary/10">
                     <contact.icon className="w-4 h-4" />
                   </div>
                   <div>
-                    <div className="text-[9px] font-black uppercase tracking-[0.2em] text-muted-foreground/60 mb-1">
+                    <div className="text-xs font-medium text-muted-foreground mb-1">
                       {contact.label}
                     </div>
-                    <div className="font-black text-xs text-foreground uppercase tracking-tight">
+                    <div className="font-bold text-sm text-foreground">
                       {contact.value}
                     </div>
                   </div>
@@ -339,20 +339,20 @@ export const ProviderTabsContent: React.FC<ProviderTabsContentProps> = ({
 
           <div className="space-y-8">
             <div className="flex flex-col gap-4">
-              <h3 className="font-heading font-black uppercase text-xs tracking-[0.2em] text-foreground/40">
+              <h3 className="text-lg font-semibold text-foreground">
                 Business Hours
               </h3>
-              <Separator className="bg-border/40" />
+              <Separator className="bg-border/30" />
             </div>
-            <div className="border border-border/40 bg-muted/5 p-8 space-y-6">
+            <div className="border border-border bg-muted/5 p-8 space-y-6">
               <div className="flex justify-between items-center pb-4 relative">
                 <div className="flex items-center gap-3">
-                  <Calendar className="w-4 h-4 text-primary opacity-60" />
-                  <span className="font-black uppercase text-[10px] tracking-widest text-foreground/80">
+                  <Calendar className="w-4 h-4 text-primary/60" />
+                  <span className="font-semibold text-sm text-foreground">
                     Business Hours
                   </span>
                 </div>
-                <span className="text-[10px] font-mono font-bold text-muted-foreground">
+                <span className="text-xs font-medium text-muted-foreground">
                   08:00 - 18:00 CAT
                 </span>
                 <Separator className="absolute bottom-0 left-0 bg-border/20" />

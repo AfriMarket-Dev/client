@@ -13,8 +13,9 @@ export default defineConfig({
 		tailwindcss(),
 		tanstackRouter({ target: "react", autoCodeSplitting: true }),
 		viteReact({
+			// @ts-expect-error - babel might be missing from types in this version
 			babel: {
-				plugins: [["babel-plugin-react-compiler"]],
+				plugins: [["babel-plugin-react-compiler", { target: "19" }]],
 			},
 		}),
 	],
@@ -34,12 +35,28 @@ export default defineConfig({
 	build: {
 		rollupOptions: {
 			output: {
-				manualChunks: {
-					"vendor-react": ["react", "react-dom"],
-					"vendor-redux": ["@reduxjs/toolkit", "react-redux", "redux-persist"],
-					"vendor-router": ["@tanstack/react-router"],
-					"vendor-charts": ["recharts"],
-					"vendor-ui": ["lucide-react", "@remixicon/react"],
+				manualChunks(id) {
+					if (id.includes("node_modules")) {
+						if (id.includes("react") || id.includes("react-dom")) {
+							return "vendor-react";
+						}
+						if (
+							id.includes("@reduxjs") ||
+							id.includes("react-redux") ||
+							id.includes("redux-persist")
+						) {
+							return "vendor-redux";
+						}
+						if (id.includes("@tanstack/react-router")) {
+							return "vendor-router";
+						}
+						if (id.includes("recharts")) {
+							return "vendor-charts";
+						}
+						if (id.includes("lucide-react") || id.includes("@remixicon/react")) {
+							return "vendor-ui";
+						}
+					}
 				},
 			},
 		},

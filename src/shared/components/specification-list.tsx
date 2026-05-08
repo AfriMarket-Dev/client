@@ -11,12 +11,12 @@ interface SpecificationListProps {
 export const SpecificationList: React.FC<SpecificationListProps> = ({
 	specifications,
 	className,
-	title = "Technical Specifications",
+	title = "Specifications",
 }) => {
 	if (!specifications || Object.keys(specifications).length === 0) {
 		return (
-			<div className="py-10 text-center border border-dashed border-border/40 bg-muted/5">
-				<p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60">
+			<div className="py-12 text-center border border-dashed border-border bg-muted/5">
+				<p className="text-sm text-muted-foreground">
 					No specifications provided
 				</p>
 			</div>
@@ -24,28 +24,30 @@ export const SpecificationList: React.FC<SpecificationListProps> = ({
 	}
 
 	return (
-		<div className={cn("space-y-6", className)}>
+		<div className={cn("space-y-4", className)}>
 			{title && (
-				<div className="flex items-center gap-3">
-					<div className="w-8 h-8 rounded-none bg-muted flex items-center justify-center">
-						<RiSettings4Line className="w-4 h-4 text-muted-foreground" />
-					</div>
-					<h3 className="text-xs font-black uppercase tracking-[0.2em] text-foreground">
+				<div className="flex items-center gap-2">
+					<RiSettings4Line className="w-4 h-4 text-muted-foreground" />
+					<h3 className="text-sm font-semibold text-foreground">
 						{title}
 					</h3>
 				</div>
 			)}
 
-			<div className="grid grid-cols-1 sm:grid-cols-2 gap-px bg-border/40 border border-border/40 overflow-hidden shadow-sm">
-				{Object.entries(specifications).map(([key, value]) => (
+			<div className="border border-border overflow-hidden">
+				{Object.entries(specifications).map(([key, value], index) => (
 					<div
 						key={key}
-						className="bg-background p-4 flex flex-col justify-center gap-1.5"
+						className={cn(
+							"flex items-center justify-between py-3 px-4",
+							index % 2 === 0 ? "bg-muted/20" : "bg-background",
+							index !== Object.entries(specifications).length - 1 && "border-b border-border"
+						)}
 					>
-						<span className="text-[8px] sm:text-[9px] font-black text-muted-foreground uppercase tracking-widest shrink-0">
+						<span className="text-xs font-medium text-muted-foreground">
 							{key}
 						</span>
-						<span className="text-[10px] sm:text-[11px] font-bold uppercase text-foreground break-words">
+						<span className="text-sm font-semibold text-foreground text-right max-w-[60%] truncate">
 							{value}
 						</span>
 					</div>

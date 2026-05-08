@@ -116,7 +116,7 @@ export const authApi = apiSlice.injectEndpoints({
 			{ email: string; redirectTo: string }
 		>({
 			query: (body) => ({
-				url: "/auth/forget-password",
+				url: "/auth/request-password-reset",
 				method: "POST",
 				body,
 			}),
@@ -134,12 +134,12 @@ export const authApi = apiSlice.injectEndpoints({
 		}),
 
 		checkEmailUniqueness: builder.query<{ available: boolean }, string>({
-			query: (email) => `/auth/check-email?email=${encodeURIComponent(email)}`,
+			query: (email) => `/users/check-email?email=${encodeURIComponent(email)}`,
 		}),
 
 		checkRegistrationUniqueness: builder.query<{ available: boolean }, string>({
-			query: (regId) =>
-				`/auth/check-registration?id=${encodeURIComponent(regId)}`,
+			query: (phoneNumber) =>
+				`/users/check-registration?phoneNumber=${encodeURIComponent(phoneNumber)}`,
 		}),
 	}),
 });

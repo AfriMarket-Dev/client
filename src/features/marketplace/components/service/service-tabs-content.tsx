@@ -27,15 +27,13 @@ export const ServiceTabsContent: React.FC<ServiceTabsContentProps> = ({
 			<div className="space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-500">
 				<section>
 					<div className="flex items-center gap-3 mb-6">
-						<div className="w-8 h-8 rounded-none bg-muted flex items-center justify-center">
-							<RiInformationLine className="w-4 h-4 text-muted-foreground" />
-						</div>
-						<h2 className="text-xs font-black uppercase tracking-[0.2em] text-foreground">
-							Service Overview
+						<RiInformationLine className="w-5 h-5 text-foreground/70" />
+						<h2 className="text-lg font-semibold text-foreground">
+							Overview
 						</h2>
 					</div>
 					<div className="prose prose-slate max-w-none">
-						<p className="text-muted-foreground leading-relaxed text-xs">
+						<p className="text-sm leading-relaxed text-muted-foreground">
 							{service.description ||
 								"Detailed description of this professional construction service will appear here. The provider hasn't updated the full overview yet."}
 						</p>
@@ -47,8 +45,8 @@ export const ServiceTabsContent: React.FC<ServiceTabsContentProps> = ({
 				<div className="grid grid-cols-1 md:grid-cols-2 gap-8">
 					<section className="p-6 bg-muted/50 border border-border">
 						<div className="flex items-center gap-3 mb-6">
-							<RiCheckDoubleLine className="w-5 h-5 text-success" />
-							<h3 className="text-[10px] font-black uppercase tracking-widest text-foreground">
+							<RiCheckDoubleLine className="w-5 h-5 text-emerald-600" />
+							<h3 className="text-sm font-semibold text-foreground">
 								What's Included
 							</h3>
 						</div>
@@ -60,8 +58,8 @@ export const ServiceTabsContent: React.FC<ServiceTabsContentProps> = ({
 								"Workmanship guarantee",
 							].map((item, i) => (
 								<li key={i} className="flex items-start gap-3">
-									<div className="mt-1.5 w-1.5 h-1.5 bg-muted/30 transform rotate-45" />
-									<span className="text-[11px] font-bold uppercase tracking-tight text-muted-foreground">
+									<div className="mt-2 w-1.5 h-1.5 bg-primary/40 rounded-none" />
+									<span className="text-sm text-muted-foreground">
 										{item}
 									</span>
 								</li>
@@ -72,32 +70,32 @@ export const ServiceTabsContent: React.FC<ServiceTabsContentProps> = ({
 					<section className="p-6 bg-background border border-border">
 						<div className="flex items-center gap-3 mb-6">
 							<RiBriefcaseLine className="w-5 h-5 text-primary" />
-							<h3 className="text-[10px] font-black uppercase tracking-widest text-foreground">
-								Service Experience
+							<h3 className="text-sm font-semibold text-foreground">
+								Experience
 							</h3>
 						</div>
 						<div className="space-y-6">
 							<div className="flex items-center justify-between">
-								<span className="text-[10px] uppercase font-bold text-muted-foreground tracking-tighter">
+								<span className="text-xs font-medium text-muted-foreground">
 									Typical Duration
 								</span>
-								<span className="text-[11px] font-black text-foreground uppercase">
+								<span className="text-sm font-semibold text-foreground">
 									{service.duration || "Contact for estimate"}
 								</span>
 							</div>
 							<div className="flex items-center justify-between">
-								<span className="text-[10px] uppercase font-bold text-muted-foreground tracking-tighter">
+								<span className="text-xs font-medium text-muted-foreground">
 									Standard Area
 								</span>
-								<span className="text-[11px] font-black text-foreground uppercase">
+								<span className="text-sm font-semibold text-foreground">
 									Kigali City
 								</span>
 							</div>
 							<div className="flex items-center justify-between">
-								<span className="text-[10px] uppercase font-bold text-muted-foreground tracking-tighter">
+								<span className="text-xs font-medium text-muted-foreground">
 									Availability
 								</span>
-								<span className="text-[11px] font-black text-foreground uppercase">
+								<span className="text-sm font-semibold text-foreground">
 									Mon - Sat
 								</span>
 							</div>
@@ -111,32 +109,31 @@ export const ServiceTabsContent: React.FC<ServiceTabsContentProps> = ({
 	if (activeTab === "provider") {
 		return (
 			<div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-				<section className="p-8 bg-muted/95 text-primary-foreground rounded-none">
+				<section className="p-8 bg-muted/20 border border-border">
 					<div className="flex flex-col md:flex-row gap-8 items-start md:items-center">
-						<div className="w-24 h-24 bg-background/10 border border-white/20 flex items-center justify-center text-3xl font-black uppercase tracking-tighter">
+						<div className="w-20 h-20 bg-muted border border-border flex items-center justify-center text-3xl font-bold">
 							{service.company?.name?.charAt(0) || "S"}
 						</div>
 						<div className="flex-1">
-							<h3 className="text-lg font-black uppercase tracking-tight mb-2">
+							<h3 className="text-lg font-semibold text-foreground mb-2">
 								{service.company?.name || "Professional Provider"}
 							</h3>
-							<div className="flex items-center gap-4 opacity-70 mb-4">
+							<div className="flex items-center gap-4 text-muted-foreground mb-4">
 								<div className="flex items-center gap-1.5">
 									<RiMapPinLine className="w-4 h-4" />
-									<span className="text-xs uppercase font-bold tracking-widest">
+									<span className="text-xs font-medium">
 										Kigali, Rwanda
 									</span>
 								</div>
 								<div className="flex items-center gap-1.5">
 									<RiBriefcaseLine className="w-4 h-4" />
-									<span className="text-xs uppercase font-bold tracking-widest">
-										50+ Services Completed
+									<span className="text-xs font-medium">
+										Verified Completed Jobs
 									</span>
 								</div>
 							</div>
-							<p className="text-sm text-muted-foreground max-w-2xl leading-relaxed italic">
-								"Dedicated to delivering precision construction solutions across
-								Rwanda with verified expertise."
+							<p className="text-sm text-muted-foreground max-w-2xl leading-relaxed">
+								"Professional construction solutions across Rwanda."
 							</p>
 						</div>
 					</div>
@@ -148,12 +145,12 @@ export const ServiceTabsContent: React.FC<ServiceTabsContentProps> = ({
 	if (activeTab === "reviews") {
 		return (
 			<div className="space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-500">
-				<div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 pb-6 border-b border-border/40">
+				<div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 pb-6 border-b border-border">
 					<div className="space-y-1">
-						<h3 className="font-heading font-black uppercase text-xs tracking-[0.4em] text-foreground/40">
-							Customer Reviews
+						<h3 className="text-lg font-semibold text-foreground tracking-tight">
+							Reviews
 						</h3>
-						<p className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest">
+						<p className="text-sm text-muted-foreground">
 							Feedback from verified customers
 						</p>
 					</div>

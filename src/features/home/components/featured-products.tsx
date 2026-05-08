@@ -78,7 +78,7 @@ const FeaturedProducts: React.FC = () => {
 						{Array.from({ length: 5 }).map((_, i) => (
 							<div
 								key={i}
-								className="aspect-[4/3] rounded-lg border border-border/40 bg-muted/20 animate-pulse"
+								className="aspect-[4/3] rounded-md border border-border/40 bg-muted/20 animate-pulse"
 							/>
 						))}
 					</div>

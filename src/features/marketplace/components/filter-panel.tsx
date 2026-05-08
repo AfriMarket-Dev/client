@@ -46,10 +46,10 @@ export const FilterPanel = memo<FilterPanelProps>(
 		const stockToggleId = useId();
 
 		return (
-			<div className="space-y-5 p-1">
+			<div className="space-y-6">
 				{/* Category */}
-				<div className="space-y-2">
-					<Label className="uppercase text-[10px] font-bold text-muted-foreground tracking-[0.2em] block">
+				<div className="space-y-3">
+					<Label className="text-sm font-bold text-foreground uppercase tracking-widest">
 						Category
 					</Label>
 					<Select
@@ -58,7 +58,7 @@ export const FilterPanel = memo<FilterPanelProps>(
 							onFilterChange({ categoryId: val ?? undefined, page: 1 })
 						}
 					>
-						<SelectTrigger className="w-full bg-background rounded-none border-border/20 font-display font-medium uppercase tracking-widest text-[10px] h-9">
+						<SelectTrigger className="w-full bg-background rounded-none border-border h-10 text-sm shadow-none">
 							<SelectValue placeholder="All Categories">
 								{filters.categoryId === "all" || !filters.categoryId
 									? "All Categories"
@@ -67,18 +67,15 @@ export const FilterPanel = memo<FilterPanelProps>(
 										)?.name || filters.categoryId}
 							</SelectValue>
 						</SelectTrigger>
-						<SelectContent className="rounded-none border-border/20">
-							<SelectItem
-								value="all"
-								className="rounded-none text-[10px] uppercase tracking-widest"
-							>
+						<SelectContent className="rounded-none border-border">
+							<SelectItem value="all" className="text-sm rounded-none">
 								All Categories
 							</SelectItem>
 							{categories.map((c) => (
 								<SelectItem
 									key={c.id}
 									value={c.id}
-									className="rounded-none text-[10px] uppercase tracking-widest"
+									className="text-sm rounded-none"
 								>
 									{c.name}
 								</SelectItem>
@@ -87,11 +84,11 @@ export const FilterPanel = memo<FilterPanelProps>(
 					</Select>
 				</div>
 
-				<Separator className="opacity-10" />
+				<Separator />
 
 				{/* Company Type */}
-				<div className="space-y-2">
-					<Label className="uppercase text-[10px] font-bold text-muted-foreground tracking-[0.2em] block">
+				<div className="space-y-3">
+					<Label className="text-sm font-bold text-foreground uppercase tracking-widest">
 						Provider Type
 					</Label>
 					<Select
@@ -100,7 +97,7 @@ export const FilterPanel = memo<FilterPanelProps>(
 							onFilterChange({ companyType: val ?? undefined, page: 1 })
 						}
 					>
-						<SelectTrigger className="w-full bg-background rounded-none border-border/20 font-display font-medium uppercase tracking-widest text-[10px] h-9">
+						<SelectTrigger className="w-full bg-background rounded-none border-border h-10 text-sm shadow-none">
 							<SelectValue placeholder="All Types">
 								{filters.companyType === "all" || !filters.companyType
 									? "All Types"
@@ -108,60 +105,57 @@ export const FilterPanel = memo<FilterPanelProps>(
 										filters.companyType}
 							</SelectValue>
 						</SelectTrigger>
-						<SelectContent className="rounded-none border-border/20">
-							<SelectItem
-								value="all"
-								className="rounded-none text-[10px] uppercase tracking-widest"
-							>
+						<SelectContent className="rounded-none border-border">
+							<SelectItem value="all" className="text-sm rounded-none">
 								All Types
 							</SelectItem>
 							<SelectGroup>
-								<SelectLabel className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
+								<SelectLabel className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mt-2 px-2">
 									Provider
 								</SelectLabel>
 								<SelectItem
 									value="SUPPLIER_DEALER"
-									className="rounded-none text-[9px] uppercase tracking-widest pl-7"
+									className="text-sm rounded-none pl-6"
 								>
 									Dealer
 								</SelectItem>
 								<SelectItem
 									value="SUPPLIER_RETAILER"
-									className="rounded-none text-[9px] uppercase tracking-widest pl-7"
+									className="text-sm rounded-none pl-6"
 								>
 									Retailer
 								</SelectItem>
 								<SelectItem
 									value="SUPPLIER_WHOLESALER"
-									className="rounded-none text-[9px] uppercase tracking-widest pl-7"
+									className="text-sm rounded-none pl-6"
 								>
 									Wholesaler/Importer
 								</SelectItem>
 							</SelectGroup>
 							<SelectGroup>
-								<SelectLabel className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mt-2">
+								<SelectLabel className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mt-2 px-2">
 									Manufacturer
 								</SelectLabel>
 								<SelectItem
 									value="MANUFACTURER_RWANDA"
-									className="rounded-none text-[9px] uppercase tracking-widest pl-7"
+									className="text-sm rounded-none pl-6"
 								>
 									Factory (Rwanda)
 								</SelectItem>
 								<SelectItem
 									value="MANUFACTURER_EAC"
-									className="rounded-none text-[9px] uppercase tracking-widest pl-7"
+									className="text-sm rounded-none pl-6"
 								>
 									Factory (EAC)
 								</SelectItem>
 							</SelectGroup>
 							<SelectGroup>
-								<SelectLabel className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mt-2">
+								<SelectLabel className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mt-2 px-2">
 									Service
 								</SelectLabel>
 								<SelectItem
 									value="SERVICE_PROVIDER"
-									className="rounded-none text-[9px] uppercase tracking-widest pl-7"
+									className="text-sm rounded-none pl-6"
 								>
 									Service Provider
 								</SelectItem>
@@ -170,21 +164,21 @@ export const FilterPanel = memo<FilterPanelProps>(
 					</Select>
 				</div>
 
-				<Separator className="opacity-10" />
+				<Separator />
 
 				{/* Sort */}
-				<div className="space-y-2">
-					<Label className="uppercase text-[10px] font-bold text-muted-foreground tracking-[0.2em] block">
+				<div className="space-y-3">
+					<Label className="text-sm font-bold text-foreground uppercase tracking-widest">
 						Sorting
 					</Label>
-					<div className="flex gap-1.5">
+					<div className="flex gap-2">
 						<Select
 							value={filters.sortBy}
 							onValueChange={(val) =>
 								onFilterChange({ sortBy: val ?? undefined, page: 1 })
 							}
 						>
-							<SelectTrigger className="flex-1 bg-background rounded-none border-border/20 font-display font-medium uppercase tracking-widest text-[10px] h-9">
+							<SelectTrigger className="flex-1 bg-background rounded-none border-border h-10 text-sm shadow-none">
 								<SelectValue placeholder="Sorting">
 									{filters.sortBy === "createdAt"
 										? "Newest"
@@ -195,31 +189,22 @@ export const FilterPanel = memo<FilterPanelProps>(
 												: "Sorting"}
 								</SelectValue>
 							</SelectTrigger>
-							<SelectContent className="rounded-none border-border/20">
-								<SelectItem
-									value="createdAt"
-									className="rounded-none text-[10px] font-bold uppercase tracking-widest"
-								>
+							<SelectContent className="rounded-none border-border">
+								<SelectItem value="createdAt" className="text-sm rounded-none">
 									Newest
 								</SelectItem>
-								<SelectItem
-									value="price"
-									className="rounded-none text-[10px] font-bold uppercase tracking-widest"
-								>
+								<SelectItem value="price" className="text-sm rounded-none">
 									Price
 								</SelectItem>
-								<SelectItem
-									value="name"
-									className="rounded-none text-[10px] font-bold uppercase tracking-widest"
-								>
+								<SelectItem value="name" className="text-sm rounded-none">
 									Name
 								</SelectItem>
 							</SelectContent>
 						</Select>
 						<Button
 							variant="outline"
-							size="sm"
-							className="shrink-0 px-2 rounded-none border-border/20 h-9"
+							size="icon"
+							className="shrink-0 rounded-none border-border h-10 w-10 shadow-none"
 							onClick={() =>
 								onFilterChange({
 									sortOrder: filters.sortOrder === "ASC" ? "DESC" : "ASC",
@@ -232,11 +217,11 @@ export const FilterPanel = memo<FilterPanelProps>(
 					</div>
 				</div>
 
-				<Separator className="opacity-10" />
+				<Separator />
 
 				{/* Price Range */}
-				<div className="space-y-3">
-					<Label className="uppercase text-[10px] font-bold text-muted-foreground tracking-[0.2em] block">
+				<div className="space-y-4">
+					<Label className="text-sm font-bold text-foreground uppercase tracking-widest">
 						Price Range
 					</Label>
 					<Slider
@@ -247,11 +232,11 @@ export const FilterPanel = memo<FilterPanelProps>(
 						onValueCommitted={onPriceCommit}
 						className="py-2"
 					/>
-					<div className="flex items-center justify-between text-[8px] font-bold text-primary uppercase tracking-widest">
+					<div className="flex items-center justify-between text-[10px] font-bold text-muted-foreground uppercase">
 						<span>{priceRange[0].toLocaleString()} RWF</span>
 						<span>{priceRange[1].toLocaleString()}+ RWF</span>
 					</div>
-					<div className="flex gap-1.5">
+					<div className="flex gap-2">
 						<Input
 							type="number"
 							placeholder="Min"
@@ -259,7 +244,7 @@ export const FilterPanel = memo<FilterPanelProps>(
 							onChange={(e) =>
 								onPriceRangeChange([Number(e.target.value), priceRange[1]])
 							}
-							className="h-8 bg-background rounded-none border-border/20 text-[10px] font-bold uppercase tracking-widest"
+							className="h-10 bg-background rounded-none border-border text-sm shadow-none"
 						/>
 						<Input
 							type="number"
@@ -268,45 +253,45 @@ export const FilterPanel = memo<FilterPanelProps>(
 							onChange={(e) =>
 								onPriceRangeChange([priceRange[0], Number(e.target.value)])
 							}
-							className="h-8 bg-background rounded-none border-border/20 text-[10px] font-bold uppercase tracking-widest"
+							className="h-10 bg-background rounded-none border-border text-sm shadow-none"
 						/>
 					</div>
 				</div>
 
-				<Separator className="opacity-10" />
+				<Separator />
 
 				{/* District */}
-				<div className="space-y-2">
-					<Label className="uppercase text-[10px] font-bold text-muted-foreground tracking-[0.2em] block">
+				<div className="space-y-3">
+					<Label className="text-sm font-bold text-foreground uppercase tracking-widest">
 						District
 					</Label>
 					<Input
-						placeholder="Search District..."
+						placeholder="Search district..."
 						value={filters.district}
 						onChange={(e) =>
 							onFilterChange({ district: e.target.value, page: 1 })
 						}
-						className="h-9 bg-background rounded-none border-border/20 text-[10px] font-bold uppercase tracking-widest placeholder:text-muted-foreground/30"
+						className="h-10 bg-background rounded-none border-border text-sm placeholder:text-muted-foreground/50 shadow-none"
 					/>
 				</div>
 
-				<Separator className="opacity-10" />
+				<Separator />
 
 				{/* In Stock */}
-				<div className="flex items-center justify-between border p-3 rounded-none border-border/20 bg-muted/5">
+				<div className="flex items-center justify-between border p-4 rounded-none border-border bg-muted/20">
 					<Label
 						htmlFor={stockToggleId}
-						className="text-[10px] font-bold uppercase tracking-widest cursor-pointer"
+						className="text-xs font-bold uppercase tracking-widest cursor-pointer"
 					>
 						Available Now
 					</Label>
 					<Switch
 						id={stockToggleId}
-						className="rounded-none scale-75"
 						checked={filters.onlyInStock}
 						onCheckedChange={(checked) =>
 							onFilterChange({ onlyInStock: checked, page: 1 })
 						}
+						className="rounded-none"
 					/>
 				</div>
 			</div>

@@ -69,10 +69,10 @@ const ProviderDetails: React.FC<ProviderDetailsProps> = ({
             <EmptyMedia variant="icon">
               <Building2 className="w-4 h-4 text-primary" />
             </EmptyMedia>
-            <EmptyTitle className="text-xl font-display font-black uppercase">
+            <EmptyTitle className="text-xl font-semibold">
               Provider Not Found
             </EmptyTitle>
-            <EmptyDescription className="uppercase tracking-widest text-[10px]">
+            <EmptyDescription className="text-sm text-muted-foreground">
               The provider you are looking for may have been removed or does not
               exist.
             </EmptyDescription>
@@ -80,7 +80,7 @@ const ProviderDetails: React.FC<ProviderDetailsProps> = ({
           <EmptyContent>
             <Button
               onClick={onBack}
-              className="rounded-none h-11 px-8 font-black uppercase text-[10px] tracking-widest"
+              className="rounded-none h-11 px-8 font-medium"
             >
               Back to Directory
             </Button>
@@ -93,7 +93,7 @@ const ProviderDetails: React.FC<ProviderDetailsProps> = ({
   if (!company) return null;
 
   return (
-    <div className="min-h-screen bg-background space-y-0 overflow-x-hidden industrial-grain pb-24">
+    <div className="min-h-screen bg-background pb-24">
       <ProviderContactModal
         isOpen={showContactModal}
         onClose={() => setShowContactModal(false)}
@@ -109,79 +109,76 @@ const ProviderDetails: React.FC<ProviderDetailsProps> = ({
       />
 
       {/* Top Navigation */}
-      <div className="bg-background border-b border-border/40 py-3 md:py-4 px-3 sm:px-6 lg:px-8 sticky top-0 z-30">
-        <div className="max-w-[1800px] mx-auto flex items-center justify-between gap-4">
-          <div className="flex items-center gap-3 overflow-hidden">
+      <div className="bg-background/80 backdrop-blur-md border-b border-border py-4 px-4 sm:px-8 lg:px-12 sticky top-0 z-30">
+        <div className="w-full flex items-center justify-between gap-4">
+          <div className="flex items-center gap-6 overflow-hidden">
             <Button
               variant="ghost"
-              size="icon-sm"
+              size="icon"
               onClick={onBack}
-              className="shrink-0"
+              className="shrink-0 h-10 w-10 rounded-none hover:bg-muted/50 transition-all"
             >
-              <RiArrowLeftLine className="size-4" />
+              <RiArrowLeftLine className="size-6" />
             </Button>
-            <div className="h-4 w-px bg-border/60 shrink-0" />
-            <h1 className="font-display font-black uppercase text-[10px] md:text-sm tracking-widest truncate text-foreground leading-tight">
+            <div className="h-6 w-px bg-border/40 shrink-0" />
+            <h1 className="font-semibold text-sm truncate text-foreground leading-none">
               {company.name}
             </h1>
           </div>
-          <div className="flex items-center gap-2 shrink-0">
+          <div className="flex items-center gap-4 shrink-0">
             <Button
               onClick={handleOpenContactModal}
-              className="hidden md:inline-flex h-8 px-4 rounded-none text-[10px] font-black uppercase tracking-[0.2em]"
+              className="hidden md:inline-flex h-11 px-8 rounded-none font-medium shadow-none transition-all duration-300"
             >
               Contact Provider
             </Button>
-            <Badge className="bg-primary/10 text-primary border-primary/20 text-[8px] font-black tracking-widest px-2 py-0.5 rounded-none uppercase hidden sm:block">
-              {isFetching ? "Syncing..." : (company.isVerified ? "Verified Provider" : "Provider")}
+            <Badge className="bg-muted/50 text-foreground border-none text-xs font-medium px-3 py-1 rounded-none hidden sm:flex">
+              {isFetching ? "Syncing..." : (company.isVerified ? "Verified Entity" : "Registered Entity")}
             </Badge>
           </div>
         </div>
       </div>
 
-      <div className="max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8 pt-6 md:pt-12 pb-8 md:pb-12 space-y-10 md:space-y-12">
-        <ProviderHeader
-          company={company}
-          rating={rating}
-          location={location}
-          onContactClick={handleOpenContactModal}
-        />
+      <div className="w-full px-4 sm:px-8 lg:px-12 py-8 md:py-16 space-y-16">
+        {/* Provider Header */}
+        <div className="relative overflow-hidden bg-background">
+          <div className="relative z-10">
+            <ProviderHeader
+              company={company}
+              rating={rating}
+              location={location}
+              onContactClick={handleOpenContactModal}
+            />
+          </div>
+        </div>
 
-        <div className="grid lg:grid-cols-12 gap-10 lg:gap-16 items-start pt-2 md:pt-4">
-          <div className="lg:col-span-8 space-y-10 md:space-y-12 w-full overflow-hidden">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 lg:gap-16">
+          <div className="w-full lg:col-span-2 space-y-12">
             <Tabs defaultValue="overview" className="w-full">
               <div className="relative mb-8">
-                <TabsList className="!flex w-full justify-start !rounded-none !bg-transparent !border-b !border-border/40 !h-auto !p-0 !gap-6 md:gap-8 overflow-x-auto no-scrollbar whitespace-nowrap">
+                <TabsList className="!flex w-full justify-start !rounded-none !bg-transparent border-b border-border !h-auto !p-0 gap-8 overflow-x-auto no-scrollbar whitespace-nowrap">
                   <TabsTrigger
                     value="overview"
-                    className="data-[state=active]:!text-primary !rounded-none !border-b-2 !border-transparent data-[state=active]:!border-primary !pb-4 !px-0 !h-auto font-heading font-black uppercase text-[10px] tracking-[0.2em] !shadow-none !bg-transparent"
+                    className="data-[state=active]:border-primary data-[state=active]:text-primary data-[state=active]:bg-transparent !rounded-none border-b-2 border-transparent py-3 px-1 !h-auto font-medium text-sm text-muted-foreground hover:text-foreground !shadow-none transition-colors"
                   >
                     Overview
                   </TabsTrigger>
                   <TabsTrigger
                     value="products"
-                    className="data-[state=active]:!text-primary !rounded-none !border-b-2 !border-transparent data-[state=active]:!border-primary !pb-4 !px-0 !h-auto font-heading font-black uppercase text-[10px] tracking-[0.2em] !shadow-none !bg-transparent"
+                    className="data-[state=active]:border-primary data-[state=active]:text-primary data-[state=active]:bg-transparent !rounded-none border-b-2 border-transparent py-3 px-1 !h-auto font-medium text-sm text-muted-foreground hover:text-foreground !shadow-none transition-colors"
                   >
                     Catalog ({listings.length})
                   </TabsTrigger>
                   <TabsTrigger
                     value="reviews"
-                    className="data-[state=active]:!text-primary !rounded-none !border-b-2 !border-transparent data-[state=active]:!border-primary !pb-4 !px-0 !h-auto font-heading font-black uppercase text-[10px] tracking-[0.2em] !shadow-none !bg-transparent"
+                    className="data-[state=active]:border-primary data-[state=active]:text-primary data-[state=active]:bg-transparent !rounded-none border-b-2 border-transparent py-3 px-1 !h-auto font-medium text-sm text-muted-foreground hover:text-foreground !shadow-none transition-colors"
                   >
                     Reviews ({company.reviewCount || 0})
                   </TabsTrigger>
-                  <TabsTrigger
-                    value="contact"
-                    className="data-[state=active]:!text-primary !rounded-none !border-b-2 !border-transparent data-[state=active]:!border-primary !pb-4 !px-0 !h-auto font-heading font-black uppercase text-[10px] tracking-[0.2em] !shadow-none !bg-transparent"
-                  >
-                    Contact
-                  </TabsTrigger>
                 </TabsList>
-                {/* Swipe Indicator Overlay */}
-                <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-background via-background/80 to-transparent pointer-events-none sm:hidden" />
               </div>
 
-              <div className="mt-0 outline-none">
+              <div className="animate-in fade-in duration-500">
                 <ProviderTabsContent
                   company={company}
                   listings={listings}
@@ -192,29 +189,38 @@ const ProviderDetails: React.FC<ProviderDetailsProps> = ({
             </Tabs>
           </div>
 
-          <div className="lg:col-span-4 space-y-8">
-            {/* Contact Info Card */}
-            <div className="rounded-none border border-border/40 bg-muted/10 p-6 md:p-8 relative overflow-hidden">
-              <div className="absolute inset-0 blueprint-grid opacity-5 pointer-events-none" />
-              <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-foreground mb-3">
-                Provider Contact
-              </h4>
-              <div className="space-y-4">
-                <div>
-                  <p className="text-[8px] font-black uppercase tracking-widest text-muted-foreground mb-1">
-                    Location
-                  </p>
-                  <p className="text-xs font-bold uppercase">{location}</p>
-                </div>
-                <div>
-                  <p className="text-[8px] font-black uppercase tracking-widest text-muted-foreground mb-1">
-                    Joined
-                  </p>
-                  <p className="text-xs font-bold">
-                    {company.createdAt
-                      ? new Date(company.createdAt).getFullYear()
-                      : "2024"}
-                  </p>
+          <div className="w-full lg:col-span-1">
+            <div className="space-y-12">
+              {/* Contact Info Card */}
+              <div className="bg-muted/5 border border-border p-8 space-y-8">
+                <h4 className="text-sm font-semibold text-foreground border-b border-border pb-4">
+                  Contact Info
+                </h4>
+                <div className="space-y-6">
+                  <div>
+                    <p className="text-xs font-medium text-muted-foreground mb-1">
+                      Location
+                    </p>
+                    <p className="text-sm font-semibold">{location}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs font-medium text-muted-foreground mb-1">
+                      Member Since
+                    </p>
+                    <p className="text-sm font-semibold">
+                      {company.createdAt
+                        ? new Date(company.createdAt).getFullYear()
+                        : "2024"}
+                    </p>
+                  </div>
+                  <div className="pt-4">
+                    <Button 
+                      onClick={handleOpenContactModal}
+                      className="w-full rounded-none h-12 font-semibold text-sm shadow-none transition-all duration-300"
+                    >
+                      Contact Provider
+                    </Button>
+                  </div>
                 </div>
               </div>
             </div>

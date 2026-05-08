@@ -74,14 +74,14 @@ export const ProductListingView: React.FC<ProductListingViewProps> = ({
     return (
       <div
         className={cn(
-          "grid grid-cols-2 gap-4 md:gap-6",
-          viewMode === "grid" ? "lg:grid-cols-2 xl:grid-cols-4" : "grid-cols-1",
+          "grid gap-4 md:gap-6",
+          viewMode === "grid" ? "grid-cols-2 lg:grid-cols-2 xl:grid-cols-4" : "grid-cols-1",
         )}
       >
         {Array.from({ length: 8 }).map((_, i) => (
           <Skeleton
             key={`skeleton-${i}`}
-            className="h-80 border border-border/10 rounded-none"
+            className="h-80 border border-border rounded-none"
           />
         ))}
       </div>
@@ -95,20 +95,19 @@ export const ProductListingView: React.FC<ProductListingViewProps> = ({
           <Empty className="max-w-md w-full">
             <EmptyHeader>
               <EmptyMedia variant="icon">
-                <Building2 className="w-4 h-4 text-primary" />
+                <Building2 className="w-8 h-8 text-muted-foreground" />
               </EmptyMedia>
-              <EmptyTitle className="text-xl font-display font-black uppercase">
-                No Products Found
-              </EmptyTitle>
-              <EmptyDescription className="uppercase tracking-widest text-[10px]">
+              <EmptyTitle>No Products Found</EmptyTitle>
+              <EmptyDescription>
                 We couldn't find any products matching your current filters. Try
                 adjusting your criteria.
               </EmptyDescription>
             </EmptyHeader>
-            <EmptyContent>
+            <EmptyContent className="mt-6 flex justify-center">
               <Button
                 onClick={resetFilters}
-                className="rounded-none h-11 px-8 font-black uppercase text-[10px] tracking-widest"
+                variant="outline"
+                className="h-10 px-6 font-medium rounded-none"
               >
                 Clear All Filters
               </Button>
@@ -139,29 +138,29 @@ export const ProductListingView: React.FC<ProductListingViewProps> = ({
       )}
 
       {meta && meta.totalPages > 1 && (
-        <div className="flex justify-center items-center gap-2 sm:gap-4 mt-12 pt-8 border-t border-border/20">
+        <div className="flex justify-center items-center gap-4 mt-12 pt-8 border-t border-border">
           <Button
             variant="outline"
             size="sm"
-            className="rounded-none font-display font-bold uppercase tracking-widest text-[8px] sm:text-[9px] h-9 sm:h-10 px-4 sm:px-6 border-border/40"
+            className="font-medium h-9 px-4 rounded-none"
             disabled={filters.page <= 1}
             onClick={() => patchFilters({ page: filters.page - 1 })}
           >
-            <ChevronLeft className="w-3.5 h-3.5 mr-1" />
+            <ChevronLeft className="w-4 h-4 mr-1" />
             Prev
           </Button>
-          <span className="flex items-center px-4 text-[9px] sm:text-[10px] font-display font-bold uppercase tracking-widest text-muted-foreground/30">
+          <span className="text-sm font-medium text-muted-foreground">
             {meta.page} / {meta.totalPages}
           </span>
           <Button
             variant="outline"
             size="sm"
-            className="rounded-none font-display font-bold uppercase tracking-widest text-[8px] sm:text-[9px] h-9 sm:h-10 px-4 sm:px-6 border-border/40"
+            className="font-medium h-9 px-4 rounded-none"
             disabled={filters.page >= meta.totalPages}
             onClick={() => patchFilters({ page: filters.page + 1 })}
           >
             Next
-            <ChevronRight className="w-3.5 h-3.5 ml-1" />
+            <ChevronRight className="w-4 h-4 ml-1" />
           </Button>
         </div>
       )}

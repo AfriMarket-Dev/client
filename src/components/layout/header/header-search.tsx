@@ -16,7 +16,7 @@ export const HeaderSearch: React.FC<HeaderSearchProps> = ({
 				placeholder="Search materials, equipment, or services..."
 				value={value}
 				onChange={(e) => onChange(e.target.value)}
-				className="h-10 text-sm border border-border bg-muted/20 focus:bg-background focus:border-primary transition-all duration-200 rounded-lg placeholder:text-muted-foreground/70"
+				className="h-10 text-sm border border-border bg-muted/20 focus:bg-background focus:border-primary transition-all duration-200 rounded-md placeholder:text-muted-foreground/70"
 			/>
 		</div>
 	</div>

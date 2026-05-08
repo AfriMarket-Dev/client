@@ -154,7 +154,7 @@ const ProviderListing: React.FC<ProviderListingProps> = ({
 						{Array.from({ length: 12 }).map((_, i) => (
 							<Skeleton
 								key={`provider-skeleton-${i}`}
-								className="h-72 rounded-none border border-border/10"
+								className="h-72 rounded-none border border-border"
 							/>
 						))}
 					</div>
@@ -204,11 +204,11 @@ const ProviderListing: React.FC<ProviderListingProps> = ({
 			pagination={
 				meta &&
 				meta.totalPages > 1 && (
-					<div className="flex justify-center items-center gap-2 sm:gap-4 mt-12 pt-8 border-t border-border/20">
+					<div className="flex justify-center items-center gap-2 sm:gap-4 mt-12 pt-8 border-t border-border">
 						<Button
 							variant="outline"
 							size="sm"
-							className="rounded-none font-display font-bold uppercase tracking-widest text-[8px] sm:text-[9px] h-9 sm:h-10 px-4 sm:px-6 border-border/40"
+							className="rounded-none font-display font-bold uppercase tracking-widest text-[8px] sm:text-[9px] h-9 sm:h-10 px-4 sm:px-6 border-border"
 							disabled={filters.page <= 1}
 							onClick={() => handleFiltersChange({ page: filters.page - 1 })}
 						>
@@ -220,7 +220,7 @@ const ProviderListing: React.FC<ProviderListingProps> = ({
 						<Button
 							variant="outline"
 							size="sm"
-							className="rounded-none font-display font-bold uppercase tracking-widest text-[8px] sm:text-[9px] h-9 sm:h-10 px-4 sm:px-6 border-border/40"
+							className="rounded-none font-display font-bold uppercase tracking-widest text-[8px] sm:text-[9px] h-9 sm:h-10 px-4 sm:px-6 border-border"
 							disabled={filters.page >= meta.totalPages}
 							onClick={() => handleFiltersChange({ page: filters.page + 1 })}
 						>

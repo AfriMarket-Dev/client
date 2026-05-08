@@ -37,35 +37,30 @@ export function DetailsPageLayout({
 	className,
 }: DetailsPageLayoutProps) {
 	return (
-		<div
-			className={cn(
-				"min-h-screen bg-background space-y-0 overflow-x-hidden industrial-grain pb-24",
-				className,
-			)}
-		>
+		<div className={cn("min-h-screen bg-background pb-24", className)}>
 			{mobileActions}
 
-			{/* Top Navigation Header - Compact on mobile */}
-			<div className="bg-background border-b border-border/40 py-2.5 md:py-4 px-2 sm:px-6 lg:px-8 sticky top-0 z-30">
-				<div className="max-w-[1800px] mx-auto flex items-center justify-between gap-2 sm:gap-4">
-					<div className="flex items-center gap-2 sm:gap-3 overflow-hidden text-ellipsis">
+			{/* Top Navigation Header */}
+			<div className="bg-background/80 backdrop-blur-md border-b border-border py-4 px-4 sm:px-8 lg:px-12 sticky top-0 z-30">
+				<div className="w-full flex items-center justify-between gap-4">
+					<div className="flex items-center gap-6 overflow-hidden text-ellipsis">
 						<Button
 							variant="ghost"
-							size="icon-sm"
+							size="icon"
 							onClick={onBack}
-							className="shrink-0 h-8 w-8"
+							className="shrink-0 h-10 w-10 rounded-none hover:bg-muted/50 transition-all"
 						>
-							<RiArrowLeftSLine className="size-4" />
+							<RiArrowLeftSLine className="size-6" />
 						</Button>
-						<div className="h-4 w-px bg-border/60 shrink-0" />
-						<h1 className="font-display font-black uppercase text-[10px] md:text-sm tracking-widest truncate text-foreground leading-none pr-2">
+						<div className="h-6 w-px bg-border/40 shrink-0" />
+						<h1 className="font-semibold text-sm truncate text-foreground leading-none">
 							{title}
 						</h1>
 					</div>
-					<div className="flex items-center gap-2 shrink-0">
+					<div className="flex items-center gap-4 shrink-0">
 						{headerAction}
 						{badgeText && (
-							<Badge className="bg-primary/10 text-primary border-primary/20 text-[8px] font-black tracking-widest px-2 py-0.5 rounded-none uppercase hidden sm:block">
+							<Badge className="bg-muted/50 text-foreground border-none text-xs font-medium px-3 py-1 rounded-none hidden sm:flex">
 								{badgeText}
 							</Badge>
 						)}
@@ -73,32 +68,32 @@ export function DetailsPageLayout({
 				</div>
 			</div>
 
-			<div className="max-w-[1800px] mx-auto w-full px-0 sm:px-6 lg:px-8 py-4 md:py-12 space-y-8 md:space-y-12">
-				{/* Hero Section: Gallery and Primary Info - Stacked on mobile */}
-				<div className="flex flex-col lg:grid lg:grid-cols-12 gap-6 md:gap-12 lg:gap-16 items-start">
-					<div className="w-full lg:col-span-6 xl:col-span-5 px-0 sm:px-0">
+			<div className="w-full px-4 sm:px-8 lg:px-12 py-8 md:py-12 space-y-12">
+				{/* Hero Section: Gallery + Info */}
+				<div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+					<div className="w-full">
 						{gallery}
 					</div>
 
-					<div className="w-full lg:col-span-6 xl:col-span-7 px-4 sm:px-0">
+					<div className="w-full">
 						{info}
 					</div>
 				</div>
 
-				{/* Secondary Section: Tabs and Sidebar - Stacked on mobile */}
-				<div className="flex flex-col lg:grid lg:grid-cols-12 gap-8 md:gap-12 lg:gap-16 items-start pt-4">
-					<div className="w-full lg:col-span-8 space-y-10 md:space-y-12 overflow-hidden">
-						{/* Tabs content gets padding-x on mobile so it's not raw to edges */}
-						<div className="px-4 sm:px-0">
-							{tabs}
-						</div>
-						<div className="px-4 sm:px-0">
-							{bottomContent}
-						</div>
+				{/* Visual separator */}
+				<div className="border-t border-border" />
+
+				{/* Secondary Section: Tabs + Sidebar */}
+				<div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
+					<div className="w-full lg:col-span-2 space-y-12">
+						{tabs}
+						{bottomContent}
 					</div>
 
-					<div className="w-full lg:col-span-4 space-y-8 px-4 sm:px-0">
-						{sidebar}
+					<div className="w-full lg:col-span-1">
+						<div className="lg:sticky lg:top-24 space-y-6">
+							{sidebar}
+						</div>
 					</div>
 				</div>
 			</div>

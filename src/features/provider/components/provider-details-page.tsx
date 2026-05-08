@@ -26,7 +26,7 @@ export function ProviderDetailsPage() {
 	if (!providerId) {
 		return (
 			<PageContainer>
-				<div className="text-center py-20 border border-dashed border-border/40">
+				<div className="text-center py-20 border border-dashed border-border">
 					<h2 className="text-2xl font-display font-black uppercase text-foreground mb-4 tracking-tight">
 						Provider Not Found
 					</h2>

@@ -70,11 +70,11 @@ export function AdminEditProviderPage() {
 
 	if (!company) {
 		return (
-			<div className="space-y-4 py-20 text-center border border-dashed border-border/40">
-				<p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Provider resource not found</p>
+			<div className="space-y-4 py-20 text-center border border-dashed border-border rounded-md bg-muted/5">
+				<p className="text-sm font-medium text-muted-foreground">Provider resource not found</p>
 				<Button 
 					variant="outline"
-					className="rounded-none h-10 px-6 font-black uppercase text-[10px] tracking-widest"
+					className="rounded-md h-10 px-6 font-semibold text-sm shadow-sm"
 					onClick={() => navigate({ to: "/admin/providers" })}
 				>
 					Return to Directory
@@ -94,7 +94,7 @@ export function AdminEditProviderPage() {
 							params: { providerId },
 						})
 					}
-					className="group flex items-center gap-2 rounded-none px-0 h-auto text-[10px] font-heading font-black uppercase tracking-[0.2em] text-muted-foreground hover:text-primary hover:bg-transparent"
+					className="group flex items-center gap-2 rounded-md px-2 h-9 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted"
 				>
 					<RiArrowLeftSLine
 						size={16}
@@ -113,16 +113,16 @@ export function AdminEditProviderPage() {
 			<div className="flex flex-col lg:flex-row gap-10">
 				{/* Step Navigation Sidebar */}
 				<aside className="w-full lg:w-64 shrink-0">
-					<div className="space-y-1 sticky top-24">
-						<p className="text-[9px] font-black uppercase tracking-[0.4em] text-muted-foreground/40 mb-4 px-4">Modification Steps</p>
+					<div className="space-y-1 sticky top-24 bg-background border border-border rounded-md p-2 shadow-sm">
+						<p className="text-xs font-semibold text-muted-foreground/60 mb-3 px-3 pt-2">Modification Steps</p>
 						<button
 							type="button"
 							onClick={() => setCurrentStep(1)}
 							className={cn(
-								"w-full flex items-center gap-3 px-4 py-4 text-[10px] font-black uppercase tracking-widest transition-all text-left rounded-none border border-transparent",
+								"w-full flex items-center gap-3 px-4 py-3 text-sm font-medium transition-all text-left rounded-md",
 								currentStep === 1
-									? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
-									: "text-muted-foreground hover:bg-muted/50 border-border/10",
+									? "bg-primary text-primary-foreground shadow-sm"
+									: "text-muted-foreground hover:bg-muted/50",
 							)}
 						>
 							<RiBuilding4Line size={16} />
@@ -132,10 +132,10 @@ export function AdminEditProviderPage() {
 							type="button"
 							onClick={() => setCurrentStep(2)}
 							className={cn(
-								"w-full flex items-center gap-3 px-4 py-4 text-[10px] font-black uppercase tracking-widest transition-all text-left rounded-none border border-transparent",
+								"w-full flex items-center gap-3 px-4 py-3 text-sm font-medium transition-all text-left rounded-md",
 								currentStep === 2
-									? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
-									: "text-muted-foreground hover:bg-muted/50 border-border/10",
+									? "bg-primary text-primary-foreground shadow-sm"
+									: "text-muted-foreground hover:bg-muted/50",
 							)}
 						>
 							<RiUserLine size={16} />
@@ -146,8 +146,7 @@ export function AdminEditProviderPage() {
 
 				{/* Form Area */}
 				<div className="flex-1 min-w-0">
-					<div className="bg-card border border-border/40 p-6 sm:p-10 relative overflow-hidden">
-						<div className="absolute inset-0 blueprint-grid opacity-[0.03] pointer-events-none" />
+					<div className="bg-card border border-border rounded-md p-6 sm:p-10 relative overflow-hidden shadow-sm">
 						<div className="relative z-10">
 							<ProviderProvisionForm
 								mode="edit"
@@ -167,7 +166,7 @@ export function AdminEditProviderPage() {
 					{saving && (
 						<div className="mt-4 flex items-center gap-2 px-2">
 							<div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-							<p className="text-[9px] font-black uppercase tracking-widest text-primary">Synchronizing changes with core server...</p>
+							<p className="text-xs font-medium text-primary">Synchronizing changes with core server...</p>
 						</div>
 					)}
 				</div>

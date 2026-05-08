@@ -66,7 +66,7 @@ export const AuctionCard: React.FC<AuctionCardProps> = ({ auction }) => {
 					{auction.description || "No description provided."}
 				</p>
 
-				<div className="flex items-center justify-between border-t border-border/10 pt-3">
+				<div className="flex items-center justify-between border-t border-border pt-3">
 					<span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">
 						Starting Bid
 					</span>

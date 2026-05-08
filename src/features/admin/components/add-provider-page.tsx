@@ -53,7 +53,7 @@ export function AdminAddProviderPage() {
 				<Button
 					variant="ghost"
 					onClick={() => navigate({ to: "/admin/providers" })}
-					className="group flex items-center gap-2 rounded-none px-4 text-[10px] font-heading font-black uppercase tracking-widest text-foreground hover:bg-muted/50 border border-border/20"
+					className="group flex items-center gap-2 rounded-md px-3 h-9 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted"
 				>
 					<RiArrowLeftSLine
 						size={16}
@@ -70,9 +70,8 @@ export function AdminAddProviderPage() {
 			/>
 
 			<div className="max-w-4xl">
-				<Card noPadding className="border-border/40 shadow-sm rounded-none mb-10 overflow-hidden">
-					<div className="blueprint-grid absolute inset-0 opacity-[0.02] pointer-events-none" />
-					<div className="relative z-10 flex items-center justify-between px-12 py-8 bg-muted/5">
+				<Card noPadding className="border-border shadow-sm rounded-md mb-10 overflow-hidden">
+					<div className="relative z-10 flex items-center justify-between px-12 py-10 bg-muted/5">
 						{steps.map((item, index) => (
 							<div
 								key={item.step}
@@ -80,30 +79,30 @@ export function AdminAddProviderPage() {
 							>
 								<div className="relative flex items-center justify-center">
 									<div
-										className={`z-10 flex h-14 w-14 items-center justify-center rounded-none border transition-all duration-500 ${
+										className={`z-10 flex h-12 w-12 items-center justify-center rounded-md border transition-all duration-300 ${
 											currentStep >= item.step
-												? "scale-110 border-primary bg-primary text-primary-foreground shadow-xl shadow-primary/20"
-												: "border-border/40 bg-background text-muted-foreground shadow-none"
+												? "scale-110 border-primary bg-primary text-primary-foreground shadow-md"
+												: "border-border bg-background text-muted-foreground shadow-none"
 										}`}
 									>
-										<item.icon size={22} />
+										<item.icon size={20} />
 									</div>
 									{index < 2 && (
 										<div
 											className={`absolute top-1/2 left-1/2 -z-10 h-[1px] w-[200px] -translate-y-1/2 translate-x-1 border-t border-dashed ${
 												currentStep > item.step
 													? "border-primary"
-													: "border-border/40"
+													: "border-border"
 											}`}
 										/>
 									)}
 								</div>
 
 								<span
-									className={`mt-5 text-[9px] font-heading font-black uppercase tracking-[0.2em] transition-colors duration-500 ${
+									className={`mt-4 text-xs font-semibold transition-colors duration-300 ${
 										currentStep >= item.step
 											? "text-primary"
-											: "text-muted-foreground/40"
+											: "text-muted-foreground/60"
 									}`}
 								>
 									{item.label}
@@ -127,7 +126,7 @@ export function AdminAddProviderPage() {
 				<div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center">
 					<div className="flex flex-col items-center gap-4">
 						<div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin" />
-						<p className="text-[10px] font-black uppercase tracking-[0.3em] text-primary">Creating provider entity...</p>
+						<p className="text-sm font-semibold text-primary">Creating provider entity...</p>
 					</div>
 				</div>
 			)}

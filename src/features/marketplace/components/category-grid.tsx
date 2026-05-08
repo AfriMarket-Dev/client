@@ -39,7 +39,7 @@ const CategoryGrid: React.FC = () => {
 						{Array.from({ length: 8 }).map((_, i) => (
 							<div
 								key={`category-skeleton-${i}`}
-								className="h-32 sm:h-40 rounded-lg border border-border/40 bg-muted/20 animate-pulse"
+								className="h-32 sm:h-40 rounded-md border border-border/40 bg-muted/20 animate-pulse"
 							/>
 						))}
 					</div>

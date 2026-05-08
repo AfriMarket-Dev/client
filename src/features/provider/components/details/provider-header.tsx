@@ -20,7 +20,7 @@ export const ProviderHeader: React.FC<ProviderHeaderProps> = ({
 	return (
 		<div className="grid md:grid-cols-[200px_1fr] gap-8 items-start">
 			{/* Logo Column */}
-			<div className="w-full aspect-square border border-border bg-muted/10 flex items-center justify-center text-4xl font-heading font-black text-muted-foreground overflow-hidden relative group">
+			<div className="w-full aspect-square border border-border bg-muted/10 flex items-center justify-center text-4xl font-bold text-muted-foreground overflow-hidden relative group">
 				{company?.logoUrl ? (
 					<img
 						src={company?.logoUrl}
@@ -41,7 +41,7 @@ export const ProviderHeader: React.FC<ProviderHeaderProps> = ({
 			<div className="space-y-6">
 				<div>
 					<div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-2">
-						<h1 className="text-2xl md:text-3xl font-heading font-bold uppercase text-foreground">
+						<h1 className="text-2xl md:text-3xl font-bold text-foreground">
 							{company?.name}
 						</h1>
 						<div className="flex items-center gap-2">

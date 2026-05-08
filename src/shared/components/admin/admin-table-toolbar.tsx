@@ -89,7 +89,7 @@ export function AdminTableToolbar<TData>({
 							onChange={(event) =>
 								searchColumnInstance.setFilterValue(event.target.value)
 							}
-							className="h-10 w-full max-w-[320px] rounded-none border-border/40 text-[10px] font-bold uppercase tracking-widest"
+							className="h-10 w-full max-w-[320px] rounded-none border-border text-sm"
 						/>
 					)}
 					{statusColumnInstance && statusOptions.length > 0 && (
@@ -101,13 +101,13 @@ export function AdminTableToolbar<TData>({
 								)
 							}
 						>
-							<SelectTrigger className="h-10 w-[170px] rounded-none border-border/40 text-[10px] font-bold uppercase">
+							<SelectTrigger className="h-10 w-[170px] rounded-none border-border text-sm">
 								<SelectValue placeholder="All statuses" />
 							</SelectTrigger>
 							<SelectContent className="rounded-none">
 								<SelectItem
 									value="all"
-									className="text-[10px] uppercase font-bold"
+									className="text-sm"
 								>
 									All statuses
 								</SelectItem>
@@ -115,7 +115,7 @@ export function AdminTableToolbar<TData>({
 									<SelectItem
 										key={option.value}
 										value={option.value}
-										className="text-[10px] uppercase font-bold"
+										className="text-sm"
 									>
 										{option.label}
 									</SelectItem>
@@ -127,7 +127,7 @@ export function AdminTableToolbar<TData>({
 						<Button
 							variant="ghost"
 							size="sm"
-							className="h-10 px-3 rounded-none text-[9px] font-black uppercase tracking-widest text-muted-foreground hover:text-foreground"
+							className="h-10 px-3 rounded-none text-sm font-medium text-muted-foreground hover:text-foreground"
 							onClick={clearFilters}
 						>
 							Clear
@@ -141,7 +141,7 @@ export function AdminTableToolbar<TData>({
 							<Button
 								variant="outline"
 								size="sm"
-								className="lg:hidden h-10 rounded-none border-border/40 font-black uppercase text-[10px] tracking-widest"
+								className="lg:hidden h-10 rounded-none border-border font-medium text-sm"
 							>
 								<RiFilter3Line className="mr-2 h-4 w-4" />
 								Filters
@@ -150,17 +150,17 @@ export function AdminTableToolbar<TData>({
 								)}
 							</Button>
 						</DrawerTrigger>
-						<DrawerContent className="bg-background flex flex-col">
-							<DrawerHeader className="border-b border-border/40 text-left">
-								<DrawerTitle className="text-[10px] font-display font-black uppercase tracking-[0.2em] flex items-center gap-2">
-									<RiFilter3Line className="h-4 w-4 text-primary" />
+						<DrawerContent className="bg-background flex flex-col rounded-t-none">
+							<DrawerHeader className="border-b border-border text-left">
+								<DrawerTitle className="text-lg font-semibold flex items-center gap-2">
+									<RiFilter3Line className="h-5 w-5 text-primary" />
 									Filters
 								</DrawerTitle>
 							</DrawerHeader>
 							<div className="p-6 space-y-5">
 								{searchColumnInstance && (
 									<div className="space-y-2">
-										<p className="text-[9px] font-black uppercase tracking-widest text-muted-foreground">
+										<p className="text-sm font-medium text-muted-foreground">
 											Search
 										</p>
 										<Input
@@ -169,13 +169,13 @@ export function AdminTableToolbar<TData>({
 											onChange={(event) =>
 												searchColumnInstance.setFilterValue(event.target.value)
 											}
-											className="h-11 rounded-none border-border/40 text-[10px] font-bold uppercase tracking-widest"
+											className="h-11 rounded-none border-border text-sm"
 										/>
 									</div>
 								)}
 								{statusColumnInstance && statusOptions.length > 0 && (
 									<div className="space-y-2">
-										<p className="text-[9px] font-black uppercase tracking-widest text-muted-foreground">
+										<p className="text-sm font-medium text-muted-foreground">
 											Status
 										</p>
 										<Select
@@ -186,13 +186,13 @@ export function AdminTableToolbar<TData>({
 												)
 											}
 										>
-											<SelectTrigger className="h-11 rounded-none border-border/40 text-[10px] font-bold uppercase">
+											<SelectTrigger className="h-11 rounded-none border-border text-sm">
 												<SelectValue placeholder="All statuses" />
 											</SelectTrigger>
 											<SelectContent className="rounded-none">
 												<SelectItem
 													value="all"
-													className="text-[10px] uppercase font-bold"
+													className="text-sm"
 												>
 													All statuses
 												</SelectItem>
@@ -200,7 +200,7 @@ export function AdminTableToolbar<TData>({
 													<SelectItem
 														key={option.value}
 														value={option.value}
-														className="text-[10px] uppercase font-bold"
+														className="text-sm"
 													>
 														{option.label}
 													</SelectItem>
@@ -211,11 +211,11 @@ export function AdminTableToolbar<TData>({
 								)}
 							</div>
 							{hasActiveFilters && (
-								<DrawerFooter className="border-t border-border/40 bg-muted/5">
+								<DrawerFooter className="border-t border-border bg-muted/5">
 									<Button
 										variant="ghost"
 										size="sm"
-										className="h-10 w-full rounded-none text-[9px] font-black uppercase tracking-widest text-destructive hover:bg-destructive/5 border border-destructive/20"
+										className="h-11 w-full rounded-none text-sm font-medium text-destructive hover:bg-destructive/5 border border-destructive/20"
 										onClick={() => {
 											clearFilters();
 											setIsFiltersOpen(false);
@@ -234,14 +234,14 @@ export function AdminTableToolbar<TData>({
 								<Button
 									variant="outline"
 									size="sm"
-									className="hidden lg:flex h-10 rounded-none border-border/40 font-black uppercase text-[10px] tracking-widest"
+									className="hidden lg:flex h-10 rounded-none border-border font-medium text-sm"
 								>
 									<RiSettings2Line className="mr-2 h-4 w-4" />
 									Columns
 								</Button>
 							}
 						/>
-						<DropdownMenuContent align="end" className="w-48">
+						<DropdownMenuContent align="end" className="w-48 rounded-none">
 							<DropdownMenuGroup>
 								<DropdownMenuLabel>Toggle columns</DropdownMenuLabel>
 								<DropdownMenuSeparator />
@@ -256,7 +256,7 @@ export function AdminTableToolbar<TData>({
 										return (
 											<DropdownMenuCheckboxItem
 												key={column.id}
-												className="capitalize"
+												className="capitalize rounded-none"
 												checked={column.getIsVisible()}
 												onCheckedChange={(value) =>
 													column.toggleVisibility(!!value)

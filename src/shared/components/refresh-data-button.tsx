@@ -27,10 +27,8 @@ export function RefreshDataButton({
 		const toastId = toast.loading("Syncing with server...");
 
 		try {
-			// 1. Reset the entire API state (The most powerful clear)
 			dispatch(apiSlice.util.resetApiState());
 
-			// 2. Invalidate all tags just to be double-sure
 			dispatch(
 				apiSlice.util.invalidateTags([
 					"Products",
@@ -45,7 +43,6 @@ export function RefreshDataButton({
 				])
 			);
 
-			// 3. Force TanStack Router to reload the current route data
 			await navigate({ to: ".", replace: true });
 
 			toast.success("Cache purged and synchronized", { id: toastId });

@@ -26,14 +26,14 @@ const CompanyAssetsPreview: React.FC<{ companyId: string }> = ({
 				? Array.from({ length: 4 }).map((_, i) => (
 						<div
 							key={i}
-							className="aspect-square rounded-none bg-muted/30 border border-border/20 animate-pulse"
+							className="aspect-square rounded-none bg-muted/30 border border-border animate-pulse"
 						/>
 					))
 				: products.length > 0
 					? products.map((product: Product) => (
 							<div
 								key={product.id}
-								className="aspect-square rounded-none bg-muted/30 border border-border/20 overflow-hidden relative group/asset"
+								className="aspect-square rounded-none bg-muted/30 border border-border overflow-hidden relative group/asset"
 							>
 								<ImageWithFallback
 									src={
@@ -48,7 +48,7 @@ const CompanyAssetsPreview: React.FC<{ companyId: string }> = ({
 					: [1, 2, 3, 4].map((i) => (
 							<div
 								key={i}
-								className="aspect-square rounded-none bg-muted/30 border border-border/20 overflow-hidden relative"
+								className="aspect-square rounded-none bg-muted/30 border border-border overflow-hidden relative"
 							>
 								<div className="w-full h-full bg-muted flex items-center justify-center opacity-20">
 									<div className="w-4 h-[1px] bg-foreground rotate-45 absolute" />
@@ -92,7 +92,7 @@ const FeaturedProviders: React.FC = () => {
 						{Array.from({ length: 3 }).map((_, i) => (
 							<div
 								key={i}
-								className="h-56 sm:h-64 rounded-none border border-border/20 bg-muted/10 animate-pulse"
+								className="h-56 sm:h-64 rounded-none border border-border bg-muted/10 animate-pulse"
 							/>
 						))}
 					</div>
@@ -104,7 +104,7 @@ const FeaturedProviders: React.FC = () => {
 							return (
 								<div
 									key={company.id}
-									className="group border border-border/40 hover:border-primary/40 transition-all duration-500 rounded-none bg-card cursor-pointer overflow-hidden flex flex-col relative"
+									className="group border border-border hover:border-primary/40 transition-all duration-500 rounded-none bg-card cursor-pointer overflow-hidden flex flex-col relative"
 									onClick={() =>
 										navigate({
 											to: "/providers/$providerId",
@@ -121,7 +121,7 @@ const FeaturedProviders: React.FC = () => {
 									<div className="p-3.5 sm:p-6 flex flex-col h-full relative z-10">
 										<div className="flex items-start justify-between mb-3 sm:mb-6">
 											<div className="flex items-center gap-2.5 sm:gap-4 overflow-hidden">
-												<div className="w-9 h-9 sm:w-14 sm:h-14 rounded-none bg-muted border border-border/40 flex items-center justify-center text-base sm:text-xl font-black text-foreground shrink-0 group-hover:border-primary group-hover:bg-primary/5 transition-all">
+												<div className="w-9 h-9 sm:w-14 sm:h-14 rounded-none bg-muted border border-border flex items-center justify-center text-base sm:text-xl font-black text-foreground shrink-0 group-hover:border-primary group-hover:bg-primary/5 transition-all">
 													{company.name?.charAt(0) ?? "?"}
 												</div>
 												<div className="flex flex-col min-w-0">
@@ -174,7 +174,7 @@ const FeaturedProviders: React.FC = () => {
 												].map((tag, i) => (
 													<span
 														key={i}
-														className="text-[7px] sm:text-[8px] bg-muted/30 text-muted-foreground/60 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-none font-black uppercase tracking-widest border border-border/20"
+														className="text-[7px] sm:text-[8px] bg-muted/30 text-muted-foreground/60 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-none font-black uppercase tracking-widest border border-border"
 													>
 														{tag}
 													</span>
@@ -183,7 +183,7 @@ const FeaturedProviders: React.FC = () => {
 										</div>
 
 										{/* Company items */}
-										<div className="mt-auto pt-3 sm:pt-6 border-t border-border/20">
+										<div className="mt-auto pt-3 sm:pt-6 border-t border-border">
 											<div className="flex items-center justify-between mb-2 sm:mb-4">
 												<div className="text-[7px] sm:text-[8px] font-black text-muted-foreground/40 uppercase tracking-[0.3em] sm:tracking-[0.5em]">
 													Latest Products
@@ -206,7 +206,7 @@ const FeaturedProviders: React.FC = () => {
 						variant="outline"
 						size="lg"
 						onClick={() => navigate({ to: "/providers" })}
-						className="w-full rounded-none font-black uppercase tracking-[0.3em] text-[9px] h-12 px-10 border-border/40"
+						className="w-full rounded-none font-black uppercase tracking-[0.3em] text-[9px] h-12 px-10 border-border"
 					>
 						View All Providers
 					</Button>

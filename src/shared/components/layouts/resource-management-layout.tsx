@@ -48,13 +48,13 @@ export function ResourceManagementLayout({
 
 			<Card title={cardTitle} subtitle={cardSubtitle} noPadding>
 				{isLoading ? (
-					<div className="p-12 text-center text-muted-foreground uppercase text-[10px] font-black tracking-widest animate-pulse">
+					<div className="p-12 text-center text-muted-foreground text-sm font-medium animate-pulse">
 						{loadingText}
 					</div>
 				) : (
 					<div className="flex flex-col">
 						{toolbar && (
-							<div className="border-b border-border/40">{toolbar}</div>
+							<div className="border-b border-border">{toolbar}</div>
 						)}
 						{content}
 					</div>

@@ -47,12 +47,12 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 	const badges = (
 		<>
 			{product.isFeatured && (
-				<div className="bg-warning text-primary-foreground text-[9px] font-bold px-2 py-0.5 rounded-none uppercase tracking-widest shadow-2xl">
+				<div className="bg-warning text-primary-foreground text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-none">
 					Featured
 				</div>
 			)}
 			{discount > 0 && (
-				<div className="bg-success text-primary-foreground text-[9px] font-bold px-2 py-0.5 rounded-none uppercase tracking-widest shadow-2xl">
+				<div className="bg-success text-primary-foreground text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-none">
 					{discount}% OFF
 				</div>
 			)}
@@ -63,7 +63,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 		<div
 			role="button"
 			tabIndex={0}
-			className="flex items-start justify-between gap-2 group/comp cursor-pointer"
+			className="flex items-start justify-between gap-3 group/comp cursor-pointer"
 			onClick={(e) => {
 				if (onProviderClick) {
 					e.stopPropagation();
@@ -71,25 +71,25 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 				}
 			}}
 		>
-			<div className="flex items-start gap-2 overflow-hidden text-left text-foreground/80 hover:text-primary transition-colors">
-				<div className="w-5 h-5 md:w-7 md:h-7 bg-muted/20 border border-border/10 flex items-center justify-center rounded-none shrink-0 text-[10px] font-bold text-primary">
+			<div className="flex items-center gap-3 overflow-hidden text-left text-foreground/80 hover:text-primary transition-colors">
+				<div className="w-8 h-8 bg-muted border border-border flex items-center justify-center rounded-none shrink-0 text-xs font-semibold text-foreground">
 					{company.name?.charAt(0)}
 				</div>
 				<div className="flex flex-col min-w-0">
-					<div className="flex items-center gap-1">
-						<span className="text-[9px] md:text-[10px] font-bold uppercase tracking-tight truncate">
+					<div className="flex items-center gap-1.5">
+						<span className="text-xs font-semibold truncate">
 							{company.name}
 						</span>
 						{company.isVerified && (
 							<RiShieldCheckLine
-								size={10}
-								className="text-success shrink-0 opacity-80"
+								size={14}
+								className="text-emerald-600 shrink-0"
 							/>
 						)}
 					</div>
-					<div className="hidden md:flex items-center gap-2 text-[8px] text-muted-foreground/40 font-bold uppercase tracking-widest mt-0.5">
+					<div className="hidden md:flex items-center gap-1.5 text-xs text-muted-foreground mt-0.5">
 						<span>{company.type}</span>
-						<span className="w-0.5 h-0.5 rounded-full bg-border" />
+						<span className="w-1 h-1 rounded-full bg-border" />
 						<span>{company.district}</span>
 					</div>
 				</div>
@@ -111,37 +111,34 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 			badges={badges}
 			footer={footer}
 		>
-			<div className="space-y-2">
+			<div className="space-y-3">
 				<div className="flex flex-col">
-					<div className="flex items-end gap-1.5">
-						<div className="text-sm font-bold text-foreground font-display tracking-tight">
+					<div className="flex items-baseline gap-1.5">
+						<div className="text-lg font-bold text-foreground tracking-tight">
 							{formatCurrency(price, "RWF")}
 						</div>
-						<div className="text-[9px] text-muted-foreground/40 font-bold uppercase tracking-widest mb-px">
-							/ {unit}
+						<div className="text-xs text-muted-foreground font-medium">
+							/ {unit?.toLowerCase() || "unit"}
 						</div>
 					</div>
 					{discount > 0 && (
-						<div className="text-[9px] font-bold text-muted-foreground/30 line-through mt-0.5 uppercase tracking-widest leading-none">
+						<div className="text-sm font-medium text-muted-foreground line-through mt-0.5">
 							{formatCurrency(basePrice, "RWF")}
 						</div>
 					)}
 				</div>
 
 				{viewMode === "grid" && (
-					<div className="hidden md:flex items-center gap-1 opacity-60">
-						<RiStarLine size={10} className="text-warning fill-warning" />
-						<span className="text-[10px] font-bold text-foreground font-display">
-							-
-						</span>
-						<span className="text-[9px] text-muted-foreground uppercase font-bold tracking-widest">
-							({product.views || 0} views)
+					<div className="hidden md:flex items-center gap-1.5 text-muted-foreground">
+						<RiStarLine size={14} className="text-amber-500 fill-amber-500" />
+						<span className="text-xs font-medium">
+							{product.views || 0} views
 						</span>
 					</div>
 				)}
 
 				{viewMode === "list" && (
-					<p className="text-sm text-muted-foreground/70 line-clamp-2 mt-3 max-w-3xl leading-relaxed text-left">
+					<p className="text-sm text-muted-foreground line-clamp-2 mt-3 leading-relaxed text-left">
 						{product.description}
 					</p>
 				)}
