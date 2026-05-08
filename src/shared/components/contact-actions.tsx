@@ -1,5 +1,12 @@
-import { RiMailSendLine, RiPhoneLine, RiWhatsappLine } from "@remixicon/react";
+import { RiMailSendLine, RiPhoneLine, RiWhatsappLine, RiChat3Line } from "@remixicon/react";
+import { useNavigate } from "@tanstack/react-router";
 import { useProviderInteractions } from "@/features/provider/hooks/use-provider-interactions";
+import { 
+	useStartProductChatMutation, 
+	useStartServiceChatMutation, 
+	useStartAuctionChatMutation 
+} from "@/services/api/messages";
+import { ROUTES } from "@/shared/constants/routes";
 
 interface ContactActionsProps {
 	phone?: string;
@@ -27,6 +34,27 @@ export function ContactActions({
 	size = "default",
 }: ContactActionsProps) {
 	const { callProvider, whatsappProvider, emailProvider } = useProviderInteractions();
+	const [startProductChat] = useStartProductChatMutation();
+	const [startServiceChat] = useStartServiceChatMutation();
+	const [startAuctionChat] = useStartAuctionChatMutation();
+	const navigate = useNavigate();
+
+	const handleMessage = async () => {
+		try {
+			if (productId) {
+				await startProductChat({ productId, content: `I'm interested in ${companyName}'s product.` }).unwrap();
+			} else if (serviceId) {
+				await startServiceChat({ serviceId, content: `I'm interested in ${companyName}'s service.` }).unwrap();
+			} else if (auctionId) {
+				await startAuctionChat({ auctionId, content: `I'm interested in this auction.` }).unwrap();
+			}
+			navigate({ to: ROUTES.PROTECTED.MESSAGES });
+		} catch (err) {
+			console.error("Failed to start chat:", err);
+			// If it fails (e.g. not logged in), still navigate to messages which handles auth redirect
+			navigate({ to: ROUTES.PROTECTED.MESSAGES });
+		}
+	};
 
 	const handleCall = async () => {
 		if (!phone || !companyId) return;
@@ -101,6 +129,18 @@ export function ContactActions({
 					Email
 				</button>
 			)}
+			<button
+				type="button"
+				className={`flex items-center justify-center rounded-none border border-primary/30 text-primary hover:bg-primary/5 transition-all font-black uppercase tracking-widest ${
+					isSmall ? "h-8 px-3 text-[9px]" : "h-11 px-4 text-[10px]"
+				}`}
+				onClick={handleMessage}
+			>
+				<RiChat3Line
+					className={isSmall ? "mr-1.5 h-3.5 w-3.5" : "mr-2 h-4 w-4"}
+				/>
+				Message
+			</button>
 		</div>
 	);
 }

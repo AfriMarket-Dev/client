@@ -5,6 +5,7 @@ import { ROUTES } from "@/shared/constants/routes";
 import { Footer } from "./footer";
 import { Header } from "./header";
 
+
 export const MainLayout = () => {
 	const navigate = useNavigate();
 	const location = useLocation();

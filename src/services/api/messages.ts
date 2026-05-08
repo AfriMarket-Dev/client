@@ -59,7 +59,7 @@ export const messagesApi = apiSlice.injectEndpoints({
 
 		// generic direct message (receiverId required)
 		sendMessage: builder.mutation<
-			{ id: string; content: string; createdAt: string },
+			Message,
 			{
 				receiverId: string;
 				content: string;
@@ -78,52 +78,87 @@ export const messagesApi = apiSlice.injectEndpoints({
 				{ dispatch, queryFulfilled, getState },
 			) {
 				const state = getState() as unknown as RootState;
-				const me = (
-					state as unknown as {
-						auth: { user?: { id?: string; name?: string } };
-					}
-				).auth?.user;
+				const me = state.auth.user;
+				if (!me) return;
+
 				const tempMessage = {
 					id: `temp-${Date.now()}`,
 					content,
 					createdAt: new Date().toISOString(),
-					sender: { id: me?.id ?? "", name: me?.name ?? "", email: "" },
+					sender: { id: me.id, name: me.name, email: me.email },
 					receiver: { id: receiverId, name: "", email: "" },
+					isRead: false,
 				} as Message;
 
-				const activeQueries = messagesApi.util.selectInvalidatedBy(getState(), [
-					{ type: "Messages", id: receiverId },
-				]);
-				const patches = activeQueries
-					.filter((q) => q.endpointName === "getChatHistory")
-					.map(({ originalArgs }) =>
-						dispatch(
-							messagesApi.util.updateQueryData(
-								"getChatHistory",
-								originalArgs as {
-									partnerId: string;
-									page?: number;
-									limit?: number;
-								},
-								(draft) => {
-									draft.items.push(tempMessage);
-									draft.meta.total += 1;
-								},
-							),
+				const patch = dispatch(
+					messagesApi.util.updateQueryData(
+						"getChatHistory",
+						{ partnerId: receiverId, page: 1, limit: 50 },
+						(draft) => {
+							draft.items.push(tempMessage);
+							draft.meta.total += 1;
+						},
+					),
+				);
+				try {
+					const { data: actualMessage } = await queryFulfilled;
+					dispatch(
+						messagesApi.util.updateQueryData(
+							"getChatHistory",
+							{ partnerId: receiverId, page: 1, limit: 50 },
+							(draft) => {
+								const index = draft.items.findIndex((m) => m.id === tempMessage.id);
+								if (index !== -1) draft.items[index] = actualMessage;
+							},
 						),
 					);
-				try {
-					await queryFulfilled;
 				} catch {
-					patches.forEach((p) => {
-						p.undo();
-					});
+					patch.undo();
 				}
 			},
 			invalidatesTags: (_result, _err, { receiverId }) => [
-				{ type: "Messages", id: receiverId },
 				{ type: "Messages", id: "LIST" },
+				{ type: "Messages", id: "COUNT" },
+				{ type: "Messages", id: receiverId },
 			],
+		}),
+
+		markAsRead: builder.mutation<{ success: boolean }, string>({
+			query: (partnerId) => ({
+				url: `/messages/read/${partnerId}`,
+				method: "POST",
+			}),
+			async onQueryStarted(partnerId, { dispatch, queryFulfilled }) {
+				const patch = dispatch(
+					messagesApi.util.updateQueryData(
+						"getChatHistory",
+						{ partnerId, page: 1, limit: 50 },
+						(draft) => {
+							draft.items.forEach((m) => {
+								if (m.sender?.id === partnerId) {
+									m.isRead = true;
+								}
+							});
+						},
+					),
+				);
+				try {
+					await queryFulfilled;
+					dispatch(messagesApi.util.invalidateTags([
+						{ type: "Messages", id: "LIST" },
+						{ type: "Messages", id: "COUNT" },
+						{ type: "Messages", id: partnerId },
+					]));
+				} catch {
+					patch.undo();
+				}
+			},
+		}),
+
+		getUnreadCount: builder.query<number, void>({
+			query: () => "/messages/unread-count",
+			transformResponse: (response: ApiResponse<number>) => response.data ?? 0,
+			providesTags: [{ type: "Messages", id: "COUNT" }],
 		}),
 
 		// context-aware: backend resolves the company owner automatically
@@ -171,6 +206,8 @@ export const {
 	useGetConversationsQuery,
 	useGetChatHistoryQuery,
 	useSendMessageMutation,
+	useMarkAsReadMutation,
+	useGetUnreadCountQuery,
 	useStartProductChatMutation,
 	useStartServiceChatMutation,
 	useStartAuctionChatMutation,

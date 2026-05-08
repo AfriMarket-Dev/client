@@ -186,13 +186,14 @@ export interface Message {
 	product?: { id: string; name: string };
 	service?: { id: string; name: string };
 	auction?: { id: string; title: string };
+	isRead: boolean;
 }
 
 export interface ConversationPartner {
 	partner: { id: string; name?: string; email: string; image?: string };
 	lastMessage: string;
 	lastMessageAt: string;
-	unreadCount?: number;
+	unreadCount: number;
 }
 
 export interface ServiceCategory {

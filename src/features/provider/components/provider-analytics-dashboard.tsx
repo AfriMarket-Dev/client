@@ -10,7 +10,7 @@ import { RouteLoading } from "@/shared/components/route-loading";
 import type { Company, DashboardTab } from "@/types";
 
 const AnalyticsDashboard = lazy(() => import("./analytics-dashboard"));
-const MessageCenter = lazy(() => import("./message-center"));
+// const MessageCenter = lazy(() => import("./message-center")); // Deleted in messaging refactor
 const ProductManagement = lazy(() => import("./product-management"));
 const ProfileSettings = lazy(() => import("./profile-settings"));
 
@@ -119,7 +119,17 @@ const ProviderDashboard: React.FC<ProviderDashboardProps> = ({
 						) : null}
 						{activeTab === "products" ? <ProductManagement /> : null}
 						{activeTab === "messages" || activeTab === "inquiries" ? (
-							<MessageCenter />
+							<div className="flex-1 flex flex-col items-center justify-center p-8 text-center bg-muted/20 border-2 border-dashed border-border/50">
+								<h3 className="text-sm font-black uppercase tracking-widest text-foreground mb-2">Message Center Relocated</h3>
+								<p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60 max-w-sm leading-relaxed mb-6">
+									The provider messaging system has been integrated into the unified global communication hub for a better experience.
+								</p>
+								<Link to="/messages">
+									<Button className="rounded-none font-black uppercase tracking-widest text-[10px] px-8 h-11 shadow-lg shadow-primary/20">
+										Open Messages
+									</Button>
+								</Link>
+							</div>
 						) : null}
 						{activeTab === "analytics" ? <AnalyticsDashboard /> : null}
 						{activeTab === "settings" ? (

@@ -17,6 +17,7 @@ import type { RootState } from "@/store";
 import { HeaderLogo } from "./header/header-logo";
 import { HeaderUserNav } from "./header/header-user-nav";
 import { RefreshDataButton } from "@/shared/components/refresh-data-button";
+import { useGetUnreadCountQuery } from "@/services/api/messages";
 
 const navLinks = [
 	{ label: "Products", href: ROUTES.PUBLIC.PRODUCTS },
@@ -35,6 +36,9 @@ const secondaryLinks = [
 export function MobileNav() {
 	const [open, setOpen] = React.useState(false);
 	const { isAuthenticated, user } = useSelector((state: RootState) => state.auth);
+	const { data: unreadCount = 0 } = useGetUnreadCountQuery(undefined, {
+		skip: !isAuthenticated,
+	});
 	const mobileMenuId = React.useId();
 
 	const isProvider = user?.role === "provider" || user?.role === "admin" || user?.role === "agent";
@@ -104,12 +108,19 @@ export function MobileNav() {
 									Wishlist
 								</Link>
 								<Link
-									className="flex items-center gap-3 text-base font-black uppercase tracking-[0.15em] py-3 border-b border-border/5 group"
+									className="flex items-center justify-between text-base font-black uppercase tracking-[0.15em] py-3 border-b border-border/5 group"
 									to={ROUTES.PROTECTED.MESSAGES}
 									onClick={() => setOpen(false)}
 								>
-									<RiMessage3Line className="size-5 text-primary" />
-									Messages
+									<div className="flex items-center gap-3">
+										<RiMessage3Line className="size-5 text-primary" />
+										Messages
+									</div>
+									{unreadCount > 0 && (
+										<div className="bg-primary text-primary-foreground text-[10px] font-black h-5 px-2 flex items-center justify-center rounded-none shadow-sm shadow-primary/20">
+											{unreadCount}
+										</div>
+									)}
 								</Link>
 							</div>
 						)}
@@ -159,6 +170,10 @@ export const Header: React.FC = () => {
 	const { isAuthenticated, user } = useSelector(
 		(state: RootState) => state.auth,
 	);
+	const { data: unreadCount = 0 } = useGetUnreadCountQuery(undefined, {
+		skip: !isAuthenticated,
+		pollingInterval: 30000, // Fallback polling if socket fails
+	});
 
 	return (
 		<header
@@ -243,6 +258,16 @@ export const Header: React.FC = () => {
 							</>
 						) : (
 							<div className="flex items-center gap-2">
+								<Link to={ROUTES.PROTECTED.MESSAGES} className="relative group mr-2">
+									<Button variant="ghost" size="icon" className="h-9 w-9 rounded-none hover:bg-primary/5 group-hover:text-primary transition-all">
+										<RiMessage3Line className="size-4" />
+										{unreadCount > 0 && (
+											<span className="absolute -top-0.5 -right-0.5 bg-primary text-primary-foreground text-[8px] font-black h-3.5 min-w-[14px] px-1 flex items-center justify-center rounded-none shadow-sm shadow-primary/20">
+												{unreadCount > 99 ? '99+' : unreadCount}
+											</span>
+										)}
+									</Button>
+								</Link>
 								<HeaderUserNav isAuthenticated={isAuthenticated} user={user} />
 							</div>
 						)}
