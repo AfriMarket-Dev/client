@@ -64,7 +64,7 @@ const FeaturedProviders: React.FC = () => {
 	const navigate = useNavigate();
 	const { data, isLoading } = useGetCompaniesQuery({
 		limit: 6,
-		isVerified: true,
+		verified: true,
 	});
 	const companies = data?.data || [];
 

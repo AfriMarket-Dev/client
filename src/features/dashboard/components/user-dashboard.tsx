@@ -52,8 +52,6 @@ export default function UserDashboard({ wishlist, conversations }: UserDashboard
 
 	const unreadCount = conversations.filter((c) => !!c.lastMessage).length;
 
-	console.log("USER_DASHBOARD: Rendering with wishlist count:", wishlist.length);
-
 	return (
 		<div className="container mx-auto max-w-[1600px] px-4 md:px-6 lg:px-8 py-8 md:py-12">
 			{/* Header Section */}

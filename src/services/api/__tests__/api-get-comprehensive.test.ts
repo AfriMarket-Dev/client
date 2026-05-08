@@ -25,7 +25,7 @@ describe("comprehensive api get requests", () => {
 		await store
 			.dispatch(
 				productsApi.endpoints.getProducts.initiate({
-					query: "test",
+					searchQuery: "test",
 					categoryId: "cat1",
 					companyId: "comp1",
 					minPrice: 100,
@@ -65,7 +65,7 @@ describe("comprehensive api get requests", () => {
 		await store
 			.dispatch(
 				servicesApi.endpoints.getServices.initiate({
-					query: "plumbing",
+					searchQuery: "plumbing",
 					companyType: "PRO",
 					isFeatured: true,
 				}),
@@ -93,7 +93,7 @@ describe("comprehensive api get requests", () => {
 				companiesApi.endpoints.getCompanies.initiate({
 					district: "Gasabo",
 					minRating: 4,
-					isVerified: true,
+					verified: true,
 				}),
 			)
 			.unwrap();

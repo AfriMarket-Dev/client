@@ -100,7 +100,7 @@ const Hero: React.FC = () => {
   });
   const { data: topProvidersResult } = useGetCompaniesQuery({
     limit: 3,
-    isVerified: true,
+    verified: true,
     sortBy: "averageRating",
     sortOrder: "DESC",
   });

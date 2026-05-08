@@ -52,13 +52,13 @@ const ProviderListing: React.FC<ProviderListingProps> = ({
 	const { data: listData, isFetching } = useGetCompaniesQuery({
 		page: filters.page,
 		limit: PAGE_SIZE,
-		query: filters.searchQuery || undefined,
+		searchQuery: filters.searchQuery || undefined,
 		categoryId: filters.categoryId === "all" ? undefined : filters.categoryId,
 		district: filters.district || undefined,
 		type: filters.type === "all" ? undefined : filters.type,
 		minRating:
 			Number(filters.minRating) > 0 ? Number(filters.minRating) : undefined,
-		isVerified: filters.verified ? true : undefined,
+		verified: filters.verified ? true : undefined,
 	});
 
 	const { data: categoriesData } = useGetCompanyCategoriesQuery({ limit: 50 });

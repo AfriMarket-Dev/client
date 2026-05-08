@@ -41,7 +41,7 @@ const CategoriesPage: React.FC<CategoriesPageProps> = () => {
   const { data: categoriesResult, isFetching } = useGetProductCategoriesQuery({
     page: filters.page,
     limit: PAGE_SIZE,
-    query: filters.searchQuery,
+    searchQuery: filters.searchQuery,
   });
 
   const categories = categoriesResult?.data || [];

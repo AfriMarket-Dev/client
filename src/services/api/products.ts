@@ -15,7 +15,7 @@ function buildProductsQuery(params: ProductsQueryParams): string {
 	const sp = new URLSearchParams();
 	if (params.page != null) sp.set("page", String(params.page));
 	if (params.limit != null) sp.set("limit", String(params.limit));
-	if (params.query) sp.set("query", params.query);
+	if (params.searchQuery) sp.set("searchQuery", params.searchQuery);
 	if (params.categoryId && params.categoryId !== "all")
 		sp.set("categoryId", params.categoryId);
 	if (params.companyId) sp.set("companyId", params.companyId);

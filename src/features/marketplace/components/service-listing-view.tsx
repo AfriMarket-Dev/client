@@ -42,7 +42,7 @@ export const ServiceListingView: React.FC<ServiceListingViewProps> = ({
 		() => ({
 			page: filters.page,
 			limit: PAGE_SIZE,
-			query: (filters.searchQuery || "").trim() || undefined,
+			searchQuery: (filters.searchQuery || "").trim() || undefined,
 			categoryId: filters.categoryId === "all" ? undefined : filters.categoryId,
 			district: (filters.district || "").trim() || undefined,
 			minPrice: filters.minPrice ? Number(filters.minPrice) : undefined,

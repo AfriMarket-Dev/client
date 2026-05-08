@@ -3,6 +3,7 @@ import {
   RiArrowLeftLine,
   RiBox3Line,
   RiCheckDoubleLine,
+  RiCheckLine,
   RiArrowDownLine,
   RiSendPlane2Fill,
   RiChat3Line,
@@ -493,7 +494,11 @@ export function MessagesPage() {
                                 {formatMessageTime(m.createdAt)}
                               </span>
                               {group.isMe && (
-                                <RiCheckDoubleLine className={cn("w-3 h-3", m.isRead ? "text-success" : "text-muted-foreground")} />
+                                m.isRead ? (
+                                  <RiCheckDoubleLine className="w-3 h-3 text-success animate-in fade-in zoom-in duration-500" />
+                                ) : (
+                                  <RiCheckLine className="w-3 h-3 text-muted-foreground" />
+                                )
                               )}
                             </div>
                           </div>

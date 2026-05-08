@@ -44,7 +44,7 @@ describe("catalog api", () => {
 				productsApi.endpoints.getProducts.initiate({
 					page: 2,
 					limit: 5,
-					query: "cement",
+					searchQuery: "cement",
 					categoryId: "c1",
 					companyId: "co1",
 					district: "Gasabo",
@@ -93,9 +93,9 @@ describe("catalog api", () => {
 		await store
 			.dispatch(
 				companiesApi.endpoints.getCompanies.initiate({
-					query: "builder",
+					searchQuery: "builder",
 					type: "CONTRACTOR",
-					isVerified: false,
+					verified: false,
 					minRating: 4,
 					sortBy: "name",
 					sortOrder: "ASC",
@@ -141,7 +141,7 @@ describe("catalog api", () => {
 		await store
 			.dispatch(
 				servicesApi.endpoints.getServices.initiate({
-					query: "plumbing",
+					searchQuery: "plumbing",
 					companyType: "PRO",
 					hasDiscount: true,
 					isFeatured: false,

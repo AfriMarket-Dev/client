@@ -16,14 +16,14 @@ export type SortOrder = "ASC" | "DESC";
 export interface CompaniesQueryParams {
 	page?: number;
 	limit?: number;
-	query?: string;
+	searchQuery?: string;
 	categoryId?: string;
 	district?: string;
 	type?: string;
 	sortBy?: string;
 	sortOrder?: SortOrder;
 	minRating?: number;
-	isVerified?: boolean;
+	verified?: boolean;
 }
 
 export interface CompaniesListResult {
@@ -34,7 +34,7 @@ export interface CompaniesListResult {
 export interface ProductsQueryParams {
 	page?: number;
 	limit?: number;
-	query?: string;
+	searchQuery?: string;
 	categoryId?: string;
 	companyId?: string;
 	district?: string;
@@ -56,7 +56,7 @@ export interface ProductsListResult {
 export interface ServicesQueryParams {
 	page?: number;
 	limit?: number;
-	query?: string;
+	searchQuery?: string;
 	categoryId?: string;
 	companyId?: string;
 	district?: string;
@@ -77,7 +77,7 @@ export interface ServicesListResult {
 export interface ProductCategoriesQueryParams {
 	page?: number;
 	limit?: number;
-	query?: string;
+	searchQuery?: string;
 }
 
 export interface ProductCategoriesListResult {

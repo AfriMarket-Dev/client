@@ -31,12 +31,10 @@ export const useSocket = () => {
 
       socketInstance.on('connect', () => {
         setIsConnected(true);
-        console.log('Socket connected');
       });
 
       socketInstance.on('disconnect', () => {
         setIsConnected(false);
-        console.log('Socket disconnected');
       });
       
       socketInstance.on('user:online-list', (userIds: string[]) => {

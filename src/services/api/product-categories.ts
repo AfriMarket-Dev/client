@@ -18,7 +18,7 @@ export const productCategoriesApi = apiSlice.injectEndpoints({
 				const sp = new URLSearchParams();
 				if (params?.page != null) sp.set("page", String(params.page));
 				if (params?.limit != null) sp.set("limit", String(params.limit));
-				if (params?.query) sp.set("query", params.query);
+				if (params?.searchQuery) sp.set("searchQuery", params.searchQuery);
 				return `/product-categories?${sp.toString()}`;
 			},
 			transformResponse: (response: ApiResponse<ProductCategory[]>) =>
