@@ -17,6 +17,7 @@ export const Route = createFileRoute("/_main/auctions/")({
 		sortOrder: search.sortOrder || "DESC",
 		page: search.page || 1,
 	}),
+	// biome-ignore lint/suspicious/noExplicitAny: tanstack router context
 	shouldReload: (ctx: any) =>
 		!ctx.prev || ctx.next.pathname !== ctx.prev.pathname,
 	staleTime: 30_000,

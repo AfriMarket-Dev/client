@@ -49,7 +49,8 @@ export function AuctionDetailsPage() {
 							Auction Offline
 						</EmptyTitle>
 						<EmptyDescription className="text-sm text-muted-foreground">
-							The requested auction terminal is currently unavailable or archived.
+							The requested auction terminal is currently unavailable or
+							archived.
 						</EmptyDescription>
 					</EmptyHeader>
 					<EmptyContent>
@@ -72,6 +73,19 @@ export function AuctionDetailsPage() {
 			title={auction.title}
 			badgeText={statusLabel}
 			onBack={() => navigate({ to: "/auctions" })}
+			headerAction={
+				<ContactActions
+					phone={auction.company?.phone}
+					whatsapp={auction.company?.phone}
+					email={auction.company?.email}
+					companyName={auction.company?.name}
+					companyId={auction.company?.id}
+					auctionId={auction.id}
+					variant="dropdown"
+					label="Bid Inquiry"
+					className="hidden md:flex"
+				/>
+			}
 			gallery={
 				<div className="flex flex-col md:flex-row gap-8 h-full">
 					{/* Main Image Stage */}
@@ -88,7 +102,7 @@ export function AuctionDetailsPage() {
 						) : (
 							<RiAuctionLine className="h-24 w-24 text-muted-foreground/20" />
 						)}
-						
+
 						{/* Image Counter Badge */}
 						<div className="absolute top-4 left-4">
 							<Badge className="bg-background/80 backdrop-blur-sm text-foreground border-none rounded-none px-3 py-1 text-xs font-medium shadow-none">
@@ -108,7 +122,7 @@ export function AuctionDetailsPage() {
 										"flex-1 md:flex-none aspect-square w-20 md:w-full shrink-0 overflow-hidden rounded-none border transition-all duration-200 p-0 shadow-none",
 										currentImageIdx === idx
 											? "border-foreground bg-background opacity-100"
-											: "border-transparent opacity-60 hover:opacity-100 hover:border-border"
+											: "border-transparent opacity-60 hover:opacity-100 hover:border-border",
 									)}
 								>
 									<img
@@ -155,7 +169,9 @@ export function AuctionDetailsPage() {
 								<p className="text-2xl md:text-3xl font-bold text-foreground tracking-tight leading-none">
 									{auction.startingPrice.toLocaleString()}
 								</p>
-								<span className="text-sm font-medium text-muted-foreground">RWF</span>
+								<span className="text-sm font-medium text-muted-foreground">
+									RWF
+								</span>
 							</div>
 						</div>
 
@@ -209,7 +225,8 @@ export function AuctionDetailsPage() {
 							Description
 						</h3>
 						<p className="text-base text-muted-foreground leading-relaxed whitespace-pre-wrap">
-							{auction.description || "Comprehensive documentation of the asset and its current condition within the industrial context."}
+							{auction.description ||
+								"Comprehensive documentation of the asset and its current condition within the industrial context."}
 						</p>
 					</div>
 				</div>
@@ -234,7 +251,7 @@ export function AuctionDetailsPage() {
 									Seller
 								</span>
 							</div>
-							
+
 							<div className="flex items-start gap-5">
 								<div className="w-16 h-16 rounded-none bg-muted text-foreground flex items-center justify-center text-2xl font-bold border-none">
 									<RiStore2Line className="h-6 w-6" />

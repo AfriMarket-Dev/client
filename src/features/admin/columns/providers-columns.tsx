@@ -116,7 +116,9 @@ export const getProvidersColumns = ({
 								}
 							>
 								<RiCheckboxCircleLine className="mr-2 h-4 w-4 text-success" />{" "}
-								{provider.isVerified ? "Remove Verification" : "Mark as Verified"}
+								{provider.isVerified
+									? "Remove Verification"
+									: "Mark as Verified"}
 							</DropdownMenuItem>
 							<DropdownMenuItem
 								className="text-destructive focus:text-destructive"

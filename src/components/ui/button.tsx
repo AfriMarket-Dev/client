@@ -59,4 +59,5 @@ function Button({ className, variant, size, render, ...props }: ButtonProps) {
 		render,
 	});
 }
+
 export { Button, buttonVariants };

@@ -37,7 +37,11 @@ export const BaseSidebar: React.FC<BaseSidebarProps> = ({
 				<NavMain items={navItems} />
 			</SidebarContent>
 			<SidebarFooter className="gap-2 p-4">
-				<RefreshDataButton variant="ghost" className="w-full justify-start px-2 h-9" showLabel />
+				<RefreshDataButton
+					variant="ghost"
+					className="w-full justify-start px-2 h-9"
+					showLabel
+				/>
 				<NavUser user={user} />
 			</SidebarFooter>
 			<SidebarRail />

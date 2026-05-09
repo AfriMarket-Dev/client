@@ -90,9 +90,7 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
 					<div className="flex items-center justify-between mb-1">
 						<div className="flex items-center gap-1.5 text-muted-foreground text-left">
 							<RiMapPinLine className="w-3.5 h-3.5" />
-							<span className="text-xs font-medium">
-								Kigali
-							</span>
+							<span className="text-xs font-medium">Kigali</span>
 						</div>
 						<div className="flex items-center gap-1.5 text-muted-foreground">
 							<RiStarFill className="w-3 h-3 text-amber-500" />
@@ -106,9 +104,7 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
 				{viewMode === "list" && (
 					<div className="flex items-center gap-1.5 text-muted-foreground text-left">
 						<RiMapPinLine className="w-4 h-4" />
-						<span className="text-xs font-medium">
-							Kigali, Rwanda
-						</span>
+						<span className="text-xs font-medium">Kigali, Rwanda</span>
 					</div>
 				)}
 

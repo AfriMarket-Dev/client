@@ -13,7 +13,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { getFormFieldErrors } from "@/lib/utils";
-import { FormField } from "@/shared/components";
+import { FormField } from "@/shared/components/form-field";
 import { type SignInFormValues, signInSchema } from "@/shared/schemas/auth";
 
 interface SignInFormProps {

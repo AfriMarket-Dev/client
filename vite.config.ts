@@ -53,7 +53,10 @@ export default defineConfig({
 						if (id.includes("recharts")) {
 							return "vendor-charts";
 						}
-						if (id.includes("lucide-react") || id.includes("@remixicon/react")) {
+						if (
+							id.includes("lucide-react") ||
+							id.includes("@remixicon/react")
+						) {
 							return "vendor-ui";
 						}
 					}

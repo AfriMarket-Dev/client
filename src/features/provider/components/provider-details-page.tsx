@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from "@tanstack/react-router";
 import { useCallback } from "react";
-import { PageContainer } from "@/shared/components";
+import { PageContainer } from "@/shared/components/page-container";
 import { ROUTES } from "@/shared/constants/routes";
 import type { Product } from "@/types";
 import ProviderDetails from "./provider-details";

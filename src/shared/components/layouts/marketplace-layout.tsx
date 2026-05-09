@@ -165,9 +165,7 @@ export function MarketplaceLayout({
 							</div>
 
 							{/* Active Filter Badges */}
-							{activeFilters && (
-								<div className="pt-2">{activeFilters}</div>
-							)}
+							{activeFilters && <div className="pt-2">{activeFilters}</div>}
 						</div>
 
 						{/* Results Content */}

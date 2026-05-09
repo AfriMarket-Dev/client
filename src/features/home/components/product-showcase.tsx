@@ -45,14 +45,14 @@ const ProductShowcase: React.FC<ProductShowcaseProps> = ({
 					subtitle={subtitle}
 					label="Curated Selection"
 					icon={icon || <Package className="w-5 h-5" />}
-					viewAllHref="/products"
+					viewAllHref={`/products?category=${categoryId}`}
 				/>
 
 				{listings.length === 0 ? (
 					<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-6">
 						{Array.from({ length: 5 }).map((_, i) => (
 							<div
-								key={i}
+								key={`skeleton-${title}-${i}`}
 								className="aspect-4/3 rounded-none border border-border/40 bg-muted/20 animate-pulse"
 							/>
 						))}

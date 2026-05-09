@@ -70,7 +70,10 @@ export function AdminAddProviderPage() {
 			/>
 
 			<div className="max-w-4xl">
-				<Card noPadding className="border-border shadow-sm rounded-md mb-10 overflow-hidden">
+				<Card
+					noPadding
+					className="border-border shadow-sm rounded-md mb-10 overflow-hidden"
+				>
 					<div className="relative z-10 flex items-center justify-between px-12 py-10 bg-muted/5">
 						{steps.map((item, index) => (
 							<div
@@ -126,7 +129,9 @@ export function AdminAddProviderPage() {
 				<div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center">
 					<div className="flex flex-col items-center gap-4">
 						<div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin" />
-						<p className="text-sm font-semibold text-primary">Creating provider entity...</p>
+						<p className="text-sm font-semibold text-primary">
+							Creating provider entity...
+						</p>
 					</div>
 				</div>
 			)}

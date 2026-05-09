@@ -11,13 +11,12 @@ import { useSelector } from "react-redux";
 import { Button } from "@/components/ui/button";
 import { Portal, PortalBackdrop } from "@/components/ui/portal";
 import { cn } from "@/lib/utils";
+import { useGetUnreadCountQuery } from "@/services/api/messages";
 import { ROUTES } from "@/shared/constants/routes";
 import { useScroll } from "@/shared/hooks/use-scroll";
 import type { RootState } from "@/store";
 import { HeaderLogo } from "./header/header-logo";
 import { HeaderUserNav } from "./header/header-user-nav";
-import { RefreshDataButton } from "@/shared/components/refresh-data-button";
-import { useGetUnreadCountQuery } from "@/services/api/messages";
 
 const navLinks = [
 	{ label: "Products", href: ROUTES.PUBLIC.PRODUCTS },
@@ -35,15 +34,20 @@ const secondaryLinks = [
 
 export function MobileNav() {
 	const [open, setOpen] = React.useState(false);
-	const { isAuthenticated, user } = useSelector((state: RootState) => state.auth);
+	const { isAuthenticated, user } = useSelector(
+		(state: RootState) => state.auth,
+	);
 	const { data: unreadCount = 0 } = useGetUnreadCountQuery(undefined, {
 		skip: !isAuthenticated,
 	});
 	const mobileMenuId = React.useId();
 
-	const isProvider = user?.role === "provider" || user?.role === "admin" || user?.role === "agent";
+	const isProvider =
+		user?.role === "provider" ||
+		user?.role === "admin" ||
+		user?.role === "agent";
 
-	const filteredSecondaryLinks = secondaryLinks.map(link => {
+	const filteredSecondaryLinks = secondaryLinks.map((link) => {
 		if (link.label === "Become a Provider" && isProvider) {
 			return { label: "Dashboard", href: ROUTES.DASHBOARD.INDEX };
 		}
@@ -170,10 +174,6 @@ export const Header: React.FC = () => {
 	const { isAuthenticated, user } = useSelector(
 		(state: RootState) => state.auth,
 	);
-	const { data: unreadCount = 0 } = useGetUnreadCountQuery(undefined, {
-		skip: !isAuthenticated,
-		pollingInterval: 30000, // Fallback polling if socket fails
-	});
 
 	return (
 		<header
@@ -231,10 +231,6 @@ export const Header: React.FC = () => {
 				</nav>
 
 				<div className="flex items-center gap-0.5 sm:gap-3 shrink-0">
-					<div className="flex items-center gap-2 pr-2 sm:pr-0">
-						<RefreshDataButton variant="ghost" className="h-9 w-9 sm:h-9 sm:w-9" />
-					</div>
-
 					<div className="hidden sm:flex items-center gap-2 pl-4 border-l border-border/40">
 						{!isAuthenticated ? (
 							<>
@@ -258,16 +254,6 @@ export const Header: React.FC = () => {
 							</>
 						) : (
 							<div className="flex items-center gap-2">
-								<Link to={ROUTES.PROTECTED.MESSAGES} className="relative group mr-2">
-									<Button variant="ghost" size="icon" className="h-9 w-9 rounded-none hover:bg-primary/5 group-hover:text-primary transition-all">
-										<RiMessage3Line className="size-4" />
-										{unreadCount > 0 && (
-											<span className="absolute -top-0.5 -right-0.5 bg-primary text-primary-foreground text-[8px] font-black h-3.5 min-w-[14px] px-1 flex items-center justify-center rounded-none shadow-sm shadow-primary/20">
-												{unreadCount > 99 ? '99+' : unreadCount}
-											</span>
-										)}
-									</Button>
-								</Link>
 								<HeaderUserNav isAuthenticated={isAuthenticated} user={user} />
 							</div>
 						)}

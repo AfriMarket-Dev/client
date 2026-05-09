@@ -39,7 +39,10 @@ interface UserDashboardProps {
 	conversations: ConversationPartner[];
 }
 
-export default function UserDashboard({ wishlist, conversations }: UserDashboardProps) {
+export default function UserDashboard({
+	wishlist,
+	conversations,
+}: UserDashboardProps) {
 	const { user } = useSelector((state: RootState) => state.auth);
 	const [reviewModalOpen, setReviewModalOpen] = useState(false);
 	const [createReview] = useCreateReviewMutation();
@@ -178,21 +181,18 @@ export default function UserDashboard({ wishlist, conversations }: UserDashboard
 										<div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 md:gap-6">
 											<div className="min-w-0">
 												<p className="text-[8px] md:text-[9px] font-black uppercase tracking-[0.3em] text-primary/60 mb-1 md:mb-2">
-													{listing.category?.name ??
-														"General Material"}
+													{listing.category?.name ?? "General Material"}
 												</p>
 												<h3 className="text-base md:text-lg font-display font-black text-foreground uppercase tracking-tight group-hover:text-primary transition-colors line-clamp-1">
 													{listing.name}
 												</h3>
 												<div className="flex items-center gap-3 md:gap-4 mt-2 md:mt-3">
 													<p className="text-[12px] md:text-sm font-black tracking-tight text-foreground/80 font-mono">
-														RWF{" "}
-														{(Number(price) || 0).toLocaleString()}
+														RWF {(Number(price) || 0).toLocaleString()}
 													</p>
 													<div className="w-1 h-1 rounded-full bg-border" />
 													<p className="text-[8px] md:text-[9px] font-bold text-muted-foreground uppercase tracking-widest truncate">
-														{listing.company?.name ||
-															"Verified Provider"}
+														{listing.company?.name || "Verified Provider"}
 													</p>
 												</div>
 											</div>
@@ -232,8 +232,7 @@ export default function UserDashboard({ wishlist, conversations }: UserDashboard
 													className="flex-1 sm:flex-none h-9 rounded-none text-[9px] font-black uppercase tracking-widest border-border/40 hover:border-warning/40 hover:text-warning"
 													onClick={() => {
 														setSelectedItem({
-															provider:
-																listing.company?.name ?? "Provider",
+															provider: listing.company?.name ?? "Provider",
 															item: listing.name,
 															productId:
 																listing.type === "product"
@@ -244,8 +243,7 @@ export default function UserDashboard({ wishlist, conversations }: UserDashboard
 														setReviewModalOpen(true);
 													}}
 												>
-													<RiStarLine className="mr-1.5 h-3 w-3" />{" "}
-													Review
+													<RiStarLine className="mr-1.5 h-3 w-3" /> Review
 												</Button>
 											</div>
 										</div>
@@ -304,8 +302,8 @@ export default function UserDashboard({ wishlist, conversations }: UserDashboard
 							Messaging Guidelines
 						</h4>
 						<p className="text-[11px] text-muted-foreground font-medium uppercase leading-relaxed tracking-wider">
-							Please keep all negotiations and delivery discussions
-							within this platform to ensure safety and transparency.
+							Please keep all negotiations and delivery discussions within this
+							platform to ensure safety and transparency.
 						</p>
 					</div>
 				</div>

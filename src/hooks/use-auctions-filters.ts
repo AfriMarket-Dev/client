@@ -35,6 +35,7 @@ export function useAuctionsFilters() {
 	const patchFilters = useCallback(
 		(patch: Partial<AuctionsQueryParams>) => {
 			startTransition(() => {
+				// biome-ignore lint/suspicious/noExplicitAny: complex type mapping for url params
 				setParams(patch as any);
 			});
 		},

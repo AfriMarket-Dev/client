@@ -7,21 +7,23 @@ import {
 } from "@remixicon/react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { PageHeader } from "@/shared/components/admin/page-header";
 import { cn } from "@/lib/utils";
+import { useGetProfileQuery } from "@/services/api/users";
+import { PageHeader } from "@/shared/components/admin/page-header";
+import type { Company } from "@/types";
 import { CompanyInfoSection } from "./settings/company-info-section";
 import { ProfileInfoSection } from "./settings/profile-info-section";
-import { useGetProfileQuery } from "@/services/api/users";
-import type { Company } from "@/types";
 
 interface ProviderProfileSettingsProps {
 	providerData: Company | null;
 }
 
-export function ProviderProfileSettings({ providerData }: ProviderProfileSettingsProps) {
-	const [activeTab, setActiveTab] = useState<"profile" | "company" | "security">(
-		"profile",
-	);
+export function ProviderProfileSettings({
+	providerData,
+}: ProviderProfileSettingsProps) {
+	const [activeTab, setActiveTab] = useState<
+		"profile" | "company" | "security"
+	>("profile");
 
 	const { data: userProfile, isLoading: loadingProfile } = useGetProfileQuery();
 
@@ -32,7 +34,11 @@ export function ProviderProfileSettings({ providerData }: ProviderProfileSetting
 	];
 
 	if (loadingProfile) {
-		return <div className="p-12 text-center text-muted-foreground animate-pulse">Synchronizing records...</div>;
+		return (
+			<div className="p-12 text-center text-muted-foreground animate-pulse">
+				Synchronizing records...
+			</div>
+		);
 	}
 
 	return (
@@ -52,7 +58,9 @@ export function ProviderProfileSettings({ providerData }: ProviderProfileSetting
 								<button
 									key={tab.id}
 									type="button"
-									onClick={() => setActiveTab(tab.id as any)}
+									onClick={() =>
+										setActiveTab(tab.id as "profile" | "company" | "security")
+									}
 									className={cn(
 										"w-full flex items-center justify-between px-4 py-4 text-[10px] font-bold uppercase tracking-widest transition-all text-left border rounded-none",
 										activeTab === tab.id
@@ -77,7 +85,9 @@ export function ProviderProfileSettings({ providerData }: ProviderProfileSetting
 										Verified Status
 									</p>
 									<p className="text-[9px] font-semibold text-success mt-0.5">
-										{providerData?.isVerified ? "ENTERPRISE LEVEL 2" : "PENDING VERIFICATION"}
+										{providerData?.isVerified
+											? "ENTERPRISE LEVEL 2"
+											: "PENDING VERIFICATION"}
 									</p>
 								</div>
 							</div>
@@ -91,7 +101,7 @@ export function ProviderProfileSettings({ providerData }: ProviderProfileSetting
 						<ProfileInfoSection user={userProfile} />
 					)}
 					{activeTab === "company" && providerData && (
-						<CompanyInfoSection provider={providerData as any} />
+						<CompanyInfoSection provider={providerData} />
 					)}
 					{activeTab === "security" && (
 						<div className="bg-card border border-border p-12 text-center rounded-none shadow-none">
@@ -104,7 +114,10 @@ export function ProviderProfileSettings({ providerData }: ProviderProfileSetting
 							<p className="text-sm text-muted-foreground mt-1 mb-6">
 								Advanced security controls are currently being synchronized.
 							</p>
-							<Button variant="outline" className="h-10 rounded-none font-bold uppercase text-[10px] tracking-widest px-6 shadow-none">
+							<Button
+								variant="outline"
+								className="h-10 rounded-none font-bold uppercase text-[10px] tracking-widest px-6 shadow-none"
+							>
 								Request Access
 							</Button>
 						</div>

@@ -70,7 +70,7 @@ const AnalyticsDashboard: React.FC = () => {
 
 	// Use real data for Top Products if available in ProviderStats
 	const topProducts = useMemo(() => {
-		if (!providerStats || !providerStats.companies) return [];
+		if (!providerStats?.companies) return [];
 
 		return providerStats.companies
 			.map((company) => ({
@@ -85,32 +85,35 @@ const AnalyticsDashboard: React.FC = () => {
 			.slice(0, 4);
 	}, [providerStats]);
 
-	const chartDataMap = {
-		inquiries: [
-			{ month: "Jan", value: 0, secondary: 0 },
-			{ month: "Feb", value: 0, secondary: 0 },
-			{ month: "Mar", value: 0, secondary: 0 },
-			{ month: "Apr", value: 0, secondary: 0 },
-			{ month: "May", value: 0, secondary: 0 },
-			{ month: "Jun", value: 0, secondary: 0 },
-		],
-		views: [
-			{ month: "Jan", value: 0, secondary: 0 },
-			{ month: "Feb", value: 0, secondary: 0 },
-			{ month: "Mar", value: 0, secondary: 0 },
-			{ month: "Apr", value: 0, secondary: 0 },
-			{ month: "May", value: 0, secondary: 0 },
-			{ month: "Jun", value: 0, secondary: 0 },
-		],
-		conversion: [
-			{ month: "Jan", value: 0, secondary: 0 },
-			{ month: "Feb", value: 0, secondary: 0 },
-			{ month: "Mar", value: 0, secondary: 0 },
-			{ month: "Apr", value: 0, secondary: 0 },
-			{ month: "May", value: 0, secondary: 0 },
-			{ month: "Jun", value: 0, secondary: 0 },
-		],
-	};
+	const chartDataMap = useMemo(
+		() => ({
+			inquiries: [
+				{ month: "Jan", value: 0, secondary: 0 },
+				{ month: "Feb", value: 0, secondary: 0 },
+				{ month: "Mar", value: 0, secondary: 0 },
+				{ month: "Apr", value: 0, secondary: 0 },
+				{ month: "May", value: 0, secondary: 0 },
+				{ month: "Jun", value: 0, secondary: 0 },
+			],
+			views: [
+				{ month: "Jan", value: 0, secondary: 0 },
+				{ month: "Feb", value: 0, secondary: 0 },
+				{ month: "Mar", value: 0, secondary: 0 },
+				{ month: "Apr", value: 0, secondary: 0 },
+				{ month: "May", value: 0, secondary: 0 },
+				{ month: "Jun", value: 0, secondary: 0 },
+			],
+			conversion: [
+				{ month: "Jan", value: 0, secondary: 0 },
+				{ month: "Feb", value: 0, secondary: 0 },
+				{ month: "Mar", value: 0, secondary: 0 },
+				{ month: "Apr", value: 0, secondary: 0 },
+				{ month: "May", value: 0, secondary: 0 },
+				{ month: "Jun", value: 0, secondary: 0 },
+			],
+		}),
+		[],
+	);
 
 	const categoryPerformance = [
 		{
@@ -134,7 +137,7 @@ const AnalyticsDashboard: React.FC = () => {
 
 	const currentChartData = useMemo(
 		() => chartDataMap[activeChart],
-		[activeChart],
+		[activeChart, chartDataMap],
 	);
 
 	const maxValue = useMemo(
@@ -210,8 +213,9 @@ const AnalyticsDashboard: React.FC = () => {
 			<div className="grid lg:grid-cols-3 gap-8">
 				<PerformanceTrendsCard
 					activeChart={activeChart}
-					// biome-ignore lint/suspicious/noExplicitAny: bypass strict enum mapping
-					onActiveChartChange={(chart) => setActiveChart(chart as any)}
+					onActiveChartChange={(chart) =>
+						setActiveChart(chart as "inquiries" | "views" | "conversion")
+					}
 					chartData={currentChartData}
 					maxValue={maxValue > 0 ? maxValue : 100}
 					labels={chartLabels}

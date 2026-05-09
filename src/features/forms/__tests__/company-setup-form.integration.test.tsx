@@ -37,7 +37,7 @@ describe("CompanySetupForm Integration", () => {
 		);
 
 		const slugInput = screen.getByLabelText(/Store URL Slug/i);
-		
+
 		// Test slug validation (taken)
 		fireEvent.change(slugInput, { target: { value: "taken-slug" } });
 		fireEvent.blur(slugInput);

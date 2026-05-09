@@ -105,10 +105,7 @@ export function AdminTableToolbar<TData>({
 								<SelectValue placeholder="All statuses" />
 							</SelectTrigger>
 							<SelectContent className="rounded-none">
-								<SelectItem
-									value="all"
-									className="text-sm"
-								>
+								<SelectItem value="all" className="text-sm">
 									All statuses
 								</SelectItem>
 								{statusOptions.map((option) => (
@@ -190,10 +187,7 @@ export function AdminTableToolbar<TData>({
 												<SelectValue placeholder="All statuses" />
 											</SelectTrigger>
 											<SelectContent className="rounded-none">
-												<SelectItem
-													value="all"
-													className="text-sm"
-												>
+												<SelectItem value="all" className="text-sm">
 													All statuses
 												</SelectItem>
 												{statusOptions.map((option) => (

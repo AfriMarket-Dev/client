@@ -17,7 +17,7 @@ export const Route = createFileRoute("/_main/providers/$providerId")({
 	loader: async ({ params }) => {
 		const result = await store.dispatch(
 			companiesApi.endpoints.getCompanyById.initiate(params.providerId),
-		)
+		);
 		if (!result.data) throw new Error("Provider not found");
 		return result.data;
 	},
@@ -45,6 +45,6 @@ export const Route = createFileRoute("/_main/providers/$providerId")({
 					addressCountry: "RW",
 				},
 			},
-		})
+		});
 	},
 });

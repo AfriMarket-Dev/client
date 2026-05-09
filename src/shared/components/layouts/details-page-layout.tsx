@@ -71,13 +71,9 @@ export function DetailsPageLayout({
 			<div className="w-full px-4 sm:px-8 lg:px-12 py-8 md:py-12 space-y-12">
 				{/* Hero Section: Gallery + Info */}
 				<div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
-					<div className="w-full">
-						{gallery}
-					</div>
+					<div className="w-full">{gallery}</div>
 
-					<div className="w-full">
-						{info}
-					</div>
+					<div className="w-full">{info}</div>
 				</div>
 
 				{/* Visual separator */}
@@ -91,9 +87,7 @@ export function DetailsPageLayout({
 					</div>
 
 					<div className="w-full lg:col-span-1">
-						<div className="lg:sticky lg:top-24 space-y-6">
-							{sidebar}
-						</div>
+						<div className="lg:sticky lg:top-24 space-y-6">{sidebar}</div>
 					</div>
 				</div>
 			</div>

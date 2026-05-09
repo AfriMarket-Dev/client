@@ -4,7 +4,11 @@ export interface CompanyCategoryRef {
 	description?: string;
 }
 
-export type ProviderType = 'MANUFACTURER_RWANDA' | 'SUPPLIER_WHOLESALER' | 'SUPPLIER_RETAILER' | 'SERVICE_PROVIDER';
+export type ProviderType =
+	| "MANUFACTURER_RWANDA"
+	| "SUPPLIER_WHOLESALER"
+	| "SUPPLIER_RETAILER"
+	| "SERVICE_PROVIDER";
 
 /**
  * Standardized Provider Entity
@@ -17,7 +21,7 @@ export interface Provider {
 	logoUrl?: string;
 	description: string;
 	type: ProviderType;
-	
+
 	// Location Data
 	province: string;
 	district: string;
@@ -29,7 +33,7 @@ export interface Provider {
 	phoneNumber: string;
 	whatsappNumber?: string;
 	email: string;
-	
+
 	// API Aliases (Legacy support for existing components)
 	phone?: string;
 	isActive: boolean;
@@ -42,7 +46,16 @@ export interface Provider {
 	averageRating: number;
 	reviewCount: number;
 	capabilities: string[];
-	
+
+	website?: string;
+	socialLinks?: {
+		facebook?: string;
+		instagram?: string;
+		linkedin?: string;
+		twitter?: string;
+		youtube?: string;
+	};
+
 	createdAt?: string;
 	updatedAt?: string;
 	ownerId?: string;
@@ -84,6 +97,8 @@ export interface Product {
 	images?: string[];
 	specifications?: Record<string, string>;
 	variants?: ProductVariant[];
+	averageRating: number;
+	reviewCount: number;
 	createdAt?: string;
 	updatedAt?: string;
 }
@@ -136,6 +151,8 @@ export interface Service {
 	images?: string[];
 	specifications?: Record<string, string>;
 	totalRequests?: number;
+	averageRating: number;
+	reviewCount: number;
 	createdAt?: string;
 	updatedAt?: string;
 }
@@ -167,12 +184,14 @@ export interface Auction {
 export interface Review {
 	id: string;
 	rating: number;
-	comment: string;
-	userId: string;
-	user?: { id: string; name: string; email: string };
-	productId?: string;
-	companyId?: string;
+	comment?: string;
+	user: UserProfile;
+	company?: Provider;
+	product?: Product;
+	service?: Service;
+	isVerifiedPurchase: boolean;
 	createdAt: string;
+	updatedAt: string;
 }
 
 export interface Message {
@@ -221,11 +240,11 @@ export interface MarketplaceStats {
 }
 
 export interface InteractionType {
-	type: 'VIEW' | 'WHATSAPP_CLICK' | 'CALL_CLICK' | 'EMAIL_CLICK' | 'SHARE';
+	type: "VIEW" | "WHATSAPP_CLICK" | "CALL_CLICK" | "EMAIL_CLICK" | "SHARE";
 }
 
 export interface LogInteractionPayload {
-	type: 'VIEW' | 'WHATSAPP_CLICK' | 'CALL_CLICK' | 'EMAIL_CLICK' | 'SHARE';
+	type: "VIEW" | "WHATSAPP_CLICK" | "CALL_CLICK" | "EMAIL_CLICK" | "SHARE";
 	serviceId?: string;
 	productId?: string;
 	companyId?: string;

@@ -39,8 +39,10 @@ export default function ProviderDashboard({
 		itemType: null,
 	});
 
-	const [deleteProduct, { isLoading: deletingProduct }] = useDeleteProductMutation();
-	const [deleteService, { isLoading: deletingService }] = useDeleteServiceMutation();
+	const [deleteProduct, { isLoading: deletingProduct }] =
+		useDeleteProductMutation();
+	const [deleteService, { isLoading: deletingService }] =
+		useDeleteServiceMutation();
 
 	const handleConfirmDelete = useCallback(async () => {
 		if (!deleteModal.listingId || !deleteModal.itemType) return;
@@ -51,12 +53,22 @@ export default function ProviderDashboard({
 				await deleteService(deleteModal.listingId).unwrap();
 			}
 			toast.success("Listing deleted successfully");
-			setDeleteModal({ isOpen: false, listingId: "", listingName: "", itemType: null });
+			setDeleteModal({
+				isOpen: false,
+				listingId: "",
+				listingName: "",
+				itemType: null,
+			});
 		} catch (error) {
 			console.error("DELETE FAILED:", error);
 			toast.error("Failed to delete listing");
 		}
-	}, [deleteProduct, deleteService, deleteModal.listingId, deleteModal.itemType]);
+	}, [
+		deleteProduct,
+		deleteService,
+		deleteModal.listingId,
+		deleteModal.itemType,
+	]);
 
 	if (!company) {
 		return <CompanySetupSection categories={categories} />;
@@ -65,7 +77,11 @@ export default function ProviderDashboard({
 	const listings = [
 		...products.map((p) => ({ ...p, itemType: "PRODUCT" as const })),
 		...services.map((s) => ({ ...s, itemType: "SERVICE" as const })),
-	].sort((a, b) => new Date(b.createdAt ?? 0).getTime() - new Date(a.createdAt ?? 0).getTime());
+	].sort(
+		(a, b) =>
+			new Date(b.createdAt ?? 0).getTime() -
+			new Date(a.createdAt ?? 0).getTime(),
+	);
 
 	return (
 		<div className="space-y-6 pb-14">
@@ -85,7 +101,7 @@ export default function ProviderDashboard({
 			/>
 
 			<InventoryStats listings={listings} />
-			
+
 			<InventoryTable
 				listings={listings}
 				onDeleteClick={(listing) =>
@@ -106,7 +122,14 @@ export default function ProviderDashboard({
 				cancelText="Cancel"
 				type="delete"
 				onConfirm={handleConfirmDelete}
-				onCancel={() => setDeleteModal({ isOpen: false, listingId: "", listingName: "", itemType: null })}
+				onCancel={() =>
+					setDeleteModal({
+						isOpen: false,
+						listingId: "",
+						listingName: "",
+						itemType: null,
+					})
+				}
 				isLoading={deletingProduct || deletingService}
 			/>
 		</div>

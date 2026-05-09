@@ -1,6 +1,6 @@
 import { RiArrowRightLine } from "@remixicon/react";
 import { useNavigate } from "@tanstack/react-router";
-import type React from "react";
+import React from "react";
 import { useSelector } from "react-redux";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -27,6 +27,12 @@ const HotDeals: React.FC = () => {
 	const { data: wishlist = [] } = useGetWishlistQuery(undefined, {
 		skip: !isAuthenticated,
 	});
+
+	const wishlistIds = React.useMemo(
+		() => new Set(wishlist.map((item) => item.id)),
+		[wishlist],
+	);
+
 	const [addToWishlist] = useAddToWishlistMutation();
 	const [removeFromWishlist] = useRemoveFromWishlistMutation();
 
@@ -40,9 +46,7 @@ const HotDeals: React.FC = () => {
 			return;
 		}
 		try {
-			const isInWishlist = wishlist.some(
-				(l: { id: string }) => l.id === productId,
-			);
+			const isInWishlist = wishlistIds.has(productId);
 			if (isInWishlist) {
 				await removeFromWishlist({ id: productId, type: "product" }).unwrap();
 				toast.success("Removed from wishlist");
@@ -89,9 +93,7 @@ const HotDeals: React.FC = () => {
 							key={prod.id}
 							product={{ ...prod, itemType: "PRODUCT" }}
 							onClick={() => navigate({ to: `/products/${prod.id}` })}
-							isInWishlist={wishlist.some(
-								(l: { id: string }) => l.id === prod.id,
-							)}
+							isInWishlist={wishlistIds.has(prod.id)}
 							onToggleWishlist={(e) => handleToggleWishlist(e, prod.id)}
 						/>
 					))}

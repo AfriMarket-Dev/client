@@ -1,8 +1,6 @@
 import React from "react";
 import BestSellers from "@/features/home/components/best-sellers";
-import CTASection from "@/features/home/components/cta-section";
 import FeaturedProducts from "@/features/home/components/featured-products";
-import FeaturedServices from "@/features/home/components/featured-services";
 import Hero from "@/features/home/components/hero";
 import HotDeals from "@/features/home/components/hot-deals";
 import LiveDealsTicker from "@/features/home/components/live-deals-ticker";
@@ -12,13 +10,25 @@ import ProductShowcase from "@/features/home/components/product-showcase";
 import PromoBanner from "@/features/home/components/promo-banner";
 import CategoryGrid from "@/features/marketplace/components/category-grid";
 import TrendingProducts from "@/features/marketplace/components/trending-products";
-import FeaturedProviders from "@/features/provider/components/featured-providers";
 import { useGetProductCategoriesQuery } from "@/services/api/product-categories";
 import { ROUTES } from "@/shared/constants/routes";
 
+const CTASection = React.lazy(
+	() => import("@/features/home/components/cta-section"),
+);
+const FeaturedServices = React.lazy(
+	() => import("@/features/home/components/featured-services"),
+);
+const FeaturedProviders = React.lazy(
+	() => import("@/features/provider/components/featured-providers"),
+);
+
 export function HomePage() {
 	const { data: categoriesResult } = useGetProductCategoriesQuery({ limit: 4 });
-	const categories = categoriesResult?.data.slice(0, 2) || [];
+	const categories = React.useMemo(
+		() => categoriesResult?.data.slice(0, 2) || [],
+		[categoriesResult?.data],
+	);
 
 	return (
 		<div className="flex flex-col pb-24 industrial-grain bg-background min-h-screen">
@@ -60,7 +70,7 @@ export function HomePage() {
 								withGrid={index % 2 === 0}
 							/>
 
-							{index === 1 && (
+							{index === 1 ? (
 								<PromoBanner
 									title="Verified Providers"
 									subtitle="Connect directly with verified local and international manufacturers."
@@ -68,7 +78,7 @@ export function HomePage() {
 									ctaLink={ROUTES.PUBLIC.SUPPLIERS}
 									variant="primary"
 								/>
-							)}
+							) : null}
 						</React.Fragment>
 					),
 				)}
@@ -78,23 +88,27 @@ export function HomePage() {
 				<NewArrivals />
 			</div>
 
-			<FeaturedServices />
+			<React.Suspense
+				fallback={<div className="h-40 animate-pulse bg-muted/20" />}
+			>
+				<FeaturedServices />
 
-			<PromoBanner
-				title="Heavy Equipment"
-				subtitle="Browse construction machinery and heavy equipment from verified providers."
-				ctaText="Explore Machinery"
-				ctaLink={ROUTES.PUBLIC.PRODUCTS}
-				variant="dark"
-			/>
+				<PromoBanner
+					title="Heavy Equipment"
+					subtitle="Browse construction machinery and heavy equipment from verified providers."
+					ctaText="Explore Machinery"
+					ctaLink={ROUTES.PUBLIC.PRODUCTS}
+					variant="dark"
+				/>
 
-			<div id="featured-products">
-				<FeaturedProducts />
-			</div>
+				<div id="featured-products">
+					<FeaturedProducts />
+				</div>
 
-			<CTASection />
+				<CTASection />
 
-			<FeaturedProviders />
+				<FeaturedProviders />
+			</React.Suspense>
 		</div>
 	);
 }

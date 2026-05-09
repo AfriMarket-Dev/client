@@ -1,3 +1,4 @@
+import { RiInformationLine } from "@remixicon/react";
 import { useForm } from "@tanstack/react-form";
 import type React from "react";
 import { useState } from "react";
@@ -15,9 +16,12 @@ import { getFormFieldErrors } from "@/lib/utils";
 import { useUploadMediaMutation } from "@/services/api/media";
 import { useGetProductCategoriesQuery } from "@/services/api/product-categories";
 import { FormField } from "@/shared/components/form-field";
+import {
+	FormGrid,
+	FormSection,
+} from "@/shared/components/forms/form-components";
 import { ImageUploadSection } from "@/shared/components/forms/image-upload-section";
 import { ResourceFormLayout } from "@/shared/components/forms/resource-form-layout";
-import { FormGrid, FormSection } from "@/shared/components/forms/form-components";
 import { SpecificationManager } from "@/shared/components/forms/specification-manager";
 import {
 	type ProductFormValues,
@@ -25,7 +29,6 @@ import {
 	productSchema,
 } from "@/shared/schemas/business";
 import type { FileWithPreview } from "@/types/ui";
-import { RiInformationLine } from "@remixicon/react";
 
 export type { ProductFormValues };
 
@@ -91,7 +94,11 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 
 	return (
 		<form.Subscribe
-			selector={(state) => [state.canSubmit, state.isSubmitting, state.values.priceType]}
+			selector={(state) => [
+				state.canSubmit,
+				state.isSubmitting,
+				state.values.priceType,
+			]}
 			children={([canSubmit, isSubmitting, priceType]) => (
 				<ResourceFormLayout
 					onSubmit={() => form.handleSubmit()}
@@ -100,10 +107,16 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 					isSubmitting={!!isSubmitting || isUploading}
 					isLoading={isLoading}
 					serverError={serverError}
-					submitLabel={submitLabel || (initialValues?.name ? "Save Changes" : "Create Product")}
+					submitLabel={
+						submitLabel ||
+						(initialValues?.name ? "Save Changes" : "Create Product")
+					}
 					submittingLabel={isUploading ? "Uploading Images..." : "Saving..."}
 				>
-					<FormSection title="Core Information" description="Basic product identity and pricing model">
+					<FormSection
+						title="Core Information"
+						description="Basic product identity and pricing model"
+					>
 						<form.Field
 							name="name"
 							validators={{ onChange: productSchema.shape.name }}
@@ -133,7 +146,9 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 								name="categoryId"
 								validators={{ onChange: productSchema.shape.categoryId }}
 								children={(field) => {
-									const selectedCategory = categories.find((c) => c.id === field.state.value);
+									const selectedCategory = categories.find(
+										(c) => c.id === field.state.value,
+									);
 									return (
 										<FormField
 											id={field.name}
@@ -146,17 +161,32 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 												value={field.state.value || ""}
 												onValueChange={(val) => field.handleChange(val ?? "")}
 											>
-												<SelectTrigger id={field.name} className="h-11 w-full bg-background rounded-none border-border/40 focus:ring-0">
+												<SelectTrigger
+													id={field.name}
+													className="h-11 w-full bg-background rounded-none border-border/40 focus:ring-0"
+												>
 													<SelectValue placeholder="Select Category">
-														{selectedCategory ? selectedCategory.name : <span className="text-muted-foreground">Select category</span>}
+														{selectedCategory ? (
+															selectedCategory.name
+														) : (
+															<span className="text-muted-foreground">
+																Select category
+															</span>
+														)}
 													</SelectValue>
 												</SelectTrigger>
 												<SelectContent className="rounded-none border-border/40">
-													{categories.map((cat: { id: string; name: string }) => (
-														<SelectItem key={cat.id} value={cat.id} className="rounded-none">
-															{cat.name}
-														</SelectItem>
-													))}
+													{categories.map(
+														(cat: { id: string; name: string }) => (
+															<SelectItem
+																key={cat.id}
+																value={cat.id}
+																className="rounded-none"
+															>
+																{cat.name}
+															</SelectItem>
+														),
+													)}
 												</SelectContent>
 											</Select>
 										</FormField>
@@ -178,10 +208,16 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 										<Select
 											value={field.state.value || "FIXED"}
 											onValueChange={(val) => {
-												if (val) field.handleChange(val as any);
+												if (val)
+													field.handleChange(
+														val as ProductFormValues["priceType"],
+													);
 											}}
 										>
-											<SelectTrigger id={field.name} className="h-11 w-full bg-background rounded-none border-border/40 focus:ring-0">
+											<SelectTrigger
+												id={field.name}
+												className="h-11 w-full bg-background rounded-none border-border/40 focus:ring-0"
+											>
 												<SelectValue>
 													{field.state.value === "FIXED" && "Fixed Price"}
 													{field.state.value === "NEGOTIABLE" && "Negotiable"}
@@ -190,9 +226,15 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 												</SelectValue>
 											</SelectTrigger>
 											<SelectContent className="rounded-none border-border/40">
-												<SelectItem value="FIXED" className="rounded-none">Fixed Price</SelectItem>
-												<SelectItem value="NEGOTIABLE" className="rounded-none">Negotiable</SelectItem>
-												<SelectItem value="STARTS_AT" className="rounded-none">Starts At</SelectItem>
+												<SelectItem value="FIXED" className="rounded-none">
+													Fixed Price
+												</SelectItem>
+												<SelectItem value="NEGOTIABLE" className="rounded-none">
+													Negotiable
+												</SelectItem>
+												<SelectItem value="STARTS_AT" className="rounded-none">
+													Starts At
+												</SelectItem>
 											</SelectContent>
 										</Select>
 									</FormField>
@@ -226,14 +268,18 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 					</FormSection>
 
 					{showPricing && (
-						<FormSection title="Initial Inventory" description="Set starting price and stock for your first variant">
+						<FormSection
+							title="Initial Inventory"
+							description="Set starting price and stock for your first variant"
+						>
 							<FormGrid>
 								<form.Field
 									name="price"
 									validators={{
 										onChange: ({ value }) => {
 											const parsed = Number(value);
-											if (Number.isNaN(parsed) || parsed < 0) return "Invalid price";
+											if (Number.isNaN(parsed) || parsed < 0)
+												return "Invalid price";
 											return undefined;
 										},
 									}}
@@ -267,7 +313,8 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 									validators={{
 										onChange: ({ value }) => {
 											const parsed = Number(value);
-											if (Number.isNaN(parsed) || parsed < 0) return "Invalid stock";
+											if (Number.isNaN(parsed) || parsed < 0)
+												return "Invalid stock";
 											return undefined;
 										},
 									}}
@@ -324,13 +371,17 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 						<div className="flex items-start gap-3 p-4 bg-primary/5 border border-primary/10 rounded-none mb-8">
 							<RiInformationLine className="size-5 text-primary shrink-0 mt-0.5" />
 							<p className="text-[10px] font-bold text-primary uppercase tracking-widest leading-relaxed">
-								To manage specific pricing, stock levels, or product options like sizes and colors, 
-								please switch to the <span className="underline italic">Inventory</span> tab.
+								To manage specific pricing, stock levels, or product options
+								like sizes and colors, please switch to the{" "}
+								<span className="underline italic">Inventory</span> tab.
 							</p>
 						</div>
 					)}
 
-					<FormSection title="Detailed Specs" description="Add technical details and metadata">
+					<FormSection
+						title="Detailed Specs"
+						description="Add technical details and metadata"
+					>
 						<form.Field
 							name="specifications"
 							children={(field) => (
@@ -342,7 +393,10 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 						/>
 					</FormSection>
 
-					<FormSection title="Gallery" description="General product images for the showcase">
+					<FormSection
+						title="Gallery"
+						description="General product images for the showcase"
+					>
 						<form.Field
 							name="images"
 							mode="array"

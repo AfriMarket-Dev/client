@@ -24,6 +24,7 @@ export const Route = createFileRoute("/auth")({
 			throw redirect({ to: "/" });
 		}
 	},
+	// biome-ignore lint/suspicious/noExplicitAny: tanstack router context
 	shouldReload: (ctx: any) =>
 		!ctx.prev || ctx.next.pathname !== ctx.prev.pathname,
 	component: AuthLayout,

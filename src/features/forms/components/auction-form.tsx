@@ -9,9 +9,12 @@ import { Textarea } from "@/components/ui/textarea";
 import { getFormFieldErrors } from "@/lib/utils";
 import { useUploadMediaMutation } from "@/services/api/media";
 import { FormField } from "@/shared/components/form-field";
-import { useFileUpload } from "@/shared/hooks/use-file-upload";
-import { FormGrid, FormSection } from "@/shared/components/forms/form-components";
+import {
+	FormGrid,
+	FormSection,
+} from "@/shared/components/forms/form-components";
 import { SpecificationManager } from "@/shared/components/forms/specification-manager";
+import { useFileUpload } from "@/shared/hooks/use-file-upload";
 import {
 	type AuctionFormValues,
 	auctionOptions,
@@ -116,14 +119,20 @@ export const AuctionForm: React.FC<AuctionFormProps> = ({
 			className="space-y-8"
 		>
 			{serverError && (
-				<Alert variant="destructive" className="rounded-none border-destructive/20 bg-destructive/5">
+				<Alert
+					variant="destructive"
+					className="rounded-none border-destructive/20 bg-destructive/5"
+				>
 					<AlertDescription className="font-bold uppercase tracking-widest text-[10px]">
 						{serverError}
 					</AlertDescription>
 				</Alert>
 			)}
 
-			<FormSection title="Auction Details" description="Define the scope and starting terms">
+			<FormSection
+				title="Auction Details"
+				description="Define the scope and starting terms"
+			>
 				<form.Field
 					name="title"
 					children={(field) => (
@@ -219,7 +228,10 @@ export const AuctionForm: React.FC<AuctionFormProps> = ({
 				</FormGrid>
 			</FormSection>
 
-			<FormSection title="Information" description="Additional context for bidders">
+			<FormSection
+				title="Information"
+				description="Additional context for bidders"
+			>
 				<form.Field
 					name="description"
 					children={(field) => (

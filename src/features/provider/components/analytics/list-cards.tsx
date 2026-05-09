@@ -65,9 +65,7 @@ export const TopProductsCard: React.FC<TopProductsCardProps> = ({
 								</div>
 								<div>
 									<span className="text-muted-foreground mr-1">Inquiries:</span>
-									<span className="text-success">
-										{product.inquiries}
-									</span>
+									<span className="text-success">{product.inquiries}</span>
 								</div>
 								<div>
 									<span className="text-muted-foreground mr-1">Conv.:</span>

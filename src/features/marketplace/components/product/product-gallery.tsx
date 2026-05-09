@@ -1,6 +1,6 @@
 import type React from "react";
-import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 import { ImageWithFallback } from "@/shared/components/image-with-fallback";
 
 interface ProductGalleryProps {
@@ -31,7 +31,7 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({
 						Preview Unavailable
 					</div>
 				)}
-				
+
 				{/* Image Counter Badge */}
 				<div className="absolute bottom-4 right-4">
 					<Badge className="bg-background/80 backdrop-blur-sm text-foreground border-none rounded-none px-3 py-1 text-xs font-medium shadow-none">
@@ -52,7 +52,7 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({
 								"flex-1 md:flex-none aspect-square w-20 md:w-full shrink-0 overflow-hidden rounded-none border transition-all duration-200 p-0 shadow-none",
 								selectedImageIndex === idx
 									? "border-foreground bg-background opacity-100"
-									: "border-transparent opacity-60 hover:opacity-100 hover:border-border/40"
+									: "border-transparent opacity-60 hover:opacity-100 hover:border-border/40",
 							)}
 						>
 							<ImageWithFallback

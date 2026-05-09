@@ -2,7 +2,7 @@ export interface AuthUser {
 	id: string;
 	email: string;
 	name: string;
-	role: 'user' | 'provider' | 'agent' | 'admin';
+	role: "user" | "provider" | "agent" | "admin";
 	phoneNumber?: string;
 	image?: string;
 	avatar?: string; // Legacy support

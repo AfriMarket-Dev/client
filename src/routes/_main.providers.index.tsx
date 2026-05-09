@@ -17,6 +17,7 @@ export const Route = createFileRoute("/_main/providers/")({
 		type: search.type || "all",
 		verified: search.verified || false,
 	}),
+	// biome-ignore lint/suspicious/noExplicitAny: tanstack router context
 	shouldReload: (ctx: any) =>
 		!ctx.prev || ctx.next.pathname !== ctx.prev.pathname,
 	staleTime: 120_000, // providers are less volatile
@@ -45,7 +46,7 @@ export const Route = createFileRoute("/_main/providers/")({
 			district: deps.district,
 			type: deps.type === "all" ? undefined : deps.type,
 			verified: deps.verified,
-		}
+		};
 		return store.dispatch(companiesApi.endpoints.getCompanies.initiate(params));
 	},
 });

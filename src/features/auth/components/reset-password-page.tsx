@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { getFormFieldErrors } from "@/lib/utils";
 import { useResetPasswordMutation } from "@/services/api/auth";
-import { FormField } from "@/shared/components";
+import { FormField } from "@/shared/components/form-field";
 import { resetPasswordSchema } from "@/shared/schemas/auth";
 
 export function ResetPasswordPage() {

@@ -118,7 +118,10 @@ export function ProviderListingFormPage() {
 						</TabsTrigger>
 					</TabsList>
 
-					<TabsContent value="product" className="mt-0 outline-none animate-in fade-in duration-500">
+					<TabsContent
+						value="product"
+						className="mt-0 outline-none animate-in fade-in duration-500"
+					>
 						<div className="bg-card border border-border/50 p-8 shadow-sm rounded-none">
 							<ProductForm
 								onSubmit={handleProductSubmit}
@@ -130,7 +133,10 @@ export function ProviderListingFormPage() {
 						</div>
 					</TabsContent>
 
-					<TabsContent value="service" className="mt-0 outline-none animate-in fade-in duration-500">
+					<TabsContent
+						value="service"
+						className="mt-0 outline-none animate-in fade-in duration-500"
+					>
 						<div className="bg-card border border-border/50 p-8 shadow-sm rounded-none">
 							<ServiceForm
 								onSubmit={handleServiceSubmit}

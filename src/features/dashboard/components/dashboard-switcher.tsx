@@ -1,7 +1,7 @@
 import { getRouteApi } from "@tanstack/react-router";
+import type { DashboardLoaderData } from "@/routes/dashboard.index";
 import ProviderDashboard from "./provider-dashboard";
 import UserDashboard from "./user-dashboard";
-import type { DashboardLoaderData } from "@/routes/dashboard.index";
 
 const routeApi = getRouteApi("/dashboard/");
 
@@ -24,7 +24,7 @@ export function DashboardSwitcher() {
 	}
 
 	return (
-		<UserDashboard 
+		<UserDashboard
 			wishlist={data.wishlist}
 			conversations={data.conversations}
 		/>

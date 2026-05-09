@@ -141,9 +141,7 @@ export const ResourceCard: React.FC<ResourceCardProps> = ({
 				)}
 
 				{topRight && (
-					<div className="absolute top-2 right-2 z-10">
-						{topRight}
-					</div>
+					<div className="absolute top-2 right-2 z-10">{topRight}</div>
 				)}
 
 				{!topRight && wishlistButton}
@@ -166,9 +164,7 @@ export const ResourceCard: React.FC<ResourceCardProps> = ({
 
 				<div className="flex-1 mt-1">{children}</div>
 				{footer && (
-					<div className="mt-4 pt-4 border-t border-border/50">
-						{footer}
-					</div>
+					<div className="mt-4 pt-4 border-t border-border/50">{footer}</div>
 				)}
 			</div>
 		</div>

@@ -6,6 +6,7 @@ import { getErrorFromRtkQuery } from "@/lib/utils";
 import { useCreateCompanyMutation } from "@/services/api/companies";
 import { useGetCompanyCategoriesQuery } from "@/services/api/company-categories";
 import { setNeedsOnboarding } from "@/store/slices/auth-slice";
+import type { CreateCompanyInput } from "@/types";
 
 export function OnboardingPage() {
 	const navigate = useNavigate();
@@ -13,12 +14,12 @@ export function OnboardingPage() {
 	const [createCompany, { isLoading, error }] = useCreateCompanyMutation();
 	const { data: categoriesData } = useGetCompanyCategoriesQuery({ limit: 100 });
 
-	const handleCompanySubmit = async (values: any) => {
+	const handleCompanySubmit = async (values: CreateCompanyInput) => {
 		try {
 			const payload = {
 				name: values.name,
-				category: values.categoryId || values.category,
-				type: values.companyType || values.type,
+				category: values.category,
+				type: values.type,
 				slug: values.slug,
 				province: values.province,
 				district: values.district,
@@ -28,16 +29,18 @@ export function OnboardingPage() {
 				description: values.description || "",
 			};
 
-			await createCompany(payload as any).unwrap();
-			
+			await createCompany(payload as CreateCompanyInput).unwrap();
+
 			// CLEAR THE FLAG IMMEDIATELY
 			dispatch(setNeedsOnboarding(false));
-			
+
 			toast.success("Business profile created successfully!");
 			navigate({ to: "/dashboard", replace: true });
 		} catch (err) {
 			console.error("Onboarding submission failed:", err);
-			toast.error("Failed to create business profile. Please check your information.");
+			toast.error(
+				"Failed to create business profile. Please check your information.",
+			);
 		}
 	};
 

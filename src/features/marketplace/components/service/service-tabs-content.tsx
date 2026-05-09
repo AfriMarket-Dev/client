@@ -6,10 +6,11 @@ import {
 	RiMapPinLine,
 } from "@remixicon/react";
 import type React from "react";
+import { Button } from "@/components/ui/button";
+import { SpecificationList } from "@/shared/components/specification-list";
 import type { Service } from "@/types";
 import { AddReviewDialog } from "../reviews/add-review-dialog";
 import { ReviewList } from "../reviews/review-list";
-import { SpecificationList } from "@/shared/components/specification-list";
 
 interface ServiceTabsContentProps {
 	service: Service;
@@ -28,9 +29,7 @@ export const ServiceTabsContent: React.FC<ServiceTabsContentProps> = ({
 				<section>
 					<div className="flex items-center gap-3 mb-6">
 						<RiInformationLine className="w-5 h-5 text-foreground/70" />
-						<h2 className="text-lg font-semibold text-foreground">
-							Overview
-						</h2>
+						<h2 className="text-lg font-semibold text-foreground">Overview</h2>
 					</div>
 					<div className="prose prose-slate max-w-none">
 						<p className="text-sm leading-relaxed text-muted-foreground">
@@ -59,9 +58,7 @@ export const ServiceTabsContent: React.FC<ServiceTabsContentProps> = ({
 							].map((item, i) => (
 								<li key={i} className="flex items-start gap-3">
 									<div className="mt-2 w-1.5 h-1.5 bg-primary/40 rounded-none" />
-									<span className="text-sm text-muted-foreground">
-										{item}
-									</span>
+									<span className="text-sm text-muted-foreground">{item}</span>
 								</li>
 							))}
 						</ul>
@@ -121,9 +118,7 @@ export const ServiceTabsContent: React.FC<ServiceTabsContentProps> = ({
 							<div className="flex items-center gap-4 text-muted-foreground mb-4">
 								<div className="flex items-center gap-1.5">
 									<RiMapPinLine className="w-4 h-4" />
-									<span className="text-xs font-medium">
-										Kigali, Rwanda
-									</span>
+									<span className="text-xs font-medium">Kigali, Rwanda</span>
 								</div>
 								<div className="flex items-center gap-1.5">
 									<RiBriefcaseLine className="w-4 h-4" />
@@ -145,18 +140,23 @@ export const ServiceTabsContent: React.FC<ServiceTabsContentProps> = ({
 	if (activeTab === "reviews") {
 		return (
 			<div className="space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-500">
-				<div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 pb-6 border-b border-border">
-					<div className="space-y-1">
-						<h3 className="text-lg font-semibold text-foreground tracking-tight">
-							Reviews
+				<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 border-b border-border/40 pb-8">
+					<div className="space-y-2">
+						<h3 className="text-sm font-black uppercase tracking-widest text-foreground">
+							Partner Feedback
 						</h3>
-						<p className="text-sm text-muted-foreground">
-							Feedback from verified customers
+						<p className="text-xs text-muted-foreground">
+							Performance metrics verified by the industrial ledger.
 						</p>
 					</div>
-					<div className="w-full sm:w-auto">
-						<AddReviewDialog serviceId={service.id} />
-					</div>
+					<AddReviewDialog
+						serviceId={service.id}
+						trigger={
+							<Button className="rounded-none h-11 px-8 font-black uppercase tracking-widest text-[10px] shadow-lg shadow-primary/20">
+								Log Experience
+							</Button>
+						}
+					/>
 				</div>
 
 				<ReviewList serviceId={service.id} />

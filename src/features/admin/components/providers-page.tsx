@@ -263,7 +263,9 @@ export function AdminProvidersPage() {
 
 					<ActionModal
 						isOpen={verifyModal.isOpen}
-						title={verifyModal.isVerified ? "Remove Verification" : "Verify Provider"}
+						title={
+							verifyModal.isVerified ? "Remove Verification" : "Verify Provider"
+						}
 						description={`Are you sure you want to ${verifyModal.isVerified ? "remove verification from" : "verify"} "${verifyModal.providerName}"?`}
 						type={verifyModal.isVerified ? "suspend" : "info"}
 						onConfirm={handleConfirmVerify}

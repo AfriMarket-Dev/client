@@ -6,9 +6,12 @@ import { Input } from "@/components/ui/input";
 import { getFormFieldErrors } from "@/lib/utils";
 import { useUploadMediaMutation } from "@/services/api/media";
 import { FormField } from "@/shared/components/form-field";
+import {
+	FormGrid,
+	FormSection,
+} from "@/shared/components/forms/form-components";
 import { ImageUploadSection } from "@/shared/components/forms/image-upload-section";
 import { ResourceFormLayout } from "@/shared/components/forms/resource-form-layout";
-import { FormGrid, FormSection } from "@/shared/components/forms/form-components";
 import {
 	type VariantFormValues,
 	variantOptions,
@@ -85,7 +88,10 @@ export const VariantForm: React.FC<VariantFormProps> = ({
 					submitLabel={submitLabel}
 					submittingLabel="Saving..."
 				>
-					<FormSection title="Variant Identity" description="Unique name and identifier for this option">
+					<FormSection
+						title="Variant Identity"
+						description="Unique name and identifier for this option"
+					>
 						<FormGrid>
 							<form.Field
 								name="name"
@@ -132,14 +138,18 @@ export const VariantForm: React.FC<VariantFormProps> = ({
 						</FormGrid>
 					</FormSection>
 
-					<FormSection title="Inventory" description="Pricing and stock management">
+					<FormSection
+						title="Inventory"
+						description="Pricing and stock management"
+					>
 						<FormGrid cols={3}>
 							<form.Field
 								name="price"
 								validators={{
 									onChange: ({ value }) => {
 										const parsed = Number(value);
-										if (Number.isNaN(parsed) || parsed < 0) return "Invalid price";
+										if (Number.isNaN(parsed) || parsed < 0)
+											return "Invalid price";
 										return undefined;
 									},
 								}}
@@ -169,7 +179,8 @@ export const VariantForm: React.FC<VariantFormProps> = ({
 								validators={{
 									onChange: ({ value }) => {
 										const parsed = Number(value);
-										if (Number.isNaN(parsed) || parsed < 0) return "Invalid stock";
+										if (Number.isNaN(parsed) || parsed < 0)
+											return "Invalid stock";
 										return undefined;
 									},
 								}}
@@ -218,7 +229,10 @@ export const VariantForm: React.FC<VariantFormProps> = ({
 						</FormGrid>
 					</FormSection>
 
-					<FormSection title="Visuals" description="Variant-specific image (optional)">
+					<FormSection
+						title="Visuals"
+						description="Variant-specific image (optional)"
+					>
 						<form.Field
 							name="images"
 							mode="array"

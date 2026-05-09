@@ -4,9 +4,9 @@ import {
 	companySetupSchema,
 	contactSchema,
 	productSchema,
+	providerProvisionSchema,
 	reviewSchema,
 	serviceSchema,
-	providerProvisionSchema,
 } from "../business";
 
 describe("Business Schemas Comprehensive Tests", () => {

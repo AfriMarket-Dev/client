@@ -1,5 +1,5 @@
-import { useForm } from "@tanstack/react-form";
 import { RiTimeLine } from "@remixicon/react";
+import { useForm } from "@tanstack/react-form";
 import type React from "react";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -16,9 +16,12 @@ import { getFormFieldErrors } from "@/lib/utils";
 import { useUploadMediaMutation } from "@/services/api/media";
 import { useGetServiceCategoriesQuery } from "@/services/api/service-categories";
 import { FormField } from "@/shared/components/form-field";
+import {
+	FormGrid,
+	FormSection,
+} from "@/shared/components/forms/form-components";
 import { ImageUploadSection } from "@/shared/components/forms/image-upload-section";
 import { ResourceFormLayout } from "@/shared/components/forms/resource-form-layout";
-import { FormGrid, FormSection } from "@/shared/components/forms/form-components";
 import { SpecificationManager } from "@/shared/components/forms/specification-manager";
 import {
 	type ServiceFormValues,
@@ -89,7 +92,11 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
 
 	return (
 		<form.Subscribe
-			selector={(state) => [state.canSubmit, state.isSubmitting, state.values.priceType]}
+			selector={(state) => [
+				state.canSubmit,
+				state.isSubmitting,
+				state.values.priceType,
+			]}
 			children={([canSubmit, isSubmitting, priceType]) => (
 				<ResourceFormLayout
 					onSubmit={() => form.handleSubmit()}
@@ -101,7 +108,10 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
 					submitLabel={initialValues?.name ? "Save Changes" : "Create Service"}
 					submittingLabel={isUploading ? "Uploading Portfolio..." : "Saving..."}
 				>
-					<FormSection title="Service Details" description="Define your expertise and categorization">
+					<FormSection
+						title="Service Details"
+						description="Define your expertise and categorization"
+					>
 						<form.Field
 							name="name"
 							validators={{ onChange: serviceSchema.shape.name }}
@@ -130,7 +140,9 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
 							name="categoryId"
 							validators={{ onChange: serviceSchema.shape.categoryId }}
 							children={(field) => {
-								const selectedCategory = categories.find((c) => c.id === field.state.value);
+								const selectedCategory = categories.find(
+									(c) => c.id === field.state.value,
+								);
 								return (
 									<FormField
 										id={field.name}
@@ -143,14 +155,27 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
 											value={field.state.value || ""}
 											onValueChange={(val) => field.handleChange(val ?? "")}
 										>
-											<SelectTrigger id={field.name} className="h-11 w-full bg-background rounded-none border-border/40 focus:ring-0">
+											<SelectTrigger
+												id={field.name}
+												className="h-11 w-full bg-background rounded-none border-border/40 focus:ring-0"
+											>
 												<SelectValue placeholder="Select category">
-													{selectedCategory ? selectedCategory.name : <span className="text-muted-foreground">Select category</span>}
+													{selectedCategory ? (
+														selectedCategory.name
+													) : (
+														<span className="text-muted-foreground">
+															Select category
+														</span>
+													)}
 												</SelectValue>
 											</SelectTrigger>
 											<SelectContent className="rounded-none border-border/40">
 												{categories.map((cat: { id: string; name: string }) => (
-													<SelectItem key={cat.id} value={cat.id} className="rounded-none">
+													<SelectItem
+														key={cat.id}
+														value={cat.id}
+														className="rounded-none"
+													>
 														{cat.name}
 													</SelectItem>
 												))}
@@ -187,7 +212,10 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
 						/>
 					</FormSection>
 
-					<FormSection title="Pricing & Availability" description="Rates and delivery timelines">
+					<FormSection
+						title="Pricing & Availability"
+						description="Rates and delivery timelines"
+					>
 						<FormGrid>
 							<form.Field
 								name="priceType"
@@ -203,10 +231,16 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
 										<Select
 											value={field.state.value || "FIXED"}
 											onValueChange={(val) => {
-												if (val) field.handleChange(val as any);
+												if (val)
+													field.handleChange(
+														val as ServiceFormValues["priceType"],
+													);
 											}}
 										>
-											<SelectTrigger id={field.name} className="h-11 w-full bg-background rounded-none border-border/40 focus:ring-0">
+											<SelectTrigger
+												id={field.name}
+												className="h-11 w-full bg-background rounded-none border-border/40 focus:ring-0"
+											>
 												<SelectValue>
 													{field.state.value === "FIXED" && "Fixed Price"}
 													{field.state.value === "NEGOTIABLE" && "Negotiable"}
@@ -215,9 +249,15 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
 												</SelectValue>
 											</SelectTrigger>
 											<SelectContent className="rounded-none border-border/40">
-												<SelectItem value="FIXED" className="rounded-none">Fixed Price</SelectItem>
-												<SelectItem value="NEGOTIABLE" className="rounded-none">Negotiable</SelectItem>
-												<SelectItem value="STARTS_AT" className="rounded-none">Starts At</SelectItem>
+												<SelectItem value="FIXED" className="rounded-none">
+													Fixed Price
+												</SelectItem>
+												<SelectItem value="NEGOTIABLE" className="rounded-none">
+													Negotiable
+												</SelectItem>
+												<SelectItem value="STARTS_AT" className="rounded-none">
+													Starts At
+												</SelectItem>
 											</SelectContent>
 										</Select>
 									</FormField>
@@ -320,7 +360,10 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
 						</FormGrid>
 					</FormSection>
 
-					<FormSection title="Service Metadata" description="Technical details and capabilities">
+					<FormSection
+						title="Service Metadata"
+						description="Technical details and capabilities"
+					>
 						<form.Field
 							name="specifications"
 							children={(field) => (
@@ -333,7 +376,10 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
 						/>
 					</FormSection>
 
-					<FormSection title="Portfolio" description="Showcase previous work and samples">
+					<FormSection
+						title="Portfolio"
+						description="Showcase previous work and samples"
+					>
 						<form.Field
 							name="images"
 							mode="array"

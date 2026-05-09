@@ -11,7 +11,7 @@ import {
 } from "@remixicon/react";
 import type React from "react";
 import { useGetMyCompanyQuery } from "@/services/api/companies";
-import { BaseSidebar } from "@/shared/components";
+import { BaseSidebar } from "@/shared/components/layouts/base-sidebar";
 import { ROUTES } from "@/shared/constants/routes";
 import type { NavHeaderInfo } from "@/types";
 

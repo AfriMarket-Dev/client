@@ -3,7 +3,7 @@ import { toast } from "sonner";
 import { CompanySetupForm } from "@/features/forms/components/company-setup-form";
 import { getErrorFromRtkQuery } from "@/lib/utils";
 import { useCreateCompanyMutation } from "@/services/api/companies";
-import type { ProductCategory } from "@/types";
+import type { CreateCompanyInput, ProductCategory } from "@/types";
 
 interface CompanySetupSectionProps {
 	categories: ProductCategory[];
@@ -11,14 +11,15 @@ interface CompanySetupSectionProps {
 
 export function CompanySetupSection({ categories }: CompanySetupSectionProps) {
 	const navigate = useNavigate();
-	const [createCompany, { isLoading: creatingCompany, error: createError }] = useCreateCompanyMutation();
+	const [createCompany, { isLoading: creatingCompany, error: createError }] =
+		useCreateCompanyMutation();
 
-	const handleCompanySubmit = async (values: any) => {
+	const handleCompanySubmit = async (values: CreateCompanyInput) => {
 		try {
 			const payload = {
 				name: values.name,
-				category: values.categoryId || values.category,
-				type: values.companyType || values.type,
+				category: values.category,
+				type: values.type,
 				slug: values.slug,
 				province: values.province,
 				district: values.district,
@@ -28,9 +29,9 @@ export function CompanySetupSection({ categories }: CompanySetupSectionProps) {
 				description: values.description || "",
 			};
 
-			await createCompany(payload as any).unwrap();
+			await createCompany(payload as CreateCompanyInput).unwrap();
 			toast.success("Company profile created successfully!");
-			
+
 			// Refresh current route to trigger loader
 			navigate({ to: ".", replace: true });
 		} catch (err) {

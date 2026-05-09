@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { getFormFieldErrors } from "@/lib/utils";
 import { useLazyCheckEmailQuery } from "@/services/api/users";
-import { FormField } from "@/shared/components";
+import { FormField } from "@/shared/components/form-field";
 import { signUpSchema } from "@/shared/schemas/auth";
 
 interface SignUpFormProps {
@@ -119,7 +119,7 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({
 					asyncDebounceMs={500}
 					validators={{
 						onChangeAsync: async ({ value }: { value: string }) => {
-							if (!value || !value.includes("@")) return undefined;
+							if (!value?.includes("@")) return undefined;
 							try {
 								const res = await checkEmail(value).unwrap();
 								if (!res.available) return "Email is already registered";

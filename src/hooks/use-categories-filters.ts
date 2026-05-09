@@ -1,4 +1,10 @@
-import { useCallback, useEffect, useMemo, useState, useTransition } from "react";
+import {
+	useCallback,
+	useEffect,
+	useMemo,
+	useState,
+	useTransition,
+} from "react";
 import { useCategoriesParams } from "./use-categories-params";
 
 export function useCategoriesFilters() {

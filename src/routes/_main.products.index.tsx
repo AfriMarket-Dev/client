@@ -19,6 +19,7 @@ export const Route = createFileRoute("/_main/products/")({
 		sortBy: search.sortBy || "createdAt",
 		sortOrder: search.sortOrder || "DESC",
 	}),
+	// biome-ignore lint/suspicious/noExplicitAny: tanstack router context
 	shouldReload: (ctx: any) =>
 		!ctx.prev || ctx.next.pathname !== ctx.prev.pathname,
 	staleTime: 60_000, // 1 minute

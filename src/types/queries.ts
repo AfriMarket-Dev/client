@@ -195,6 +195,14 @@ export interface CreateCompanyInput {
 	phone?: string;
 	whatsappNumber?: string;
 	email?: string;
+	website?: string;
+	socialLinks?: {
+		facebook?: string;
+		instagram?: string;
+		linkedin?: string;
+		twitter?: string;
+		youtube?: string;
+	};
 }
 
 export interface CreateProductCategoryInput {

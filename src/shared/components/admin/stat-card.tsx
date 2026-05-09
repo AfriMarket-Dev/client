@@ -25,9 +25,7 @@ export const StatCard: React.FC<StatCardProps> = ({
 			<CardContent className="p-6">
 				<div className="flex items-center justify-between mb-4">
 					<div className={cn("p-2 rounded-none", bgColor)}>
-						<Icon
-							className={cn("w-5 h-5", color)}
-						/>
+						<Icon className={cn("w-5 h-5", color)} />
 					</div>
 					{change && (
 						<Badge

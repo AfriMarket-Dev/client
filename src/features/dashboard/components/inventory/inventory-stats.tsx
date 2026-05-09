@@ -1,7 +1,7 @@
 import { RiStore2Line } from "@remixicon/react";
 import { Package } from "lucide-react";
-import { StatsGrid } from "@/shared/components";
 import { StatCard as AdminStatCard } from "@/shared/components/admin/stat-card";
+import { StatsGrid } from "@/shared/components/stats-grid";
 import type { MarketplaceItem } from "@/types";
 
 interface InventoryStatsProps {

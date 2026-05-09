@@ -17,7 +17,10 @@ export interface NormalizedCompaniesResult extends CompaniesListResult {
 export const companiesApi = apiSlice.injectEndpoints({
 	endpoints: (builder) => ({
 		/** Get list of companies with pagination/filters */
-		getCompanies: builder.query<NormalizedCompaniesResult, CompaniesQueryParams>({
+		getCompanies: builder.query<
+			NormalizedCompaniesResult,
+			CompaniesQueryParams
+		>({
 			query: (params) => ({ url: "/companies", params }),
 			transformResponse: (response: ApiResponse<Company[]>) => {
 				const res = unwrapListResponse<Company>(response);
@@ -101,13 +104,17 @@ export const companiesApi = apiSlice.injectEndpoints({
 		checkCompanySlug: builder.query<{ available: boolean }, string>({
 			query: (slug) => `/companies/check-slug?slug=${slug}`,
 			transformResponse: (response: ApiResponse<{ available: boolean }>) =>
-				unwrapResponse<{ available: boolean }>(response) || { available: false },
+				unwrapResponse<{ available: boolean }>(response) || {
+					available: false,
+				},
 		}),
 
 		checkCompanyName: builder.query<{ available: boolean }, string>({
 			query: (name) => `/companies/check-name?name=${name}`,
 			transformResponse: (response: ApiResponse<{ available: boolean }>) =>
-				unwrapResponse<{ available: boolean }>(response) || { available: false },
+				unwrapResponse<{ available: boolean }>(response) || {
+					available: false,
+				},
 		}),
 	}),
 });
@@ -126,10 +133,15 @@ export const {
 } = companiesApi;
 
 /** Selectors for clean component usage */
-const selectCompaniesResult = (state: RootState, params: CompaniesQueryParams) =>
-	companiesApi.endpoints.getCompanies.select(params)(state);
+const selectCompaniesResult = (
+	state: RootState,
+	params: CompaniesQueryParams,
+) => companiesApi.endpoints.getCompanies.select(params)(state);
 
 export const selectCompanyById = createSelector(
-	[selectCompaniesResult, (_state: RootState, _params: any, id: string) => id],
+	[
+		selectCompaniesResult,
+		(_state: RootState, _params: unknown, id: string) => id,
+	],
 	(result, id) => result.data?.byId?.[id],
 );

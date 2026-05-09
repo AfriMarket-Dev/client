@@ -1,13 +1,19 @@
+import {
+	RiBuilding4Line,
+	RiGlobeLine,
+	RiMailLine,
+	RiPhoneLine,
+	RiWhatsappLine,
+} from "@remixicon/react";
 import { useForm } from "@tanstack/react-form";
-import { RiBuilding4Line, RiGlobeLine, RiMailLine, RiPhoneLine, RiWhatsappLine } from "@remixicon/react";
 import { Upload } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { useUpdateCompanyMutation } from "@/services/api/companies";
-import { FormField } from "@/shared/components";
 import { getFormFieldErrors } from "@/lib/utils";
+import { useUpdateCompanyMutation } from "@/services/api/companies";
+import { FormField } from "@/shared/components/form-field";
 import type { Provider } from "@/types";
 
 interface CompanyInfoSectionProps {
@@ -24,6 +30,14 @@ export function CompanyInfoSection({ provider }: CompanyInfoSectionProps) {
 			phoneNumber: provider.phoneNumber || provider.phone || "",
 			whatsappNumber: provider.whatsappNumber || "",
 			email: provider.email || "",
+			website: provider.website || "",
+			socialLinks: {
+				facebook: provider.socialLinks?.facebook || "",
+				instagram: provider.socialLinks?.instagram || "",
+				linkedin: provider.socialLinks?.linkedin || "",
+				twitter: provider.socialLinks?.twitter || "",
+				youtube: provider.socialLinks?.youtube || "",
+			},
 			province: provider.province || "",
 			district: provider.district || "",
 			sector: provider.sector || "",
@@ -47,7 +61,11 @@ export function CompanyInfoSection({ provider }: CompanyInfoSectionProps) {
 			{/* Brand Header */}
 			<div className="relative h-48 bg-muted border border-border rounded-none group overflow-hidden shadow-none">
 				{provider.logoUrl ? (
-					<img src={provider.logoUrl} alt="Logo" className="w-full h-full object-cover opacity-40" />
+					<img
+						src={provider.logoUrl}
+						alt="Logo"
+						className="w-full h-full object-cover opacity-40"
+					/>
 				) : (
 					<div className="w-full h-full flex items-center justify-center text-foreground/10 text-6xl font-bold">
 						{provider.name?.charAt(0) || "B"}
@@ -79,12 +97,15 @@ export function CompanyInfoSection({ provider }: CompanyInfoSectionProps) {
 							Entity Definition
 						</h3>
 					</div>
-					
+
 					<div className="grid gap-8">
 						<form.Field
 							name="name"
 							children={(field) => (
-								<FormField label="Official Business Name" error={getFormFieldErrors(field.state.meta.errors)}>
+								<FormField
+									label="Official Business Name"
+									error={getFormFieldErrors(field.state.meta.errors)}
+								>
 									<Input
 										value={field.state.value}
 										onBlur={field.handleBlur}
@@ -98,7 +119,10 @@ export function CompanyInfoSection({ provider }: CompanyInfoSectionProps) {
 						<form.Field
 							name="description"
 							children={(field) => (
-								<FormField label="Enterprise Abstract" error={getFormFieldErrors(field.state.meta.errors)}>
+								<FormField
+									label="Enterprise Abstract"
+									error={getFormFieldErrors(field.state.meta.errors)}
+								>
 									<Textarea
 										value={field.state.value}
 										onBlur={field.handleBlur}
@@ -126,7 +150,10 @@ export function CompanyInfoSection({ provider }: CompanyInfoSectionProps) {
 						<form.Field
 							name="phoneNumber"
 							children={(field) => (
-								<FormField label="Direct Line" error={getFormFieldErrors(field.state.meta.errors)}>
+								<FormField
+									label="Direct Line"
+									error={getFormFieldErrors(field.state.meta.errors)}
+								>
 									<div className="relative">
 										<RiPhoneLine className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/40" />
 										<Input
@@ -144,7 +171,10 @@ export function CompanyInfoSection({ provider }: CompanyInfoSectionProps) {
 						<form.Field
 							name="whatsappNumber"
 							children={(field) => (
-								<FormField label="WhatsApp Protocol" error={getFormFieldErrors(field.state.meta.errors)}>
+								<FormField
+									label="WhatsApp Protocol"
+									error={getFormFieldErrors(field.state.meta.errors)}
+								>
 									<div className="relative">
 										<RiWhatsappLine className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/40" />
 										<Input
@@ -162,7 +192,10 @@ export function CompanyInfoSection({ provider }: CompanyInfoSectionProps) {
 						<form.Field
 							name="email"
 							children={(field) => (
-								<FormField label="Official Correspondence" error={getFormFieldErrors(field.state.meta.errors)}>
+								<FormField
+									label="Official Correspondence"
+									error={getFormFieldErrors(field.state.meta.errors)}
+								>
 									<div className="relative">
 										<RiMailLine className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/40" />
 										<Input
@@ -173,6 +206,125 @@ export function CompanyInfoSection({ provider }: CompanyInfoSectionProps) {
 											placeholder="office@business.rw"
 										/>
 									</div>
+								</FormField>
+							)}
+						/>
+
+						<form.Field
+							name="website"
+							children={(field) => (
+								<FormField
+									label="Digital Domain (Website)"
+									error={getFormFieldErrors(field.state.meta.errors)}
+								>
+									<div className="relative">
+										<RiGlobeLine className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/40" />
+										<Input
+											value={field.state.value}
+											onBlur={field.handleBlur}
+											onChange={(e) => field.handleChange(e.target.value)}
+											className="h-11 pl-10 bg-background font-medium text-sm rounded-none border-border focus:ring-1 focus:ring-primary/20 shadow-none"
+											placeholder="https://www.business.rw"
+										/>
+									</div>
+								</FormField>
+							)}
+						/>
+					</div>
+
+					<div className="h-px bg-border/40 my-8" />
+
+					<p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground mb-6">
+						Social Presence Protocols
+					</p>
+
+					<div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+						<form.Field
+							name="socialLinks.facebook"
+							children={(field) => (
+								<FormField
+									label="Facebook Identifier"
+									error={getFormFieldErrors(field.state.meta.errors)}
+								>
+									<Input
+										value={field.state.value}
+										onBlur={field.handleBlur}
+										onChange={(e) => field.handleChange(e.target.value)}
+										className="h-11 bg-background font-medium text-sm rounded-none border-border focus:ring-1 focus:ring-primary/20 shadow-none"
+										placeholder="facebook.com/username"
+									/>
+								</FormField>
+							)}
+						/>
+
+						<form.Field
+							name="socialLinks.instagram"
+							children={(field) => (
+								<FormField
+									label="Instagram Handle"
+									error={getFormFieldErrors(field.state.meta.errors)}
+								>
+									<Input
+										value={field.state.value}
+										onBlur={field.handleBlur}
+										onChange={(e) => field.handleChange(e.target.value)}
+										className="h-11 bg-background font-medium text-sm rounded-none border-border focus:ring-1 focus:ring-primary/20 shadow-none"
+										placeholder="@username"
+									/>
+								</FormField>
+							)}
+						/>
+
+						<form.Field
+							name="socialLinks.linkedin"
+							children={(field) => (
+								<FormField
+									label="LinkedIn Presence"
+									error={getFormFieldErrors(field.state.meta.errors)}
+								>
+									<Input
+										value={field.state.value}
+										onBlur={field.handleBlur}
+										onChange={(e) => field.handleChange(e.target.value)}
+										className="h-11 bg-background font-medium text-sm rounded-none border-border focus:ring-1 focus:ring-primary/20 shadow-none"
+										placeholder="linkedin.com/company/..."
+									/>
+								</FormField>
+							)}
+						/>
+
+						<form.Field
+							name="socialLinks.twitter"
+							children={(field) => (
+								<FormField
+									label="X (Twitter) Feed"
+									error={getFormFieldErrors(field.state.meta.errors)}
+								>
+									<Input
+										value={field.state.value}
+										onBlur={field.handleBlur}
+										onChange={(e) => field.handleChange(e.target.value)}
+										className="h-11 bg-background font-medium text-sm rounded-none border-border focus:ring-1 focus:ring-primary/20 shadow-none"
+										placeholder="@username"
+									/>
+								</FormField>
+							)}
+						/>
+
+						<form.Field
+							name="socialLinks.youtube"
+							children={(field) => (
+								<FormField
+									label="YouTube Channel"
+									error={getFormFieldErrors(field.state.meta.errors)}
+								>
+									<Input
+										value={field.state.value}
+										onBlur={field.handleBlur}
+										onChange={(e) => field.handleChange(e.target.value)}
+										className="h-11 bg-background font-medium text-sm rounded-none border-border focus:ring-1 focus:ring-primary/20 shadow-none"
+										placeholder="youtube.com/c/..."
+									/>
 								</FormField>
 							)}
 						/>
@@ -188,7 +340,9 @@ export function CompanyInfoSection({ provider }: CompanyInfoSectionProps) {
 								disabled={!canSubmit || isSubmitting || isLoading}
 								className="w-full h-12 rounded-none font-bold uppercase text-xs tracking-widest shadow-none transition-all active:scale-[0.98]"
 							>
-								{isSubmitting || isLoading ? "Committing Updates..." : "Save Business Profile"}
+								{isSubmitting || isLoading
+									? "Committing Updates..."
+									: "Save Business Profile"}
 							</Button>
 						)}
 					/>

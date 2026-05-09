@@ -94,8 +94,10 @@ export function AdminProviderDetailsPage() {
 					}
 				/>
 				<div className="space-y-4 py-20 text-center border border-dashed border-border rounded-none bg-muted/5">
-					<p className="text-sm font-medium text-muted-foreground">Provider not found.</p>
-					<Button 
+					<p className="text-sm font-medium text-muted-foreground">
+						Provider not found.
+					</p>
+					<Button
 						variant="outline"
 						className="rounded-none font-bold uppercase text-[10px] tracking-widest shadow-none h-10 px-6"
 						onClick={() => navigate({ to: "/admin/providers" })}
@@ -135,13 +137,13 @@ export function AdminProviderDetailsPage() {
 				<Tabs defaultValue="products" className="w-full">
 					<div className="border-b border-border px-4 pt-4 bg-muted/5">
 						<TabsList className="bg-transparent border-none">
-							<TabsTrigger 
+							<TabsTrigger
 								value="products"
 								className="data-[state=active]:bg-background rounded-none px-6 font-bold uppercase text-[10px] tracking-widest border border-transparent data-[state=active]:border-border data-[state=active]:border-b-transparent -mb-[1px]"
 							>
 								Products ({products.length})
 							</TabsTrigger>
-							<TabsTrigger 
+							<TabsTrigger
 								value="services"
 								className="data-[state=active]:bg-background rounded-none px-6 font-bold uppercase text-[10px] tracking-widest border border-transparent data-[state=active]:border-border data-[state=active]:border-b-transparent -mb-[1px]"
 							>

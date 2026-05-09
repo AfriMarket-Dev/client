@@ -53,9 +53,7 @@ export function ResourceManagementLayout({
 					</div>
 				) : (
 					<div className="flex flex-col">
-						{toolbar && (
-							<div className="border-b border-border">{toolbar}</div>
-						)}
+						{toolbar && <div className="border-b border-border">{toolbar}</div>}
 						{content}
 					</div>
 				)}

@@ -19,7 +19,6 @@ export const ProductTabsContent: React.FC<ProductTabsContentProps> = ({
 	variantName: _variantName,
 	variantSku: _variantSku,
 }) => {
-
 	return (
 		<div className="space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-700">
 			{/* Overview Section */}
@@ -30,12 +29,11 @@ export const ProductTabsContent: React.FC<ProductTabsContentProps> = ({
 						Overview
 					</h3>
 				</div>
-				
+
 				<div className="grid md:grid-cols-12 gap-10 items-start">
 					<div className="md:col-span-7 space-y-6">
 						<p className="text-sm leading-relaxed text-muted-foreground">
-							{description ||
-								"Product documentation and overview information."}
+							{description || "Product documentation and overview information."}
 						</p>
 					</div>
 

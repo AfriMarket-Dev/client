@@ -63,7 +63,7 @@ export function AuctionsPage() {
 	const sortValue = `${filters.sortBy}-${filters.sortOrder}`;
 	const handleSortChange = (val: string | null) => {
 		const [sortBy, sortOrder] = (val || "-").split("-");
-		patchFilters({ sortBy, sortOrder: sortOrder as any });
+		patchFilters({ sortBy, sortOrder: sortOrder as "ASC" | "DESC" });
 	};
 
 	const sortOptions = [

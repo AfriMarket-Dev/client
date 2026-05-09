@@ -1,17 +1,13 @@
-import {
-	RiAddLine,
-	RiLayoutGridLine,
-	RiSearchLine,
-} from "@remixicon/react";
+import { RiAddLine, RiLayoutGridLine, RiSearchLine } from "@remixicon/react";
 import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { cn } from "@/lib/utils";
 import { useGetProductsQuery } from "@/services/api/products";
 import { PageHeader } from "@/shared/components/admin/page-header";
 import { StatCard } from "@/shared/components/admin/stat-card";
 import { StatsGrid } from "@/shared/components/stats-grid";
-import { cn } from "@/lib/utils";
 
 export function ProviderProductManagement() {
 	const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
@@ -87,7 +83,9 @@ export function ProviderProductManagement() {
 							onClick={() => setViewMode("grid")}
 							className={cn(
 								"h-8 w-8 p-0 rounded-none transition-all",
-								viewMode === "grid" ? "bg-background shadow-none" : "hover:bg-background/50",
+								viewMode === "grid"
+									? "bg-background shadow-none"
+									: "hover:bg-background/50",
 							)}
 						>
 							<RiLayoutGridLine size={16} />
@@ -98,7 +96,9 @@ export function ProviderProductManagement() {
 							onClick={() => setViewMode("list")}
 							className={cn(
 								"h-8 w-8 p-0 rounded-none transition-all",
-								viewMode === "list" ? "bg-background shadow-none" : "hover:bg-background/50",
+								viewMode === "list"
+									? "bg-background shadow-none"
+									: "hover:bg-background/50",
 							)}
 						>
 							<RiLayoutGridLine size={16} />
@@ -107,7 +107,11 @@ export function ProviderProductManagement() {
 
 					<div className="w-[1px] h-6 bg-border mx-2" />
 
-					<Button variant="outline" size="sm" className="h-10 rounded-none font-bold uppercase text-[10px] tracking-widest px-4 shadow-none">
+					<Button
+						variant="outline"
+						size="sm"
+						className="h-10 rounded-none font-bold uppercase text-[10px] tracking-widest px-4 shadow-none"
+					>
 						Export Data
 					</Button>
 				</div>
@@ -162,7 +166,9 @@ export function ProviderProductManagement() {
 									<Badge
 										className={cn(
 											"rounded-none font-bold uppercase text-[9px] tracking-wider px-2 py-0.5",
-											product.isActive ? "bg-success text-white" : "bg-muted text-muted-foreground",
+											product.isActive
+												? "bg-success text-white"
+												: "bg-muted text-muted-foreground",
 										)}
 									>
 										{product.isActive ? "Active" : "Hidden"}
@@ -171,7 +177,12 @@ export function ProviderProductManagement() {
 							</div>
 
 							{/* Product Info */}
-							<div className={cn("p-4 flex-1 flex flex-col", viewMode === "list" ? "py-2" : "")}>
+							<div
+								className={cn(
+									"p-4 flex-1 flex flex-col",
+									viewMode === "list" ? "py-2" : "",
+								)}
+							>
 								<div className="flex justify-between items-start mb-2">
 									<div>
 										<p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-1">
@@ -197,7 +208,11 @@ export function ProviderProductManagement() {
 										<span>Views: {product.views || 0}</span>
 									</div>
 									<div className="flex items-center gap-2">
-										<Button variant="ghost" size="sm" className="h-8 rounded-none text-xs font-bold uppercase tracking-widest hover:text-primary">
+										<Button
+											variant="ghost"
+											size="sm"
+											className="h-8 rounded-none text-xs font-bold uppercase tracking-widest hover:text-primary"
+										>
 											Edit
 										</Button>
 									</div>

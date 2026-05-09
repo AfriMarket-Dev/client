@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { getFormFieldErrors } from "@/lib/utils";
-import { FormField } from "@/shared/components";
+import { FormField } from "@/shared/components/form-field";
 import {
 	type CategoryFormValues,
 	categoryOptions,

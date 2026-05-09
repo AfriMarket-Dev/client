@@ -81,7 +81,10 @@ export const ProviderHeader: React.FC<ProviderHeaderProps> = ({
 				</div>
 
 				{onContactClick && (
-					<ProviderContactBar company={company} onContactClick={onContactClick} />
+					<ProviderContactBar
+						company={company}
+						onContactClick={onContactClick}
+					/>
 				)}
 			</div>
 		</div>

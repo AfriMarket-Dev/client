@@ -72,7 +72,9 @@ export const ServiceListingView: React.FC<ServiceListingViewProps> = ({
 			<div
 				className={cn(
 					"grid gap-4 md:gap-6",
-					viewMode === "grid" ? "grid-cols-2 lg:grid-cols-2 xl:grid-cols-3" : "grid-cols-1",
+					viewMode === "grid"
+						? "grid-cols-2 lg:grid-cols-2 xl:grid-cols-3"
+						: "grid-cols-1",
 				)}
 			>
 				{Array.from({ length: 8 }).map((_, i) => (
@@ -94,9 +96,7 @@ export const ServiceListingView: React.FC<ServiceListingViewProps> = ({
 							<EmptyMedia variant="icon">
 								<Building2 className="w-8 h-8 text-muted-foreground" />
 							</EmptyMedia>
-							<EmptyTitle>
-								No Services Found
-							</EmptyTitle>
+							<EmptyTitle>No Services Found</EmptyTitle>
 							<EmptyDescription>
 								We couldn't find any professional services matching your current
 								filters.

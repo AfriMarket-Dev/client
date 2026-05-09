@@ -39,6 +39,7 @@ export function useMarketplaceFilters(
 	const patchFilters = useCallback(
 		(patch: Partial<CatalogFilters>) => {
 			startTransition(() => {
+				// biome-ignore lint/suspicious/noExplicitAny: complex type mapping for url params
 				setParams(patch as any);
 				if (patch.type && onTypeChange) {
 					onTypeChange(patch.type as ListingType);

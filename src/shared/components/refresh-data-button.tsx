@@ -1,11 +1,11 @@
 import { RiRefreshLine } from "@remixicon/react";
+import { useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { apiSlice } from "@/services/api/api-entry";
 import { cn } from "@/lib/utils";
+import { apiSlice } from "@/services/api/api-entry";
 
 interface RefreshDataButtonProps {
 	className?: string;
@@ -13,10 +13,10 @@ interface RefreshDataButtonProps {
 	showLabel?: boolean;
 }
 
-export function RefreshDataButton({ 
-	className, 
+export function RefreshDataButton({
+	className,
 	variant = "outline",
-	showLabel = false 
+	showLabel = false,
 }: RefreshDataButtonProps) {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
@@ -39,8 +39,8 @@ export function RefreshDataButton({
 					"Dashboard",
 					"Session",
 					"Users",
-					"Auctions"
-				])
+					"Auctions",
+				]),
 			);
 
 			await navigate({ to: ".", replace: true });
@@ -62,18 +62,22 @@ export function RefreshDataButton({
 			disabled={isRefreshing}
 			className={cn(
 				"rounded-none border-border/40 hover:bg-primary/5 hover:text-primary transition-all",
-				className
+				className,
 			)}
 			title="Sync with server"
 		>
-			<RiRefreshLine 
+			<RiRefreshLine
 				className={cn(
-					"w-4 h-4", 
+					"w-4 h-4",
 					isRefreshing && "animate-spin text-primary",
-					showLabel && "mr-2"
-				)} 
+					showLabel && "mr-2",
+				)}
 			/>
-			{showLabel && <span className="text-[10px] font-black uppercase tracking-widest">Sync Data</span>}
+			{showLabel && (
+				<span className="text-[10px] font-black uppercase tracking-widest">
+					Sync Data
+				</span>
+			)}
 		</Button>
 	);
 }

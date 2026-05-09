@@ -1,17 +1,22 @@
-import { RiArrowLeftSLine, RiBuilding4Line, RiUserLine } from "@remixicon/react";
+import {
+	RiArrowLeftSLine,
+	RiBuilding4Line,
+	RiUserLine,
+} from "@remixicon/react";
 import { useNavigate, useParams } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { ProviderProvisionForm } from "@/features/forms/components/provider-provision-form";
+import { cn } from "@/lib/utils";
 import {
 	useGetCompanyByIdQuery,
 	useUpdateCompanyMutation,
 } from "@/services/api/companies";
 import { PageHeader } from "@/shared/components/admin/page-header";
 import { AdminPageSkeleton } from "@/shared/components/skeletons";
-import { cn } from "@/lib/utils";
 import type { ProviderProvisionValues } from "@/shared/schemas/business";
+import type { ProviderType } from "@/types";
 
 export function AdminEditProviderPage() {
 	const navigate = useNavigate();
@@ -44,7 +49,7 @@ export function AdminEditProviderPage() {
 				id: providerId,
 				data: {
 					name: values.companyName,
-					type: values.industry as any,
+					type: values.industry as ProviderType,
 					description: values.position || undefined,
 					province: values.location || undefined,
 					district: values.district || undefined,
@@ -71,8 +76,10 @@ export function AdminEditProviderPage() {
 	if (!company) {
 		return (
 			<div className="space-y-4 py-20 text-center border border-dashed border-border rounded-md bg-muted/5">
-				<p className="text-sm font-medium text-muted-foreground">Provider resource not found</p>
-				<Button 
+				<p className="text-sm font-medium text-muted-foreground">
+					Provider resource not found
+				</p>
+				<Button
 					variant="outline"
 					className="rounded-md h-10 px-6 font-semibold text-sm shadow-sm"
 					onClick={() => navigate({ to: "/admin/providers" })}
@@ -114,7 +121,9 @@ export function AdminEditProviderPage() {
 				{/* Step Navigation Sidebar */}
 				<aside className="w-full lg:w-64 shrink-0">
 					<div className="space-y-1 sticky top-24 bg-background border border-border rounded-md p-2 shadow-sm">
-						<p className="text-xs font-semibold text-muted-foreground/60 mb-3 px-3 pt-2">Modification Steps</p>
+						<p className="text-xs font-semibold text-muted-foreground/60 mb-3 px-3 pt-2">
+							Modification Steps
+						</p>
 						<button
 							type="button"
 							onClick={() => setCurrentStep(1)}
@@ -166,7 +175,9 @@ export function AdminEditProviderPage() {
 					{saving && (
 						<div className="mt-4 flex items-center gap-2 px-2">
 							<div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-							<p className="text-xs font-medium text-primary">Synchronizing changes with core server...</p>
+							<p className="text-xs font-medium text-primary">
+								Synchronizing changes with core server...
+							</p>
 						</div>
 					)}
 				</div>

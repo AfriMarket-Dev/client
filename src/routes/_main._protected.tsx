@@ -17,6 +17,7 @@ export const Route = createFileRoute("/_main/_protected")({
 			});
 		}
 	},
+	// biome-ignore lint/suspicious/noExplicitAny: tanstack router context
 	shouldReload: (ctx: any) =>
 		!ctx.prev || ctx.next.pathname !== ctx.prev.pathname,
 	component: Outlet,

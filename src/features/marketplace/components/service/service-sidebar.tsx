@@ -26,9 +26,7 @@ export const ServiceSidebar: React.FC<ServiceSidebarProps> = ({
 			{/* Seller Card */}
 			<div className="border border-border bg-muted/5 p-6 space-y-5">
 				<div className="flex items-center justify-between pb-3 border-b border-border">
-					<span className="text-sm font-semibold text-foreground">
-						Seller
-					</span>
+					<span className="text-sm font-semibold text-foreground">Seller</span>
 					<span className="text-primary flex items-center gap-1.5 text-xs font-medium">
 						<div className="w-1.5 h-1.5 bg-primary rounded-full" />
 						Active
@@ -56,7 +54,9 @@ export const ServiceSidebar: React.FC<ServiceSidebarProps> = ({
 					<span
 						className={cn(
 							"text-xs font-semibold",
-							service.company?.isVerified ? "text-emerald-600" : "text-amber-500",
+							service.company?.isVerified
+								? "text-emerald-600"
+								: "text-amber-500",
 						)}
 					>
 						{service.company?.isVerified ? "Verified" : "Pending"}

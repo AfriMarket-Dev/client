@@ -28,9 +28,7 @@ export const SpecificationList: React.FC<SpecificationListProps> = ({
 			{title && (
 				<div className="flex items-center gap-2">
 					<RiSettings4Line className="w-4 h-4 text-muted-foreground" />
-					<h3 className="text-sm font-semibold text-foreground">
-						{title}
-					</h3>
+					<h3 className="text-sm font-semibold text-foreground">{title}</h3>
 				</div>
 			)}
 
@@ -41,7 +39,8 @@ export const SpecificationList: React.FC<SpecificationListProps> = ({
 						className={cn(
 							"flex items-center justify-between py-3 px-4",
 							index % 2 === 0 ? "bg-muted/20" : "bg-background",
-							index !== Object.entries(specifications).length - 1 && "border-b border-border"
+							index !== Object.entries(specifications).length - 1 &&
+								"border-b border-border",
 						)}
 					>
 						<span className="text-xs font-medium text-muted-foreground">

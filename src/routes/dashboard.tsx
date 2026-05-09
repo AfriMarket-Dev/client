@@ -13,7 +13,7 @@ export const Route = createFileRoute("/dashboard")({
 	beforeLoad: () => {
 		const { isAuthenticated, user } = store.getState().auth;
 
-		if (isAuthenticated && (!user || !user.role)) {
+		if (isAuthenticated && !user?.role) {
 			store.dispatch({ type: "auth/logout" });
 			throw redirect({ to: ROUTES.AUTH.SIGNIN });
 		}
@@ -24,7 +24,7 @@ export const Route = createFileRoute("/dashboard")({
 			});
 		}
 
-		// REMOVED: needsOnboarding redirect. 
+		// REMOVED: needsOnboarding redirect.
 		// We let the dashboard loader verify if a company actually exists.
 
 		if (!user?.role || !PROVIDER_ROLES.includes(user.role)) {
@@ -33,6 +33,7 @@ export const Route = createFileRoute("/dashboard")({
 			});
 		}
 	},
+	// biome-ignore lint/suspicious/noExplicitAny: tanstack router context
 	shouldReload: (ctx: any) =>
 		!ctx.prev || ctx.next.pathname !== ctx.prev.pathname,
 	preload: false,

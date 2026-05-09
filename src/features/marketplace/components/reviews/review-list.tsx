@@ -1,5 +1,12 @@
-import { RiStarFill, RiStarLine } from "@remixicon/react";
+import {
+	RiDeleteBin7Line,
+	RiEditLine,
+	RiStarFill,
+	RiStarLine,
+} from "@remixicon/react";
 import React from "react";
+import { useSelector } from "react-redux";
+import { toast } from "sonner";
 import {
 	Pagination,
 	PaginationContent,
@@ -9,7 +16,11 @@ import {
 	PaginationPrevious,
 } from "@/components/ui/pagination";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useGetReviewsQuery } from "@/services/api/reviews";
+import {
+	useDeleteReviewMutation,
+	useGetReviewsQuery,
+} from "@/services/api/reviews";
+import type { RootState } from "@/store";
 
 interface ReviewListProps {
 	productId?: string;
@@ -23,6 +34,7 @@ export const ReviewList: React.FC<ReviewListProps> = ({
 	companyId,
 }) => {
 	const [page, setPage] = React.useState(1);
+	const { user } = useSelector((state: RootState) => state.auth);
 	const { data, isLoading } = useGetReviewsQuery({
 		productId,
 		serviceId,
@@ -30,6 +42,24 @@ export const ReviewList: React.FC<ReviewListProps> = ({
 		page,
 		limit: 5,
 	});
+	const [deleteReview] = useDeleteReviewMutation();
+
+	const targetId = productId || serviceId || companyId;
+	const targetType = productId ? "product" : serviceId ? "service" : "company";
+
+	const handleDelete = async (reviewId: string) => {
+		try {
+			await deleteReview({
+				id: reviewId,
+				targetId,
+				targetType,
+			}).unwrap();
+			toast.success("Review deleted successfully.");
+		} catch (err) {
+			console.error("Failed to delete review:", err);
+			toast.error("Failed to delete review.");
+		}
+	};
 
 	if (isLoading) {
 		return (
@@ -70,21 +100,44 @@ export const ReviewList: React.FC<ReviewListProps> = ({
 						key={review.id}
 						className="border-b border-border/40 pb-8 last:border-0"
 					>
-						<div className="flex items-center gap-1 mb-3">
-							{[1, 2, 3, 4, 5].map((star) => (
-								<span key={star}>
-									{star <= review.rating ? (
-										<RiStarFill className="w-3 h-3 text-primary" />
-									) : (
-										<RiStarLine className="w-3 h-3 text-muted-foreground/30" />
-									)}
+						<div className="flex items-center justify-between mb-3">
+							<div className="flex items-center gap-1">
+								{[1, 2, 3, 4, 5].map((star) => (
+									<span key={star}>
+										{star <= review.rating ? (
+											<RiStarFill className="w-3 h-3 text-primary" />
+										) : (
+											<RiStarLine className="w-3 h-3 text-muted-foreground/30" />
+										)}
+									</span>
+								))}
+								<span className="text-[10px] font-black uppercase tracking-tighter text-muted-foreground ml-3">
+									{review.createdAt
+										? new Date(review.createdAt).toLocaleDateString()
+										: "RECENT"}
 								</span>
-							))}
-							<span className="text-[10px] font-black uppercase tracking-tighter text-muted-foreground ml-3">
-								{review.createdAt
-									? new Date(review.createdAt).toLocaleDateString()
-									: "RECENT"}
-							</span>
+							</div>
+
+							{user?.id === review.user?.id && (
+								<div className="flex items-center gap-4">
+									<button
+										type="button"
+										onClick={() => {
+											toast.info("Edit functionality ready for integration.");
+										}}
+										className="text-muted-foreground hover:text-primary transition-colors"
+									>
+										<RiEditLine size={14} />
+									</button>
+									<button
+										type="button"
+										onClick={() => handleDelete(review.id)}
+										className="text-muted-foreground hover:text-destructive transition-colors"
+									>
+										<RiDeleteBin7Line size={14} />
+									</button>
+								</div>
+							)}
 						</div>
 						<div className="flex items-center gap-2 mb-2">
 							<span className="text-[10px] font-black uppercase tracking-widest text-foreground">

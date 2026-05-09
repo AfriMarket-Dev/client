@@ -1,6 +1,6 @@
 import { RiSparklingLine } from "@remixicon/react";
 import { useNavigate } from "@tanstack/react-router";
-import type React from "react";
+import React from "react";
 import { useSelector } from "react-redux";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -28,6 +28,12 @@ const NewArrivals: React.FC = () => {
 	const { data: wishlist = [] } = useGetWishlistQuery(undefined, {
 		skip: !isAuthenticated,
 	});
+
+	const wishlistIds = React.useMemo(
+		() => new Set(wishlist.map((item) => item.id)),
+		[wishlist],
+	);
+
 	const [addToWishlist] = useAddToWishlistMutation();
 	const [removeFromWishlist] = useRemoveFromWishlistMutation();
 
@@ -41,9 +47,7 @@ const NewArrivals: React.FC = () => {
 			return;
 		}
 		try {
-			const isInWishlist = wishlist.some(
-				(l: { id: string }) => l.id === productId,
-			);
+			const isInWishlist = wishlistIds.has(productId);
 			if (isInWishlist) {
 				await removeFromWishlist({ id: productId, type: "product" }).unwrap();
 				toast.success("Removed from wishlist");
@@ -95,9 +99,7 @@ const NewArrivals: React.FC = () => {
 									params: { productId: product.id },
 								})
 							}
-							isInWishlist={wishlist.some(
-								(l: { id: string }) => l.id === product.id,
-							)}
+							isInWishlist={wishlistIds.has(product.id)}
 							onToggleWishlist={(e) => handleToggleWishlist(e, product.id)}
 						/>
 					))}

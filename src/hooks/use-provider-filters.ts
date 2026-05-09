@@ -16,10 +16,11 @@ export function useProviderFilters() {
 	const handleFiltersChange = useCallback(
 		(updates: Partial<ProviderFiltersState>) => {
 			startTransition(() => {
-				setParams({
+				const nextParams: Parameters<typeof setParams>[0] = {
 					...updates,
 					page: 1,
-				} as any);
+				};
+				setParams(nextParams);
 			});
 		},
 		[setParams],

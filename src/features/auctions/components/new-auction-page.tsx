@@ -1,18 +1,21 @@
+import { RiArrowLeftLine } from "@remixicon/react";
 import { useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 import { AuctionForm } from "@/features/forms/components/auction-form";
 import { getErrorFromRtkQuery } from "@/lib/utils";
 import { useCreateAuctionMutation } from "@/services/api/auctions";
 import { useGetMyCompanyQuery } from "@/services/api/companies";
-import { Button } from "@/components/ui/button";
-import { RiArrowLeftLine } from "@remixicon/react";
+import type { CreateAuctionInput } from "@/types";
 
 export function NewAuctionPage() {
 	const navigate = useNavigate();
 	const { data: company } = useGetMyCompanyQuery();
 	const [createAuction, { isLoading, error }] = useCreateAuctionMutation();
 
-	const handleSubmit = async (values: any) => {
+	const handleSubmit = async (
+		values: Omit<CreateAuctionInput, "companyId">,
+	) => {
 		if (!company?.id) {
 			toast.error("Company not found. Ensure you are linked to a company.");
 			return;

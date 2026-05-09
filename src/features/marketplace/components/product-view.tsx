@@ -12,7 +12,10 @@ import {
 } from "@/components/ui/empty";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useProductActions } from "@/hooks/use-product-actions";
+import { logger } from "@/lib/logger";
+import { cn } from "@/lib/utils";
 import { useGetProductByIdQuery } from "@/services/api/products";
+import { ContactActions } from "@/shared/components/contact-actions";
 import { DetailsPageLayout } from "@/shared/components/layouts/details-page-layout";
 import { ResourceInquiryModal } from "@/shared/components/modals/resource-inquiry-modal";
 import { DetailPageSkeleton } from "@/shared/components/skeletons";
@@ -22,8 +25,8 @@ import { ProductGallery } from "./product/product-gallery";
 import { ProductInfo } from "./product/product-info";
 import { ProductSidebar } from "./product/product-sidebar";
 import { ProductTabsContent } from "./product/product-tabs-content";
-import { cn } from "@/lib/utils";
-import { logger } from "@/lib/logger";
+import { AddReviewDialog } from "./reviews/add-review-dialog";
+import { ReviewList } from "./reviews/review-list";
 
 interface ProductViewProps {
 	productId: string;
@@ -39,9 +42,15 @@ export default function ProductView({
 	const router = useRouter();
 	const [activeTab, setActiveTab] = useState("overview");
 	const [selectedImageIndex, setSelectedImageIndex] = useState(0);
-	const [selectedVariantId, setSelectedVariantId] = useState<string | null>(null);
+	const [selectedVariantId, setSelectedVariantId] = useState<string | null>(
+		null,
+	);
 
-	const { data: product, isLoading, isFetching } = useGetProductByIdQuery(productId);
+	const {
+		data: product,
+		isLoading,
+		isFetching,
+	} = useGetProductByIdQuery(productId);
 
 	const {
 		messageOpen: showContactModal,
@@ -59,7 +68,7 @@ export default function ProductView({
 	const variants = product?.variants || [];
 	const selectedVariant = useMemo(() => {
 		if (selectedVariantId) {
-			const found = variants.find(v => v.id === selectedVariantId);
+			const found = variants.find((v) => v.id === selectedVariantId);
 			if (found) return found;
 		}
 		return variants[0];
@@ -131,7 +140,11 @@ export default function ProductView({
 	return (
 		<DetailsPageLayout
 			title={product.name}
-			badgeText={isFetching && product ? "Synchronizing..." : (product.category?.name || "Standardized Item")}
+			badgeText={
+				isFetching && product
+					? "Synchronizing..."
+					: product.category?.name || "Standardized Item"
+			}
 			onBack={backHandler}
 			mobileActions={
 				<MobileActions
@@ -146,15 +159,25 @@ export default function ProductView({
 			headerAction={
 				<div className="flex items-center gap-6">
 					<div className="hidden lg:flex flex-col items-end">
-						<span className="text-xs font-medium text-muted-foreground">Verification Status</span>
-						<span className="text-sm font-semibold text-emerald-600 dark:text-emerald-500">Active & Authenticated</span>
+						<span className="text-xs font-medium text-muted-foreground">
+							Verification Status
+						</span>
+						<span className="text-sm font-semibold text-emerald-600 dark:text-emerald-500">
+							Active & Authenticated
+						</span>
 					</div>
-					<Button
-						onClick={() => setShowContactModal(true)}
-						className="hidden md:inline-flex h-11 px-8 rounded-none font-medium shadow-none transition-all duration-300"
-					>
-						Submit Inquiry
-					</Button>
+					<ContactActions
+						phone={product.company?.phone}
+						whatsapp={product.company?.phone}
+						email={product.company?.email}
+						companyName={product.company?.name}
+						companyId={product.company?.id}
+						productId={product.id}
+						variant="dropdown"
+						label="Submit Inquiry"
+						onCustomInquiry={() => setShowContactModal(true)}
+						className="hidden md:flex"
+					/>
 				</div>
 			}
 			gallery={
@@ -175,7 +198,11 @@ export default function ProductView({
 						stock={selectedVariant?.stock ?? product.stock ?? 0}
 						views={product.views}
 						categoryName={product.category?.name}
-						brandName={product.specifications?.["Brand"] || product.specifications?.["brand"]}
+						brandName={
+							product.specifications?.Brand || product.specifications?.brand
+						}
+						averageRating={product.averageRating}
+						reviewCount={product.reviewCount}
 						onInquire={() => setShowContactModal(true)}
 					/>
 
@@ -190,7 +217,9 @@ export default function ProductView({
 							</div>
 							<div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
 								{variants.map((v) => {
-									const isActive = selectedVariantId === v.id || (!selectedVariantId && v === variants[0]);
+									const isActive =
+										selectedVariantId === v.id ||
+										(!selectedVariantId && v === variants[0]);
 									return (
 										<button
 											key={v.id}
@@ -200,7 +229,7 @@ export default function ProductView({
 												"px-4 py-3 text-sm font-medium rounded-none transition-all duration-300 text-center border shadow-none",
 												isActive
 													? "bg-primary/5 border-primary text-primary"
-													: "bg-background border-border text-foreground hover:bg-muted/50"
+													: "bg-background border-border text-foreground hover:bg-muted/50",
 											)}
 										>
 											{v.name}
@@ -248,7 +277,7 @@ export default function ProductView({
 								</TabsTrigger>
 							</TabsList>
 						</div>
-						
+
 						<div className="animate-in fade-in duration-500">
 							<TabsContent value="overview" className="mt-0 outline-none">
 								<ProductTabsContent
@@ -260,21 +289,33 @@ export default function ProductView({
 								/>
 							</TabsContent>
 							<TabsContent value="specifications" className="mt-0 outline-none">
-								<SpecificationList 
-									specifications={product.specifications} 
+								<SpecificationList
+									specifications={product.specifications}
 									title="Material Properties"
 								/>
 							</TabsContent>
 							<TabsContent value="reviews" className="mt-0 outline-none">
-								<div className="py-20 text-center border-y border-border bg-muted/5 relative overflow-hidden">
-									<div className="relative z-10 space-y-3 px-4">
-										<p className="text-base font-semibold text-foreground">
-											Status: Aggregating Data
-										</p>
-										<p className="text-sm text-muted-foreground">
-											Feedback and performance metrics are currently under verification.
-										</p>
+								<div className="space-y-12">
+									<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 border-b border-border/40 pb-8">
+										<div className="space-y-2">
+											<h3 className="text-sm font-black uppercase tracking-widest text-foreground">
+												Partner Feedback
+											</h3>
+											<p className="text-xs text-muted-foreground">
+												Performance metrics verified by the industrial ledger.
+											</p>
+										</div>
+										<AddReviewDialog
+											productId={product.id}
+											trigger={
+												<Button className="rounded-none h-11 px-8 font-black uppercase tracking-widest text-[10px] shadow-lg shadow-primary/20">
+													Log Experience
+												</Button>
+											}
+										/>
 									</div>
+
+									<ReviewList productId={product.id} />
 								</div>
 							</TabsContent>
 						</div>
@@ -297,6 +338,7 @@ export default function ProductView({
 					onSubmit={handleSubmitInquiry}
 					resourceName={product.name}
 					resourceType="PRODUCT"
+					company={product.company}
 				/>
 			}
 		/>

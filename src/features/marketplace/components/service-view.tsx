@@ -1,8 +1,8 @@
 import { useRouter } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useServiceActions } from "@/hooks/use-service-actions";
+import { ContactActions } from "@/shared/components/contact-actions";
 import { ImageWithFallback } from "@/shared/components/image-with-fallback";
 import { DetailsPageLayout } from "@/shared/components/layouts/details-page-layout";
 import { ResourceInquiryModal } from "@/shared/components/modals/resource-inquiry-modal";
@@ -54,12 +54,18 @@ export default function ServiceView({ service, onBack }: ServiceViewProps) {
 				/>
 			}
 			headerAction={
-				<Button
-					onClick={() => setShowContactModal(true)}
-					className="hidden md:inline-flex h-11 px-8 rounded-none font-medium shadow-none transition-all duration-300"
-				>
-					Request Quote
-				</Button>
+				<ContactActions
+					phone={service.company?.phone}
+					whatsapp={service.company?.phone}
+					email={service.company?.email}
+					companyName={service.company?.name}
+					companyId={service.company?.id}
+					serviceId={service.id}
+					variant="dropdown"
+					label="Request Quote"
+					onCustomInquiry={() => setShowContactModal(true)}
+					className="hidden md:flex"
+				/>
 			}
 			gallery={
 				<div className="aspect-square md:aspect-auto h-full overflow-hidden bg-muted/5 relative group border-none shadow-none">
@@ -185,6 +191,7 @@ export default function ServiceView({ service, onBack }: ServiceViewProps) {
 					onSubmit={handleSubmitInquiry}
 					resourceName={service.name}
 					resourceType="SERVICE"
+					company={service.company}
 					isLoading={sendingInquiry}
 				/>
 			}

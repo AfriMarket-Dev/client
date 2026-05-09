@@ -127,7 +127,7 @@ export function AdminDashboard() {
 							key={op.label}
 							variant="outline"
 							size="sm"
-							onClick={() => navigate({ to: op.to as any })}
+							onClick={() => navigate({ to: op.to as string })}
 							className="h-10 rounded-none border-border font-bold uppercase text-[10px] tracking-widest shadow-none px-4"
 						>
 							{op.label}
@@ -138,15 +138,14 @@ export function AdminDashboard() {
 
 			{/* Stats Grid */}
 			<StatsGrid columns={3}>
-				{isLoading ? (
-					Array.from({ length: 6 }).map((_, i) => (
-						<div key={i} className="h-32 bg-muted/30 rounded-none animate-pulse border border-border" />
-					))
-				) : (
-					stats.map((stat) => (
-						<StatCard key={stat.label} {...stat} />
-					))
-				)}
+				{isLoading
+					? Array.from({ length: 6 }).map((_, i) => (
+							<div
+								key={i}
+								className="h-32 bg-muted/30 rounded-none animate-pulse border border-border"
+							/>
+						))
+					: stats.map((stat) => <StatCard key={stat.label} {...stat} />)}
 			</StatsGrid>
 
 			{/* Recent Activity */}
@@ -156,7 +155,10 @@ export function AdminDashboard() {
 						<h3 className="text-lg font-bold text-foreground">
 							Live Operations Feed
 						</h3>
-						<Badge variant="outline" className="font-bold text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-none bg-background">
+						<Badge
+							variant="outline"
+							className="font-bold text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-none bg-background"
+						>
 							Real-time
 						</Badge>
 					</div>

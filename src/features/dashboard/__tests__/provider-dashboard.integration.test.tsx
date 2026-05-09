@@ -5,7 +5,27 @@ import {
 	jsonResponse,
 } from "@/services/api/__tests__/test-utils";
 import { renderWithProviders } from "@/test/test-utils";
+import type { Company, Product } from "@/types";
 import ProviderDashboard from "../components/provider-dashboard";
+
+type MockFetchCall = [input: string | URL | Request, init?: RequestInit];
+
+function getRequestUrl([input]: MockFetchCall) {
+	if (typeof input === "string") {
+		return input;
+	}
+	if (input instanceof URL) {
+		return input.toString();
+	}
+	return input.url;
+}
+
+function getRequestMethod([input, init]: MockFetchCall) {
+	if (typeof input === "string" || input instanceof URL) {
+		return init?.method ?? "GET";
+	}
+	return input.method || init?.method || "GET";
+}
 
 describe("ProviderDashboard Integration", () => {
 	it("allows a provider to delete a product listing", async () => {
@@ -35,9 +55,9 @@ describe("ProviderDashboard Integration", () => {
 
 		renderWithProviders(
 			<ProviderDashboard
-				company={mockCompany as any}
+				company={mockCompany as unknown as Company}
 				categories={[]}
-				products={mockProducts as any}
+				products={mockProducts as unknown as Product[]}
 				services={[]}
 			/>,
 		);
@@ -57,9 +77,9 @@ describe("ProviderDashboard Integration", () => {
 
 		// Verify that the delete API was called
 		await waitFor(() => {
-			const deleteReq = fetchMock.mock.calls.find(c => {
-				const url = typeof c[0] === 'string' ? c[0] : (c[0] as any).url || String(c[0]);
-				const method = typeof c[0] === 'string' ? (c[1] as any)?.method : (c[0] as any).method || (c[1] as any)?.method;
+			const deleteReq = fetchMock.mock.calls.find((call) => {
+				const url = getRequestUrl(call as MockFetchCall);
+				const method = getRequestMethod(call as MockFetchCall);
 				return url.includes("/products/prod-1") && method === "DELETE";
 			});
 			expect(deleteReq).toBeTruthy();

@@ -31,9 +31,7 @@ export const CardWrapper: React.FC<CardProps> = ({
 								</CardTitle>
 							)}
 							{subtitle && (
-								<p className="text-sm text-muted-foreground">
-									{subtitle}
-								</p>
+								<p className="text-sm text-muted-foreground">{subtitle}</p>
 							)}
 						</div>
 						{headerActions}

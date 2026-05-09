@@ -34,9 +34,7 @@ export const ProductSidebar: React.FC<ProductSidebarProps> = ({
 			{/* Seller Card — bordered card with subtle tint */}
 			<div className="border border-border bg-muted/5 p-6 space-y-5">
 				<div className="flex items-center justify-between pb-3 border-b border-border">
-					<span className="text-sm font-semibold text-foreground">
-						Seller
-					</span>
+					<span className="text-sm font-semibold text-foreground">Seller</span>
 					<span className="text-emerald-600 dark:text-emerald-500 flex items-center gap-1.5 text-xs font-medium">
 						<div className="w-1.5 h-1.5 bg-emerald-500 rounded-full" />
 						Active
@@ -64,7 +62,9 @@ export const ProductSidebar: React.FC<ProductSidebarProps> = ({
 					<span
 						className={cn(
 							"text-xs font-semibold",
-							company?.isVerified ? "text-emerald-600 dark:text-emerald-500" : "text-amber-500",
+							company?.isVerified
+								? "text-emerald-600 dark:text-emerald-500"
+								: "text-amber-500",
 						)}
 					>
 						{company?.isVerified ? "Verified" : "Pending"}
@@ -99,9 +99,7 @@ export const ProductSidebar: React.FC<ProductSidebarProps> = ({
 					onClick={handleShare}
 				>
 					<RiShareForwardLine className="w-4 h-4" />
-					<span className="text-sm font-medium">
-						Share
-					</span>
+					<span className="text-sm font-medium">Share</span>
 				</Button>
 			</div>
 		</div>

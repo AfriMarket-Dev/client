@@ -70,11 +70,7 @@ export const productsApi = apiSlice.injectEndpoints({
 
 		createProduct: builder.mutation<Product, CreateProductInput>({
 			query: (body) => ({ url: "/products", method: "POST", body }),
-			invalidatesTags: [
-				{ type: "Products", id: "LIST" },
-				"Stats",
-				"Providers",
-			],
+			invalidatesTags: [{ type: "Products", id: "LIST" }, "Stats", "Providers"],
 		}),
 
 		updateProduct: builder.mutation<
@@ -95,11 +91,7 @@ export const productsApi = apiSlice.injectEndpoints({
 
 		deleteProduct: builder.mutation<void, string>({
 			query: (id) => ({ url: `/products/${id}`, method: "DELETE" }),
-			invalidatesTags: [
-				{ type: "Products", id: "LIST" },
-				"Stats",
-				"Providers",
-			],
+			invalidatesTags: [{ type: "Products", id: "LIST" }, "Stats", "Providers"],
 		}),
 
 		addProductVariant: builder.mutation<
@@ -117,7 +109,10 @@ export const productsApi = apiSlice.injectEndpoints({
 			],
 		}),
 
-		removeProductVariant: builder.mutation<void, { productId: string; variantId: string }>({
+		removeProductVariant: builder.mutation<
+			void,
+			{ productId: string; variantId: string }
+		>({
 			query: ({ productId, variantId }) => ({
 				url: `/products/${productId}/variant/${variantId}`,
 				method: "DELETE",
@@ -130,7 +125,11 @@ export const productsApi = apiSlice.injectEndpoints({
 
 		updateProductVariant: builder.mutation<
 			unknown,
-			{ productId: string; variantId: string; data: Partial<CreateProductVariantInput> }
+			{
+				productId: string;
+				variantId: string;
+				data: Partial<CreateProductVariantInput>;
+			}
 		>({
 			query: ({ productId, variantId, data }) => ({
 				url: `/products/${productId}/variant/${variantId}`,

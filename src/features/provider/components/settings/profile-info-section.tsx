@@ -3,9 +3,9 @@ import { Camera, Upload } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useUpdateProfileMutation } from "@/services/api/users";
-import { FormField } from "@/shared/components";
 import { getFormFieldErrors } from "@/lib/utils";
+import { useUpdateProfileMutation } from "@/services/api/users";
+import { FormField } from "@/shared/components/form-field";
 import type { UserProfile } from "@/types";
 
 interface ProfileInfoSectionProps {
@@ -41,7 +41,11 @@ export function ProfileInfoSection({ user }: ProfileInfoSectionProps) {
 				<div className="relative shrink-0">
 					<div className="w-28 h-28 rounded-none bg-muted border border-border overflow-hidden flex items-center justify-center text-3xl font-bold text-foreground/20">
 						{user.image ? (
-							<img src={user.image} alt={user.name} className="w-full h-full object-cover" />
+							<img
+								src={user.image}
+								alt={user.name}
+								className="w-full h-full object-cover"
+							/>
 						) : (
 							user.name?.charAt(0) || "U"
 						)}
@@ -133,7 +137,9 @@ export function ProfileInfoSection({ user }: ProfileInfoSectionProps) {
 								disabled={!canSubmit || isSubmitting || isLoading}
 								className="w-full h-11 rounded-none font-bold uppercase text-xs tracking-widest shadow-none"
 							>
-								{isSubmitting || isLoading ? "Saving Identity..." : "Update Profile"}
+								{isSubmitting || isLoading
+									? "Saving Identity..."
+									: "Update Profile"}
 							</Button>
 						)}
 					/>

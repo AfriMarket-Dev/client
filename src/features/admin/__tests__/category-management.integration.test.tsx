@@ -7,6 +7,25 @@ import {
 import { renderWithProviders } from "@/test/test-utils";
 import { AdminCategoriesPage } from "../components/categories-page";
 
+type MockFetchCall = [input: string | URL | Request, init?: RequestInit];
+
+function getRequestUrl([input]: MockFetchCall) {
+	if (typeof input === "string") {
+		return input;
+	}
+	if (input instanceof URL) {
+		return input.toString();
+	}
+	return input.url;
+}
+
+function getRequestMethod([input, init]: MockFetchCall) {
+	if (typeof input === "string" || input instanceof URL) {
+		return init?.method ?? "GET";
+	}
+	return input.method || init?.method || "GET";
+}
+
 describe("Admin Category Management Integration", () => {
 	const mockCategories = [
 		{ id: "cat-1", name: "Construction", slug: "construction" },
@@ -69,14 +88,16 @@ describe("Admin Category Management Integration", () => {
 		fireEvent.change(descInput, { target: { value: "Category description" } });
 
 		// Submit
-		const submitButton = screen.getByRole("button", { name: /Create Category/i });
+		const submitButton = screen.getByRole("button", {
+			name: /Create Category/i,
+		});
 		fireEvent.click(submitButton);
 
 		await waitFor(() => {
-			const postCall = fetchMock.mock.calls.find(c => {
-				const url = typeof c[0] === 'string' ? c[0] : (c[0] as any).url || String(c[0]);
-				const method = typeof c[0] === 'string' ? (c[1] as any)?.method : (c[0] as any).method || (c[1] as any)?.method;
-				return url.includes("/product-categories") && method === "POST";
+			const postCall = fetchMock.mock.calls.find((call) => {
+				const reqUrl = getRequestUrl(call as MockFetchCall);
+				const reqMethod = getRequestMethod(call as MockFetchCall);
+				return reqUrl.includes("/product-categories") && reqMethod === "POST";
 			});
 			expect(postCall).toBeTruthy();
 		});
@@ -90,7 +111,10 @@ describe("Admin Category Management Integration", () => {
 					meta: { total: 2, page: 1, limit: 100, totalPages: 1 },
 				});
 			}
-			if (req.url.includes("/product-categories/cat-1") && req.method === "DELETE") {
+			if (
+				req.url.includes("/product-categories/cat-1") &&
+				req.method === "DELETE"
+			) {
 				return jsonResponse({ success: true });
 			}
 			return jsonResponse({}, { status: 404 });
@@ -111,10 +135,12 @@ describe("Admin Category Management Integration", () => {
 		fireEvent.click(confirmButton);
 
 		await waitFor(() => {
-			const deleteCall = fetchMock.mock.calls.find(c => {
-				const url = typeof c[0] === 'string' ? c[0] : (c[0] as any).url || String(c[0]);
-				const method = typeof c[0] === 'string' ? (c[1] as any)?.method : (c[0] as any).method || (c[1] as any)?.method;
-				return url.includes("/product-categories/cat-1") && method === "DELETE";
+			const deleteCall = fetchMock.mock.calls.find((call) => {
+				const reqUrl = getRequestUrl(call as MockFetchCall);
+				const reqMethod = getRequestMethod(call as MockFetchCall);
+				return (
+					reqUrl.includes("/product-categories/cat-1") && reqMethod === "DELETE"
+				);
 			});
 			expect(deleteCall).toBeTruthy();
 		});

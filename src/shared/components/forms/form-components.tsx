@@ -14,7 +14,12 @@ export const FormSection: React.FC<FormSectionProps> = ({
 	children,
 	className,
 }) => (
-	<div className={cn("space-y-6 pb-8 border-b border-border/10 last:border-0 last:pb-0", className)}>
+	<div
+		className={cn(
+			"space-y-6 pb-8 border-b border-border/10 last:border-0 last:pb-0",
+			className,
+		)}
+	>
 		<div>
 			<h3 className="text-xs font-black uppercase tracking-[0.2em] text-foreground mb-1.5">
 				{title}
@@ -35,7 +40,11 @@ interface FormGridProps {
 	className?: string;
 }
 
-export const FormGrid: React.FC<FormGridProps> = ({ children, cols = 2, className }) => (
+export const FormGrid: React.FC<FormGridProps> = ({
+	children,
+	cols = 2,
+	className,
+}) => (
 	<div
 		className={cn(
 			"grid gap-5",

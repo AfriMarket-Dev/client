@@ -41,7 +41,10 @@ export function useProviderInteractions() {
 			});
 
 			// 2. Execute native action
-			window.open(ProviderContact.getWhatsAppLink(phoneNumber, message), "_blank");
+			window.open(
+				ProviderContact.getWhatsAppLink(phoneNumber, message),
+				"_blank",
+			);
 		},
 		[logInteraction],
 	);

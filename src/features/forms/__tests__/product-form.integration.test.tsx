@@ -25,7 +25,11 @@ describe("ProductForm Integration", () => {
 		});
 
 		renderWithProviders(
-			<ProductForm onSubmit={onSubmit} onCancel={onCancel} showPricing={true} />,
+			<ProductForm
+				onSubmit={onSubmit}
+				onCancel={onCancel}
+				showPricing={true}
+			/>,
 		);
 
 		// Wait for categories to load
