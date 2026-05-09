@@ -10,7 +10,7 @@ import {
 	useResendVerificationEmailMutation,
 	useSignInMutation,
 } from "@/services/api/auth";
-import { setToken, setUser } from "@/store/slices/auth-slice";
+import { setSession } from "@/store/slices/auth-slice";
 
 export function SignInPage() {
 	const navigate = useNavigate();
@@ -32,14 +32,16 @@ export function SignInPage() {
 		setLastEmail(data.email);
 		try {
 			const result = await signIn(data).unwrap();
-			dispatch(setToken(result.token));
 			dispatch(
-				setUser({
-					id: result.user.id,
-					email: result.user.email,
-					name: result.user.name,
-					role: result.user.role,
-					needsOnboarding: result.user.needsOnboarding,
+				setSession({
+					token: result.token,
+					user: {
+						id: result.user.id,
+						email: result.user.email,
+						name: result.user.name,
+						role: result.user.role,
+						needsOnboarding: result.user.needsOnboarding,
+					},
 				}),
 			);
 

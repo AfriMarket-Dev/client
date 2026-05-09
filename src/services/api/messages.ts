@@ -1,4 +1,5 @@
 import { apiSlice } from "@/services/api/api-entry";
+import { unwrapResponse } from "@/services/api/utils";
 import type { RootState } from "@/store";
 import type {
 	ApiResponse,
@@ -73,6 +74,8 @@ export const messagesApi = apiSlice.injectEndpoints({
 				method: "POST",
 				body,
 			}),
+			transformResponse: (response: ApiResponse<Message>) =>
+				unwrapResponse<Message>(response) as Message,
 			async onQueryStarted(
 				{ receiverId, content },
 				{ dispatch, queryFulfilled, getState },
@@ -107,7 +110,9 @@ export const messagesApi = apiSlice.injectEndpoints({
 							"getChatHistory",
 							{ partnerId: receiverId, page: 1, limit: 50 },
 							(draft) => {
-								const index = draft.items.findIndex((m) => m.id === tempMessage.id);
+								const index = draft.items.findIndex(
+									(m) => m.id === tempMessage.id,
+								);
 								if (index !== -1) draft.items[index] = actualMessage;
 							},
 						),
@@ -144,11 +149,13 @@ export const messagesApi = apiSlice.injectEndpoints({
 				);
 				try {
 					await queryFulfilled;
-					dispatch(messagesApi.util.invalidateTags([
-						{ type: "Messages", id: "LIST" },
-						{ type: "Messages", id: "COUNT" },
-						{ type: "Messages", id: partnerId },
-					]));
+					dispatch(
+						messagesApi.util.invalidateTags([
+							{ type: "Messages", id: "LIST" },
+							{ type: "Messages", id: "COUNT" },
+							{ type: "Messages", id: partnerId },
+						]),
+					);
 				} catch {
 					patch.undo();
 				}

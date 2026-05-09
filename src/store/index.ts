@@ -15,7 +15,8 @@ import { apiSlice } from "@/services/api/api-entry";
 import authReducer from "@/store/slices/auth-slice";
 
 // Safely handle the storage object for Vite/ESM compatibility
-const storageEngine = (storage as any).default || storage;
+// biome-ignore lint/suspicious/noExplicitAny: required for storage compatibility
+const storageEngine = ((storage as any).default || storage) as Storage;
 
 const authPersistConfig = {
 	key: "auth",
@@ -23,24 +24,14 @@ const authPersistConfig = {
 	whitelist: ["isAuthenticated", "user", "token"],
 };
 
-const apiPersistConfig = {
-	key: "api",
-	storage: storageEngine,
-};
-
 export const persistedAuthReducer = persistReducer(
 	authPersistConfig,
 	authReducer,
 );
 
-export const persistedApiReducer = persistReducer(
-	apiPersistConfig,
-	apiSlice.reducer,
-);
-
 const rootReducer = combineReducers({
 	auth: persistedAuthReducer,
-	[apiSlice.reducerPath]: persistedApiReducer,
+	[apiSlice.reducerPath]: apiSlice.reducer,
 });
 
 export const store = configureStore({

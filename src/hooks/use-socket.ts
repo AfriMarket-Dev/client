@@ -1,68 +1,155 @@
-import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { io, Socket } from 'socket.io-client';
-import type { RootState } from '@/store';
-import { ENV } from '@/shared/config/env';
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { io, Socket } from "socket.io-client";
+import { ENV } from "@/shared/config/env";
+import type { RootState } from "@/store";
 
 let socketInstance: Socket | null = null;
+let socketToken: string | null = null;
+let activeConsumers = 0;
+let connectionState = {
+	isConnected: false,
+	onlineUsers: new Set<string>(),
+};
+const subscribers = new Set<
+	(state: { isConnected: boolean; onlineUsers: Set<string> }) => void
+>();
 
-export const useSocket = () => {
-  const token = useSelector((state: RootState) => state.auth.token);
-  const [isConnected, setIsConnected] = useState(false);
-  const [onlineUsers, setOnlineUsers] = useState<Set<string>>(new Set());
+function emitConnectionState() {
+	const snapshot = {
+		isConnected: connectionState.isConnected,
+		onlineUsers: new Set(connectionState.onlineUsers),
+	};
 
-  useEffect(() => {
-    if (!token) {
-      if (socketInstance) {
-        socketInstance.disconnect();
-        socketInstance = null;
-        setIsConnected(false);
-      }
-      return;
-    }
+	for (const subscriber of subscribers) {
+		subscriber(snapshot);
+	}
+}
 
-    if (!socketInstance) {
-      socketInstance = io(ENV.API_URL, {
-        auth: {
-          token,
-        },
-        transports: ['websocket'],
-      });
+function cleanupSocket() {
+	if (socketInstance) {
+		socketInstance.removeAllListeners();
+		socketInstance.disconnect();
+		socketInstance = null;
+	}
 
-      socketInstance.on('connect', () => {
-        setIsConnected(true);
-      });
+	socketToken = null;
+	connectionState = {
+		isConnected: false,
+		onlineUsers: new Set<string>(),
+	};
+	emitConnectionState();
+}
 
-      socketInstance.on('disconnect', () => {
-        setIsConnected(false);
-      });
-      
-      socketInstance.on('user:online-list', (userIds: string[]) => {
-        setOnlineUsers(new Set(userIds));
-      });
+function connectSocket(token: string) {
+	if (socketInstance && socketToken === token) {
+		return;
+	}
 
-      socketInstance.on('user:presence', ({ userId, status }: { userId: string, status: 'online' | 'offline' }) => {
-        setOnlineUsers((prev) => {
-          const next = new Set(prev);
-          if (status === 'online') {
-            next.add(userId);
-          } else {
-            next.delete(userId);
-          }
-          return next;
-        });
-      });
-    }
+	cleanupSocket();
+	socketToken = token;
+	socketInstance = io(ENV.API_URL, {
+		auth: {
+			token,
+		},
+		autoConnect: true,
+		reconnection: true,
+		reconnectionAttempts: 5,
+		reconnectionDelay: 1000,
+		reconnectionDelayMax: 10000,
+		timeout: 10000,
+		transports: ["websocket"],
+	});
 
-    return () => {
-      // We don't disconnect on unmount because we want a singleton across the app
-      // Disconnect only happens on logout (when token becomes null)
-    };
-  }, [token]);
+	socketInstance.on("connect", () => {
+		connectionState = {
+			...connectionState,
+			isConnected: true,
+		};
+		emitConnectionState();
+	});
 
-  return {
-    socket: socketInstance,
-    isConnected,
-    onlineUsers,
-  };
+	socketInstance.on("disconnect", () => {
+		connectionState = {
+			...connectionState,
+			isConnected: false,
+		};
+		emitConnectionState();
+	});
+
+	socketInstance.on("user:online-list", (userIds: string[]) => {
+		connectionState = {
+			...connectionState,
+			onlineUsers: new Set(userIds),
+		};
+		emitConnectionState();
+	});
+
+	socketInstance.on(
+		"user:presence",
+		({ userId, status }: { userId: string; status: "online" | "offline" }) => {
+			const nextOnlineUsers = new Set(connectionState.onlineUsers);
+			if (status === "online") {
+				nextOnlineUsers.add(userId);
+			} else {
+				nextOnlineUsers.delete(userId);
+			}
+
+			connectionState = {
+				...connectionState,
+				onlineUsers: nextOnlineUsers,
+			};
+			emitConnectionState();
+		},
+	);
+}
+
+function retainSocket(token: string) {
+	activeConsumers += 1;
+	connectSocket(token);
+}
+
+function releaseSocket() {
+	activeConsumers = Math.max(0, activeConsumers - 1);
+	if (activeConsumers === 0) {
+		cleanupSocket();
+	}
+}
+
+export const useSocket = (enabled = true) => {
+	const token = useSelector((state: RootState) => state.auth.token);
+	const [state, setState] = useState(() => ({
+		isConnected: connectionState.isConnected,
+		onlineUsers: new Set(connectionState.onlineUsers),
+	}));
+
+	useEffect(() => {
+		subscribers.add(setState);
+		return () => {
+			subscribers.delete(setState);
+		};
+	}, []);
+
+	useEffect(() => {
+		if (!enabled) {
+			return;
+		}
+
+		if (!token) {
+			cleanupSocket();
+			return;
+		}
+
+		retainSocket(token);
+
+		return () => {
+			releaseSocket();
+		};
+	}, [enabled, token]);
+
+	return {
+		socket: socketInstance,
+		isConnected: state.isConnected,
+		onlineUsers: state.onlineUsers,
+	};
 };

@@ -1,109 +1,150 @@
-import { useEffect, useState, useCallback } from 'react';
-import { useAppDispatch } from './store';
-import { useSocket } from './use-socket';
-import { messagesApi } from '@/services/api/messages';
-import type { Message } from '@/types';
+import { useCallback, useEffect, useState } from "react";
+import type { Socket } from "socket.io-client";
+import { messagesApi } from "@/services/api/messages";
+import type { Message } from "@/types";
+import { useAppDispatch } from "./store";
 
-export const useChatSocket = (partnerId?: string) => {
-  const { socket, isConnected } = useSocket();
-  const dispatch = useAppDispatch();
-  const [typingUsers, setTypingUsers] = useState<Set<string>>(new Set());
-  const [isTypingState, setIsTypingState] = useState(false);
+export const useChatSocket = ({
+	partnerId,
+	socket,
+	isConnected,
+}: {
+	partnerId?: string;
+	socket: Socket | null;
+	isConnected: boolean;
+}) => {
+	const dispatch = useAppDispatch();
+	const [typingUsers, setTypingUsers] = useState<Set<string>>(new Set());
+	const [isTypingState, setIsTypingState] = useState(false);
 
-  // Debounced typing indicator cleanup
-  useEffect(() => {
-    if (!isTypingState || !socket || !isConnected || !partnerId) return;
+	useEffect(() => {
+		if (!socket || !isConnected || !partnerId) return;
 
-    const timeout = setTimeout(() => {
-      setIsTypingState(false);
-      socket.emit('typing', { partnerId, isTyping: false });
-    }, 3000);
+		socket.emit("conversation:join", { partnerId });
 
-    return () => clearTimeout(timeout);
-  }, [isTypingState, partnerId, socket, isConnected]);
+		return () => {
+			socket.emit("conversation:leave", { partnerId });
+		};
+	}, [socket, isConnected, partnerId]);
 
-  useEffect(() => {
-    if (!socket || !isConnected) return;
+	// Debounced typing indicator cleanup
+	useEffect(() => {
+		if (!isTypingState || !socket || !isConnected || !partnerId) return;
 
-    const handleNewMessage = (message: Message) => {
-      // Update chat history if the message is from/to the current partner
-      if (partnerId && (message.sender.id === partnerId || message.receiver.id === partnerId)) {
-        dispatch(
-          messagesApi.util.updateQueryData('getChatHistory', { partnerId, page: 1, limit: 50 }, (draft) => {
-            // Only add if not already there (to avoid duplicates with optimistic updates)
-            if (!draft.items.find((m) => m.id === message.id)) {
-              draft.items.push(message);
-              draft.meta.total += 1;
-            }
-          })
-        );
-      }
+		const timeout = setTimeout(() => {
+			setIsTypingState(false);
+			socket.emit("typing", { partnerId, isTyping: false });
+		}, 3000);
 
-      // Invalidate conversations list and total unread count
-      dispatch(messagesApi.util.invalidateTags([
-        { type: 'Messages', id: 'LIST' },
-        { type: 'Messages', id: 'COUNT' }
-      ]));
-    };
+		return () => clearTimeout(timeout);
+	}, [isTypingState, partnerId, socket, isConnected]);
 
-    const handleReadReceipt = ({ partnerId: readByPartnerId }: { partnerId: string }) => {
-      if (partnerId && readByPartnerId === partnerId) {
-        dispatch(
-          messagesApi.util.updateQueryData('getChatHistory', { partnerId, page: 1, limit: 50 }, (draft) => {
-            draft.items.forEach((m) => {
-              if (m.receiver.id === partnerId) {
-                m.isRead = true;
-              }
-            });
-          })
-        );
-      }
-    };
+	useEffect(() => {
+		if (!socket || !isConnected) return;
 
-    const handleTyping = ({ userId, isTyping }: { userId: string, isTyping: boolean }) => {
-      setTypingUsers((prev) => {
-        const next = new Set(prev);
-        if (isTyping) {
-          next.add(userId);
-        } else {
-          next.delete(userId);
-        }
-        return next;
-      });
-    };
+		const handleConversationUpdated = () => {
+			dispatch(
+				messagesApi.util.invalidateTags([
+					{ type: "Messages", id: "LIST" },
+					{ type: "Messages", id: "COUNT" },
+				]),
+			);
+		};
 
-    socket.on('message:new', handleNewMessage);
-    socket.on('message:read', handleReadReceipt);
-    socket.on('typing', handleTyping);
+		const handleNewMessage = (message: Message) => {
+			if (!partnerId) return;
 
-    return () => {
-      socket.off('message:new', handleNewMessage);
-      socket.off('message:read', handleReadReceipt);
-      socket.off('typing', handleTyping);
-    };
-  }, [socket, isConnected, partnerId, dispatch]);
+			dispatch(
+				messagesApi.util.updateQueryData(
+					"getChatHistory",
+					{ partnerId, page: 1, limit: 50 },
+					(draft) => {
+						if (!draft.items.find((m) => m.id === message.id)) {
+							draft.items.push(message);
+							draft.meta.total += 1;
+						}
+					},
+				),
+			);
+		};
 
-  const sendTyping = useCallback((isTyping: boolean) => {
-    if (socket && isConnected && partnerId) {
-      if (isTyping && !isTypingState) {
-        setIsTypingState(true);
-        socket.emit('typing', { partnerId, isTyping: true });
-      } else if (!isTyping && isTypingState) {
-        setIsTypingState(false);
-        socket.emit('typing', { partnerId, isTyping: false });
-      }
-    }
-  }, [socket, isConnected, partnerId, isTypingState]);
+		const handleReadReceipt = ({
+			partnerId: readByPartnerId,
+		}: {
+			partnerId: string;
+		}) => {
+			if (partnerId && readByPartnerId === partnerId) {
+				dispatch(
+					messagesApi.util.updateQueryData(
+						"getChatHistory",
+						{ partnerId, page: 1, limit: 50 },
+						(draft) => {
+							draft.items.forEach((m) => {
+								if (m.receiver.id === partnerId) {
+									m.isRead = true;
+								}
+							});
+						},
+					),
+				);
+			}
+		};
 
-  const markAsRead = useCallback(() => {
-    if (socket && isConnected && partnerId) {
-      socket.emit('message:read', { partnerId });
-    }
-  }, [socket, isConnected, partnerId]);
+		const handleTyping = ({
+			userId,
+			isTyping,
+		}: {
+			userId: string;
+			isTyping: boolean;
+		}) => {
+			setTypingUsers((prev) => {
+				const next = new Set(prev);
+				if (isTyping) {
+					next.add(userId);
+				} else {
+					next.delete(userId);
+				}
+				return next;
+			});
+		};
 
-  return {
-    isPartnerTyping: partnerId ? typingUsers.has(partnerId) : false,
-    sendTyping,
-    markAsRead,
-  };
+		socket.on("conversation:updated", handleConversationUpdated);
+		socket.on("message:new", handleNewMessage);
+		socket.on("message:read", handleReadReceipt);
+		socket.on("typing", handleTyping);
+
+		return () => {
+			socket.off("conversation:updated", handleConversationUpdated);
+			socket.off("message:new", handleNewMessage);
+			socket.off("message:read", handleReadReceipt);
+			socket.off("typing", handleTyping);
+		};
+	}, [socket, isConnected, partnerId, dispatch]);
+
+	const sendTyping = useCallback(
+		(isTyping: boolean) => {
+			if (socket && isConnected && partnerId) {
+				if (isTyping && !isTypingState) {
+					setIsTypingState(true);
+					socket.emit("typing", { partnerId, isTyping: true });
+				} else if (!isTyping && isTypingState) {
+					setIsTypingState(false);
+					socket.emit("typing", { partnerId, isTyping: false });
+				}
+			}
+		},
+		[socket, isConnected, partnerId, isTypingState],
+	);
+
+	const markAsRead = useCallback(() => {
+		if (socket && isConnected && partnerId) {
+			socket.emit("message:read", { partnerId });
+		}
+	}, [socket, isConnected, partnerId]);
+
+	return {
+		isPartnerTyping: partnerId ? typingUsers.has(partnerId) : false,
+		sendTyping,
+		markAsRead,
+	};
 };

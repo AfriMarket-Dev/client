@@ -5,10 +5,10 @@ import type {
 } from "@reduxjs/toolkit/query/react";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { REHYDRATE } from "redux-persist";
+import { apiLogger } from "@/lib/logger";
 import { getApiUrl } from "@/shared/config/env";
 import type { RootState } from "@/store";
 import { logout } from "@/store/slices/auth-slice";
-import { apiLogger } from "@/lib/logger";
 
 const BASE_URL = getApiUrl();
 
@@ -46,6 +46,7 @@ const baseQueryWithReauth: BaseQueryFn<
 
 	if (result.error && result.error.status === 401) {
 		apiLogger.warn("Session expired, logging out...");
+		api.dispatch(apiSlice.util.resetApiState());
 		api.dispatch(logout());
 	}
 
@@ -61,7 +62,7 @@ export const apiSlice = createApi({
 			return (action.payload as Record<string, unknown>)?.[reducerPath];
 		}
 	},
-	
+
 	/**
 	 * GLOBAL CACHE POLICIES
 	 * Implements SWR (Stale-While-Revalidate)

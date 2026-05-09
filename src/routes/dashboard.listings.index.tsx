@@ -1,11 +1,25 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 import ProviderDashboard from "@/features/dashboard/components/provider-dashboard";
 import { companiesApi } from "@/services/api/companies";
 import { companyCategoriesApi } from "@/services/api/company-categories";
-import { productsApi } from "@/services/api/products";
-import { servicesApi } from "@/services/api/services";
+import {
+	type NormalizedProductsResult,
+	productsApi,
+} from "@/services/api/products";
+import {
+	type NormalizedServicesResult,
+	servicesApi,
+} from "@/services/api/services";
+import { getFreshOrCached } from "@/services/api/utils";
+import { ROUTES } from "@/shared/constants/routes";
 import { store } from "@/store";
-import type { Company, ProductCategory, Product, Service } from "@/types";
+import type {
+	Company,
+	CompanyCategoriesListResult,
+	Product,
+	ProductCategory,
+	Service,
+} from "@/types";
 
 export interface ListingsLoaderData {
 	company: Company | null;
@@ -16,33 +30,58 @@ export interface ListingsLoaderData {
 
 export const Route = createFileRoute("/dashboard/listings/")({
 	loader: async (): Promise<ListingsLoaderData> => {
-		// 1. Fetch Company
-		let company: Company | null = null;
 		try {
-			company = await store.dispatch(
-				companiesApi.endpoints.getMyCompany.initiate(undefined, { forceRefetch: true }),
-			).unwrap();
+			const company = await store
+				.dispatch(
+					companiesApi.endpoints.getMyCompany.initiate(undefined, {
+						forceRefetch: true,
+					}),
+				)
+				.unwrap();
+
+			const [categoriesRes, productsRes, servicesRes] = await Promise.all([
+				getFreshOrCached<CompanyCategoriesListResult>(
+					store,
+					companyCategoriesApi.endpoints.getCompanyCategories,
+					{ limit: 100 },
+				),
+				company?.id
+					? getFreshOrCached<NormalizedProductsResult>(
+							store,
+							productsApi.endpoints.getProducts,
+							{ companyId: company.id, limit: 100 },
+						)
+					: Promise.resolve<NormalizedProductsResult>({
+							data: [],
+							meta: { total: 0, page: 1, limit: 100, totalPages: 0 },
+							byId: {},
+						}),
+				company?.id
+					? getFreshOrCached<NormalizedServicesResult>(
+							store,
+							servicesApi.endpoints.getServices,
+							{ companyId: company.id, limit: 100 },
+						)
+					: Promise.resolve<NormalizedServicesResult>({
+							data: [],
+							meta: { total: 0, page: 1, limit: 100, totalPages: 0 },
+							byId: {},
+						}),
+			]);
+
+			return {
+				company,
+				categories: categoriesRes.data,
+				products: productsRes.data,
+				services: servicesRes.data,
+			};
 		} catch (err) {
-			console.error("Listings Loader: Company fetch failed", err);
+			console.error("Listings Loader failed", err);
+			if (!store.getState().auth.isAuthenticated) {
+				throw redirect({ to: ROUTES.AUTH.SIGNIN });
+			}
+			throw err;
 		}
-
-		// 2. Fetch dependencies
-		const [categoriesRes, productsRes, servicesRes] = await Promise.all([
-			store.dispatch(companyCategoriesApi.endpoints.getCompanyCategories.initiate({ limit: 100 }, { forceRefetch: true })),
-			company?.id
-				? store.dispatch(productsApi.endpoints.getProducts.initiate({ companyId: company.id, limit: 100 }, { forceRefetch: true }))
-				: Promise.resolve({ data: { data: [] } }),
-			company?.id
-				? store.dispatch(servicesApi.endpoints.getServices.initiate({ companyId: company.id, limit: 100 }, { forceRefetch: true }))
-				: Promise.resolve({ data: { data: [] } })
-		]);
-
-		return {
-			company,
-			categories: (categoriesRes as any).data?.data || (categoriesRes as any).data || [],
-			products: (productsRes as any).data?.data || (productsRes as any).data || [],
-			services: (servicesRes as any).data?.data || (servicesRes as any).data || [],
-		};
 	},
 	component: () => {
 		const data = Route.useLoaderData();

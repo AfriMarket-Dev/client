@@ -15,10 +15,21 @@ const authSlice = createSlice({
 	reducers: {
 		setUser: (state, action: PayloadAction<AuthUser | null>) => {
 			state.user = action.payload;
-			state.isAuthenticated = !!action.payload;
+			state.isAuthenticated = Boolean(action.payload && state.token);
 		},
 		setToken: (state, action: PayloadAction<string | null>) => {
 			state.token = action.payload;
+			state.isAuthenticated = Boolean(state.user && action.payload);
+		},
+		setSession: (
+			state,
+			action: PayloadAction<{ user: AuthUser | null; token: string | null }>,
+		) => {
+			state.user = action.payload.user;
+			state.token = action.payload.token;
+			state.isAuthenticated = Boolean(
+				action.payload.user && action.payload.token,
+			);
 		},
 		setLoading: (state, action: PayloadAction<boolean>) => {
 			state.loading = action.payload;
@@ -46,6 +57,7 @@ const authSlice = createSlice({
 export const {
 	setUser,
 	setToken,
+	setSession,
 	setLoading,
 	setError,
 	logout,

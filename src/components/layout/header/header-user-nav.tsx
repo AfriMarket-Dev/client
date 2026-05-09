@@ -21,7 +21,9 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { apiSlice } from "@/services/api/api-entry";
 import { useSignOutMutation } from "@/services/api/auth";
+import { useGetUnreadCountQuery } from "@/services/api/messages";
 import { useGetWishlistQuery } from "@/services/api/wishlist";
 import { ROLES } from "@/shared/constants";
 import { ROUTES } from "@/shared/constants/routes";
@@ -43,18 +45,27 @@ export const HeaderUserNav: React.FC<HeaderUserNavProps> = ({
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const [signOut] = useSignOutMutation();
+
 	const { data: wishlist = [] } = useGetWishlistQuery(undefined, {
 		skip: !isAuthenticated,
 	});
+
+	const { data: unreadCount = 0 } = useGetUnreadCountQuery(undefined, {
+		skip: !isAuthenticated,
+		pollingInterval: 30000,
+	});
+
 	const wishlistCount = Array.isArray(wishlist) ? wishlist.length : 0;
 
 	const handleLogout = async () => {
 		try {
 			await signOut().unwrap();
 		} catch {}
+		dispatch(apiSlice.util.resetApiState());
 		dispatch(logout());
 		navigate({ to: ROUTES.HOME });
 	};
+
 	return (
 		<div className="flex items-center gap-2 md:gap-4">
 			{isAuthenticated && (
@@ -75,10 +86,15 @@ export const HeaderUserNav: React.FC<HeaderUserNavProps> = ({
 					<Button
 						variant="ghost"
 						size="icon"
-						className="h-9 w-9 text-muted-foreground/80 hover:text-primary hover:bg-primary/5 rounded-md transition-all"
+						className="relative h-9 w-9 text-muted-foreground/80 hover:text-primary hover:bg-primary/5 rounded-md transition-all"
 						onClick={() => navigate({ to: ROUTES.PROTECTED.MESSAGES })}
 					>
 						<RiChat1Line size={18} />
+						{unreadCount > 0 && (
+							<Badge className="absolute -top-1 -right-1 min-w-[18px] h-[18px] flex items-center justify-center p-0 text-[9px] font-bold bg-primary text-primary-foreground border-2 border-background rounded-md font-sans">
+								{unreadCount > 99 ? "99+" : unreadCount}
+							</Badge>
+						)}
 					</Button>
 				</div>
 			)}

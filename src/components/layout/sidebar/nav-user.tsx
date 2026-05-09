@@ -26,6 +26,7 @@ import {
 	SidebarMenuItem,
 	useSidebar,
 } from "@/components/ui/sidebar";
+import { apiSlice } from "@/services/api/api-entry";
 import { logout } from "@/store/slices/auth-slice";
 
 export function NavUser({
@@ -136,6 +137,7 @@ export function NavUser({
 						<DropdownMenuSeparator />
 						<DropdownMenuItem
 							onClick={() => {
+								dispatch(apiSlice.util.resetApiState());
 								dispatch(logout());
 								navigate({ to: "/" });
 							}}

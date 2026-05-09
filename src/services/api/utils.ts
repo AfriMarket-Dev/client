@@ -1,8 +1,27 @@
 import type { RootState } from "@/store";
 
+function isCachedPayloadEmpty(data: unknown) {
+	if (data == null) {
+		return true;
+	}
+	if (Array.isArray(data)) {
+		return data.length === 0;
+	}
+	if (typeof data === "object") {
+		if ("data" in data && Array.isArray(data.data)) {
+			return data.data.length === 0;
+		}
+		if ("items" in data && Array.isArray(data.items)) {
+			return data.items.length === 0;
+		}
+	}
+	return false;
+}
+
 /**
  * Standard utility to handle backend's standardized wrapped responses
  */
+// biome-ignore lint/suspicious/noExplicitAny: rtk query internal type
 export function unwrapResponse<T>(response: any): T | null {
 	if (!response) return null;
 	if (response && typeof response === "object" && "data" in response) {
@@ -17,6 +36,7 @@ export function unwrapResponse<T>(response: any): T | null {
 /**
  * Standard utility for paginated/list responses
  */
+// biome-ignore lint/suspicious/noExplicitAny: rtk query internal type
 export function unwrapListResponse<T>(response: any) {
 	if (!response) {
 		return {
@@ -43,20 +63,23 @@ export function unwrapListResponse<T>(response: any) {
  * Otherwise, wait for the fetch.
  */
 export async function getFreshOrCached<T>(
+	// biome-ignore lint/suspicious/noExplicitAny: rtk query internal type
 	store: { getState: () => RootState; dispatch: (action: any) => any },
+	// biome-ignore lint/suspicious/noExplicitAny: rtk query internal type
 	endpoint: any,
+	// biome-ignore lint/suspicious/noExplicitAny: rtk query internal type
 	args: any = undefined,
-	staleTimeMs = 30000 // 30s default
+	staleTimeMs = 30000, // 30s default
 ) {
 	const state = store.getState();
 	const cacheEntry = endpoint.select(args)(state);
-	
+
 	const now = Date.now();
 	const fulfilledStamp = cacheEntry?.fulfilledTimeStamp ?? 0;
 	const isFresh = now - fulfilledStamp < staleTimeMs;
 
 	// FIX: If data is empty (null or empty array), don't trust the cache
-	const isEmpty = !cacheEntry?.data || (Array.isArray(cacheEntry.data) && cacheEntry.data.length === 0);
+	const isEmpty = isCachedPayloadEmpty(cacheEntry?.data);
 
 	if (cacheEntry?.data && isFresh && !isEmpty) {
 		// Return cached data instantly, but trigger background refresh
@@ -65,5 +88,7 @@ export async function getFreshOrCached<T>(
 	}
 
 	// Wait for fresh data if cache is empty, stale, or suspect
-	return await store.dispatch(endpoint.initiate(args, { forceRefetch: true })).unwrap() as T;
+	return (await store
+		.dispatch(endpoint.initiate(args, { forceRefetch: true }))
+		.unwrap()) as T;
 }

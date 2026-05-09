@@ -1,10 +1,42 @@
 import { apiSlice } from "@/services/api/api-entry";
+import { unwrapResponse } from "@/services/api/utils";
 import type {
+	ApiResponse,
 	AuthResponse,
 	SessionUser,
 	SignInRequest,
 	SignUpRequest,
 } from "@/types";
+
+function normalizeSessionUser(
+	response: ApiResponse<SessionUser> | ApiResponse<{ user?: SessionUser }>,
+): SessionUser | null {
+	const payload = unwrapResponse<SessionUser | { user?: SessionUser }>(
+		response,
+	);
+
+	if (!payload || typeof payload !== "object") {
+		return null;
+	}
+
+	const maybeUser = "user" in payload ? payload.user : payload;
+
+	if (
+		!maybeUser ||
+		typeof maybeUser !== "object" ||
+		!("id" in maybeUser) ||
+		!("email" in maybeUser) ||
+		!("name" in maybeUser) ||
+		!("role" in maybeUser)
+	) {
+		return null;
+	}
+
+	return {
+		...maybeUser,
+		needsOnboarding: Boolean(maybeUser.needsOnboarding ?? false),
+	};
+}
 
 export const authApi = apiSlice.injectEndpoints({
 	endpoints: (builder) => ({
@@ -25,8 +57,9 @@ export const authApi = apiSlice.injectEndpoints({
 
 				const res = (result.meta as { response?: Response })?.response;
 				const envelope = result.data as Record<string, unknown>;
+				// biome-ignore lint/suspicious/noExplicitAny: complex backend envelope
 				const payload = (envelope?.data ?? envelope) as any;
-				
+
 				const token =
 					res?.headers.get("set-auth-token") ??
 					payload?.token ??
@@ -34,7 +67,9 @@ export const authApi = apiSlice.injectEndpoints({
 					"";
 
 				const user = (payload?.user ?? payload) as SessionUser;
-				const needsOnboarding = payload?.needsOnboarding ?? user?.needsOnboarding ?? false;
+				const needsOnboarding = Boolean(
+					payload?.needsOnboarding ?? user?.needsOnboarding ?? false,
+				);
 
 				return {
 					data: {
@@ -60,8 +95,9 @@ export const authApi = apiSlice.injectEndpoints({
 
 				const res = (result.meta as { response?: Response })?.response;
 				const envelope = result.data as Record<string, unknown>;
+				// biome-ignore lint/suspicious/noExplicitAny: complex backend envelope
 				const payload = (envelope?.data ?? envelope) as any;
-				
+
 				const token =
 					res?.headers.get("set-auth-token") ??
 					payload?.token ??
@@ -69,7 +105,9 @@ export const authApi = apiSlice.injectEndpoints({
 					"";
 
 				const user = (payload?.user ?? payload) as SessionUser;
-				const needsOnboarding = payload?.needsOnboarding ?? user?.needsOnboarding ?? false;
+				const needsOnboarding = Boolean(
+					payload?.needsOnboarding ?? user?.needsOnboarding ?? false,
+				);
 
 				return {
 					data: {
@@ -80,8 +118,13 @@ export const authApi = apiSlice.injectEndpoints({
 			},
 		}),
 
-		getSession: builder.query<{ user?: Record<string, unknown> }, void>({
+		getSession: builder.query<SessionUser | null, void>({
 			query: () => "/auth/get-session",
+			transformResponse: (
+				response:
+					| ApiResponse<SessionUser>
+					| ApiResponse<{ user?: SessionUser }>,
+			) => normalizeSessionUser(response),
 			providesTags: ["Session"],
 		}),
 

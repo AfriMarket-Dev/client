@@ -4,7 +4,6 @@ import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import { NuqsAdapter } from "nuqs/adapters/tanstack-router";
 import { NotFound } from "@/shared/components/not-found";
 import { RouteError } from "@/shared/components/route-error";
-import { useSocket } from "@/hooks/use-socket";
 import "../index.css";
 
 export const Route = createRootRoute({
@@ -14,7 +13,6 @@ export const Route = createRootRoute({
 });
 
 function RootComponent() {
-	useSocket();
 	return (
 		<>
 			<NuqsAdapter defaultOptions={{ clearOnDefault: true }}>

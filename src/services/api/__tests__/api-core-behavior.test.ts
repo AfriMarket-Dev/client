@@ -67,7 +67,13 @@ describe("api core behavior", () => {
 			jsonResponse(
 				{
 					data: {
-						user: { id: "u1", email: "a@b.com", name: "A", role: "user", needsOnboarding: false },
+						user: {
+							id: "u1",
+							email: "a@b.com",
+							name: "A",
+							role: "user",
+							needsOnboarding: false,
+						},
 						token: "body-token",
 					},
 				},
